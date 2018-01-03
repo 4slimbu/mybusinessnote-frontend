@@ -1,10 +1,10 @@
 import {combineReducers} from "redux";
 import flashMessageReducer from "./reducers/flashMessageReducer";
 import authReducer from "./reducers/authReducer";
-import levelReducer from "./reducers/levelReducer";
+import appStatusReducer from "./reducers/appStatusReducer";
 
 export default combineReducers({
     authReducer,
-    levelReducer,
+    appStatusReducer,
     flashMessageReducer
 });

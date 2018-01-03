@@ -1,35 +1,66 @@
 import React, {Component} from "react";
+import {map} from "lodash";
+import * as classnames from "classnames";
+import {Link, withRouter} from "react-router-dom";
+import SectionLinks from "./SectionLinks";
+import PropTypes from "prop-types";
 
-export default class LevelLinks extends Component {
+class LevelLinks extends Component {
+
+    onClickLevel(level) {
+        this.props.setCurrentLevel(level);
+        this.props.history.push("/level/" + level.slug);
+    }
+
     render() {
-        const levels = (
-            <div className="panel panel-default panel-faq active">
-                <div className="panel-heading" role="tab" id="headingEight">
-                    <div className="panel-title clearfix">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseEight" aria-expanded="true" aria-controls="collapseOne">
-                            <figure><img src={`${process.env.PUBLIC_URL}/assets/images/journey/img_1.png`} alt="" /></figure>
-                            <h6>Getting<br/> started</h6>
-                        </a>
+        //get the app status object
+        const { appStatus } = this.props;
+        //init levels
+        const levels = appStatus.levels;
+        //init current levels
+        const currentLevel = appStatus.currentLevel;
+
+        //generate level list from levels
+        const levelsList = map(levels, (level, key) => {
+            //generate level Image from level id
+            const levelImg = (level.completed_percent === 100) ? "badge/gold-badge-" + level.id : "img_" + level.id;
+            return (
+                <div key={level.id} className={classnames("panel panel-default panel-faq", { "active" : currentLevel.id === level.id})}>
+                    <div className="panel-heading" role="tab" id={`menu${level.id}`}>
+                        <div className="panel-title clearfix">
+                            <Link onClick={() => this.onClickLevel(level)}
+                                  role="button" data-toggle="collapse"
+                                  data-parent="#accordion2"
+                                  to={`/level/${level.slug}#collapse${level.id}`}
+                                  aria-expanded="true" aria-controls={`collapse${level.id}`}
+                            >
+                                <figure className={classnames({"goldbadge-img" : (level.completed_percent === 100)})}><img src={`${process.env.PUBLIC_URL}/assets/images/journey/${levelImg}.png`} alt="" /></figure>
+                                <h6>{ level.name }</h6>
+                            </Link>
+                        </div>
+                    </div>
+                    <div id={`collapse${level.id}`} className={classnames("panel-collapse collapse", {"in" : currentLevel.id === level.id })} role="tabpanel" aria-labelledby="menu2">
+                        <div className="panel-body">
+                            <ul className="getting-start-list">
+                                <SectionLinks level={level} appStatus={appStatus} />
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div id="collapseEight" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingEight">
-                    <div className="panel-body">
-                        <ul className="getting-start-list">
-                            <li><a href="level1_step_1.html">
-                                <span className="circle-span complete"></span>Your business</a>
-                            </li>
-                            <li><a href="level1_step_4.html"><span className="circle-span"></span>About you</a></li>
-                            <li><a href="level1_step_5.html"><span className="circle-span"></span>Your business</a></li>
-                            <li><a href="level1_step_6.html"><span className="circle-span"></span>Register your business</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        );
+            )
+        });
+
         return (
             <div>
-                { levels}
+                { levelsList }
             </div>
         )
     }
 }
+
+LevelLinks.propTypes = {
+    appStatus: PropTypes.object.isRequired,
+    onClickLevel: PropTypes.func.isRequired
+};
+
+export default withRouter(LevelLinks);

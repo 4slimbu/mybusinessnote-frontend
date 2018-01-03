@@ -12,7 +12,8 @@ class LevelIntroPage extends Component {
     };
 
     render() {
-        const Level = this.components[this.props.level];
+        const Level = `${this.props.levelSlug}`;
+
         return <Level/>
     }
 }

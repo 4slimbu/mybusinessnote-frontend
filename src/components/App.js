@@ -5,16 +5,13 @@ import FlashMessageList from "./flash/FlashMessageList";
 import ToolTip from "./tooltip/ToolTip";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getLevels, setLevels} from "../actions/levelActions";
+import {getAppStatus, setAppStatus} from "../actions/appStatusAction";
+import {withRouter} from "react-router-dom";
 
 class App extends Component {
 
     componentDidMount() {
-        this.props.getLevels().then(
-            (response) => {
-                this.props.setLevels(response.data);
-            }
-        );
+        this.props.getAppStatus();
     }
 
     render() {
@@ -42,18 +39,15 @@ class App extends Component {
 
 App.propTypes = {
     auth: PropTypes.object.isRequired,
+    getAppStatus: PropTypes.func.isRequired,
+    setAppStatus: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         auth: state.authReducer,
-        levels: state.levelReducer
     }
 }
 
-App.propTypes = {
-    getLevels: PropTypes.func.isRequired,
-    setLevels: PropTypes.func.isRequired,
-};
 
-export default connect(mapStateToProps, {getLevels, setLevels})(App);
+export default withRouter(connect(mapStateToProps, {getAppStatus, setAppStatus})(App));
