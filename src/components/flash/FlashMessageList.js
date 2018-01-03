@@ -11,7 +11,7 @@ class FlashMessageList extends Component {
         );
 
         return (
-            <div>{messages}</div>
+            <div className="flash-message">{messages}</div>
         )
     }
 }

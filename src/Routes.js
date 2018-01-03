@@ -12,14 +12,14 @@ import LevelCompletePage from "./components/level/LevelCompletePage";
 export default () => {
     return (
         <Switch>
-            <Route exact path="/" render={() => { return <Redirect to="/getting-started" /> }}/>
+            <Route exact path="/" render={() => { return <Redirect to="/level/getting-started" /> }}/>
             <Route path="/login" component={LoginPage}/>
             <Route path="/new-event" component={requireAuth(NewEventPage)} />
             <Route path="/:url/not-found" component={PageNotFound}/>
-            <Route path='/:level' exact component={LevelPage} />
-            <Route path='/:level/complete' exact component={LevelCompletePage} />
-            <Route path='/:level/:section' exact component={SectionPage} />
-            <Route path='/:level/:section/:businessOption' exact component={BusinessOptionPage} />
+            <Route path='/level/:level' exact component={LevelPage} />
+            <Route path='/level/:level/complete' exact component={LevelCompletePage} />
+            <Route path='/level/:level/section/:section' exact component={SectionPage} />
+            <Route path='/level/:level/section/:section/business-option/:businessOption' exact component={BusinessOptionPage} />
             <Route component={PageNotFound}/>
         </Switch>
     )

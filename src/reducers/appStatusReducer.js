@@ -1,24 +1,7 @@
 import {GET_APP_STATUS, SET_CURRENT_LEVEL} from "../actions/types";
+import {DEFAULT_APP_STATUS} from "../data/default";
 
-const initialState = {
-    business_id: null,
-    user_id: null,
-    business_category_id: null,
-    business_name: null,
-    levels: [{slug: "" }],
-    defaultLevel: {},
-    previousLevel: {},
-    currentLevel: {},
-    nextLevel: {},
-    previousSection: {},
-    currentSection: {},
-    nextSection: {},
-    previousBusinessOption: {},
-    currentBusinessOption: {},
-    nextBusinessOption: {}
-};
-
-export default (state = initialState, action = {}) => {
+export default (state = DEFAULT_APP_STATUS, action = {}) => {
     switch(action.type) {
         case `${GET_APP_STATUS}_FULFILLED` :
             return {

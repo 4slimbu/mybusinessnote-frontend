@@ -1,44 +1,43 @@
 import React, {Component} from "react";
 import LevelIntroPage from "./LevelIntroPage";
-import LevelCompletePage from "./LevelCompletePage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import {generateLevelCompletedPercent} from "../navigation/helperFunctions";
+import {getFirstBusinessOptionUsingLevel} from "../../actions/businessOptionAction";
 
 class LevelPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            levelSlug: "",
-        }
+        this.onClickStart = this.onClickStart.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            ...this.state,
-            levelSlug: nextProps.match.params.level,
-        })
-
+    onClickStart() {
+        this.props.getFirstBusinessOptionUsingLevel(this.props.appStatus.currentLevel)
     }
 
     render() {
         let page;
-        const { levels = [], current = {} } = this.props.appStatus;
+        const { levels = [], currentLevel = {} } = this.props.appStatus;
 
-        // const completedPercent = (levels[this.state.levelSlug]) ? levels[this.state.levelSlug].completed_percent : 0;
+        const completedPercent = generateLevelCompletedPercent(levels, currentLevel);
 
-        // page = (<LevelIntroPage appStatus={this.props.appStatus} levelSlug={this.state.levelSlug}/>);
+        console.log('completed percent', completedPercent);
 
-        // if (completedPercent === -1) {
-        //     page = (
-        //         <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
-        //             <div className="content-wrapper step-one">
-        //             </div>
-        //         </section>
-        //     );
-        // }
+        page = (<LevelIntroPage appStatus={this.props.appStatus} level={currentLevel} onClickStart={this.onClickStart}/>);
+
+        if (completedPercent === -1) {
+            console.log('inside completed percent === -1 ');
+            page = (
+                <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
+                    <div className="content-wrapper step-one">
+                    </div>
+                </section>
+            );
+        }
 
         // if (completedPercent === 100) {
-        //     page = (<LevelCompletePage level={this.state.level}/>)
+        //     console.log('inside completed percent === 100')
+        //     page = (<LevelCompletePage level={currentLevel}/>)
         // }
 
         return (
@@ -50,7 +49,8 @@ class LevelPage extends Component {
 }
 
 LevelPage.propTypes = {
-    appStatus: PropTypes.object.isRequired
+    appStatus: PropTypes.object.isRequired,
+    getFirstBusinessOptionUsingLevel: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -59,4 +59,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(LevelPage);
+export default connect(mapStateToProps, {getFirstBusinessOptionUsingLevel} )(LevelPage);

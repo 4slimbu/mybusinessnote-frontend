@@ -1,13 +1,24 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
-
-.route-wrapper {
-  position: relative;
-}
-
-.route-wrapper > div {
+.flash-message {
   position: absolute;
+  top: 50px;
+  right: 10px;
+  width: 250px;
+  z-index: 99999;
+}
+
+.btn-wrap button.btn {
+  background: #4b384b;
+  border-color: #4b384b;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 1.5;
+  padding: 10px 43px;
+  border-radius: 25px;
+  transition-property: background, border;
+  transition-duration: 0.5s;
+  font-weight: 300;
+}
+.btn-wrap button.btn:hover {
+  background: none;
+  border-color: #ffffff;
 }

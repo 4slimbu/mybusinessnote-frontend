@@ -25,7 +25,7 @@ class LevelLinks extends Component {
             //generate level Image from level id
             const levelImg = (level.completed_percent === 100) ? "badge/gold-badge-" + level.id : "img_" + level.id;
             return (
-                <div key={level.id} className={classnames("panel panel-default panel-faq", { "active" : currentLevel.id === level.id})}>
+                <div key={level.slug} className={classnames("panel panel-default panel-faq", { "active" : currentLevel.id === level.id})}>
                     <div className="panel-heading" role="tab" id={`menu${level.id}`}>
                         <div className="panel-title clearfix">
                             <Link onClick={() => this.onClickLevel(level)}
@@ -60,7 +60,6 @@ class LevelLinks extends Component {
 
 LevelLinks.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    onClickLevel: PropTypes.func.isRequired
 };
 
 export default withRouter(LevelLinks);
