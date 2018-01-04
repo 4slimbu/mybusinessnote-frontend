@@ -51,6 +51,8 @@ class LoginForm extends Component {
                         text: "You have logged in successfully! Welcome!"
                     });
 
+                    this.props.getAppStatus();
+
                     this.props.history.push("/");
                 },
                 (error) => {
@@ -103,7 +105,8 @@ class LoginForm extends Component {
 
 LoginForm.propTypes = {
     userLoginFormRequest: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    getAppStatus: PropTypes.func.isRequired
 };
 
 export default withRouter(LoginForm);

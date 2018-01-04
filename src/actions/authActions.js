@@ -2,8 +2,8 @@ import * as axios from "axios";
 import setAuthorizationToken from "../utils/setAuthorizationToken";
 import jwt_decode from "jwt-decode";
 import {SET_CURRENT_USER} from "./types";
-import {setAppStatus} from "./appStatusAction";
-import {DEFAULT_APP_STATUS} from "../data/default";
+import {getAppStatus} from "./appStatusAction";
+import {addFlashMessage} from "./flashMessageAction";
 
 export function userLoginFormRequest(userData) {
     return dispatch => {
@@ -37,6 +37,10 @@ export function logout() {
         localStorage.removeItem("jwtToken");
         setAuthorizationToken(false);
         dispatch(setCurrentUser({}));
-        dispatch(setAppStatus(DEFAULT_APP_STATUS));
+        dispatch(getAppStatus());
+        dispatch(addFlashMessage({
+            type: "success",
+            text: "You have logged out successfully!"
+        }));
     }
 }

@@ -21,7 +21,7 @@ class NavigationBar extends Component {
         const userLinks = (
             <ul>
                 <li>
-                    <a href="#" onClick={this.logout.bind(this)}>Logout</a>
+                    <button onClick={this.logout.bind(this)}>Logout</button>
                 </li>
             </ul>
         );
@@ -29,18 +29,18 @@ class NavigationBar extends Component {
         const guestLinks = (
             <ul>
                 <li>
-                    <Link to="/login">Login</Link>
+                    <Link to="/login"><button>Login</button></Link>
                 </li>
             </ul>
         );
 
         return (
             <section className="left-sec bg-navy">
-                <Link to="/" className="site-branding"><img src={`${process.env.PUBLIC_URL}/assets/images/apps-logo.png`} alt="" /></Link>
-                <h3 className="tagline-head">Let your <br/>journey begins</h3>
                 <div>
                     { isAuthenticated ? userLinks : guestLinks }
                 </div>
+                <Link to="/" className="site-branding"><img src={`${process.env.PUBLIC_URL}/assets/images/apps-logo.png`} alt="" /></Link>
+                <h3 className="tagline-head">Let your <br/>journey begins</h3>
                 <div className="menu-accordion">
                     <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
                         <LevelLinks appStatus={appStatus} setCurrentLevel={setCurrentLevel}/>

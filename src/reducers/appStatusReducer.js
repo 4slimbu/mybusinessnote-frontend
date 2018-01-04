@@ -1,4 +1,4 @@
-import {GET_APP_STATUS, SET_CURRENT_LEVEL} from "../actions/types";
+import {GET_APP_STATUS, SET_APP_STATUS, SET_CURRENT_LEVEL} from "../actions/types";
 import {DEFAULT_APP_STATUS} from "../data/default";
 
 export default (state = DEFAULT_APP_STATUS, action = {}) => {
@@ -8,6 +8,11 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 ...state,
                 ...action.payload,
                 currentLevel: action.payload.levels[0]
+            };
+        case `${SET_APP_STATUS}` :
+            return {
+                ...state,
+                ...action.appStatus
             };
         case `${SET_CURRENT_LEVEL}` :
             return {
