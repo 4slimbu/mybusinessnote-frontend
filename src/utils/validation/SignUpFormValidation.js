@@ -20,8 +20,16 @@ export function validateInput(data) {
         errors.email = ["Email is invalid"];
     }
 
+    if (! (/^\(?(\d{2})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.phone_number)) ) {
+        errors.phone_number = ["Phone Number field is invalid"];
+    }
+
     if (Validator.isEmpty(data.phone_number)) {
         errors.phone_number = ["Phone Number field is required"];
+    }
+
+    if (! (/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(data.password)) ) {
+        errors.password = ["Password is invalid"];
     }
 
     if (Validator.isEmpty(data.password)) {
@@ -36,9 +44,9 @@ export function validateInput(data) {
         errors.confirm_password = ["Password and Confirm Password must match"];
     }
 
-    if (Validator.isEmpty(data.timezone)) {
-        errors.timezone = ["Timezone field is required"];
-    }
+    // if (Validator.isEmpty(data.timezone)) {
+    //     errors.timezone = ["Timezone field is required"];
+    // }
 
     return {
         errors,

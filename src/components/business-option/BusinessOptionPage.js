@@ -1,26 +1,33 @@
 import React, {Component} from "react";
+import PropTypes from "prop-types";
+import LevelHead from "../level/LevelHead";
+import Element from "../elements/Element";
 
 class BusinessOptionPage extends Component {
     render() {
+        const {currentLevel, currentBusinessOption, onClickNext} = this.props;
         return (
-            <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
-                <div className="content-wrapper step-one">
-                    <h5 className="obvious-h5">Getting started</h5>
-                    <span className="progress-label">5% complete</span> <span className="pull-right progress-label">1/4</span>
-                    <div className="progress">
-                        <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "25%"}}>
-                        </div>
-                    </div>
-                    <h1>Business Option Page</h1>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-                    <div className="btn-wrap">
-                        <a href="level1_step_2.html" className="btn btn-default btn-md">Start</a>
-                    </div>
+            <div>
+                <LevelHead currentLevel={currentLevel}/>
+                <h1>{currentBusinessOption.data.name}</h1>
+                <p>{currentBusinessOption.data.content}</p>
+                <div>
+                    {
+                        currentBusinessOption.data.element &&
+                        <Element element={currentBusinessOption.data.element} onClickNext={(e) => onClickNext(e)}/>
+                    }
                 </div>
-            </section>
+            </div>
         );
     }
 }
+
+BusinessOptionPage.propTypes = {
+    currentLevel: PropTypes.object.isRequired,
+    currentSection: PropTypes.object.isRequired,
+    currentBusinessOption: PropTypes.object.isRequired,
+    onClickNext: PropTypes.func.isRequired
+};
+
 
 export default BusinessOptionPage;

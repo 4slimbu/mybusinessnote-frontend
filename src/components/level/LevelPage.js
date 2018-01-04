@@ -2,17 +2,32 @@ import React, {Component} from "react";
 import LevelIntroPage from "./LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {generateLevelCompletedPercent} from "../navigation/helperFunctions";
-import {getFirstBusinessOptionUsingLevel} from "../../actions/businessOptionAction";
+import {filterLevelsBySlug, firstSectionUrl, generateLevelCompletedPercent} from "../navigation/helperFunctions";
+import {getBusinessOption, setCurrentLevel, setCurrentSection} from "../../actions/appStatusAction";
 
 class LevelPage extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            currentLevel: {},
+        };
         this.onClickStart = this.onClickStart.bind(this);
     }
 
+    componentDidMount() {
+        this.setState({
+           currentLevel: this.props.match.params
+        });
+        console.log("filter by slug", this.props.match.params.level);
+
+    }
+
     onClickStart() {
-        this.props.getFirstBusinessOptionUsingLevel(this.props.appStatus.currentLevel)
+        const currentLevel = filterLevelsBySlug(this.props.appStatus.levels, this.props.match.params.level);
+        console.log('current level: ', currentLevel);
+        this.props.setCurrentLevel(currentLevel);
+        this.props.setCurrentSection(currentLevel.sections[0]);
+        this.props.history.push(firstSectionUrl(this.props.appStatus.currentLevel));
     }
 
     render() {
@@ -50,7 +65,9 @@ class LevelPage extends Component {
 
 LevelPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    getFirstBusinessOptionUsingLevel: PropTypes.func.isRequired
+    getBusinessOption: PropTypes.func.isRequired,
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -59,4 +76,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {getFirstBusinessOptionUsingLevel} )(LevelPage);
+export default connect(mapStateToProps, {getBusinessOption, setCurrentLevel, setCurrentSection} )(LevelPage);

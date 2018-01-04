@@ -19,7 +19,7 @@ export function doesUserExists(identifier) {
     return dispatch => {
         return axios({
             method:"POST",
-            url: "http://mbj.dev/api/user/check-if-exist",
+            url: "http://mbj.dev/api/user/check-if-exists",
             data: {"email" : identifier},
             crossDomain: true,
             headers: {

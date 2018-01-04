@@ -18,6 +18,10 @@ export function generateAppRelativeUrl(level, section = null, businessOption = n
     }
 }
 
+export function firstSectionUrl(currentLevel) {
+    return '/level/' + currentLevel.slug + '/section/' + currentLevel.sections[0].slug;
+}
+
 export function filterLevelsBySlug(levels, slug) {
     let currentLevel =  filter(levels, (level) => {
         return level.slug;
