@@ -22,3 +22,21 @@ export function validateCreateBusiness(data) {
         isValid: isEmpty(errors)
     }
 }
+
+
+export function validateRegisterBusiness(data) {
+    let errors = {};
+
+    if (! (/^\(?(\d{4})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.abn)) ) {
+        errors.abn = ["ABN field is invalid"];
+    }
+
+    if (Validator.isEmpty(data.abn)) {
+        errors.abn = ["ABN field is required"];
+    }
+
+    return {
+        errors,
+        isValid: isEmpty(errors)
+    }
+}

@@ -19,6 +19,7 @@ class SectionPage extends Component {
 
     onClickNext(e) {
         e.preventDefault();
+        this.props.getAppStatus();
         this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
     }
 

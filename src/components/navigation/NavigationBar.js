@@ -27,6 +27,7 @@ class NavigationBar extends Component {
         const userLinks = (
             <ul>
                 <li>
+                    <strong>Hi! { appStatus.first_name + ' ' + appStatus.last_name }   </strong>
                     <button onClick={this.logout.bind(this)}>Logout</button>
                 </li>
             </ul>

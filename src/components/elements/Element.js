@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import BusinessCategories from "./BusinessCategories";
 import RegisterUser from "./RegisterUser";
 import CreateBusiness from "./CreateBusiness";
+import RegisterBusiness from "./RegisterBusiness";
 
 class Element extends Component {
     constructor(props) {
@@ -13,7 +14,8 @@ class Element extends Component {
     components = {
         BusinessCategories: BusinessCategories,
         RegisterUser: RegisterUser,
-        CreateBusiness: CreateBusiness
+        CreateBusiness: CreateBusiness,
+        RegisterBusiness: RegisterBusiness
     };
 
     render() {

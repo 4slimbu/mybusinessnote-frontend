@@ -5,15 +5,16 @@ import {addFlashMessage} from "../../actions/flashMessageAction";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setCurrentUser} from "../../actions/authActions";
-import {getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {getAppStatus, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
 
 class RegisterUser extends Component {
     render() {
-        const {appStatus, auth, userSignUpFormRequest, addFlashMessage, doesUserExists, setCurrentUser, getBusinessOptionFromUrl} = this.props;
+        const {appStatus, auth, userSignUpFormRequest, getAppStatus, addFlashMessage, doesUserExists, setCurrentUser, getBusinessOptionFromUrl} = this.props;
         return (
             <div>
                 <SignUpForm
                     appStatus={appStatus}
+                    getAppStatus={getAppStatus}
                     auth={auth}
                     userSignUpFormRequest={userSignUpFormRequest}
                     addFlashMessage={addFlashMessage}
@@ -33,7 +34,8 @@ RegisterUser.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     doesUserExists: PropTypes.func.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    getAppStatus: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -43,4 +45,11 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {userSignUpFormRequest, addFlashMessage, doesUserExists, setCurrentUser, getBusinessOptionFromUrl})(RegisterUser);
+export default connect(mapStateToProps, {
+    userSignUpFormRequest,
+    addFlashMessage,
+    doesUserExists,
+    setCurrentUser,
+    getBusinessOptionFromUrl,
+    getAppStatus
+})(RegisterUser);

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../common/TextFieldGroup";
-import {validateInput} from "../../utils/validation/LoginFormValidation";
+import {validateLogin} from "../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
 
 class LoginForm extends Component {
@@ -21,7 +21,7 @@ class LoginForm extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const {errors, isValid} = validateInput(input);
+        const {errors, isValid} = validateLogin(input);
 
         if (!isValid) {
             this.setState({errors});

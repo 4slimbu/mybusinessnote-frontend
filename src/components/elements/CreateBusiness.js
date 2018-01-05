@@ -2,24 +2,22 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import {getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {getAppStatus, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
-import {validateInput} from "../../utils/validation/SignUpFormValidation";
 import TextFieldGroup from "../common/TextFieldGroup";
-import {createBusinessFormRequest} from "../../actions/businessActions";
+import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {withRouter} from "react-router-dom";
-import {validateCreateBusiness} from "../../utils/validation/CreateBusinessValidation";
+import {validateCreateBusiness} from "../../utils/validation/BusinessValidation";
 
 class CreateBusiness extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            type: "update_business",
+            business_id: null,
             business_name: "",
             website: "",
-            user_id: "",
-            business_category_id: "",
-            sell_goods: "",
             errors: {},
             isLoading: false
         };
@@ -27,7 +25,22 @@ class CreateBusiness extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentDidMount() {
+        this.setState({
+            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_id: this.props.appStatus.business_id,
+            business_name: this.props.appStatus.business_name,
+            website: this.props.appStatus.website,
+        });
+    }
+
     componentWillReceiveProps() {
+        this.setState({
+            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_id: this.props.appStatus.business_id,
+            business_name: this.props.appStatus.business_name,
+            website: this.props.appStatus.website,
+        });
     }
 
     onChange(e) {
@@ -57,15 +70,7 @@ class CreateBusiness extends Component {
                 isLoading: true,
             });
 
-            if (!this.state.business_category_id) {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "You haven't selected any business category"
-                });
-                return;
-            }
-
-            if (!this.state.user_id) {
+            if (!this.props.appStatus.user_id || !this.props.appStatus.business_id) {
                 this.props.addFlashMessage({
                     type: "error",
                     text: "You need to create an account before creating business"
@@ -73,19 +78,17 @@ class CreateBusiness extends Component {
                 return;
             }
 
-            this.props.createBusinessFormRequest(this.state).then(
+            this.props.saveBusinessFormRequest(this.state).then(
                 (response) => {
                     this.setState({isLoading: false});
-
                     const token = response.data.token;
-                    localStorage.setItem("jwtToken", token);
-                    setAuthorizationToken(token);
-                    this.props.setCurrentUser(jwt_decode(token).user);
 
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "You have created your business successfully!"
-                    });
+                    if (token) {
+                        localStorage.setItem("jwtToken", token);
+                        setAuthorizationToken(token);
+                        this.props.setCurrentUser(jwt_decode(token).user);
+                    }
+                    this.props.getAppStatus();
                     this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
                 },
                 ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
@@ -105,7 +108,7 @@ class CreateBusiness extends Component {
                     label="Your Business Name *"
                     placeholder="eg. John's Bakery LTD PTD"
                     onChange={this.onChange}
-                    value={this.state.business_name}
+                    value={(this.state.business_name) ? this.state.business_name : appStatus.business_name}
                     type="text"
                     field="business_name"
                 />
@@ -115,7 +118,7 @@ class CreateBusiness extends Component {
                     label="Your Business Website *"
                     placeholder="eg. http://johnsbakery.com.au"
                     onChange={this.onChange}
-                    value={this.state.website}
+                    value={(this.state.website) ? this.state.website : appStatus.website}
                     type="text"
                     field="website"
                 />
@@ -133,9 +136,10 @@ class CreateBusiness extends Component {
 CreateBusiness.propTypes = {
     appStatus: PropTypes.func.isRequired,
     auth: PropTypes.func.isRequired,
-    createBusinessFormRequest: PropTypes.func.isRequired,
+    saveBusinessFormRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    getAppStatus: PropTypes.func.isRequired
 };
 
 
@@ -147,7 +151,8 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-    createBusinessFormRequest,
+    saveBusinessFormRequest,
     addFlashMessage,
-    getBusinessOptionFromUrl
+    getBusinessOptionFromUrl,
+    getAppStatus
 })(CreateBusiness));

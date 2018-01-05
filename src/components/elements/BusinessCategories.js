@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
+    getAppStatus,
     getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
 import {map} from "lodash";
+import {saveBusinessFormRequest} from "../../actions/businessActions";
 
 class BusinessCategories extends Component {
     constructor(props) {
@@ -28,6 +30,27 @@ class BusinessCategories extends Component {
         e.preventDefault();
 
         this.props.setBusinessCategoryId(id);
+
+        if (this.props.appStatus.business_id) {
+            this.props.saveBusinessFormRequest({
+                type: "update_business",
+                business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+                business_id: this.props.appStatus.business_id,
+                business_category_id: this.props.appStatus.business_category_id
+            }).then(
+                (response) => {
+                    this.setState({isLoading: false});
+
+                    this.props.addFlashMessage({
+                        type: "success",
+                        text: "Saved successfully!"
+                    });
+                    this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
+                },
+                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+            );
+        }
+
         this.setState({
             showSellGoodsOption: (id != 4) ? true : false,
             active: id
@@ -38,6 +61,26 @@ class BusinessCategories extends Component {
         e.preventDefault();
 
         this.props.setSellGoods(sellGoods);
+
+        if (this.props.appStatus.business_id) {
+            this.props.saveBusinessFormRequest({
+                type: "update_business",
+                business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+                business_id: this.props.appStatus.business_id,
+                sell_goods: this.props.appStatus.sell_goods
+            }).then(
+                (response) => {
+                    this.setState({isLoading: false});
+
+                    this.props.addFlashMessage({
+                        type: "success",
+                        text: "Saved successfully!"
+                    });
+                    this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
+                },
+                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+            );
+        }
     }
 
     handleToolTip(e, id) {
@@ -47,6 +90,7 @@ class BusinessCategories extends Component {
 
     onClickNext(e) {
         e.preventDefault();
+        this.props.getAppStatus();
         this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
     }
 
@@ -129,7 +173,9 @@ BusinessCategories.propTypes = {
     setCurrentBusinessCategoryId: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    saveBusinessFormRequest: PropTypes.func.isRequired,
+    getAppStatus: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -146,6 +192,8 @@ export default withRouter(
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            getBusinessOptionFromUrl
+            getBusinessOptionFromUrl,
+            saveBusinessFormRequest,
+            getAppStatus
         }
     )(BusinessCategories))

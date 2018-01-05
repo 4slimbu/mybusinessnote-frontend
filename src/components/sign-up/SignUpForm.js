@@ -1,9 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import {map} from "lodash";
-import timezones from "../../data/timezones";
 import jwt_decode from "jwt-decode";
-import {validateEmail, validateInput} from "../../utils/validation/SignUpFormValidation";
+import {validateEmail, validateCreateUser} from "../../utils/validation/UserValidation";
 import TextFieldGroup from "../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
@@ -14,6 +12,9 @@ class SignUpForm extends Component {
         this.state = {
             type: "register_user",
             business_option_id: null,
+            business_category_id: null,
+            sell_goods: null,
+            user_id: null,
             first_name: "",
             last_name: "",
             email: "",
@@ -29,7 +30,29 @@ class SignUpForm extends Component {
         this.checkIfUserExists = this.checkIfUserExists.bind(this);
     }
 
+    componentDidMount() {
+        this.setState({
+            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_category_id: this.props.appStatus.business_category_id,
+            first_name: this.props.appStatus.first_name,
+            last_name: this.props.appStatus.last_name,
+            email: this.props.appStatus.email,
+            phone_number: this.props.appStatus.phone_number,
+            sell_goods: this.props.appStatus.sell_goods,
+            user_id: this.props.appStatus.user_id ? this.props.appStatus.user_id : null,
+        });
+    }
+
     componentWillReceiveProps() {
+        this.setState({
+            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_category_id: this.props.appStatus.business_category_id,
+            first_name: this.props.appStatus.first_name,
+            last_name: this.props.appStatus.last_name,
+            email: this.props.appStatus.email,
+            phone_number: this.props.appStatus.phone_number,
+            sell_goods: this.props.appStatus.sell_goods,
+        });
     }
 
     onChange(e) {
@@ -40,7 +63,7 @@ class SignUpForm extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const { errors, isValid } = validateInput(input);
+        const { errors, isValid } = validateCreateUser(input);
 
         console.log('is form valid', errors);
 
@@ -63,30 +86,42 @@ class SignUpForm extends Component {
 
     onSubmit(e) {
         e.preventDefault();
+
         if (this.isFormValid()) {
             this.setState({
                 errors: {},
                 isLoading: true,
-                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                business_option_id: this.props.appStatus.currentBusinessOption.data.id,
                 business_category_id: this.props.appStatus.business_category_id,
                 sell_goods: this.props.appStatus.sell_goods
             });
+
+            if (!this.state.business_category_id) {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "You haven't selected any business category"
+                });
+                return;
+            }
 
             this.props.userSignUpFormRequest(this.state).then(
                 (response) => {
                     this.setState({isLoading: false});
 
                     const token = response.data.token;
-                    localStorage.setItem("jwtToken", token);
-                    setAuthorizationToken(token);
-                    this.props.setCurrentUser(jwt_decode(token).user);
+                    if (token) {
+                        localStorage.setItem("jwtToken", token);
+                        setAuthorizationToken(token);
+                        this.props.setCurrentUser(jwt_decode(token).user);
 
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "You have signed up successfully! Welcome!"
-                    });
+                        this.props.addFlashMessage({
+                            type: "success",
+                            text: "You have signed up successfully! Welcome!"
+                        });
+                    }
                     console.log('user sign up form request:', response);
                     console.log(this.props.appStatus.currentBusinessOption.links.next);
+                    this.props.getAppStatus();
                     this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
                 },
                 ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
@@ -120,17 +155,8 @@ class SignUpForm extends Component {
     }
 
     render() {
-        const { isAuthenticated, user} = this.props.auth;
+        const { appStatus } = this.props;
         const errors = this.state.errors;
-        const options = map(timezones, (value, key) => {
-            return <option key={value} value={value}>{key}</option>
-        });
-
-        const displayError = (fieldName) => {
-            return map(fieldName, (value, key) => {
-                return <div className="help-block" key={key}>{ value }</div>
-            })
-        };
 
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
@@ -175,28 +201,35 @@ class SignUpForm extends Component {
                     field="phone_number"
                 />
 
-                <TextFieldGroup
-                    error={errors.password}
-                    label="Password *"
-                    placeholder="xxxxxxxxxxxx"
-                    onChange={this.onChange}
-                    value={this.state.password}
-                    type="password"
-                    field="password"
-                />
+                {
+                    !this.state.user_id &&
+                    <div>
+                        <TextFieldGroup
+                            error={errors.password}
+                            label="Password *"
+                            placeholder="xxxxxxxxxxxx"
+                            onChange={this.onChange}
+                            value={this.state.password}
+                            type="password"
+                            field="password"
+                        />
 
-                <small className="note">Must include lower, upper, number and symbol min 8 characters up to 20.
-                </small>
+                        <small className="note">Must include lower, upper, number and symbol min 8 characters up to 20.
+                        </small>
 
-                <TextFieldGroup
-                    error={errors.confirm_password}
-                    label="Confirm Password"
-                    placeholder="xxxxxxxxxxxx"
-                    onChange={this.onChange}
-                    value={this.state.confirm_password}
-                    type="password"
-                    field="confirm_password"
-                />
+                        <TextFieldGroup
+                            error={errors.confirm_password}
+                            label="Confirm Password"
+                            placeholder="xxxxxxxxxxxx"
+                            onChange={this.onChange}
+                            value={this.state.confirm_password}
+                            type="password"
+                            field="confirm_password"
+                        />
+                    </div>
+                }
+
+
 
                 <div className="btn-wrap">
                     <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Continue</button>
@@ -213,7 +246,8 @@ SignUpForm.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     doesUserExists: PropTypes.func.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    getAppStatus: PropTypes.func.isRequired
 };
 
 export default withRouter(SignUpForm);
