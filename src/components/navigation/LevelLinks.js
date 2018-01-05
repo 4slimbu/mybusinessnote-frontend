@@ -14,7 +14,7 @@ class LevelLinks extends Component {
 
     render() {
         //get the app status object
-        const { appStatus } = this.props;
+        const { appStatus, onClickLink } = this.props;
         //init levels
         const levels = appStatus.levels;
         //init current levels
@@ -42,7 +42,7 @@ class LevelLinks extends Component {
                     <div id={`collapse${level.id}`} className={classnames("panel-collapse collapse", {"in" : currentLevel.id === level.id })} role="tabpanel" aria-labelledby="menu2">
                         <div className="panel-body">
                             <ul className="getting-start-list">
-                                <SectionLinks level={level} appStatus={appStatus} />
+                                <SectionLinks level={level} appStatus={appStatus} onClickLink={(e, url)=>onClickLink(e, url)}/>
                             </ul>
                         </div>
                     </div>
@@ -60,6 +60,7 @@ class LevelLinks extends Component {
 
 LevelLinks.propTypes = {
     appStatus: PropTypes.object.isRequired,
+    onClickLink: PropTypes.func.isRequired
 };
 
 export default withRouter(LevelLinks);

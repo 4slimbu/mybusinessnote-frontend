@@ -4,9 +4,15 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {logout} from "../../actions/authActions";
 import LevelLinks from "./LevelLinks";
-import {setCurrentLevel} from "../../actions/appStatusAction";
+import {getBusinessOptionFromUrl, setCurrentLevel} from "../../actions/appStatusAction";
 
 class NavigationBar extends Component {
+
+    onClickLink(e, url) {
+        e.preventDefault();
+        this.props.getBusinessOptionFromUrl(url);
+        this.props.history.push(url);
+    }
 
     logout(e) {
         e.preventDefault();
@@ -43,7 +49,7 @@ class NavigationBar extends Component {
                 <h3 className="tagline-head">Let your <br/>journey begins</h3>
                 <div className="menu-accordion">
                     <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
-                        <LevelLinks appStatus={appStatus} setCurrentLevel={setCurrentLevel}/>
+                        <LevelLinks appStatus={appStatus} setCurrentLevel={setCurrentLevel} onClickLink={(e, url) => this.onClickLink(e, url)}/>
                     </div>
                 </div>
             </section>
@@ -55,7 +61,8 @@ NavigationBar.propTypes = {
     auth: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
     appStatus: PropTypes.object.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired
+    setCurrentLevel: PropTypes.func.isRequired,
+    getBusinessOptionFromUrl: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -65,4 +72,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default withRouter(connect(mapStateToProps, { logout, setCurrentLevel })(NavigationBar));
+export default withRouter(connect(mapStateToProps, { logout, setCurrentLevel, getBusinessOptionFromUrl })(NavigationBar));

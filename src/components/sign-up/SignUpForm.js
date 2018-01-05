@@ -12,6 +12,8 @@ class SignUpForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            type: "register_user",
+            business_option_id: null,
             first_name: "",
             last_name: "",
             email: "",
@@ -62,7 +64,13 @@ class SignUpForm extends Component {
     onSubmit(e) {
         e.preventDefault();
         if (this.isFormValid()) {
-            this.setState({ errors: {}, isLoading: true});
+            this.setState({
+                errors: {},
+                isLoading: true,
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                business_category_id: this.props.appStatus.business_category_id,
+                sell_goods: this.props.appStatus.sell_goods
+            });
 
             this.props.userSignUpFormRequest(this.state).then(
                 (response) => {

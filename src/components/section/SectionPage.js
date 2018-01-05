@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {getAppStatus, getBusinessOption, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
+import {API_BASE_URL} from "../../config";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -12,12 +13,9 @@ class SectionPage extends Component {
 
     componentDidMount() {
         this.props.getAppStatus();
-        this.props.getBusinessOption(
-            this.props.appStatus.currentLevel.id,
-            this.props.appStatus.currentSection.id,
-            this.props.appStatus.currentBusinessOption.id,
-        );
+        this.props.getBusinessOptionFromUrl(this.props.location.pathname);
     }
+
 
     onClickNext(e) {
         e.preventDefault();

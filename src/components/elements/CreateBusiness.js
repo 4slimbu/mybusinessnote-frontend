@@ -1,191 +1,153 @@
 import React, {Component} from 'react';
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {addFlashMessage} from "../../actions/flashMessageAction";
+import {getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import jwt_decode from "jwt-decode";
+import setAuthorizationToken from "../../utils/setAuthorizationToken";
+import {validateInput} from "../../utils/validation/SignUpFormValidation";
+import TextFieldGroup from "../common/TextFieldGroup";
+import {createBusinessFormRequest} from "../../actions/businessActions";
+import {withRouter} from "react-router-dom";
+import {validateCreateBusiness} from "../../utils/validation/CreateBusinessValidation";
 
-export default class CreateBusiness extends Component {
-    // constructor(props) {
-    //     super(props);
-    //
-    //     this.state = {
-    //         isComplete: false,
-    //         businessName: "",
-    //         website: "",
-    //         isBusinessNameValid: true,
-    //         isWebsiteValid: true,
-    //         errors: {
-    //             businessName: '',
-    //             website: ''
-    //         }
-    //     };
-    //     this.handleSubmit = this.handleSubmit.bind(this);
-    // }
-    //
-    // async componentDidMount(){
-    //     this.updateFormBusinessData();
-    // }
-    //
-    // async componentWillReceiveProps(){
-    //     this.updateFormBusinessData();
-    // }
-    //
-    // updateFormBusinessData() {
-    //     this.setState({
-    //         businessName: (this.props.business) ? this.props.business.business_name : '',
-    //         website: (this.props.business) ? this.props.business.website : '',
-    //     })
-    // }
-    //
-    // updateBusiness(response) {
-    //     this.props.onChangeBusiness(response.data);
-    // }
-    //
-    // validateForm() {
-    //     this.setState({
-    //         isBusinessNameValid: (this.validateBusinessName(this.state.businessName)) ? true : false,
-    //         isWebsiteValid: (this.validateWebsite(this.state.website)) ? true : false,
-    //     });
-    //
-    //     return this.state.isBusinessNameValid &&
-    //         this.state.isWebsiteValid
-    // }
-    //
-    // validateBusinessName(businessName) {
-    //     if (!businessName) {
-    //         this.setState(prevState => ({
-    //             errors: {
-    //                 ...prevState.errors,
-    //                 businessName: 'Business Name is required'
-    //             }
-    //         }));
-    //         return false;
-    //     }
-    //
-    //     this.setState(prevState => ({
-    //         errors: {
-    //             ...prevState.errors,
-    //             businessName: ''
-    //         }
-    //     }));
-    //
-    //     return true;
-    // }
-    //
-    // validateWebsite(website) {
-    //     if (!website) {
-    //         this.setState(prevState => ({
-    //             errors: {
-    //                 ...prevState.errors,
-    //                 website: 'Website is required'
-    //             }
-    //         }));
-    //         return false;
-    //     }
-    //
-    //     this.setState(prevState => ({
-    //         errors: {
-    //             ...prevState.errors,
-    //             website: ''
-    //         }
-    //     }));
-    //
-    //     return true;
-    // }
-    //
-    // handleSubmit = async event => {
-    //     event.preventDefault();
-    //     if (! this.validateForm()) {
-    //         return;
-    //     }
-    //     try {
-    //         let self = this;
-    //         let method = (this.props.business)? ((this.props.business.id) ? 'PUT' : 'POST') : 'POST';
-    //         let url = (this.props.business)? ((this.props.business.id)? '/businesses/' + this.props.business.id : '/businesses' ) : '/businesses';
-    //         let data;
-    //         if ((this.props.business)? ((this.props.business.id) ? true : false) : false) {
-    //             data = {
-    //                 "business_name": this.state.businessName,
-    //                 "website": this.state.website,
-    //             }
-    //         } else {
-    //             data = {
-    //                 "business_name": this.state.businessName,
-    //                 "website": this.state.website,
-    //                 "user_id": this.props.authUser.id,
-    //                 "business_category_id": this.props.businessCategory
-    //             }
-    //         }
-    //         axios({
-    //             method: method,
-    //             url: apiBaseUrl + url,
-    //             data: data,
-    //             crossDomain: true,
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         })
-    //             .then(function (response) {
-    //                 self.updateBusiness(response);
-    //                 self.setState({
-    //                     isComplete: true,
-    //                 })
-    //
-    //             })
-    //             .catch(function (error) {
-    //                 console.log(error);
-    //             });
-    //
-    //     } catch (e) {
-    //         alert(e);
-    //     }
-    //
-    // }
-    //
-    // handleChange = event => {
-    //     this.setState({
-    //         [event.target.id]: event.target.value
-    //     });
-    // }
-    // render() {
-    //     const next = (this.props.links) ? this.props.links.next : null;
-    //     const authUser = this.props.authUser;
-    //     return (
-    //         authUser ?
-    //         <div>
-    //             { this.state.isComplete &&
-    //             <Redirect to={next} />
-    //             }
-    //             <form className="apps-form" onSubmit={this.handleSubmit}>
-    //                 <div className="form-group">
-    //                     <label>Your Business Name<span>*</span></label>
-    //                     <input type="text" className={`${(!this.state.isBusinessNameValid) ? 'form-error' : ''} form-control`} id="businessName" placeholder="eg. John’s Bakery LTD PTD"
-    //                            autoFocus
-    //                            value={this.state.businessName}
-    //                            onChange={this.handleChange}
-    //                     />
-    //                     <small className="form-error-message">{this.state.errors.businessName}</small>
-    //                 </div>
-    //                 <div className="form-group">
-    //                     <label>Your Business Web Address<span>*</span></label>
-    //                     <input type="text" className={`${(!this.state.isWebsiteValid) ? 'form-error' : ''} form-control`} id="website" placeholder="eg. http://www.johnsbakery.com.au"
-    //                            autoFocus
-    //                            value={this.state.website}
-    //                            onChange={this.handleChange}
-    //                     />
-    //                     <small className="form-error-message">{this.state.errors.website}</small>
-    //                 </div>
-    //                 <span className="find-web-span">Don’t have a web address?</span><a href={ this.props.currentBusinessOption.data.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Find me a web address</a>
-    //                 <div className="btn-wrap">
-    //                     <button type="submit" className="btn btn-default btn-md">Continue</button>
-    //                 </div>
-    //             </form>
-    //
-    //         </div>
-    //             :
-    //             <Redirect to='/levels/1/sections/2/business-options/3'/>
-    //     )
-    // }
+class CreateBusiness extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            business_name: "",
+            website: "",
+            user_id: "",
+            business_category_id: "",
+            sell_goods: "",
+            errors: {},
+            isLoading: false
+        };
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    componentWillReceiveProps() {
+    }
+
+    onChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
+    isFormValid(data = null) {
+        let input = (data) ? data : this.state;
+        const { errors, isValid } = validateCreateBusiness(input);
+
+        console.log('is form valid', errors);
+
+        if(! isValid) {
+            this.setState({ errors });
+        }
+
+        return isValid;
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+        if (this.isFormValid()) {
+            this.setState({
+                errors: {},
+                isLoading: true,
+            });
+
+            if (!this.state.business_category_id) {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "You haven't selected any business category"
+                });
+                return;
+            }
+
+            if (!this.state.user_id) {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "You need to create an account before creating business"
+                });
+                return;
+            }
+
+            this.props.createBusinessFormRequest(this.state).then(
+                (response) => {
+                    this.setState({isLoading: false});
+
+                    const token = response.data.token;
+                    localStorage.setItem("jwtToken", token);
+                    setAuthorizationToken(token);
+                    this.props.setCurrentUser(jwt_decode(token).user);
+
+                    this.props.addFlashMessage({
+                        type: "success",
+                        text: "You have created your business successfully!"
+                    });
+                    this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
+                },
+                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+            );
+        }
+    }
+
 
     render() {
+        const { appStatus } = this.props;
+        const errors = this.state.errors;
+
         return (
-            <div>inside create business</div>
-        )
+            <form className="apps-form" onSubmit={this.onSubmit}>
+                <TextFieldGroup
+                    error={errors.business_name}
+                    label="Your Business Name *"
+                    placeholder="eg. John's Bakery LTD PTD"
+                    onChange={this.onChange}
+                    value={this.state.business_name}
+                    type="text"
+                    field="business_name"
+                />
+
+                <TextFieldGroup
+                    error={errors.website}
+                    label="Your Business Website *"
+                    placeholder="eg. http://johnsbakery.com.au"
+                    onChange={this.onChange}
+                    value={this.state.website}
+                    type="text"
+                    field="website"
+                />
+
+                <span className="find-web-span">Don’t have a web address?</span><a href={ appStatus.currentBusinessOption.data.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Find me a web address</a>
+
+                <div className="btn-wrap">
+                    <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Continue</button>
+                </div>
+            </form>
+        );
     }
 }
+
+CreateBusiness.propTypes = {
+    appStatus: PropTypes.func.isRequired,
+    auth: PropTypes.func.isRequired,
+    createBusinessFormRequest: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
+    getBusinessOptionFromUrl: PropTypes.func.isRequired
+};
+
+
+function mapStateToProps(state) {
+    return {
+        appStatus: state.appStatusReducer,
+        auth: state.authReducer
+    }
+}
+
+export default withRouter(connect(mapStateToProps, {
+    createBusinessFormRequest,
+    addFlashMessage,
+    getBusinessOptionFromUrl
+})(CreateBusiness));
