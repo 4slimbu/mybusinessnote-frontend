@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {filterLevelsBySlug, firstSectionUrl, generateLevelCompletedPercent} from "../navigation/helperFunctions";
 import {getBusinessOption, setCurrentLevel, setCurrentSection} from "../../actions/appStatusAction";
+import LevelCompletePage from "./LevelCompletePage";
 
 class LevelPage extends Component {
     constructor(props) {
@@ -24,7 +25,6 @@ class LevelPage extends Component {
 
     onClickStart() {
         const currentLevel = filterLevelsBySlug(this.props.appStatus.levels, this.props.match.params.level);
-        console.log('current level: ', currentLevel);
         this.props.setCurrentLevel(currentLevel);
         this.props.setCurrentSection(currentLevel.sections[0]);
         this.props.history.push(firstSectionUrl(this.props.appStatus.currentLevel));
@@ -36,12 +36,9 @@ class LevelPage extends Component {
 
         const completedPercent = generateLevelCompletedPercent(levels, currentLevel);
 
-        console.log('completed percent', completedPercent);
-
         page = (<LevelIntroPage appStatus={this.props.appStatus} level={currentLevel} onClickStart={this.onClickStart}/>);
 
         if (completedPercent === -1) {
-            console.log('inside completed percent === -1 ');
             page = (
                 <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                     <div className="content-wrapper step-one">
@@ -50,10 +47,9 @@ class LevelPage extends Component {
             );
         }
 
-        // if (completedPercent === 100) {
-        //     console.log('inside completed percent === 100')
-        //     page = (<LevelCompletePage level={currentLevel}/>)
-        // }
+        if (completedPercent >= "100") {
+            page = (<LevelCompletePage level={currentLevel}/>)
+        }
 
         return (
             <div>

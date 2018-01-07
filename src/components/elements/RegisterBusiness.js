@@ -85,8 +85,8 @@ class RegisterBusiness extends Component {
                         setAuthorizationToken(token);
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
-                    this.props.getAppStatus()
-                    this.props.history.push(this.props.appStatus.currentLevel.links.self);
+                    this.props.getAppStatus();
+                    this.props.history.push('/level/' + this.props.appStatus.currentLevel.slug);
                 },
                 ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
             );
