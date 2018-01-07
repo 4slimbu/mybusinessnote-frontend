@@ -964,7 +964,7 @@ ul.apps-icons li {
    /* min-height: 159px;*/
     float: left;
     margin: 0 12px 12px 0;
-    min-width: 168px;
+    min-width: 165px;
     position: relative;
     cursor: pointer;
     transition-property: background;
@@ -1319,10 +1319,11 @@ a.next-session-link i {
 .panel-group .panel-heading + .panel-collapse > .panel-body {
     border-top: 0;
     border: 0;
-    font-size: 16px;
+    font-size: 16px; 
 }
+
 .panel-body {
-    padding: 5px 0;
+    padding: 10px;
 }
 .panel-default > .panel-heading {
     background-color: #f2f2f2;

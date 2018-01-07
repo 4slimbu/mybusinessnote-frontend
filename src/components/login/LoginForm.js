@@ -70,7 +70,7 @@ class LoginForm extends Component {
     render() {
         const {errors, email, password, isLoading} = this.state;
         return (
-            <form onSubmit={this.onSubmit}>
+            <form className="apps-form" onSubmit={this.onSubmit}>
                 <h1>Login</h1>
 
                 { errors.form && <div className="alert alert-danger">{errors.form}</div> }
@@ -91,11 +91,8 @@ class LoginForm extends Component {
                     type="password"
                     field="password"
                 />
-
-                <div className="form-group">
-                    <button className="btn btn-primary btn-lg" disabled={isLoading}>
-                        Login
-                    </button>
+                <div className="btn-wrap">
+                    <button disabled={ isLoading } className="btn btn-default btn-md">Login</button>
                 </div>
 
             </form>

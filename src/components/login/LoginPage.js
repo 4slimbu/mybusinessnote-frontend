@@ -12,6 +12,7 @@ class LoginPage extends Component {
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
+
                     <LoginForm
                         addFlashMessage={addFlashMessage}
                         userLoginFormRequest={userLoginFormRequest}

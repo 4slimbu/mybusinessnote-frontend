@@ -1,6 +1,6 @@
 import {
     GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID, SET_CURRENT,
-    SET_CURRENT_BUSINESS_CATEGORY_ID,
+    SET_CURRENT_BUSINESS_OPTION,
     SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS
 } from "./types";
 import * as axios from "axios";
@@ -92,6 +92,13 @@ export function setCurrentSection(currentSection) {
     return {
         type: SET_CURRENT_SECTION,
         currentSection
+    }
+}
+
+export function setCurrentBusinessOption(currentBusinessOption) {
+    return {
+        type: SET_CURRENT_BUSINESS_OPTION,
+        currentBusinessOption
     }
 }
 

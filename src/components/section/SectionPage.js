@@ -1,9 +1,12 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {getAppStatus, getBusinessOption, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {
+    getAppStatus, getBusinessOption, getBusinessOptionFromUrl,
+    setCurrentBusinessOption
+} from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
-import {API_BASE_URL} from "../../config";
+import Loading from "../Loading";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -24,15 +27,17 @@ class SectionPage extends Component {
     }
 
     render() {
-        const { currentLevel, currentSection, currentBusinessOption } = this.props.appStatus;
+        const { isFetching, currentLevel, currentSection, currentBusinessOption } = this.props.appStatus;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
+                    { isFetching && <Loading /> }
                     <BusinessOptionPage
                         currentLevel={currentLevel}
                         currentSection={currentSection}
                         currentBusinessOption={currentBusinessOption}
                         onClickNext={(e) => this.onClickNext(e)}
+                        isFetching={isFetching}
                     />
                 </div>
             </section>
@@ -44,7 +49,8 @@ SectionPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired
+    getAppStatus: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -53,4 +59,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {getBusinessOption, getBusinessOptionFromUrl, getAppStatus})(SectionPage);
+export default connect(mapStateToProps, {getBusinessOption, getBusinessOptionFromUrl, getAppStatus, setCurrentBusinessOption})(SectionPage);

@@ -23,7 +23,7 @@ class LevelLinks extends Component {
         //generate level list from levels
         const levelsList = map(levels, (level, key) => {
             //generate level Image from level id
-            const levelImg = (level.completed_percent === 100) ? "badge/gold-badge-" + level.id : "img_" + level.id;
+            const levelImg = (level.completed_percent >= 100) ? "badge/gold-badge-" + level.id : "img_" + level.id;
             return (
                 <div key={level.slug} className={classnames("panel panel-default panel-faq", { "active" : currentLevel.id === level.id})}>
                     <div className="panel-heading" role="tab" id={`menu${level.id}`}>
@@ -34,7 +34,7 @@ class LevelLinks extends Component {
                                   to={`/level/${level.slug}#collapse${level.id}`}
                                   aria-expanded="true" aria-controls={`collapse${level.id}`}
                             >
-                                <figure className={classnames({"goldbadge-img" : (level.completed_percent === 100)})}><img src={`${process.env.PUBLIC_URL}/assets/images/journey/${levelImg}.png`} alt="" /></figure>
+                                <figure className={classnames({"goldbadge-img" : (level.completed_percent >= 100)})}><img src={`${process.env.PUBLIC_URL}/assets/images/journey/${levelImg}.png`} alt="" /></figure>
                                 <h6>{ level.name }</h6>
                             </Link>
                         </div>

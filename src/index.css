@@ -31,3 +31,10 @@
   font-size: 12px;
   color: darkred;
 }
+
+.loading-spinner {
+  position: fixed;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+  transform: translate(-50%, -50%);
+}

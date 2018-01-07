@@ -28,3 +28,4 @@ export const DEFAULT_APP_STATUS =  {
 };
 
 export const DEFAULT_BUSINESS_OPTION =  {};
+export const DEFAULT_CURRENT_BUSINESS_OPTION =  {data:{}, links: {}};

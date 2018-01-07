@@ -8,10 +8,16 @@ import {DEFAULT_APP_STATUS} from "../data/default";
 
 export default (state = DEFAULT_APP_STATUS, action = {}) => {
     switch(action.type) {
+        case `${GET_APP_STATUS}_PENDING` :
+            return {
+                ...state,
+                isFetching: true,
+            };
         case `${GET_APP_STATUS}_FULFILLED` :
             return {
                 ...state,
                 ...action.payload,
+                isFetching: false,
                 currentLevel: action.payload.levels[0]
             };
         case `${SET_APP_STATUS}` :
@@ -36,9 +42,15 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 ...state,
                 currentSection: action.currentSection
             };
+        case `${GET_BUSINESS_OPTION}_PENDING` :
+            return {
+                ...state,
+                isFetching: true
+            };
         case `${GET_BUSINESS_OPTION}_FULFILLED` :
             return {
                 ...state,
+                isFetching: false,
                 currentBusinessOption: action.payload
             };
         case `${SET_CURRENT_BUSINESS_OPTION}` :

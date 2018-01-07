@@ -19,9 +19,11 @@ export function userLoginFormRequest(userData) {
             },
         }).then(res => {
             const token = res.data.token;
-            localStorage.setItem("jwtToken", token);
-            setAuthorizationToken(token);
-            dispatch(setCurrentUser(jwt_decode(token).user));
+            if (token) {
+                localStorage.setItem("jwtToken", token);
+                setAuthorizationToken(token);
+                dispatch(setCurrentUser(jwt_decode(token).user));
+            }
         });
     }
 }

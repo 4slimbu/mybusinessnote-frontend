@@ -20,7 +20,7 @@ export function doesUserExists(identifier) {
     return dispatch => {
         return axios({
             method:"POST",
-            url: API_BASE_URL + "user/check-if-exists",
+            url: API_BASE_URL + "/user/check-if-exists",
             data: {"email" : identifier},
             crossDomain: true,
             headers: {

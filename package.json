@@ -2,7 +2,7 @@
   "name": "mbj-front",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://localhost/sandbox/mbj-front/build/",
+  "homepage": "/mbj-front/build/",
   "dependencies": {
     "axios": "^0.17.1",
     "classnames": "^2.2.5",
@@ -11,6 +11,7 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-loading": "^1.0.3",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",

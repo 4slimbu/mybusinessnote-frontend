@@ -10,7 +10,7 @@ class ToolTip extends Component {
            return  (
                <div className="panel panel-default" key={`tip-list-${key}` }>
                    <div className="panel-heading " role="tab" id={`tip-heading-${key}`}>
-                       <a href={`#tip-collapse-${key}`} className={ classnames("panel-title", { "" : item.id == currentTipCategoryId})} role="button" data-toggle="collapse"
+                       <a href={`#tip-collapse-${key}`} className={ classnames("panel-title", { "collapsed" : item.id == currentTipCategoryId})} role="button" data-toggle="collapse"
                           data-parent="#accordion" aria-expanded="true" aria-controls={`tip-collapse-${key}`}>
                            <h4>
                                <span className="accordion-titles">{ item.name }</span>
