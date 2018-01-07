@@ -1,8 +1,10 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import jwt_decode from "jwt-decode";
 import TextFieldGroup from "../common/TextFieldGroup";
 import {validateLogin} from "../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
+import setAuthorizationToken from "../../utils/setAuthorizationToken";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -42,27 +44,28 @@ class LoginForm extends Component {
         if (this.isFormValid()) {
             this.setState({errors: {}, isLoading: true});
 
-            this.props.userLoginFormRequest(this.state).then(
+            this.props.userLoginFormRequest({
+                siwps: this.state.email,
+                sdlkw: this.state.password
+            }).then(
                 (response) => {
                     this.setState({isLoading: false});
 
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "You have logged in successfully! Welcome!"
-                    });
+                    const token = response.data.token;
+                    if (token) {
+                        localStorage.setItem("jwtToken", token);
+                        setAuthorizationToken(token);
+                        this.props.setCurrentUser(jwt_decode(token).user);
 
+                        this.props.addFlashMessage({
+                            type: "success",
+                            text: "Logged in successfully! Welcome!"
+                        });
+                    }
                     this.props.getAppStatus();
-
-                    this.props.history.push("/");
+                    this.props.history.push('/');
                 },
-                (error) => {
-                    this.setState({
-                        isLoading: false,
-                        errors: {
-                            form: error.response.data.error
-                        }
-                    });
-                }
+                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
             );
         }
     }
@@ -103,7 +106,9 @@ class LoginForm extends Component {
 LoginForm.propTypes = {
     userLoginFormRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired
+    getAppStatus: PropTypes.func.isRequired,
+    setCurrentUser: PropTypes.func.isRequired,
+    getBusinessOptionFromUrl: PropTypes.func.isRequired
 };
 
 export default withRouter(LoginForm);

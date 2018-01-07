@@ -5,25 +5,19 @@ import {SET_CURRENT_USER} from "./types";
 import {getAppStatus, setAppStatus} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../data/default";
+import {API_BASE_URL} from "../config";
 
 export function userLoginFormRequest(userData) {
     return dispatch => {
         //register user using axios
         return axios({
             method: "POST",
-            url: "http://mbj.dev/api/user/login",
+            url: API_BASE_URL + "/user/login",
             data: userData,
             crossDomain: true,
             headers: {
                 'Content-Type': 'application/json',
             },
-        }).then(res => {
-            const token = res.data.token;
-            if (token) {
-                localStorage.setItem("jwtToken", token);
-                setAuthorizationToken(token);
-                dispatch(setCurrentUser(jwt_decode(token).user));
-            }
         });
     }
 }
