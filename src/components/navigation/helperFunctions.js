@@ -18,16 +18,34 @@ export function generateAppRelativeUrl(level, section = null, businessOption = n
     }
 }
 
+export function generateApiUrlFromSlug(appStatus, levelSlug, sectionSlug) {
+    console.log('appstatus', appStatus.levels);
+    return '/level/' + 1 + '/section/' + 1;
+}
+
 export function firstSectionUrl(currentLevel) {
     return '/level/' + currentLevel.slug + '/section/' + currentLevel.sections[0].slug;
 }
 
-export function filterLevelsBySlug(levels, slug) {
+export function filterLevelsBySlug(levels, levelSlug) {
     let currentLevel =  filter(levels, (level) => {
-        return level.slug;
+        return level.slug == levelSlug;
     });
     //get only the first value
     return currentLevel[0];
+}
+
+export function getCurrentLevelByUrl(levels, url) {
+    console.log('levels', levels);
+    console.log('url:', url);
+    let splittedArray = url.split(/\/|\?|&|=|\./g);
+    console.log('splittedArray:', splittedArray[2]);
+    let currentLevel = filter(levels, (level) => {
+        return level.slug == splittedArray[2];
+    });
+    console.log('current level', currentLevel);
+    return currentLevel[0];
+
 }
 
 export function generateLevelCompletedPercent(levels, currentLevel) {

@@ -17,6 +17,7 @@ export function userLoginFormRequest(userData) {
             crossDomain: true,
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
         });
     }

@@ -27,7 +27,7 @@ class CreateBusiness extends Component {
 
     componentDidMount() {
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_id: this.props.appStatus.business_id,
             business_name: this.props.appStatus.business_name,
             website: this.props.appStatus.website,
@@ -36,7 +36,7 @@ class CreateBusiness extends Component {
 
     componentWillReceiveProps() {
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_id: this.props.appStatus.business_id,
             business_name: this.props.appStatus.business_name,
             website: this.props.appStatus.website,
@@ -64,13 +64,14 @@ class CreateBusiness extends Component {
 
     onSubmit(e) {
         e.preventDefault();
+        const appStatus = this.props.appStatus;
         if (this.isFormValid()) {
             this.setState({
                 errors: {},
                 isLoading: true,
             });
 
-            if (!this.props.appStatus.user_id || !this.props.appStatus.business_id) {
+            if (!appStatus.user_id || !appStatus.business_id) {
                 this.props.addFlashMessage({
                     type: "error",
                     text: "You need to create an account before creating business"
@@ -78,7 +79,7 @@ class CreateBusiness extends Component {
                 return;
             }
 
-            this.props.saveBusinessFormRequest(this.state).then(
+            this.props.saveBusinessFormRequest(this.state, appStatus.currentBusinessOption.links.self).then(
                 (response) => {
                     this.setState({isLoading: false});
                     const token = response.data.token;
@@ -89,7 +90,11 @@ class CreateBusiness extends Component {
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
                     this.props.getAppStatus();
-                    this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
+                    this.props.addFlashMessage({
+                        type: "success",
+                        text: "Saved successfully!"
+                    });
+                    this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
                 },
                 ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
             );
@@ -123,7 +128,7 @@ class CreateBusiness extends Component {
                     field="website"
                 />
 
-                <span className="find-web-span">Don’t have a web address?</span><a href={ appStatus.currentBusinessOption.data.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Find me a web address</a>
+                <span className="find-web-span">Don’t have a web address?</span><a href={ appStatus.currentBusinessOption.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Find me a web address</a>
 
                 <div className="btn-wrap">
                     <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Continue</button>

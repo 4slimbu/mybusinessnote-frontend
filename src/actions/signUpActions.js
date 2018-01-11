@@ -6,11 +6,28 @@ export function userSignUpFormRequest(userData) {
         //register user using axios
         return axios({
             method: "POST",
-            url: API_BASE_URL + "/business-option",
+            url: API_BASE_URL + '/entry-business-option',
             data: userData,
             crossDomain: true,
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+        });
+    }
+}
+
+export function userUpdateRequest(userData, url) {
+    return dispatch => {
+        //register user using axios
+        return axios({
+            method: "PUT",
+            url: API_BASE_URL + url,
+            data: userData,
+            crossDomain: true,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
         });
     }
@@ -24,7 +41,8 @@ export function doesUserExists(identifier) {
             data: {"email" : identifier},
             crossDomain: true,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             }
         });
     }

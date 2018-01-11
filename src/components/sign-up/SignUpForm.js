@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import jwt_decode from "jwt-decode";
-import {validateEmail, validateCreateUser} from "../../utils/validation/UserValidation";
+import {validateEmail, validateCreateUser, validateUpdateUser} from "../../utils/validation/UserValidation";
 import TextFieldGroup from "../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
@@ -21,7 +21,6 @@ class SignUpForm extends Component {
             phone_number: "",
             password: "",
             confirm_password: "",
-            timezone: "",
             errors: {},
             isLoading: false
         };
@@ -32,7 +31,7 @@ class SignUpForm extends Component {
 
     componentDidMount() {
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_category_id: this.props.appStatus.business_category_id,
             first_name: this.props.appStatus.first_name,
             last_name: this.props.appStatus.last_name,
@@ -45,7 +44,7 @@ class SignUpForm extends Component {
 
     componentWillReceiveProps() {
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_category_id: this.props.appStatus.business_category_id,
             first_name: this.props.appStatus.first_name,
             last_name: this.props.appStatus.last_name,
@@ -63,9 +62,7 @@ class SignUpForm extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const { errors, isValid } = validateCreateUser(input);
-
-        console.log('is form valid', errors);
+        const { errors, isValid } = (! this.props.auth.isAuthenticated) ? validateCreateUser(input) : validateUpdateUser(input);
 
         if(! isValid) {
             this.setState({ errors });
@@ -86,46 +83,54 @@ class SignUpForm extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-
+        const appStatus = this.props.appStatus;
         if (this.isFormValid()) {
             this.setState({
                 errors: {},
                 isLoading: true,
-                business_option_id: this.props.appStatus.currentBusinessOption.data.id,
-                business_category_id: this.props.appStatus.business_category_id,
-                sell_goods: this.props.appStatus.sell_goods
+                business_option_id: appStatus.currentBusinessOption.id,
             });
+            if (this.props.auth.isAuthenticated) {
+                this.props.userUpdateRequest(this.state, appStatus.currentBusinessOption.links.self).then(
+                    (response) => {
+                        this.setState({isLoading: false});
 
-            if (!this.state.business_category_id) {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "You haven't selected any business category"
-                });
-                return;
+                        const token = response.data.token;
+                        if (token) {
+                            localStorage.setItem("jwtToken", token);
+                            setAuthorizationToken(token);
+                            this.props.setCurrentUser(jwt_decode(token).user);
+
+                            this.props.addFlashMessage({
+                                type: "success",
+                                text: "Saved Successfully!"
+                            });
+                        }
+                        this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                    },
+                    ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+                );
+            } else {
+                this.props.userSignUpFormRequest(this.state).then(
+                    (response) => {
+                        this.setState({isLoading: false});
+
+                        const token = response.data.token;
+                        if (token) {
+                            localStorage.setItem("jwtToken", token);
+                            setAuthorizationToken(token);
+                            this.props.setCurrentUser(jwt_decode(token).user);
+
+                            this.props.addFlashMessage({
+                                type: "success",
+                                text: "You have signed up successfully! Welcome!"
+                            });
+                        }
+                        this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                    },
+                    ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+                );
             }
-
-            this.props.userSignUpFormRequest(this.state).then(
-                (response) => {
-                    this.setState({isLoading: false});
-
-                    const token = response.data.token;
-                    if (token) {
-                        localStorage.setItem("jwtToken", token);
-                        setAuthorizationToken(token);
-                        this.props.setCurrentUser(jwt_decode(token).user);
-
-                        this.props.addFlashMessage({
-                            type: "success",
-                            text: "You have signed up successfully! Welcome!"
-                        });
-                    }
-                    console.log('user sign up form request:', response);
-                    console.log(this.props.appStatus.currentBusinessOption.links.next);
-                    this.props.getAppStatus();
-                    this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
-                },
-                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
-            );
         }
     }
 
@@ -202,7 +207,6 @@ class SignUpForm extends Component {
                 />
 
                 {
-                    !this.state.user_id &&
                     <div>
                         <TextFieldGroup
                             error={errors.password}
@@ -243,6 +247,7 @@ SignUpForm.propTypes = {
     appStatus: PropTypes.func.isRequired,
     auth: PropTypes.func.isRequired,
     userSignUpFormRequest: PropTypes.func.isRequired,
+    userUpdateRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     doesUserExists: PropTypes.func.isRequired,
     setCurrentUser: PropTypes.func.isRequired,

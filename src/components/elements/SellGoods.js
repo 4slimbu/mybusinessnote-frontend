@@ -11,46 +11,10 @@ import {map} from "lodash";
 import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 
-class BusinessCategories extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            selectedBusinessCategory: null,
-            businessCategories: null,
-            active: null,
-        };
-    }
-
+class SellGoods extends Component {
     componentDidMount() {
         this.props.getBusinessCategories();
     }
-
-    handleSelect(e, id) {
-        e.preventDefault();
-        alert(id);
-        this.props.setBusinessCategoryId(id);
-        const appStatus = this.props.appStatus;
-        if (this.props.auth.isAuthenticated) {
-            this.props.saveBusinessFormRequest({
-                    business_option_id: appStatus.currentBusinessOption.id,
-                    business_category_id: id
-                },
-                appStatus.currentBusinessOption.links.self
-            ).then(
-                (response) => {
-                    this.setState({isLoading: false});
-
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "Saved successfully!"
-                    });
-                    this.props.getAppStatus();
-                },
-            );
-        }
-    }
-
 
     handleToolTip(e, id) {
         e.preventDefault();
@@ -59,40 +23,75 @@ class BusinessCategories extends Component {
 
     onClickNext(e) {
         e.preventDefault();
-        const appStatus = this.props.appStatus;
-
         this.props.getAppStatus();
+        const appStatus = this.props.appStatus;
         const query = (appStatus.business_category_id) ? '?business_category_id=' + appStatus.business_category_id : '';
         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next, query);
+    }
+
+    handleSelectSellGoods(e, sellGoods) {
+        e.preventDefault();
+
+        this.props.setSellGoods(sellGoods);
+        const appStatus = this.props.appStatus;
+
+        if (this.props.auth.isAuthenticated) {
+            this.props.saveBusinessFormRequest({
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                sell_goods: sellGoods
+            },
+                appStatus.currentBusinessOption.links.self
+                ).then(
+                (response) => {
+                    this.setState({isLoading: false});
+                    this.props.addFlashMessage({
+                        type: "success",
+                        text: "Saved successfully!"
+                    });
+                    this.props.getAppStatus();
+                }
+            );
+        }
     }
 
     render() {
         const { appStatus } = this.props;
         const next = (appStatus.currentBusinessOption.links && appStatus.business_category_id !== null) ? appStatus.currentBusinessOption.links.next : null;
-        const businessCategories = map(appStatus.businessCategories.data, (item, key) => {
-            const active = appStatus.business_category_id == item.id ? 'active' : '';
-            return (
-                <li key={item.id} style={{ maxWidth: "150px" }} className={active}>
-                    <div onClick={(e) => this.handleSelect(e, item.id)}>
-                        <a className="white-icon" href="#">
-                            <img src={item.white_icon} alt=""/>
-                        </a>
-                        <a className="red-icon" href="#">
-                            <img src={item.red_icon} alt=""/>
-                        </a>
-                        <span> <a href="#">{item.name}</a></span>
-                    </div>
-                    <a className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, item.id)}>
-                        <i className="fa fa-lightbulb-o" aria-hidden="true"></i>
-                    </a>
-                </li>
-            )
-        });
+        const selectedCategory = appStatus.businessCategories[appStatus.business_category_id];
+        const sellGoodsCategory = (
+            selectedCategory &&
+            <li key={selectedCategory.id} style={{ maxWidth: "150px" }} className="active">
+                <a className="white-icon" href="#">
+                    <img src={selectedCategory.white_icon} alt=""/>
+                </a>
+                <a className="red-icon" href="#">
+                    <img src={selectedCategory.red_icon} alt=""/>
+                </a>
+                <span> <a href="#">{selectedCategory.name}</a></span>
+                <a className="apps-question" href="#"><i className="fa fa-lightbulb-o" aria-hidden="true"></i>
+                </a>
+            </li>
+        );
+
+        const sellGoodsQuestion = (
+            <div>
+                <ul className="apps-icons clearfix">
+                    {sellGoodsCategory}
+                </ul>
+                <h3>Will you be selling goods online?</h3>
+                <div className="selling-goods-btns">
+                    <a href="" className={`btn btn-default btn-sm ${appStatus.sell_goods ? 'active' : ''}`}
+                       onClick={(e) => this.handleSelectSellGoods(e, true)}>Yes</a>
+                    <a href="" className={`btn btn-default btn-sm ${appStatus.sell_goods ? '' : 'active'}`}
+                       onClick={(e) => this.handleSelectSellGoods(e, false)}>No</a>
+                </div>
+            </div>
+        );
 
         return (
             <div>
                 <ul className="apps-icons clearfix apps-h-effect">
-                    {businessCategories }
+                    {sellGoodsQuestion }
                 </ul>
                 <div className="btn-wrap">
                     {next && <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
@@ -101,10 +100,13 @@ class BusinessCategories extends Component {
 
         )
 
+        // return (
+        //     <div>here</div>
+        // )
     }
 }
 
-BusinessCategories.propTypes = {
+SellGoods.propTypes = {
     getBusinessCategories: PropTypes.func.isRequired,
     setBusinessCategoryId: PropTypes.func.isRequired,
     setSellGoods: PropTypes.func.isRequired,
@@ -118,9 +120,8 @@ BusinessCategories.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        auth: state.authReducer,
         appStatus: state.appStatusReducer,
-        addFlashMessage: state.flashMessageReducer
+        auth: state.authReducer
     }
 }
 
@@ -137,4 +138,4 @@ export default withRouter(
             getAppStatus,
             addFlashMessage
         }
-    )(BusinessCategories))
+    )(SellGoods))

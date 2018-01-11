@@ -7,6 +7,7 @@ import {
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
 import Loading from "../Loading";
+import {generateApiUrlFromSlug, generateApiUrlFromUrlLocation} from "../navigation/helperFunctions";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -15,15 +16,24 @@ class SectionPage extends Component {
     }
 
     componentDidMount() {
+        const appStatus = this.props.appStatus;
         this.props.getAppStatus();
-        this.props.getBusinessOptionFromUrl(this.props.location.pathname);
+        this.props.getBusinessOption(this.props.appStatus);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // if (this.props.history.location.pathname != nextProps.history.location.pathname) {
+        //     const levelSlug = nextProps.match.params.level;
+        //     const sectionSlug = nextProps.match.params.section;
+        //     const appStatus = this.props.appStatus;
+        //     generateApiUrlFromSlug(appStatus, levelSlug, sectionSlug);
+        // }
     }
 
 
     onClickNext(e) {
         e.preventDefault();
-        this.props.getAppStatus();
-        this.props.getBusinessOptionFromUrl(this.props.appStatus.currentBusinessOption.links.next);
+        this.props.getBusinessOption(this.props.appStatus);
     }
 
     render() {

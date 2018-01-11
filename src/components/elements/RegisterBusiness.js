@@ -26,7 +26,7 @@ class RegisterBusiness extends Component {
 
     componentDidMount() {
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_id: this.props.appStatus.business_id,
             abn: this.props.appStatus.abn,
         });
@@ -34,7 +34,7 @@ class RegisterBusiness extends Component {
 
     componentWillReceiveProps() {
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.data.id,
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_id: this.props.appStatus.business_id,
             abn: this.props.appStatus.abn,
         });
@@ -61,13 +61,14 @@ class RegisterBusiness extends Component {
 
     onSubmit(e) {
         e.preventDefault();
+        const appStatus = this.props.appStatus;
         if (this.isFormValid()) {
             this.setState({
                 errors: {},
                 isLoading: true,
             });
 
-            if (!this.props.appStatus.user_id || !this.props.appStatus.business_id) {
+            if (!appStatus.user_id || !appStatus.business_id) {
                 this.props.addFlashMessage({
                     type: "error",
                     text: "You need to create an account before creating business"
@@ -75,7 +76,7 @@ class RegisterBusiness extends Component {
                 return;
             }
 
-            this.props.saveBusinessFormRequest(this.state).then(
+            this.props.saveBusinessFormRequest(this.state, appStatus.currentBusinessOption.links.self).then(
                 (response) => {
                     this.setState({isLoading: false});
                     const token = response.data.token;
@@ -86,7 +87,7 @@ class RegisterBusiness extends Component {
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
                     this.props.getAppStatus();
-                    this.props.history.push('/level/' + this.props.appStatus.currentLevel.slug);
+                    this.props.history.push('/level/' + appStatus.currentLevel.slug);
                 },
                 ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
             );
@@ -110,7 +111,7 @@ class RegisterBusiness extends Component {
                     field="abn"
                 />
 
-                <span className="find-web-span">Don’t have a ABN?</span><a href={ appStatus.currentBusinessOption.data.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Register for an ABN</a>
+                <span className="find-web-span">Don’t have a ABN?</span><a href={ appStatus.currentBusinessOption.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Register for an ABN</a>
 
                 <div className="btn-wrap">
                     <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Done</button>

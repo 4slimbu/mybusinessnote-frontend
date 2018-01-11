@@ -2,7 +2,10 @@ import React, {Component} from "react";
 import LevelIntroPage from "./LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {filterLevelsBySlug, firstSectionUrl, generateLevelCompletedPercent} from "../navigation/helperFunctions";
+import {
+    filterLevelsBySlug, firstSectionUrl, generateLevelCompletedPercent,
+    getCurrentLevelByUrl
+} from "../navigation/helperFunctions";
 import {getBusinessOption, setCurrentLevel, setCurrentSection} from "../../actions/appStatusAction";
 import LevelCompletePage from "./LevelCompletePage";
 
@@ -16,11 +19,20 @@ class LevelPage extends Component {
     }
 
     componentDidMount() {
+        alert('level c d m');
         this.setState({
            currentLevel: this.props.match.params
         });
-        console.log("filter by slug", this.props.match.params.level);
+    }
 
+    componentWillReceiveProps(nextProps) {
+        alert('level c w r p');
+        if (this.props.history.location.pathname != nextProps.history.location.pathname) {
+            const currentLevel = getCurrentLevelByUrl(nextProps.appStatus.levels, nextProps.history.location.pathname);
+            if (currentLevel && currentLevel.id) {
+                nextProps.setCurrentLevel(currentLevel);
+            }
+        }
     }
 
     onClickStart() {
@@ -63,7 +75,8 @@ LevelPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired
+    setCurrentSection: PropTypes.func.isRequired,
+    getCurrentLevelByUrl: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -72,4 +85,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {getBusinessOption, setCurrentLevel, setCurrentSection} )(LevelPage);
+export default connect(mapStateToProps, {getBusinessOption, setCurrentLevel, setCurrentSection, getCurrentLevelByUrl} )(LevelPage);

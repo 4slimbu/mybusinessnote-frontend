@@ -16,6 +16,7 @@ export function getAppStatus() {
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
             }).then(response => {
                 resolve(response.data)
@@ -24,9 +25,10 @@ export function getAppStatus() {
     }
 }
 
-export function getBusinessOption(levelId, sectionId, currentBusinessOptionId) {
-    const identifier = (currentBusinessOptionId) ? currentBusinessOptionId : 'first';
-    const url = API_BASE_URL + "/levels/" + levelId + "/sections/" + sectionId + "/business-options/" + identifier;
+export function getBusinessOption(appStatus) {
+    const identifier = (appStatus.currentBusinessOption.id) ? '/business-option/' + appStatus.currentBusinessOption.id : '';
+    const query = '?business_category_id=' + appStatus.business_category_id ;
+    const url = API_BASE_URL + "/level/" + appStatus.currentSection.level_id + "/section/" + appStatus.currentSection.id + identifier + query;
     return {
         type: GET_BUSINESS_OPTION,
         payload: new Promise((resolve, reject) => {
@@ -36,6 +38,7 @@ export function getBusinessOption(levelId, sectionId, currentBusinessOptionId) {
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
             }).then(response => {
                 resolve(response.data)
@@ -44,16 +47,17 @@ export function getBusinessOption(levelId, sectionId, currentBusinessOptionId) {
     }
 }
 
-export function getBusinessOptionFromUrl(url) {
+export function getBusinessOptionFromUrl(url, query = '') {
     return {
         type: GET_BUSINESS_OPTION,
         payload: new Promise((resolve, reject) => {
             axios({
                 method: "GET",
-                url: API_BASE_URL + url,
+                url: API_BASE_URL + url + query,
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
             }).then(response => {
                 resolve(response.data)
@@ -112,6 +116,7 @@ export function getBusinessCategories() {
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
             }).then(response => {
                 resolve(response.data)

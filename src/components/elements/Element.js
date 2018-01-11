@@ -4,6 +4,7 @@ import BusinessCategories from "./BusinessCategories";
 import RegisterUser from "./RegisterUser";
 import CreateBusiness from "./CreateBusiness";
 import RegisterBusiness from "./RegisterBusiness";
+import SellGoods from "./SellGoods";
 
 class Element extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class Element extends Component {
     //these are pre-defined levels intro components
     components = {
         BusinessCategories: BusinessCategories,
+        SellGoods: SellGoods,
         RegisterUser: RegisterUser,
         CreateBusiness: CreateBusiness,
         RegisterBusiness: RegisterBusiness

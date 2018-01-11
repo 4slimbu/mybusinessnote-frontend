@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SignUpForm from "../sign-up/SignUpForm";
-import {doesUserExists, userSignUpFormRequest} from "../../actions/signUpActions";
+import {doesUserExists, userSignUpFormRequest, userUpdateRequest} from "../../actions/signUpActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -9,7 +9,7 @@ import {getAppStatus, getBusinessOptionFromUrl} from "../../actions/appStatusAct
 
 class RegisterUser extends Component {
     render() {
-        const {appStatus, auth, userSignUpFormRequest, getAppStatus, addFlashMessage, doesUserExists, setCurrentUser, getBusinessOptionFromUrl} = this.props;
+        const {appStatus, auth, userSignUpFormRequest, userUpdateRequest, getAppStatus, addFlashMessage, doesUserExists, setCurrentUser, getBusinessOptionFromUrl} = this.props;
         return (
             <div>
                 <SignUpForm
@@ -17,6 +17,7 @@ class RegisterUser extends Component {
                     getAppStatus={getAppStatus}
                     auth={auth}
                     userSignUpFormRequest={userSignUpFormRequest}
+                    userUpdateRequest={userUpdateRequest}
                     addFlashMessage={addFlashMessage}
                     doesUserExists={doesUserExists}
                     setCurrentUser={setCurrentUser}
@@ -31,6 +32,7 @@ RegisterUser.propTypes = {
     appStatus: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     userSignUpFormRequest: PropTypes.func.isRequired,
+    userUpdateRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     doesUserExists: PropTypes.func.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
@@ -47,6 +49,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
     userSignUpFormRequest,
+    userUpdateRequest,
     addFlashMessage,
     doesUserExists,
     setCurrentUser,

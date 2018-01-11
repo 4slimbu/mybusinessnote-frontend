@@ -14,18 +14,23 @@ import {logger} from "redux-logger";
 import promise from "redux-promise-middleware";
 import {DEFAULT_APP_STATUS} from "./data/default";
 import {setAppStatus} from "./actions/appStatusAction";
+import registerObserver from "react-perf-devtool";
+
+// monitor react component performance
+registerObserver();
 
 const store = createStore(
     rootReducer,
     compose(
-        applyMiddleware(thunk, logger, promise()),
+        // applyMiddleware(thunk, logger, promise()),
+        applyMiddleware(thunk, promise()),
         window.devToolsExtension ? window.devToolsExtension() : f => f
     )
 );
 
 if (localStorage.getItem("jwtToken")) {
     const decodedToken = jwt_decode(localStorage.getItem("jwtToken"));
-    if (decodedToken.exp > (new Date().getTime()/1000)) {
+    if (decodedToken.exp > (new Date().getTime() / 1000)) {
         setAuthorizationToken(localStorage.getItem("jwtToken"));
         store.dispatch(setCurrentUser(jwt_decode(localStorage.getItem("jwtToken"))));
 
