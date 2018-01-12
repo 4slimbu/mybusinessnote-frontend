@@ -4,17 +4,13 @@ import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
 import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
+import {generateAppRelativeUrl} from "./helperFunctions";
 
 class LevelLinks extends Component {
 
-    onClickLevel(level) {
-        this.props.setCurrentLevel(level);
-        this.props.history.push("/level/" + level.slug);
-    }
-
     render() {
         //get the app status object
-        const { appStatus, onClickLink } = this.props;
+        const { appStatus, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
         //init levels
         const levels = appStatus.levels;
         //init current levels
@@ -23,12 +19,20 @@ class LevelLinks extends Component {
         //generate level list from levels
         const levelsList = map(levels, (level, key) => {
             //generate level Image from level id
+            const levelUrl = generateAppRelativeUrl(level.slug);
             const levelImg = (level.completed_percent >= 100) ? "badge/gold-badge-" + level.id : "img_" + level.id;
+            const onClickLevelLink = function(e, levelUrl) {
+                e.preventDefault();
+                setCurrentLevel(level);
+                setCurrentSection({});
+                setCurrentBusinessOption({});
+                history.push(levelUrl);
+            };
             return (
                 <div key={level.slug} className={classnames("panel panel-default panel-faq", { "active" : currentLevel.id === level.id})}>
                     <div className="panel-heading" role="tab" id={`menu${level.id}`}>
                         <div className="panel-title clearfix">
-                            <Link onClick={() => this.onClickLevel(level)}
+                            <Link onClick={(e) => onClickLevelLink(e, levelUrl )}
                                   role="button" data-toggle="collapse"
                                   data-parent="#accordion2"
                                   to={`/level/${level.slug}#collapse${level.id}`}
@@ -42,7 +46,14 @@ class LevelLinks extends Component {
                     <div id={`collapse${level.id}`} className={classnames("panel-collapse collapse", {"in" : currentLevel.id === level.id })} role="tabpanel" aria-labelledby="menu2">
                         <div className="panel-body">
                             <ul className="getting-start-list">
-                                <SectionLinks level={level} appStatus={appStatus} onClickLink={(e, url)=>onClickLink(e, url)}/>
+                                <SectionLinks
+                                    level={level}
+                                    appStatus={appStatus}
+                                    setCurrentLevel={setCurrentLevel}
+                                    setCurrentSection={setCurrentSection}
+                                    setCurrentBusinessOption={setCurrentBusinessOption}
+                                    getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                                />
                             </ul>
                         </div>
                     </div>
@@ -60,7 +71,10 @@ class LevelLinks extends Component {
 
 LevelLinks.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    onClickLink: PropTypes.func.isRequired
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired,
+    getBusinessOptionFromUrl: PropTypes.func.isRequired
 };
 
 export default withRouter(LevelLinks);

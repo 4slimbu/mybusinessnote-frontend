@@ -13,15 +13,22 @@ class LevelIntroPage extends Component {
     };
 
     render() {
-        const {level, onClickStart} = this.props;
+        const {level, setCurrentLevel, setCurrentSection, setCurrentBusinessOption} = this.props;
         const Level = this.components[level.id];
-        return <Level level={level} onClickStart={ onClickStart }/>
+        return <Level
+            level={level}
+            setCurrentLevel={setCurrentLevel}
+            setCurrentSection={setCurrentSection}
+            setCurrentBusinessOption={setCurrentBusinessOption}
+        />
     }
 }
 
 LevelIntroPage.propTypes = {
     level: PropTypes.object.isRequired,
-    onClickStart: PropTypes.func.isRequired
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
 export default LevelIntroPage;

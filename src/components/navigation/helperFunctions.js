@@ -36,16 +36,43 @@ export function filterLevelsBySlug(levels, levelSlug) {
 }
 
 export function getCurrentLevelByUrl(levels, url) {
-    console.log('levels', levels);
-    console.log('url:', url);
-    let splittedArray = url.split(/\/|\?|&|=|\./g);
-    console.log('splittedArray:', splittedArray[2]);
-    let currentLevel = filter(levels, (level) => {
-        return level.slug == splittedArray[2];
-    });
-    console.log('current level', currentLevel);
-    return currentLevel[0];
+    console.log('helper: levels', levels);
+    console.log('helper: url:', url);
 
+    let splittedArray = url.split(/\/|\?|&|=|\./g);
+
+    console.log('helper: splittedArray:', splittedArray[2]);
+
+    if (splittedArray && splittedArray[2]) {
+        let currentLevel = filter(levels, (level) => {
+            return level.slug == splittedArray[2];
+        });
+        console.log('helper: current level', currentLevel);
+
+        return (currentLevel && currentLevel[0]) ? currentLevel[0] : false;
+    }
+
+    return false;
+}
+
+export function getCurrentSectionByUrl(sections, url) {
+    console.log('helper: sections', sections);
+    console.log('helper: url:', url);
+
+    let splittedArray = url.split(/\/|\?|&|=|\./g);
+
+    console.log('helper: splittedArray:', splittedArray[4]);
+
+    if (splittedArray && splittedArray[4]) {
+        let currentSection = filter(sections, (section) => {
+            return section.slug == splittedArray[4];
+        });
+        console.log('helper: current section', currentSection);
+
+        return (currentSection && currentSection[0]) ? currentSection[0] : false;
+    }
+
+    return false;
 }
 
 export function generateLevelCompletedPercent(levels, currentLevel) {

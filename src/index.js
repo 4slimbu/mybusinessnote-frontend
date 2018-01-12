@@ -32,7 +32,7 @@ if (localStorage.getItem("jwtToken")) {
     const decodedToken = jwt_decode(localStorage.getItem("jwtToken"));
     if (decodedToken.exp > (new Date().getTime() / 1000)) {
         setAuthorizationToken(localStorage.getItem("jwtToken"));
-        store.dispatch(setCurrentUser(jwt_decode(localStorage.getItem("jwtToken"))));
+        store.dispatch(setCurrentUser(jwt_decode(localStorage.getItem("jwtToken")).user));
 
     } else {
         localStorage.removeItem("jwtToken");

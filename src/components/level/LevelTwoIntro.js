@@ -1,31 +1,46 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {map} from "lodash";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 class LevelTwoIntro extends Component {
     handleSelect(e) {
         e.preventDefault();
     }
     render() {
-        const {level} = this.props;
+        const {level, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
         const {name, completed_percent, total_sections, total_completed_sections } = this.props.level;
 
-        const sections = map(level.sections, (item, key) => {
+        const onClickContinue = function (e, sectionUrl) {
+            e.preventDefault();
+            setCurrentLevel(level);
+            setCurrentSection(level.sections[0]);
+            setCurrentBusinessOption({});
+            history.push('/level/' + level.slug + '/section/' + level.sections[0].slug);
+        };
+
+        const sections = map(level.sections, (section, key) => {
             const active = 'active';
-            const sectionLink = '/level/' + level.slug + '/section/' + item.slug;
+            const sectionUrl = '/level/' + level.slug + '/section/' + section.slug;
+            const onClickSectionLink = function (e) {
+                e.preventDefault();
+                setCurrentLevel(level);
+                setCurrentSection(section);
+                setCurrentBusinessOption({});
+                history.push(sectionUrl);
+            };
             return (
-                <li key={item.id} style={{ maxWidth: "150px" }} className={active}>
-                    <Link to={sectionLink}>
+                <li key={section.id} style={{ maxWidth: "150px" }} className={active}>
+                    <Link to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
                         <div className="white-icon" >
-                            <img src={item.white_icon} alt=""/>
+                            <img src={section.white_icon} alt=""/>
                         </div>
                         <div className="red-icon" >
-                            <img src={item.red_icon} alt=""/>
+                            <img src={section.red_icon} alt=""/>
                         </div>
-                        <span> {item.name}</span>
+                        <span> {section.name}</span>
                     </Link>
-                    <a className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, item.id)}>
+                    <a className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, section.id)}>
                         <i className="fa fa-lightbulb-o" aria-hidden="true"></i>
                     </a>
                 </li>
@@ -49,7 +64,7 @@ class LevelTwoIntro extends Component {
                         <ul className="apps-icons clearfix level2-apps-icons">{ sections }</ul>
                     </div>
                     <div className="btn-wrap">
-                        <a href="level1_step_2.html" className="btn btn-default btn-md">Start</a>
+                        <a href="#" onClick={(e) => onClickContinue(e)}  className="btn btn-default btn-md">Continue</a>
                     </div>
                 </div>
             </section>
@@ -58,7 +73,10 @@ class LevelTwoIntro extends Component {
 }
 
 LevelTwoIntro.propTypes = {
-    level: PropTypes.object.isRequired
+    level: PropTypes.object.isRequired,
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
-export default LevelTwoIntro;
+export default withRouter(LevelTwoIntro);

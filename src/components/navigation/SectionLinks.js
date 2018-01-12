@@ -8,13 +8,20 @@ import {withRouter} from "react-router-dom";
 class SectionLinks extends Component {
 
     render() {
-        const {level, onClickLink} = this.props;
+        const {level, setCurrentLevel, setCurrentSection, history, getBusinessOptionFromUrl} = this.props;
 
         const sectionsList = map(level.sections, (section, key) => {
             const complete = section.completed_percent == 100 ? true : false;
             const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
+            const onClickSectionLink= function(e, sectionUrl) {
+                e.preventDefault();
+                setCurrentLevel(level);
+                setCurrentSection(section);
+                getBusinessOptionFromUrl(generateAppRelativeUrl(level.id, section.id));
+                history.push(sectionUrl);
+            };
             return (
-                <li key={section.id}><a href={sectionUrl} onClick={(e) => onClickLink(e, sectionUrl)}>
+                <li key={section.id}><a href={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
                     <span className={classnames("circle-span", {"complete": complete})}></span>{section.name}</a>
                 </li>
             )
@@ -30,7 +37,9 @@ class SectionLinks extends Component {
 
 SectionLinks.propTypes = {
     level: PropTypes.object.isRequired,
-    onClickLink: PropTypes.func.isRequired
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    getBusinessOptionFromUrl: PropTypes.func.isRequired
 };
 
 export default withRouter(SectionLinks);

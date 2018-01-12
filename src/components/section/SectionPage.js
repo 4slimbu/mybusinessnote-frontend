@@ -8,6 +8,7 @@ import {
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
 import Loading from "../Loading";
 import {generateApiUrlFromSlug, generateApiUrlFromUrlLocation} from "../navigation/helperFunctions";
+import {withRouter} from "react-router-dom";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -17,11 +18,23 @@ class SectionPage extends Component {
 
     componentDidMount() {
         const appStatus = this.props.appStatus;
-        this.props.getAppStatus();
-        this.props.getBusinessOption(this.props.appStatus);
+
+        if (appStatus.currentLevel && appStatus.currentLevel.id && appStatus.currentSection && appStatus.currentSection.id) {
+            const url = '/level/' + appStatus.currentLevel.id + '/section/' + appStatus.currentSection.id;
+            this.props.getBusinessOptionFromUrl(url);
+        } else {
+            this.props.history.push('/');
+        }
+
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log('section c w r p');
+        //get url part
+        console.log('url part', this.props.history.location.pathname);
+        //extract route params
+        //get business option
+        //get component did mount
         // if (this.props.history.location.pathname != nextProps.history.location.pathname) {
         //     const levelSlug = nextProps.match.params.level;
         //     const sectionSlug = nextProps.match.params.section;
@@ -42,13 +55,16 @@ class SectionPage extends Component {
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
                     { isFetching && <Loading /> }
-                    <BusinessOptionPage
-                        currentLevel={currentLevel}
-                        currentSection={currentSection}
-                        currentBusinessOption={currentBusinessOption}
-                        onClickNext={(e) => this.onClickNext(e)}
-                        isFetching={isFetching}
-                    />
+                    {
+                        currentBusinessOption && currentBusinessOption.id &&
+                        <BusinessOptionPage
+                            currentLevel={currentLevel}
+                            currentSection={currentSection}
+                            currentBusinessOption={currentBusinessOption}
+                            onClickNext={(e) => this.onClickNext(e)}
+                            isFetching={isFetching}
+                        />
+                    }
                 </div>
             </section>
         );
@@ -69,4 +85,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {getBusinessOption, getBusinessOptionFromUrl, getAppStatus, setCurrentBusinessOption})(SectionPage);
+export default withRouter(connect(mapStateToProps, {getBusinessOption, getBusinessOptionFromUrl, getAppStatus, setCurrentBusinessOption})(SectionPage));

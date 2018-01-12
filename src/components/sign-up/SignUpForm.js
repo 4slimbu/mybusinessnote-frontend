@@ -126,7 +126,9 @@ class SignUpForm extends Component {
                                 text: "You have signed up successfully! Welcome!"
                             });
                         }
-                        this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                        this.props.getAppStatus().then((response) => {
+                            this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                        });
                     },
                     ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
                 );
@@ -244,8 +246,8 @@ class SignUpForm extends Component {
 }
 
 SignUpForm.propTypes = {
-    appStatus: PropTypes.func.isRequired,
-    auth: PropTypes.func.isRequired,
+    appStatus: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
     userSignUpFormRequest: PropTypes.func.isRequired,
     userUpdateRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,

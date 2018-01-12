@@ -86,8 +86,9 @@ class RegisterBusiness extends Component {
                         setAuthorizationToken(token);
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
-                    this.props.getAppStatus();
-                    this.props.history.push('/level/' + appStatus.currentLevel.slug);
+                    this.props.getAppStatus().then(() => {
+                        this.props.history.push('/level/' + appStatus.currentLevel.slug);
+                    });
                 },
                 ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
             );
@@ -122,8 +123,8 @@ class RegisterBusiness extends Component {
 }
 
 RegisterBusiness.propTypes = {
-    appStatus: PropTypes.func.isRequired,
-    auth: PropTypes.func.isRequired,
+    appStatus: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
     saveBusinessFormRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,

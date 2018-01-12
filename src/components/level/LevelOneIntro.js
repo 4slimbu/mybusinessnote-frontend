@@ -1,10 +1,19 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
 
 class Level1Intro extends Component {
     render() {
-        const { onClickStart } = this.props;
+        const { level, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history } = this.props;
         const { name, completed_percent, total_sections, total_completed_sections } = this.props.level;
+        const onClickStart = function (e, sectionUrl) {
+            e.preventDefault();
+            setCurrentLevel(level);
+            setCurrentSection(level.sections[0]);
+            setCurrentBusinessOption({});
+            history.push(sectionUrl);
+        };
+        const sectionUrl = '/level/' + level.slug + '/section/' + level.sections[0].slug;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
@@ -23,7 +32,7 @@ class Level1Intro extends Component {
                     <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining
                         essentially unchanged.</p>
                     <div className="btn-wrap">
-                        <button onClick={ onClickStart } className="btn btn-default btn-md">Start</button>
+                        <button onClick={(e) => onClickStart(e, sectionUrl)} className="btn btn-default btn-md">Start</button>
                     </div>
                 </div>
             </section>
@@ -33,7 +42,9 @@ class Level1Intro extends Component {
 
 Level1Intro.propTypes = {
     level: PropTypes.object.isRequired,
-    onClickStart: PropTypes.func.isRequired
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
-export default Level1Intro;
+export default withRouter(Level1Intro);

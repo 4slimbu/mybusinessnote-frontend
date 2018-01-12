@@ -28,7 +28,6 @@ class BusinessCategories extends Component {
 
     handleSelect(e, id) {
         e.preventDefault();
-        alert(id);
         this.props.setBusinessCategoryId(id);
         const appStatus = this.props.appStatus;
         if (this.props.auth.isAuthenticated) {

@@ -6,49 +6,41 @@ import {
     filterLevelsBySlug, firstSectionUrl, generateLevelCompletedPercent,
     getCurrentLevelByUrl
 } from "../navigation/helperFunctions";
-import {getBusinessOption, setCurrentLevel, setCurrentSection} from "../../actions/appStatusAction";
+import {
+    getBusinessOption, setCurrentBusinessOption, setCurrentLevel,
+    setCurrentSection
+} from "../../actions/appStatusAction";
 import LevelCompletePage from "./LevelCompletePage";
 
 class LevelPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentLevel: {},
-        };
-        this.onClickStart = this.onClickStart.bind(this);
-    }
-
     componentDidMount() {
-        alert('level c d m');
-        this.setState({
-           currentLevel: this.props.match.params
-        });
+        console.log('level c d m');
     }
 
     componentWillReceiveProps(nextProps) {
-        alert('level c w r p');
-        if (this.props.history.location.pathname != nextProps.history.location.pathname) {
-            const currentLevel = getCurrentLevelByUrl(nextProps.appStatus.levels, nextProps.history.location.pathname);
-            if (currentLevel && currentLevel.id) {
-                nextProps.setCurrentLevel(currentLevel);
-            }
-        }
-    }
-
-    onClickStart() {
-        const currentLevel = filterLevelsBySlug(this.props.appStatus.levels, this.props.match.params.level);
-        this.props.setCurrentLevel(currentLevel);
-        this.props.setCurrentSection(currentLevel.sections[0]);
-        this.props.history.push(firstSectionUrl(this.props.appStatus.currentLevel));
+        console.log('level c w r p');
+        // if (this.props.history.location.pathname != nextProps.history.location.pathname) {
+        //     const currentLevel = getCurrentLevelByUrl(nextProps.appStatus.levels, nextProps.history.location.pathname);
+        //     if (currentLevel && currentLevel.id) {
+        //         nextProps.setCurrentLevel(currentLevel);
+        //     }
+        // }
     }
 
     render() {
         let page;
+        const { setCurrentLevel, setCurrentSection, setCurrentBusinessOption, appStatus } = this.props;
         const { levels = [], currentLevel = {} } = this.props.appStatus;
-
+        const nextLevel = (appStatus.levels && appStatus.levels[currentLevel.id]) ? appStatus.levels[currentLevel.id] : currentLevel;
         const completedPercent = generateLevelCompletedPercent(levels, currentLevel);
 
-        page = (<LevelIntroPage appStatus={this.props.appStatus} level={currentLevel} onClickStart={this.onClickStart}/>);
+        page = (<LevelIntroPage
+            appStatus={this.props.appStatus}
+            level={currentLevel}
+            setCurrentLevel={setCurrentLevel}
+            setCurrentSection={setCurrentSection}
+            setCurrentBusinessOption={setCurrentBusinessOption}
+        />);
 
         if (completedPercent === -1) {
             page = (
@@ -60,7 +52,13 @@ class LevelPage extends Component {
         }
 
         if (completedPercent >= "100") {
-            page = (<LevelCompletePage level={currentLevel}/>)
+            page = (<LevelCompletePage
+                level={currentLevel}
+                nextLevel={nextLevel}
+                setCurrentLevel={setCurrentLevel}
+                setCurrentSection={setCurrentSection}
+                setCurrentBusinessOption={setCurrentBusinessOption}
+            />)
         }
 
         return (
@@ -76,6 +74,7 @@ LevelPage.propTypes = {
     getBusinessOption: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired,
     getCurrentLevelByUrl: PropTypes.func.isRequired
 };
 
@@ -85,4 +84,10 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {getBusinessOption, setCurrentLevel, setCurrentSection, getCurrentLevelByUrl} )(LevelPage);
+export default connect(mapStateToProps, {
+    getBusinessOption,
+    setCurrentLevel,
+    setCurrentSection,
+    setCurrentBusinessOption,
+    getCurrentLevelByUrl
+} )(LevelPage);

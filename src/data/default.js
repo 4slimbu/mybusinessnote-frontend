@@ -1,4 +1,4 @@
-export const DEFAULT_APP_STATUS =  {
+export const DEFAULT_APP_STATUS = {
     business_id: null,
     user_id: null,
     first_name: "",
@@ -12,7 +12,7 @@ export const DEFAULT_APP_STATUS =  {
     business_name: "",
     website: "",
     abn: "",
-    levels: [{slug: "" }],
+    levels: [{slug: ""}],
     defaultLevel: {},
     previousLevel: {},
     currentLevel: {},
@@ -27,5 +27,6 @@ export const DEFAULT_APP_STATUS =  {
     currentTipCategoryId: null
 };
 
-export const DEFAULT_BUSINESS_OPTION =  {};
-export const DEFAULT_CURRENT_BUSINESS_OPTION =  {data:{}, links: {}};
+export const DEFAULT_BUSINESS_OPTION = {};
+export const DEFAULT_CURRENT_BUSINESS_OPTION = {data: {}, links: {}};
+

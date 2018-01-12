@@ -1,23 +1,38 @@
 import React, {Component} from "react";
 import {Link, withRouter} from "react-router-dom";
+import PropTypes from "prop-types";
 
 class LevelCompletePage extends Component {
     render() {
+        const {level, nextLevel, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
+        const onClickLevelLink = function (e, levelUrl) {
+            e.preventDefault();
+            setCurrentLevel(nextLevel);
+            setCurrentSection({});
+            setCurrentBusinessOption({});
+            history.push(levelUrl);
+        };
+        const nextLevelUrl = '/level/' + nextLevel.slug;
         return (
             <div className="level-7">
                 <section className="mid-sec bg-red">
                     <div className="content-wrapper step-one">
-                        <h5 className="obvious-h5">Getting started</h5>
+                        <h5 className="obvious-h5">{ level.name }</h5>
                         <h1>Congratulations</h1>
-                        <p>Level 1 complete!</p>
-                        <img className="complete-block-img" src={`${process.env.PUBLIC_URL}/assets/images/level-complete.png`} alt="" />
+                        <p>Level {level.id} complete!</p>
+                        <img className="complete-block-img"
+                             src={`${process.env.PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
                         <div className="bottom-block-complete">
                             <div className="btn-wrap">
-                                <Link to="/level/setting-the-foundations" className="btn btn-default btn-md">Continue to level 2</Link>
+                                <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
+                                      to={nextLevelUrl} className="btn btn-default btn-md">Continue to
+                                    level {nextLevel.id}</Link>
                             </div>
-                            <Link to="/level/setting-the-foundations" className="next-session-link"><i className="fa fa-chevron-down" aria-hidden="true"></i>
+                            <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
+                                  to={nextLevelUrl} className="next-session-link"><i
+                                className="fa fa-chevron-down" aria-hidden="true"></i>
                             </Link>
-                            <h6>Setting the foundations</h6>
+                            <h6>{ nextLevel.name }</h6>
                         </div>
                     </div>
                 </section>
@@ -25,5 +40,13 @@ class LevelCompletePage extends Component {
         );
     }
 }
+
+LevelCompletePage.propTypes = {
+    level: PropTypes.object.isRequired,
+    nextLevel: PropTypes.object.isRequired,
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired
+};
 
 export default withRouter(LevelCompletePage);

@@ -5,20 +5,56 @@ import FlashMessageList from "./flash/FlashMessageList";
 import ToolTip from "./tooltip/ToolTip";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getAppStatus, getBusinessCategories, setAppStatus, setCurrentLevel} from "../actions/appStatusAction";
+import {
+    getAppStatus, getBusinessCategories, setAppStatus, setCurrentBusinessOption, setCurrentLevel,
+    setCurrentSection
+} from "../actions/appStatusAction";
 import {withRouter} from "react-router-dom";
-import {filterLevelsBySlug, getCurrentLevelByUrl} from "./navigation/helperFunctions";
+import {
+    filterLevelsBySlug, generateAppRelativeUrl, getCurrentLevelByUrl,
+    getCurrentSectionByUrl
+} from "./navigation/helperFunctions";
 
 class App extends Component {
 
     componentDidMount() {
-        this.props.getAppStatus();
+        console.log('app: c d m');
         this.props.getBusinessCategories();
+        this.props.getAppStatus().then((response) => {
+            const appStatus = this.props.appStatus;
+            const url = this.props.history.location.pathname;
+
+            // console.log('app: get app status response', response);
+            // console.log('app: calling appStatus inside response', this.props.appStatus);
+            // console.log('app: appStatus.levels', appStatus.levels);
+            // console.log('app: url', url);
+
+            const currentLevel = getCurrentLevelByUrl(appStatus.levels, url);
+
+            if (currentLevel) {
+                console.log('app: currentLevel', currentLevel);
+                this.props.setCurrentLevel(currentLevel);
+
+                const currentSection = getCurrentSectionByUrl(currentLevel.sections, url);
+
+                if (currentSection) {
+                    this.props.setCurrentSection(currentSection);
+                } else {
+                    this.props.setCurrentSection({});
+                    this.props.setCurrentBusinessOption({});
+                }
+            }
+
+        });
+        console.log('app: current url location:', this.props.history.location.pathname);
+
+        // setCurrentLevel(level);
+        // setCurrentSection(section);
+        // getBusinessOptionFromUrl(generateAppRelativeUrl(level.id, section.id));
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('app: this.props.appStatus', this.props.appStatus);
-        console.log('app: nextProps.match.params.level', this.props);
+        console.log('app: c w r p');
 
     }
 
@@ -51,7 +87,9 @@ App.propTypes = {
     appStatus: PropTypes.object.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     getBusinessCategories: PropTypes.func.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -62,4 +100,10 @@ function mapStateToProps(state) {
 }
 
 
-export default withRouter(connect(mapStateToProps, {getAppStatus, getBusinessCategories, setCurrentLevel})(App));
+export default withRouter(connect(mapStateToProps, {
+    getAppStatus,
+    getBusinessCategories,
+    setCurrentLevel,
+    setCurrentSection,
+    setCurrentBusinessOption
+})(App));

@@ -4,15 +4,13 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {logout} from "../../actions/authActions";
 import LevelLinks from "./LevelLinks";
-import {getBusinessOptionFromUrl, setCurrentLevel} from "../../actions/appStatusAction";
+import {
+    getBusinessOptionFromUrl, setCurrentBusinessOption, setCurrentLevel,
+    setCurrentSection
+} from "../../actions/appStatusAction";
+import {getCurrentLevelByUrl} from "./helperFunctions";
 
 class NavigationBar extends Component {
-
-    onClickLink(e, url) {
-        e.preventDefault();
-        this.props.getBusinessOptionFromUrl(url);
-        this.props.history.push(url);
-    }
 
     logout(e) {
         e.preventDefault();
@@ -21,7 +19,7 @@ class NavigationBar extends Component {
     }
 
     render() {
-        const { appStatus, setCurrentLevel } = this.props;
+        const { appStatus, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl, history } = this.props;
         const { isAuthenticated } = this.props.auth;
 
         const userLinks = (
@@ -41,16 +39,33 @@ class NavigationBar extends Component {
             </ul>
         );
 
+        const onClickLevelLink = function(e, url) {
+            e.preventDefault();
+            setCurrentSection({});
+            setCurrentBusinessOption({});
+            history.push(url);
+        };
+
         return (
             <section className="left-sec bg-navy">
                 <div>
                     { isAuthenticated ? userLinks : guestLinks }
                 </div>
-                <Link to="/" className="site-branding"><img src={`${process.env.PUBLIC_URL}/assets/images/apps-logo.png`} alt="" /></Link>
+                <Link to="/"
+                      onClick={(e) => onClickLevelLink(e, '/' )}
+                      className="site-branding">
+                    <img src={`${process.env.PUBLIC_URL}/assets/images/apps-logo.png`} alt="" />
+                </Link>
                 <h3 className="tagline-head">Let your <br/>journey begins</h3>
                 <div className="menu-accordion">
                     <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
-                        <LevelLinks appStatus={appStatus} setCurrentLevel={setCurrentLevel} onClickLink={(e, url) => this.onClickLink(e, url)}/>
+                        <LevelLinks
+                            appStatus={appStatus}
+                            setCurrentLevel={setCurrentLevel}
+                            setCurrentSection={setCurrentSection}
+                            setCurrentBusinessOption={setCurrentBusinessOption}
+                            getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                        />
                     </div>
                 </div>
             </section>
@@ -63,6 +78,8 @@ NavigationBar.propTypes = {
     logout: PropTypes.func.isRequired,
     appStatus: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired
 };
 
@@ -73,4 +90,10 @@ function mapStateToProps(state) {
     }
 }
 
-export default withRouter(connect(mapStateToProps, { logout, setCurrentLevel, getBusinessOptionFromUrl })(NavigationBar));
+export default withRouter(connect(mapStateToProps, {
+    logout,
+    setCurrentLevel,
+    setCurrentSection,
+    setCurrentBusinessOption,
+    getBusinessOptionFromUrl
+})(NavigationBar));
