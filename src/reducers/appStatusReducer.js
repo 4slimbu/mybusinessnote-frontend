@@ -56,7 +56,7 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
         case `${SET_CURRENT_BUSINESS_OPTION}` :
             return {
                 ...state,
-                currentBusinessOption: action.businessOption
+                currentBusinessOption: action.currentBusinessOption
             };
         case `${GET_BUSINESS_CATEGORIES}_FULFILLED` :
             return {

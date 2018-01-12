@@ -41,6 +41,7 @@ class NavigationBar extends Component {
 
         const onClickLevelLink = function(e, url) {
             e.preventDefault();
+            setCurrentLevel(appStatus.levels[0]);
             setCurrentSection({});
             setCurrentBusinessOption({});
             history.push(url);

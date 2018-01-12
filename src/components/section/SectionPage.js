@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus, getBusinessOption, getBusinessOptionFromUrl,
-    setCurrentBusinessOption
+    setCurrentBusinessOption, setCurrentLevel, setCurrentSection
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
 import Loading from "../Loading";
@@ -50,7 +50,8 @@ class SectionPage extends Component {
     }
 
     render() {
-        const { isFetching, currentLevel, currentSection, currentBusinessOption } = this.props.appStatus;
+        const { isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
+        const {setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
@@ -61,6 +62,10 @@ class SectionPage extends Component {
                             currentLevel={currentLevel}
                             currentSection={currentSection}
                             currentBusinessOption={currentBusinessOption}
+                            setCurrentLevel={setCurrentLevel}
+                            setCurrentSection={setCurrentSection}
+                            setCurrentBusinessOption={setCurrentBusinessOption}
+                            getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                             onClickNext={(e) => this.onClickNext(e)}
                             isFetching={isFetching}
                         />
@@ -76,6 +81,8 @@ SectionPage.propTypes = {
     getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
@@ -85,4 +92,11 @@ function mapStateToProps(state) {
     }
 }
 
-export default withRouter(connect(mapStateToProps, {getBusinessOption, getBusinessOptionFromUrl, getAppStatus, setCurrentBusinessOption})(SectionPage));
+export default withRouter(connect(mapStateToProps, {
+    getBusinessOption,
+    getBusinessOptionFromUrl,
+    getAppStatus,
+    setCurrentLevel,
+    setCurrentSection,
+    setCurrentBusinessOption
+})(SectionPage));

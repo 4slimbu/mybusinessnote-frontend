@@ -91,7 +91,7 @@ class SellGoods extends Component {
         return (
             <div>
                 <ul className="apps-icons clearfix apps-h-effect">
-                    {sellGoodsQuestion }
+                    { sellGoodsQuestion }
                 </ul>
                 <div className="btn-wrap">
                     {next && <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
