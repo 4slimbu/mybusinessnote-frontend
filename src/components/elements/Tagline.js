@@ -13,6 +13,13 @@ import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class Tagline extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            tagline: ''
+        };
+    }
+
     onClickNext(e) {
         e.preventDefault();
         this.props.getAppStatus();
@@ -20,13 +27,13 @@ class Tagline extends Component {
         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
     }
 
-    onClickOption(e, option) {
+    onClickOption(e) {
         e.preventDefault();
-
+        alert(e.target.value);
         this.props.saveBusinessOptionFormRequest({
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
-                    tagline: option
+                    tagline: e.target.value
                 }
             }
         ).then(
@@ -59,6 +66,13 @@ class Tagline extends Component {
         );
     }
 
+    onChangeTagline(e) {
+        e.preventDefault();
+        this.setState({
+            tagline: e.target.value
+        })
+    }
+
     render() {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
@@ -66,14 +80,16 @@ class Tagline extends Component {
 
         return (
             <div>
-                <ul className="alert-btns">
-                    <li><a
-                        className={ currentBusinessMeta.tagline == 'option 1' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 1')}>Option 1</a></li>
-                    <li><a
-                        className={ currentBusinessMeta.tagline == 'option 2' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 2')}>Option 2</a></li>
-                </ul>
+                <form className="alert-form">
+                    <div className="form-group">
+                        <input type="text"
+                               onBlur={(e) => this.onClickOption(e)}
+                               onChange={(e) => this.onChangeTagline(e)}
+                               className="form-control" name="alert-name" placeholder="eg. We deliver you safely home"
+                                value={this.state.tagline}
+                        />
+                    </div>
+                </form>
                 <ul className="alert-f-links">
                     <li><a
                         className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}

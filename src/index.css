@@ -42,3 +42,84 @@
 ul.apps-icons li.active span {
   color: #bf696e;
 }
+
+
+/* Custom Upload Button */
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+ul.alert-btns li .upload-button {
+  border: 1px solid #bf696e;
+  background: none;
+  color: #bf696e;
+  font-size: 12px;
+  line-height: 15.6px;
+  border-radius: 25px;
+  padding: 11px 32px;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition-duration: 0.8s;
+  transition-property: background, color, border;
+}
+ul.alert-btns li .upload-button:hover,
+ul.alert-btns li .upload-button:active,
+ul.alert-btns li .upload-button.active,
+ul.alert-btns li .upload-button:focus,
+ul.alert-btns li .upload-button.focus {
+  border: 1px solid #000;
+  background: #000;
+  color: #ffffff;
+}
+
+.alert-form img.alert-frm-img {
+  width: 125px;
+}
+
+.remove-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.remove {
+    position: absolute;
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 0.6;
+    top: 0;
+    left: 0;
+}
+
+.btn-done{
+    background: #bf696e;
+    border-color: #bf696e;
+    font-size: 12px;
+    line-height: 15.6px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 55px;
+    padding: 12px 50px;
+}
+.btn-done:hover,
+.btn-done:active,
+.btn-done.active,
+.btn-done:focus,
+.btn-done.focus {
+    border: 1px solid #000;
+    background: #000;
+    color: #ffffff;
+}
