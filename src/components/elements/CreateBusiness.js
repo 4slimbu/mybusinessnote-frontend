@@ -139,8 +139,8 @@ class CreateBusiness extends Component {
 }
 
 CreateBusiness.propTypes = {
-    appStatus: PropTypes.func.isRequired,
-    auth: PropTypes.func.isRequired,
+    appStatus: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
     saveBusinessFormRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,

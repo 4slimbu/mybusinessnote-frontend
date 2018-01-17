@@ -63,16 +63,15 @@ class PhoneSetUp extends Component {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
+        const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
             <div>
                 <ul className="alert-btns">
                     <li><a
-                        className={ currentBusinessMeta.phone_setup == 'option 1' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 1')}>Option 1</a></li>
-                    <li><a
-                        className={ currentBusinessMeta.phone_setup == 'option 2' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 2')}>Option 2</a></li>
+                        className={ currentBusinessMeta.phone_setup == 'yes' ? 'active' : '' }
+                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
+                    <li><a href={ affiliateLink }>Set a phone line now</a></li>
                 </ul>
                 <ul className="alert-f-links">
                     <li><a

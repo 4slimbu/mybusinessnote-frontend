@@ -48,11 +48,22 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 isFetching: true
             };
         case `${GET_BUSINESS_OPTION}_FULFILLED` :
-            return {
-                ...state,
-                isFetching: false,
-                currentBusinessOption: action.payload
-            };
+            if (action.payload.level && action.payload.section) {
+                return {
+                    ...state,
+                    isFetching: false,
+                    currentBusinessOption: action.payload,
+                    currentLevel: action.payload.level,
+                    currentSection: action.payload.section
+                };
+            } else {
+                return {
+                    ...state,
+                    isFetching: false,
+                    currentBusinessOption: action.payload
+                };
+            }
+
         case `${SET_CURRENT_BUSINESS_OPTION}` :
             return {
                 ...state,

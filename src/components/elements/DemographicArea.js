@@ -11,7 +11,7 @@ import {
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 
-class QuickOfficeSetUp extends Component {
+class DeviceMotionEvent extends Component {
 
     onClickNext(e) {
         e.preventDefault();
@@ -20,13 +20,34 @@ class QuickOfficeSetUp extends Component {
         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
     }
 
+    onChangeSelect(e) {
+        e.preventDefault();
+
+        this.props.saveBusinessOptionFormRequest({
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                business_meta: {
+                    demographic_events_option: e.target.value
+                }
+            }
+        ).then(
+            (response) => {
+                this.props.addFlashMessage({
+                    type: "success",
+                    text: "Saved successfully!"
+                });
+                console.log('financing option: response', response.data.business_option);
+                this.props.setCurrentBusinessOption(response.data.business_option);
+            }
+        );
+    }
+
     onClickOption(e, option) {
         e.preventDefault();
 
         this.props.saveBusinessOptionFormRequest({
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
-                    quick_office_setup: option
+                    demographic_events: option
                 }
             }
         ).then(
@@ -69,9 +90,15 @@ class QuickOfficeSetUp extends Component {
             <div>
                 <ul className="alert-btns">
                     <li><a
-                        className={ currentBusinessMeta.quick_office_setup == 'already_have' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'already_have')}>Already Have</a></li>
-                    <li><a href={ affiliateLink }>Find me an office</a></li>
+                        className={ currentBusinessMeta.demographic_events == 'yes' ? 'active' : '' }
+                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
+                    <li>
+                        <select onChange={(e) => this.onChangeSelect(e)} value={ currentBusinessMeta.demographic_events_option}>
+                            <option value="">Options</option>
+                            <option value="option1">Option1</option>
+                            <option value="option2">Option2</option>
+                        </select>
+                    </li>
                 </ul>
                 <ul className="alert-f-links">
                     <li><a
@@ -88,7 +115,7 @@ class QuickOfficeSetUp extends Component {
     }
 }
 
-QuickOfficeSetUp.propTypes = {
+DeviceMotionEvent.propTypes = {
     getBusinessCategories: PropTypes.func.isRequired,
     setBusinessCategoryId: PropTypes.func.isRequired,
     setSellGoods: PropTypes.func.isRequired,
@@ -122,4 +149,4 @@ export default withRouter(
             getAppStatus,
             addFlashMessage
         }
-    )(QuickOfficeSetUp))
+    )(DeviceMotionEvent))

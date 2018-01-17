@@ -14,10 +14,10 @@ import {logger} from "redux-logger";
 import promise from "redux-promise-middleware";
 import {DEFAULT_APP_STATUS} from "./data/default";
 import {setAppStatus} from "./actions/appStatusAction";
-import registerObserver from "react-perf-devtool";
+// import registerObserver from "react-perf-devtool";
 
 // monitor react component performance
-registerObserver();
+// registerObserver();
 
 const store = createStore(
     rootReducer,

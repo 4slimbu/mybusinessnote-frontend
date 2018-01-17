@@ -1,5 +1,6 @@
 import {
-    GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID, SET_CURRENT,
+    GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID,
+    SET_BUSINESS_META, SET_CURRENT,
     SET_CURRENT_BUSINESS_OPTION,
     SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS
 } from "./types";
@@ -144,5 +145,12 @@ export function setCurrentTipCategory(id) {
     return {
         type: SET_CURRENT_TIP_CATEGORY,
         currentTipCategoryId: id
+    }
+}
+
+export function setBusinessMeta(metaData) {
+    return {
+        type: SET_BUSINESS_META,
+        metaData
     }
 }

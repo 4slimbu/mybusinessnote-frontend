@@ -2,20 +2,34 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../level/LevelHead";
 import Element from "../elements/Element";
+import {getBusinessOptionFromUrl} from "../../actions/appStatusAction";
 
 class BusinessOptionPage extends Component {
+    onClickNext(e) {
+        const {
+            currentBusinessOption, getBusinessOptionFromUrl
+        } = this.props;
+        e.preventDefault();
+        getBusinessOptionFromUrl(currentBusinessOption.links.next);
+    }
+
+    onClickBack(e) {
+        const {
+            currentBusinessOption, getBusinessOptionFromUrl
+        } = this.props;
+        e.preventDefault();
+        getBusinessOptionFromUrl(currentBusinessOption.links.prev);
+    }
+
     render() {
         const {
-            currentLevel, currentSection, currentBusinessOption, getBusinessOptionFromUrl
+            currentLevel, currentSection, currentBusinessOption
 
         } = this.props;
-        const onClickNext= function(e) {
-            e.preventDefault();
-            getBusinessOptionFromUrl(currentBusinessOption.links.next);
-        };
-        const onClickBack= function(e) {
-            e.preventDefault();
-            getBusinessOptionFromUrl(currentBusinessOption.links.prev);
+        let isComplete = false;
+
+        const onComplete = function(bool) {
+            isComplete = bool;
         };
         return (
             <div>
@@ -28,17 +42,17 @@ class BusinessOptionPage extends Component {
                         <div>
                             {
                                 currentBusinessOption.element &&
-                                <Element element={currentBusinessOption.element} onClick={(e) => onClickNext(e).bind(this)}/>
+                                <Element element={currentBusinessOption.element} onComplete={(bool) => onComplete(bool)} onClick={(e) => this.onClickNext(e).bind(this)}/>
                             }
                         </div>
                     </div>
                     :
                         <div>
                             <div className='clearfix'>
-                                <a className="back-link pull-left" href="#" onClick={(e) => onClickBack(e)}>
+                                <a className="back-link pull-left" href="#" onClick={(e) => this.onClickBack(e)}>
                                     <i className="fa fa-chevron-left" aria-hidden="true"></i>
                                     back</a>
-                                <a className="pull-right back-link" href="#" onClick={(e) => onClickNext(e)}>
+                                <a className="pull-right back-link" href="#" onClick={(e) => this.onClickNext(e)}>
                                     next
                                     <i className="fa fa-chevron-right" aria-hidden="true"></i>
                                     </a>
@@ -54,14 +68,24 @@ class BusinessOptionPage extends Component {
                                     <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: currentSection.completed_percent + '%'}}>
                                     </div>
                                 </div>
-                                <p>{ currentBusinessOption.name }</p>
+                                {
+                                    isComplete ?
+                                        <div className="completed-section">
+                                            <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
+                                                <p>Well done for completing this section!</p>
+                                        </div>
+                                        :
+                                    <div>
+                                        <p>{ currentBusinessOption.name }</p>
 
-                                <div>
-                                    {
-                                        currentBusinessOption.element &&
-                                        <Element element={currentBusinessOption.element} onClickNext={(e) => onClickNext(e)}/>
-                                    }
-                                </div>
+                                        <div>
+                                            {
+                                                currentBusinessOption.element &&
+                                                <Element element={currentBusinessOption.element} onClick={(e) => this.onClickNext(e)}/>
+                                            }
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                 }
@@ -78,7 +102,6 @@ BusinessOptionPage.propTypes = {
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    onClickNext: PropTypes.func.isRequired,
 };
 
 

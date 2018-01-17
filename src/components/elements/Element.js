@@ -18,6 +18,20 @@ import PhoneSetUp from "./PhoneSetUp";
 import QuickOfficeSetUp from "./QuickOfficeSetUp";
 import SetUpInternet from "./SetUpInternet";
 import OfficeAccessories from "./OfficeAccessories";
+import SWOT from "./SWOT";
+import CustomerAnalysis from "./CustomerAnalysis";
+import DemographicArea from "./DemographicArea";
+import SocialMediaExecution from "./SocialMediaExecution";
+import Budget from "./Budget";
+import LegalAdviser from "./LegalAdviser";
+import EmploymentContracts from "./EmploymentContracts";
+import AwardWages from "./AwardWages";
+import HrPolicy from "./HrPolicy";
+import BookKeeping from "./BookKeeping";
+import CashFlowForecasting from "./CashFlowForecasting";
+import OfficeSpace from "./OfficeSpace";
+import StoreLease from "./StoreLease";
+import NeedHardware from "./NeedHardware";
 
 class Element extends Component {
     constructor(props) {
@@ -44,8 +58,20 @@ class Element extends Component {
         QuickOfficeSetUp: QuickOfficeSetUp,
         SetUpInternet: SetUpInternet,
         OfficeAccessories: OfficeAccessories,
-
-
+        SWOT: SWOT,
+        CustomerAnalysis : CustomerAnalysis,
+        DemographicArea : DemographicArea,
+        SocialMediaExecution : SocialMediaExecution,
+        Budget : Budget,
+        LegalAdviser : LegalAdviser,
+        EmploymentContracts : EmploymentContracts,
+        AwardWages : AwardWages,
+        HrPolicy : HrPolicy,
+        BookKeeping : BookKeeping,
+        CashFlowForecasting : CashFlowForecasting,
+        OfficeSpace : OfficeSpace,
+        StoreLease : StoreLease,
+        NeedHardware : NeedHardware
     };
 
     render() {
@@ -55,7 +81,7 @@ class Element extends Component {
 
         return (
             <div>
-                <DynamicElement onClickNext={(e) => onClickNext(e)}/>
+                <DynamicElement onClickNext={(e) => onClickNext(e)} onComplete={(bool) => this.props.onComplete(bool)}/>
             </div>
         )
     }

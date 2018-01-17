@@ -63,16 +63,16 @@ class OfficeAccessories extends Component {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
+        const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
             <div>
                 <ul className="alert-btns">
                     <li><a
-                        className={ currentBusinessMeta.office_accessories == 'option 1' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 1')}>Option 1</a></li>
+                        className={ currentBusinessMeta.office_accessories == 'yes' ? 'active' : '' }
+                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
                     <li><a
-                        className={ currentBusinessMeta.office_accessories == 'option 2' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 2')}>Option 2</a></li>
+                        href={ affiliateLink }>Buy Some Now</a></li>
                 </ul>
                 <ul className="alert-f-links">
                     <li><a

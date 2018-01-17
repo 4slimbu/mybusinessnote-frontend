@@ -4,18 +4,23 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentBusinessOption,
+    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setBusinessMeta, setCurrentBusinessOption,
     setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import {API_BASE_IMAGE_URL, API_BASE_URL} from "../../config";
 
 class Logo extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {file: '',imagePreviewUrl: ''};
+        this.state = {
+            file: '',
+            imagePreviewUrl: '',
+            isPreview: true
+        };
     }
 
     _handleSubmit(e) {
@@ -25,7 +30,7 @@ class Logo extends Component {
         this.props.saveBusinessOptionFormRequest({
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
-                    logo: this.state.file
+                    logo: this.state.imagePreviewUrl
                 }
             }
         ).then(
@@ -49,7 +54,8 @@ class Logo extends Component {
         reader.onloadend = () => {
             this.setState({
                 file: file,
-                imagePreviewUrl: reader.result
+                imagePreviewUrl: reader.result,
+                isPreview: true
             });
         }
 
@@ -59,7 +65,8 @@ class Logo extends Component {
     onClickRemove(e) {
         e.preventDefault();
         this.setState({
-            imagePreviewUrl: ''
+            imagePreviewUrl: '',
+            isPreview: false
         });
     }
 
@@ -94,23 +101,30 @@ class Logo extends Component {
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
-        let {imagePreviewUrl} = this.state;
         let imagePreview = null;
-        if (imagePreviewUrl) {
-            imagePreview = (<img className="alert-frm-img" src={imagePreviewUrl} />);
+
+        const logo = (this.state.imagePreviewUrl) ? this.state.imagePreviewUrl :
+            ((currentBusinessMeta.logo) ? API_BASE_IMAGE_URL + '/images/business-options/' + currentBusinessMeta.logo : null);
+        if (logo) {
+            imagePreview = (<img className="alert-frm-img" src={logo} />);
         }
 
         return (
             <div>
                 <form onSubmit={(e)=>this._handleSubmit(e)}>
                     {
-                        imagePreview ?
+                        (this.state.isPreview && imagePreview) ?
                             <div>
                                 <span className="remove-wrapper">
-                                    <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}><i class="fa fa-remove" aria-hidden="true"></i></a>
+                                    <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}><i className="fa fa-remove" aria-hidden="true"></i></a>
                                     { imagePreview }
                                 </span>
-                                <button className="btn btn-default btn-lg btn-done">Done</button>
+                                {
+                                    this.state.imagePreviewUrl ?
+                                    <button className="btn btn-default btn-lg btn-done">Done</button>
+                                        :
+                                        <button onClick={(e) => this.onClickRemove(e)} className="btn btn-default btn-lg btn-done">Change</button>
+                                }
                             </div>
                             :
                             <ul className="alert-btns">
@@ -152,6 +166,7 @@ Logo.propTypes = {
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
+    setBusinessMeta: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };
 
@@ -174,6 +189,7 @@ export default withRouter(
             getBusinessOptionFromUrl,
             saveBusinessOptionFormRequest,
             getAppStatus,
-            addFlashMessage
+            addFlashMessage,
+            setBusinessMeta
         }
     )(Logo))

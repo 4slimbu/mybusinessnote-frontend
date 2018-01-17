@@ -29,11 +29,10 @@ class Tagline extends Component {
 
     onClickOption(e) {
         e.preventDefault();
-        alert(e.target.value);
         this.props.saveBusinessOptionFormRequest({
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
-                    tagline: e.target.value
+                    tagline: this.state.tagline
                 }
             }
         ).then(
@@ -77,19 +76,23 @@ class Tagline extends Component {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
+        const tagline = (this.state.tagline) ? this.state.tagline : ((currentBusinessMeta.tagline) ? currentBusinessMeta.tagline : '');
 
         return (
             <div>
                 <form className="alert-form">
                     <div className="form-group">
                         <input type="text"
-                               onBlur={(e) => this.onClickOption(e)}
                                onChange={(e) => this.onChangeTagline(e)}
                                className="form-control" name="alert-name" placeholder="eg. We deliver you safely home"
-                                value={this.state.tagline}
+                                value={tagline}
                         />
                     </div>
                 </form>
+                {
+                    tagline &&
+                    <a onClick={(e) => this.onClickOption(e)} href="#" className="btn btn-default btn-lg btn-alert">Done</a>
+                }
                 <ul className="alert-f-links">
                     <li><a
                         className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}

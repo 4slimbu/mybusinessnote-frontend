@@ -123,3 +123,13 @@ ul.alert-btns li .upload-button.focus {
     background: #000;
     color: #ffffff;
 }
+
+.completed-section p {
+    max-width: 210px;
+    margin: 28px auto 0;
+    padding-bottom: 97px;
+}
+
+.completed-section img {
+    margin-top: 50px;
+}
