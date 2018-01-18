@@ -8,11 +8,13 @@ import LevelPage from "./components/level/LevelPage";
 import SectionPage from "./components/section/SectionPage";
 import BusinessOptionPage from "./components/business-option/BusinessOptionPage";
 import LevelCompletePage from "./components/level/LevelCompletePage";
+import HomePage from "./components/home/HomePage";
 
 export default () => {
     return (
         <Switch>
-            <Route exact path="/" render={() => { return <Redirect to="/level/getting-started" /> }}/>
+            {/*<Route exact path="/" render={() => { return <Redirect to="/level/getting-started" /> }}/>*/}
+            <Route exact path="/" component={HomePage} />
             <Route path="/login" component={LoginPage}/>
             <Route path="/new-event" component={requireAuth(NewEventPage)} />
             <Route path="/:url/not-found" component={PageNotFound}/>

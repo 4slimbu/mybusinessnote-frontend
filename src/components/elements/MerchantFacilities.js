@@ -13,6 +13,13 @@ import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class MerchantFacilities extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowCompleted: false,
+        }
+    }
+
     onClickNext(e) {
         e.preventDefault();
         this.props.getAppStatus();
@@ -37,6 +44,17 @@ class MerchantFacilities extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -55,6 +73,17 @@ class MerchantFacilities extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -65,24 +94,30 @@ class MerchantFacilities extends Component {
         const currentBusinessMeta = currentBusinessOption.business_meta;
 
         return (
-            <div>
-                <ul className="alert-btns">
-                    <li><a
-                        className={ currentBusinessMeta.merchant_facilities == 'option 1' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 1')}>Option 1</a></li>
-                    <li><a
-                        className={ currentBusinessMeta.merchant_facilities == 'option 2' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'option 2')}>Option 2</a></li>
-                </ul>
-                <ul className="alert-f-links">
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
-                </ul>
-            </div>
+            this.state.isShowCompleted ?
+                <div className="completed-section">
+                    <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
+                    <p>Well done for completing this section!</p>
+                </div>
+                :
+                <div>
+                    <ul className="alert-btns">
+                        <li><a
+                            className={ currentBusinessMeta.merchant_facilities == 'option 1' ? 'active' : '' }
+                            href="" onClick={(e) => this.onClickOption(e, 'option 1')}>Option 1</a></li>
+                        <li><a
+                            className={ currentBusinessMeta.merchant_facilities == 'option 2' ? 'active' : '' }
+                            href="" onClick={(e) => this.onClickOption(e, 'option 2')}>Option 2</a></li>
+                    </ul>
+                    <ul className="alert-f-links">
+                        <li><a
+                            className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
+                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
+                        <li><a
+                            className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
+                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
+                    </ul>
+                </div>
 
         )
 

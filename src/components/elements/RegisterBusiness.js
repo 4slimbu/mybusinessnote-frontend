@@ -90,7 +90,13 @@ class RegisterBusiness extends Component {
                         this.props.history.push('/level/' + appStatus.currentLevel.slug);
                     });
                 },
-                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+                ( error ) => {
+                    this.setState({errors: error.response.data.error, isLoading: false});
+                    this.props.addFlashMessage({
+                        type: "error",
+                        text: "Failed!"
+                    });
+                }
             );
         }
     }

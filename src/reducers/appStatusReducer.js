@@ -2,7 +2,7 @@ import {
     GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID, SET_CURRENT,
     SET_CURRENT_BUSINESS_CATEGORY_ID,
     SET_CURRENT_BUSINESS_OPTION,
-    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS
+    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS, SET_TOOLTIP_CONTENT
 } from "../actions/types";
 import {DEFAULT_APP_STATUS} from "../data/default";
 
@@ -48,13 +48,14 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 isFetching: true
             };
         case `${GET_BUSINESS_OPTION}_FULFILLED` :
-            if (action.payload.level && action.payload.section) {
+            if (action.payload.level && action.payload.section && action.payload.levels) {
                 return {
                     ...state,
                     isFetching: false,
                     currentBusinessOption: action.payload,
                     currentLevel: action.payload.level,
-                    currentSection: action.payload.section
+                    currentSection: action.payload.section,
+                    levels: action.payload.levels
                 };
             } else {
                 return {
@@ -65,10 +66,22 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
             }
 
         case `${SET_CURRENT_BUSINESS_OPTION}` :
-            return {
-                ...state,
-                currentBusinessOption: action.currentBusinessOption
-            };
+            if (action.currentBusinessOption.level && action.currentBusinessOption.section && action.currentBusinessOption.levels) {
+                return {
+                    ...state,
+                    isFetching: false,
+                    currentBusinessOption: action.currentBusinessOption,
+                    currentLevel: action.currentBusinessOption.level,
+                    currentSection: action.currentBusinessOption.section,
+                    levels: action.currentBusinessOption.levels
+                };
+            } else {
+                return {
+                    ...state,
+                    isFetching: false,
+                    currentBusinessOption: action.currentBusinessOption
+                };
+            }
         case `${GET_BUSINESS_CATEGORIES}_FULFILLED` :
             return {
                 ...state,
@@ -88,6 +101,11 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
             return {
                 ...state,
                 currentTipCategoryId: action.currentTipCategoryId
+            };
+        case `${SET_TOOLTIP_CONTENT}` :
+            return {
+                ...state,
+                toolTip: action.toolTip
             };
         default: return state;
     }

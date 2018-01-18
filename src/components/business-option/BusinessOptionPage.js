@@ -52,10 +52,18 @@ class BusinessOptionPage extends Component {
                                 <a className="back-link pull-left" href="#" onClick={(e) => this.onClickBack(e)}>
                                     <i className="fa fa-chevron-left" aria-hidden="true"></i>
                                     back</a>
-                                <a className="pull-right back-link" href="#" onClick={(e) => this.onClickNext(e)}>
-                                    next
-                                    <i className="fa fa-chevron-right" aria-hidden="true"></i>
+                                {
+                                    (
+                                        currentBusinessOption.business_business_option_status === 'done' ||
+                                        currentBusinessOption.business_business_option_status === 'skipped' ||
+                                        currentBusinessOption.business_business_option_status === 'irrelevant'
+
+                                    ) &&
+                                    <a className="pull-right front-link" href="#" onClick={(e) => this.onClickNext(e)}>
+                                        next
+                                        <i className="fa fa-chevron-right" aria-hidden="true"></i>
                                     </a>
+                                }
                             </div>
                             <div className="alert-form">
                                 <div className="alert-head">

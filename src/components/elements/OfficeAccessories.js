@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
@@ -12,6 +12,12 @@ import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class OfficeAccessories extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowCompleted: false,
+        }
+    }
 
     onClickNext(e) {
         e.preventDefault();
@@ -37,6 +43,18 @@ class OfficeAccessories extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -55,6 +73,17 @@ class OfficeAccessories extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -66,23 +95,26 @@ class OfficeAccessories extends Component {
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
-            <div>
-                <ul className="alert-btns">
-                    <li><a
-                        className={ currentBusinessMeta.office_accessories == 'yes' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
-                    <li><a
-                        href={ affiliateLink }>Buy Some Now</a></li>
-                </ul>
-                <ul className="alert-f-links">
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
-                </ul>
-            </div>
+            this.state.isShowCompleted ?
+                <Redirect to='/level/setting-the-foundations' />
+                :
+                <div>
+                    <ul className="alert-btns">
+                        <li><a
+                            className={ currentBusinessMeta.office_accessories == 'yes' ? 'active' : '' }
+                            href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
+                        <li><a
+                            href={ affiliateLink }>Buy Some Now</a></li>
+                    </ul>
+                    <ul className="alert-f-links">
+                        <li><a
+                            className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
+                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
+                        <li><a
+                            className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
+                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
+                    </ul>
+                </div>
 
         )
 

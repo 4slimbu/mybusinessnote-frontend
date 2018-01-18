@@ -24,7 +24,8 @@ export const DEFAULT_APP_STATUS = {
     currentBusinessOption: {data: {}, links: {}},
     nextBusinessOption: {},
     businessCategories: {data: {}, links: {}},
-    currentTipCategoryId: null
+    currentTipCategoryId: null,
+    toolTip: null
 };
 
 export const DEFAULT_BUSINESS_OPTION = {};

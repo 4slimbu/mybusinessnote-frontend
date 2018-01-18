@@ -11,6 +11,13 @@ import {generateApiUrlFromSlug, generateApiUrlFromUrlLocation} from "../navigati
 import {withRouter} from "react-router-dom";
 
 class SectionPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isEdit: false
+        }
+    }
+
     componentDidMount() {
         const appStatus = this.props.appStatus;
 
@@ -18,10 +25,7 @@ class SectionPage extends Component {
             const url = '/level/' + appStatus.currentLevel.id + '/section/' + appStatus.currentSection.id;
             this.props.getBusinessOptionFromUrl(url);
         } else {
-            this.props.getBusinessOptionFromUrl().then((response) => {
-                this.props.setCurrentLevel(appStatus.levels[response.data.level_id - 1]);
-                this.props.setCurrentSection(appStatus.levels[response.data.level_id - 1].sections[response.data.section_id - 1]);
-            });
+            this.props.history.push('/');
         }
 
     }

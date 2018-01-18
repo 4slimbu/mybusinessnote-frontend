@@ -37,6 +37,12 @@ class CustomerAnalysis extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -58,6 +64,12 @@ class CustomerAnalysis extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -76,6 +88,12 @@ class CustomerAnalysis extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }

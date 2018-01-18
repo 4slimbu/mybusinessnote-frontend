@@ -14,6 +14,7 @@ import {
     filterLevelsBySlug, generateAppRelativeUrl, getCurrentLevelByUrl,
     getCurrentSectionByUrl
 } from "./navigation/helperFunctions";
+import {logout} from "../actions/authActions";
 
 class App extends Component {
 
@@ -59,6 +60,7 @@ class App extends Component {
     }
 
     render() {
+        const { auth, logout, appStatus } = this.props;
         const { businessCategories, currentTipCategoryId } = this.props.appStatus;
         return (
             <div id="page" className="hfeed site">
@@ -69,7 +71,13 @@ class App extends Component {
                                 <NavigationBar/>
                                 <FlashMessageList/>
                                 <Routes/>
-                                <ToolTip businessCategories={businessCategories} currentTipCategoryId={currentTipCategoryId}/>
+                                <ToolTip
+                                    toolTip={appStatus.toolTip}
+                                    businessCategories={businessCategories}
+                                    currentTipCategoryId={currentTipCategoryId}
+                                    auth={auth}
+                                    logout={logout}
+                                />
                             </div>
                         </main>
                         {/* #main */}
@@ -89,7 +97,8 @@ App.propTypes = {
     getBusinessCategories: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired
+    setCurrentBusinessOption: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -105,5 +114,6 @@ export default withRouter(connect(mapStateToProps, {
     getBusinessCategories,
     setCurrentLevel,
     setCurrentSection,
-    setCurrentBusinessOption
+    setCurrentBusinessOption,
+    logout
 })(App));

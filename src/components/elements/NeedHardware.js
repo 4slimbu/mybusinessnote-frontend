@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
@@ -12,6 +12,13 @@ import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class NeedHardware extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowCompleted: false,
+        }
+    }
 
     onClickNext(e) {
         e.preventDefault();
@@ -37,6 +44,17 @@ class NeedHardware extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -58,6 +76,12 @@ class NeedHardware extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -76,24 +100,40 @@ class NeedHardware extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
+            this.state.isShowCompleted ?
+                <Redirect to='/level/building-the-business' />
+    :
             <div>
                 <ul className="alert-btns">
                     <li><a
-                        className={ currentBusinessMeta.need_hardware == 'yes' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
+                        className={currentBusinessMeta.need_hardware == 'yes' ? 'active' : ''}
+                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a>
+                    </li>
                     <li>
-                        <select onChange={(e) => this.onChangeSelect(e)} value={ currentBusinessMeta.need_hardware_option}>
+                        <select onChange={(e) => this.onChangeSelect(e)}
+                                value={currentBusinessMeta.need_hardware_option}>
                             <option value="">Options</option>
                             <option value="option1">Option1</option>
                             <option value="option2">Option2</option>
@@ -110,43 +150,43 @@ class NeedHardware extends Component {
                 </ul>
             </div>
 
-        )
+    )
 
     }
-}
+    }
 
-NeedHardware.propTypes = {
-    getBusinessCategories: PropTypes.func.isRequired,
-    setBusinessCategoryId: PropTypes.func.isRequired,
-    setSellGoods: PropTypes.func.isRequired,
-    setCurrentTipCategory: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired,
-    onClickNext: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessOptionFormRequest: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
-};
+    NeedHardware.propTypes = {
+        getBusinessCategories: PropTypes.func.isRequired,
+        setBusinessCategoryId: PropTypes.func.isRequired,
+        setSellGoods: PropTypes.func.isRequired,
+        setCurrentTipCategory: PropTypes.func.isRequired,
+        setCurrentBusinessOption: PropTypes.func.isRequired,
+        onClickNext: PropTypes.func.isRequired,
+        getBusinessOptionFromUrl: PropTypes.func.isRequired,
+        saveBusinessOptionFormRequest: PropTypes.func.isRequired,
+        getAppStatus: PropTypes.func.isRequired,
+        addFlashMessage: PropTypes.func.isRequired
+    };
 
-function mapStateToProps(state) {
-    return {
+    function mapStateToProps(state) {
+        return {
         appStatus: state.appStatusReducer,
         auth: state.authReducer
     }
-}
+    }
 
-export default withRouter(
+    export default withRouter(
     connect(
-        mapStateToProps,
-        {
-            getBusinessCategories,
-            setBusinessCategoryId,
-            setSellGoods,
-            setCurrentTipCategory,
-            setCurrentBusinessOption,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
-            addFlashMessage
-        }
+    mapStateToProps,
+    {
+        getBusinessCategories,
+        setBusinessCategoryId,
+        setSellGoods,
+        setCurrentTipCategory,
+        setCurrentBusinessOption,
+        getBusinessOptionFromUrl,
+        saveBusinessOptionFormRequest,
+        getAppStatus,
+        addFlashMessage
+    }
     )(NeedHardware))

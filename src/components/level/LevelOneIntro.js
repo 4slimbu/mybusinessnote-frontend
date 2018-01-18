@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 class Level1Intro extends Component {
     render() {
@@ -26,14 +26,15 @@ class Level1Intro extends Component {
                         </div>
                     </div>
                     <h1>Getting started</h1>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                        the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
-                        of type and scrambled it to make a type specimen book.</p>
-                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining
-                        essentially unchanged.</p>
+
+                    <p>
+                        Let's get you started by setting up your account. Click on continue to go through the steps
+                        to register as well as to set up your business.
+                    </p>
                     <div className="btn-wrap">
-                        <button onClick={(e) => onClickStart(e, sectionUrl)} className="btn btn-default btn-md">Start</button>
+                        <button onClick={(e) => onClickStart(e, sectionUrl)} className="btn btn-default btn-md">Continue</button>
                     </div>
+
                 </div>
             </section>
         );

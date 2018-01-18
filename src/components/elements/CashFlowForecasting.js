@@ -12,6 +12,12 @@ import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class CashFlowForecasting extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowCompleted: false,
+        }
+    }
 
     onClickNext(e) {
         e.preventDefault();
@@ -37,6 +43,17 @@ class CashFlowForecasting extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -58,6 +75,12 @@ class CashFlowForecasting extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -76,6 +99,17 @@ class CashFlowForecasting extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -87,6 +121,12 @@ class CashFlowForecasting extends Component {
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
+            this.state.isShowCompleted ?
+                <div className="completed-section">
+                    <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
+                    <p>Well done for completing this section!</p>
+                </div>
+                :
             <div>
                 <ul className="alert-btns">
                     <li><a

@@ -96,7 +96,13 @@ class CreateBusiness extends Component {
                     });
                     this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
                 },
-                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+                ( error ) => {
+                    this.setState({errors: error.response.data.error, isLoading: false});
+                    this.props.addFlashMessage({
+                        type: "error",
+                        text: "Failed!"
+                    });
+                }
             );
         }
     }

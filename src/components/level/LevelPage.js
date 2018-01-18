@@ -11,6 +11,7 @@ import {
     setCurrentSection
 } from "../../actions/appStatusAction";
 import LevelCompletePage from "./LevelCompletePage";
+import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class LevelPage extends Component {
     componentDidMount() {
@@ -29,13 +30,14 @@ class LevelPage extends Component {
 
     render() {
         let page;
-        const { setCurrentLevel, setCurrentSection, setCurrentBusinessOption, appStatus } = this.props;
+        const { setCurrentLevel, setCurrentSection, setCurrentBusinessOption, appStatus, addFlashMessage } = this.props;
         const { levels = [], currentLevel = {} } = this.props.appStatus;
         const nextLevel = (appStatus.levels && appStatus.levels[currentLevel.id]) ? appStatus.levels[currentLevel.id] : currentLevel;
         const completedPercent = generateLevelCompletedPercent(levels, currentLevel);
 
         page = (<LevelIntroPage
             appStatus={this.props.appStatus}
+            addFlashMessage={addFlashMessage}
             level={currentLevel}
             setCurrentLevel={setCurrentLevel}
             setCurrentSection={setCurrentSection}
@@ -75,7 +77,8 @@ LevelPage.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
-    getCurrentLevelByUrl: PropTypes.func.isRequired
+    getCurrentLevelByUrl: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -89,5 +92,6 @@ export default connect(mapStateToProps, {
     setCurrentLevel,
     setCurrentSection,
     setCurrentBusinessOption,
-    getCurrentLevelByUrl
+    getCurrentLevelByUrl,
+    addFlashMessage
 } )(LevelPage);

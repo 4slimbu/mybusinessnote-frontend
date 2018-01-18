@@ -5,12 +5,13 @@ import {Link, withRouter} from "react-router-dom";
 import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl} from "./helperFunctions";
+import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class LevelLinks extends Component {
 
     render() {
         //get the app status object
-        const { appStatus, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
+        const { appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
         //init levels
         const levels = appStatus.levels;
         //init current levels
@@ -49,6 +50,7 @@ class LevelLinks extends Component {
                                 <SectionLinks
                                     level={level}
                                     appStatus={appStatus}
+                                    addFlashMessage={addFlashMessage}
                                     setCurrentLevel={setCurrentLevel}
                                     setCurrentSection={setCurrentSection}
                                     setCurrentBusinessOption={setCurrentBusinessOption}
@@ -74,7 +76,8 @@ LevelLinks.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired
 };
 
 export default withRouter(LevelLinks);

@@ -2,41 +2,42 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {map} from "lodash";
 import * as classnames from "classnames";
+import {withRouter} from "react-router-dom";
 
 class ToolTip extends Component {
     render() {
-        const { businessCategories, currentTipCategoryId } = this.props;
-        const tipList = map(businessCategories.data, (item, key) => {
-           return  (
-               <div className="panel panel-default" key={`tip-list-${key}` }>
-                   <div className="panel-heading " role="tab" id={`tip-heading-${key}`}>
-                       <a href={`#tip-collapse-${key}`} className={ classnames("panel-title", { "collapsed" : item.id == currentTipCategoryId})} role="button" data-toggle="collapse"
-                          data-parent="#accordion" aria-expanded="true" aria-controls={`tip-collapse-${key}`}>
-                           <h4>
-                               <span className="accordion-titles">{ item.name }</span>
-                               <span className="acc-img"></span>
-                           </h4>
-                       </a>
-                   </div>
-                   <div id={`tip-collapse-${key}`} className={ classnames("panel-collapse collapse", { "in" : item.id == currentTipCategoryId})} role="tabpanel"
-                        aria-labelledby={`heading${key}`}>
-                       <div className="panel-body">
-                           { item.tooltip }
-                       </div>
-                   </div>
-               </div>
-           )
-        });
+        const { toolTip, logout, history, auth } = this.props;
+
+        const onLogout = function(e) {
+            e.preventDefault();
+
+            logout();
+            history.push('/');
+        };
+
+
 
         return (
             <section className="right-sec bg-white mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper">
-                    <h5>Hint and tips</h5>
-                    <div className="acc-wrapper">
-                        <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            { tipList }
+                    {
+                        auth.isAuthenticated &&
+                        <div>
+                            <a href="/logout" onClick={(e) => onLogout(e)}>Logout</a>
+                            <hr />
                         </div>
-                    </div>
+                    }
+                    {
+                        toolTip &&
+                        <div>
+                            <h5>Hint and tips</h5>
+                            <div className="acc-wrapper">
+                                <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    { toolTip }
+                                </div>
+                            </div>
+                        </div>
+                    }
                     <div className="news-events-wrap">
                         <h5 className="news-title">News & Information</h5>
                         <div className="news-block clearfix">
@@ -84,7 +85,9 @@ class ToolTip extends Component {
 
 ToolTip.propTypes = {
     businessCategories: PropTypes.object.isRequired,
-    currentTipCategoryId: PropTypes.string
+    currentTipCategoryId: PropTypes.string,
+    auth: PropTypes.object.isRequired,
+    logout: PropTypes.func.isRequired,
 };
 
-export default ToolTip;
+export default withRouter(ToolTip);

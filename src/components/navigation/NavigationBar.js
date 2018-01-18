@@ -9,6 +9,7 @@ import {
     setCurrentSection
 } from "../../actions/appStatusAction";
 import {getCurrentLevelByUrl} from "./helperFunctions";
+import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class NavigationBar extends Component {
 
@@ -19,25 +20,7 @@ class NavigationBar extends Component {
     }
 
     render() {
-        const { appStatus, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl, history } = this.props;
-        const { isAuthenticated } = this.props.auth;
-
-        const userLinks = (
-            <ul>
-                <li>
-                    <strong>Hi! { appStatus.first_name + ' ' + appStatus.last_name }   </strong>
-                    <button onClick={this.logout.bind(this)}>Logout</button>
-                </li>
-            </ul>
-        );
-
-        const guestLinks = (
-            <ul>
-                <li>
-                    <Link to="/login"><button>Login</button></Link>
-                </li>
-            </ul>
-        );
+        const { appStatus, addFlashMessage, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl, history } = this.props;
 
         const onClickLevelLink = function(e, url) {
             e.preventDefault();
@@ -49,9 +32,6 @@ class NavigationBar extends Component {
 
         return (
             <section className="left-sec bg-navy">
-                <div>
-                    { isAuthenticated ? userLinks : guestLinks }
-                </div>
                 <Link to="/"
                       onClick={(e) => onClickLevelLink(e, '/' )}
                       className="site-branding">
@@ -66,6 +46,7 @@ class NavigationBar extends Component {
                             setCurrentSection={setCurrentSection}
                             setCurrentBusinessOption={setCurrentBusinessOption}
                             getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                            addFlashMessage={addFlashMessage}
                         />
                     </div>
                 </div>
@@ -81,7 +62,8 @@ NavigationBar.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -95,6 +77,7 @@ export default withRouter(connect(mapStateToProps, {
     logout,
     setCurrentLevel,
     setCurrentSection,
+    addFlashMessage,
     setCurrentBusinessOption,
     getBusinessOptionFromUrl
 })(NavigationBar));

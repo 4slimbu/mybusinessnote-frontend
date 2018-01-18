@@ -24,7 +24,7 @@ class SocialMediaRegistration extends Component {
             isTwitterClicked: false,
             isLinkedinClicked: false,
             isInstagramClicked: false,
-            isLast:true
+            isShowCompleted: false,
         }
     }
 
@@ -108,8 +108,16 @@ class SocialMediaRegistration extends Component {
                 });
                 this.props.setCurrentBusinessOption(response.data.business_option);
                 if (this.props.appStatus.currentSection >= '100') {
-                    this.props.onComplete(true);
+                    this.setState({
+                        isShowCompleted: true
+                    })
                 }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -139,6 +147,17 @@ class SocialMediaRegistration extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
+                if (this.props.appStatus.currentSection >= '100') {
+                    this.setState({
+                        isShowCompleted: true
+                    })
+                }
+            },
+            (error) => {
+                this.props.addFlashMessage({
+                    type: "error",
+                    text: "Failed!"
+                });
             }
         );
     }
@@ -160,88 +179,94 @@ class SocialMediaRegistration extends Component {
         const instagram_icon = (currentBusinessMeta.instagram || this.state.instagram) ? 'instagram_grey.png' : 'instagram.png';
 
         return (
-            <div>
-                {
-                    !(this.state.isFacebookClicked || this.state.isTwitterClicked || this.state.isLinkedinClicked || this.state.isInstagramClicked)
+            this.state.isShowCompleted ?
+                <div className="completed-section">
+                    <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
+                    <p>Well done for completing this section!</p>
+                </div>
+                :
+                <div>
+                    {
+                        !(this.state.isFacebookClicked || this.state.isTwitterClicked || this.state.isLinkedinClicked || this.state.isInstagramClicked)
 
-                    &&
-                    <div>
+                        &&
+                        <div>
 
+                            <ul className="apps-social-media">
+                                <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a></li>
+                                <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a></li>
+                                <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a></li>
+                                <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a></li>
+                            </ul>
+                            {
+                                (this.state.facebook || this.state.twitter || this.state.linkedin || this.state.instagram)
+                                &&
+                                <a href="#" onClick={(e) => this.onClickFinished(e)} className="btn btn-default btn-lg btn-alert">Finished</a>
+                            }
+                        </div>
+                    }
+                    {
+                        this.state.isTwitterClicked &&
                         <ul className="apps-social-media">
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a></li>
+                            <li>
+                                <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a>
+                                <form onSubmit={(e)=> this.onClickDone(e)} className="alert-form">
+                                    <input type="text" onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
+                                    <button className="btn btn-default btn-lg btn-alert">Done</button>
+                                </form>
+                            </li>
                         </ul>
-                        {
-                            (this.state.facebook || this.state.twitter || this.state.linkedin || this.state.instagram)
-                            &&
-                            <a href="#" onClick={(e) => this.onClickFinished(e)} className="btn btn-default btn-lg btn-alert">Finished</a>
-                        }
-                    </div>
-                }
-                {
-                    this.state.isTwitterClicked &&
-                    <ul className="apps-social-media">
-                        <li>
-                            <a href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)} className="alert-form">
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
-                            </form>
-                        </li>
+                    }
+
+                    {
+                        this.state.isFacebookClicked &&
+                        <ul className="apps-social-media">
+                            <li>
+                                <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a>
+                                <form onSubmit={(e)=> this.onClickDone(e)}>
+                                    <input type="text" onChange={(e) => this.onChangeInput(e, 'facebook')} value={facebook}/>
+                                    <button className="btn btn-default btn-lg btn-alert">Done</button>
+                                </form>
+                            </li>
+                        </ul>
+                    }
+
+                    {
+                        this.state.isLinkedinClicked &&
+                        <ul className="apps-social-media">
+                            <li>
+                                <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a>
+                                <form onSubmit={(e)=> this.onClickDone(e)}>
+                                    <input type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
+                                    <button className="btn btn-default btn-lg btn-alert">Done</button>
+                                </form>
+                            </li>
+                        </ul>
+                    }
+
+                    {
+                        this.state.isInstagramClicked &&
+                        <ul className="apps-social-media">
+                            <li>
+                                <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a>
+                                <form onSubmit={(e)=> this.onClickDone(e)}>
+                                    <input type="text" onChange={(e) => this.onChangeInput(e, 'instagram')} value={instagram}/>
+                                    <button className="btn btn-default btn-lg btn-alert">Done</button>
+                                </form>
+
+                            </li>
+                        </ul>
+                    }
+
+                    <ul className="alert-f-links">
+                        <li><a
+                            className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
+                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
+                        <li><a
+                            className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
+                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
                     </ul>
-                }
-
-                {
-                    this.state.isFacebookClicked &&
-                    <ul className="apps-social-media">
-                        <li>
-                            <a href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)}>
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'facebook')} value={facebook}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
-                            </form>
-                        </li>
-                    </ul>
-                }
-
-                {
-                    this.state.isLinkedinClicked &&
-                    <ul className="apps-social-media">
-                        <li>
-                            <a href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)}>
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
-                            </form>
-                        </li>
-                    </ul>
-                }
-
-                {
-                    this.state.isInstagramClicked &&
-                    <ul className="apps-social-media">
-                        <li>
-                            <a href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)}>
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'instagram')} value={instagram}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
-                            </form>
-
-                        </li>
-                    </ul>
-                }
-
-                <ul className="alert-f-links">
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
-                </ul>
-            </div>
+                </div>
 
         )
 

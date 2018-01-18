@@ -8,7 +8,7 @@ class LevelThreeIntro extends Component {
         e.preventDefault();
     }
     render() {
-        const {level, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
+        const {level, addFlashMessage, appStatus, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
         const {name, completed_percent, total_sections, total_completed_sections } = this.props.level;
 
         const onClickContinue = function (e, sectionUrl) {
@@ -24,6 +24,34 @@ class LevelThreeIntro extends Component {
             const sectionUrl = '/level/' + level.slug + '/section/' + section.slug;
             const onClickSectionLink = function (e) {
                 e.preventDefault();
+                if ((key - 1) >= 0) {
+                    if (level.sections[key - 1].completed_percent < '100') {
+                        addFlashMessage({
+                            type: "error",
+                            text: "Section Locked!"
+                        });
+                        return;
+                    }
+                } else {
+                    if (level.id == 2) {
+                        if (appStatus.levels[0].completed_percent < '100') {
+                            addFlashMessage({
+                                type: "error",
+                                text: "Section Locked!"
+                            });
+                            return;
+                        }
+                    }
+                    if (level.id == 3) {
+                        if (appStatus.levels[1].completed_percent < '100') {
+                            addFlashMessage({
+                                type: "error",
+                                text: "Section Locked!"
+                            });
+                            return;
+                        }
+                    }
+                }
                 setCurrentLevel(level);
                 setCurrentSection(section);
                 setCurrentBusinessOption({});
@@ -73,6 +101,8 @@ class LevelThreeIntro extends Component {
 }
 
 LevelThreeIntro.propTypes = {
+    appStatus: PropTypes.object.isRequired,
+    addFlashMessage: PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,

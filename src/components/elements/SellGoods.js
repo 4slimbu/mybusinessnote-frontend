@@ -49,6 +49,12 @@ class SellGoods extends Component {
                         text: "Saved successfully!"
                     });
                     this.props.getAppStatus();
+                },
+                (error) => {
+                    this.props.addFlashMessage({
+                        type: "error",
+                        text: "Failed!"
+                    });
                 }
             );
         }
@@ -57,7 +63,7 @@ class SellGoods extends Component {
     render() {
         const { appStatus } = this.props;
         const next = (appStatus.currentBusinessOption.links && appStatus.business_category_id !== null) ? appStatus.currentBusinessOption.links.next : null;
-        const selectedCategory = appStatus.businessCategories[appStatus.business_category_id];
+        const selectedCategory = appStatus.businessCategories.data[appStatus.business_category_id -1];
         const sellGoodsCategory = (
             selectedCategory &&
             <li key={selectedCategory.id} style={{ maxWidth: "150px" }} className="active">
@@ -78,7 +84,6 @@ class SellGoods extends Component {
                 <ul className="apps-icons clearfix">
                     {sellGoodsCategory}
                 </ul>
-                <h3>Will you be selling goods online?</h3>
                 <div className="selling-goods-btns">
                     <a href="" className={`btn btn-default btn-sm ${appStatus.sell_goods ? 'active' : ''}`}
                        onClick={(e) => this.handleSelectSellGoods(e, true)}>Yes</a>

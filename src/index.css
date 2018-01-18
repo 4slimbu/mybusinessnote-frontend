@@ -104,25 +104,25 @@ ul.alert-btns li .upload-button.focus {
     left: 0;
 }
 
-.btn-done{
-    background: #bf696e;
-    border-color: #bf696e;
-    font-size: 12px;
-    line-height: 15.6px;
-    font-weight: 500;
-    text-transform: uppercase;
-    margin-bottom: 55px;
-    padding: 12px 50px;
-}
-.btn-done:hover,
-.btn-done:active,
-.btn-done.active,
-.btn-done:focus,
-.btn-done.focus {
-    border: 1px solid #000;
-    background: #000;
-    color: #ffffff;
-}
+/*.btn-done{*/
+    /*background: #bf696e;*/
+    /*border-color: #bf696e;*/
+    /*font-size: 12px;*/
+    /*line-height: 15.6px;*/
+    /*font-weight: 500;*/
+    /*text-transform: uppercase;*/
+    /*margin-bottom: 55px;*/
+    /*padding: 12px 50px;*/
+/*}*/
+/*.btn-done:hover,*/
+/*.btn-done:active,*/
+/*.btn-done.active,*/
+/*.btn-done:focus,*/
+/*.btn-done.focus {*/
+    /*border: 1px solid #000;*/
+    /*background: #000;*/
+    /*color: #ffffff;*/
+/*}*/
 
 .completed-section p {
     max-width: 210px;

@@ -108,7 +108,13 @@ class SignUpForm extends Component {
                         }
                         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
                     },
-                    ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+                    ( error ) => {
+                        this.setState({errors: error.response.data.errors, isLoading: false});
+                        this.props.addFlashMessage({
+                            type: "error",
+                            text: "Failed!"
+                        });
+                    }
                 );
             } else {
                 this.props.userSignUpFormRequest(this.state).then(
@@ -130,7 +136,13 @@ class SignUpForm extends Component {
                             this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
                         });
                     },
-                    ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+                    ( error ) => {
+                        this.setState({errors: error.response.data.errors, isLoading: false});
+                        this.props.addFlashMessage({
+                            type: "error",
+                            text: "Failed!"
+                        });
+                    }
                 );
             }
         }
@@ -155,7 +167,11 @@ class SignUpForm extends Component {
                 },
                 ( error ) => {
                     console.log('inside does user exist error', error);
-                    this.setState({errors: error.response.data.error});
+                    this.setState({errors: error.response.data.errors});
+                    this.props.addFlashMessage({
+                        type: "error",
+                        text: "Failed!"
+                    });
                 }
             );
         }

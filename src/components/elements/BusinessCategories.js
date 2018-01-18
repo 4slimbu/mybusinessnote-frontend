@@ -5,11 +5,12 @@ import PropTypes from "prop-types";
 import {
     getAppStatus,
     getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
-    setSellGoods
+    setSellGoods, setToolTipContent
 } from "../../actions/appStatusAction";
 import {map} from "lodash";
 import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import * as classnames from "classnames";
 
 class BusinessCategories extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class BusinessCategories extends Component {
 
     componentDidMount() {
         this.props.getBusinessCategories();
+        this.displayToolTip(1);
     }
 
     handleSelect(e, id) {
@@ -46,6 +48,12 @@ class BusinessCategories extends Component {
                     });
                     this.props.getAppStatus();
                 },
+                (error) => {
+                    this.props.addFlashMessage({
+                        type: "error",
+                        text: "Failed!"
+                    });
+                }
             );
         }
     }
@@ -53,7 +61,33 @@ class BusinessCategories extends Component {
 
     handleToolTip(e, id) {
         e.preventDefault();
-        this.props.setCurrentTipCategory(id);
+        this.displayToolTip(id);
+    }
+
+    displayToolTip(id) {
+        const { businessCategories } = this.props.appStatus;
+        const tipList = map(businessCategories.data, (item, key) => {
+            return  (
+                <div className="panel panel-default" key={`tip-list-${key}` }>
+                    <div className="panel-heading " role="tab" id={`tip-heading-${key}`}>
+                        <a href={`#tip-collapse-${key}`} className={ classnames("panel-title", { "collapsed" : item.id == id})} role="button" data-toggle="collapse"
+                           data-parent="#accordion" aria-expanded="true" aria-controls={`tip-collapse-${key}`}>
+                            <h4>
+                                <span className="accordion-titles">{ item.name }</span>
+                                <span className="acc-img"></span>
+                            </h4>
+                        </a>
+                    </div>
+                    <div id={`tip-collapse-${key}`} className={ classnames("panel-collapse collapse", { "in" : item.id == id})} role="tabpanel"
+                         aria-labelledby={`heading${key}`}>
+                        <div className="panel-body">
+                            { item.tooltip }
+                        </div>
+                    </div>
+                </div>
+            )
+        });
+        this.props.setToolTipContent(tipList);
     }
 
     onClickNext(e) {
@@ -81,7 +115,8 @@ class BusinessCategories extends Component {
                         </a>
                         <span> <a href="#">{item.name}</a></span>
                     </div>
-                    <a className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, item.id)}>
+                    <a onMouseEnter={(e) => this.handleToolTip(e, item.id)}
+                        className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, item.id)}>
                         <i className="fa fa-lightbulb-o" aria-hidden="true"></i>
                     </a>
                 </li>
@@ -112,7 +147,8 @@ BusinessCategories.propTypes = {
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     saveBusinessFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    setToolTipContent: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -134,6 +170,7 @@ export default withRouter(
             getBusinessOptionFromUrl,
             saveBusinessFormRequest,
             getAppStatus,
-            addFlashMessage
+            addFlashMessage,
+            setToolTipContent
         }
     )(BusinessCategories))
