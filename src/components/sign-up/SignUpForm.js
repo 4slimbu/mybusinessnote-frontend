@@ -5,6 +5,7 @@ import {validateEmail, validateCreateUser, validateUpdateUser} from "../../utils
 import TextFieldGroup from "../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
+import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 
 class SignUpForm extends Component {
     constructor(props) {
@@ -91,7 +92,7 @@ class SignUpForm extends Component {
                 business_option_id: appStatus.currentBusinessOption.id,
             });
             if (this.props.auth.isAuthenticated) {
-                this.props.userUpdateRequest(this.state, appStatus.currentBusinessOption.links.self).then(
+                this.props.userUpdateRequest(this.state, '/level/1/section/2/business-option/3').then(
                     (response) => {
                         this.setState({isLoading: false});
 
@@ -106,7 +107,11 @@ class SignUpForm extends Component {
                                 text: "Saved Successfully!"
                             });
                         }
-                        this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                        const {appStatus, history, getBusinessOption} = this.props;
+                        getBusinessOption(
+                            '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
+                            true);
+                        history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
                     },
                     ( error ) => {
                         this.setState({errors: error.response.data.errors, isLoading: false});
@@ -132,9 +137,12 @@ class SignUpForm extends Component {
                                 text: "You have signed up successfully! Welcome!"
                             });
                         }
-                        this.props.getAppStatus().then((response) => {
-                            this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
-                        });
+
+                        const {appStatus, history, getBusinessOption} = this.props;
+                        getBusinessOption(
+                            '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
+                            true);
+                        history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
                     },
                     ( error ) => {
                         this.setState({errors: error.response.data.errors, isLoading: false});
@@ -270,6 +278,7 @@ SignUpForm.propTypes = {
     doesUserExists: PropTypes.func.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    getBusinessOption: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired
 };
 

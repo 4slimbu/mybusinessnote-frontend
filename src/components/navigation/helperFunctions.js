@@ -35,6 +35,38 @@ export function filterLevelsBySlug(levels, levelSlug) {
     return currentLevel[0];
 }
 
+export function getApiUrlFromAppUrl(location) {
+    const levelSlug = extractLevelFromLocation(location);
+    const sectionSlug = extractSectionFromLocation(location);
+    const boId = extractBoIdFromLocation(location);
+    return '/business-option?' + 'level=' + levelSlug + '&section=' + sectionSlug + '&bo=' + boId;
+}
+
+export function getAppUrlFromApiUrl(location) {
+    const levelSlug = extractLevelFromLocation(location);
+    const sectionSlug = extractSectionFromLocation(location);
+    const boId = extractBoIdFromLocation(location);
+    return '/level/' + levelSlug + '/section/' + sectionSlug + '/bo/' + boId;
+}
+
+export function extractLevelFromLocation(location) {
+    let params = location.split(/\/|\?|&|=|\./g);
+
+    return params && (params.indexOf('level') >= 0) && params[params.indexOf('level') + 1];
+}
+
+export function extractSectionFromLocation(location) {
+    let params = location.split(/\/|\?|&|=|\./g);
+
+    return params && (params.indexOf('section') >= 0) && params[params.indexOf('section') + 1];
+}
+
+export function extractBoIdFromLocation(location) {
+    let params = location.split(/\/|\?|&|=|\./g);
+
+    return params && (params.indexOf('bo') >= 0) && params[params.indexOf('bo') + 1];
+}
+
 export function getCurrentLevelByUrl(levels, url) {
     console.log('helper: levels', levels);
     console.log('helper: url:', url);

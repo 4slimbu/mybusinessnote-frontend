@@ -4,12 +4,13 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
+    getBusinessCategories, getBusinessOption, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
 import {map} from "lodash";
 import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 
 class SellGoods extends Component {
     componentDidMount() {
@@ -23,10 +24,11 @@ class SellGoods extends Component {
 
     onClickNext(e) {
         e.preventDefault();
-        this.props.getAppStatus();
-        const appStatus = this.props.appStatus;
-        const query = (appStatus.business_category_id) ? '?business_category_id=' + appStatus.business_category_id : '';
-        this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next, query);
+        const {appStatus, history} = this.props;
+        this.props.getBusinessOption(
+            '/level/1/section/1/business-option/2/next?business_category_id=' + appStatus.business_category_id,
+            true);
+        history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
     }
 
     handleSelectSellGoods(e, sellGoods) {
@@ -40,7 +42,7 @@ class SellGoods extends Component {
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 sell_goods: sellGoods
             },
-                appStatus.currentBusinessOption.links.self
+                '/level/1/section/1/business-option/2'
                 ).then(
                 (response) => {
                     this.setState({isLoading: false});
@@ -117,6 +119,7 @@ SellGoods.propTypes = {
     setSellGoods: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
+    getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     saveBusinessFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
@@ -138,6 +141,7 @@ export default withRouter(
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
+            getBusinessOption,
             getBusinessOptionFromUrl,
             saveBusinessFormRequest,
             getAppStatus,

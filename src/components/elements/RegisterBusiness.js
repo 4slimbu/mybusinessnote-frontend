@@ -76,7 +76,7 @@ class RegisterBusiness extends Component {
                 return;
             }
 
-            this.props.saveBusinessFormRequest(this.state, appStatus.currentBusinessOption.links.self).then(
+            this.props.saveBusinessFormRequest(this.state, '/level/1/section/4/business-option/5').then(
                 (response) => {
                     this.setState({isLoading: false});
                     const token = response.data.token;
@@ -149,5 +149,5 @@ export default withRouter(connect(mapStateToProps, {
     getAppStatus,
     saveBusinessFormRequest,
     addFlashMessage,
-    getBusinessOptionFromUrl
+    getBusinessOptionFromUrl,
 })(RegisterBusiness));

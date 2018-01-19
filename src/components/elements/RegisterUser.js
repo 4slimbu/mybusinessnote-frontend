@@ -5,11 +5,12 @@ import {addFlashMessage} from "../../actions/flashMessageAction";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setCurrentUser} from "../../actions/authActions";
-import {getAppStatus, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {getAppStatus, getBusinessOption, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
 
 class RegisterUser extends Component {
     render() {
-        const {appStatus, auth, userSignUpFormRequest, userUpdateRequest, getAppStatus, addFlashMessage, doesUserExists, setCurrentUser, getBusinessOptionFromUrl} = this.props;
+        const {appStatus, auth, userSignUpFormRequest, userUpdateRequest, getAppStatus, addFlashMessage,
+            doesUserExists, setCurrentUser, getBusinessOptionFromUrl, getBusinessOption} = this.props;
         return (
             <div>
                 <SignUpForm
@@ -21,6 +22,7 @@ class RegisterUser extends Component {
                     addFlashMessage={addFlashMessage}
                     doesUserExists={doesUserExists}
                     setCurrentUser={setCurrentUser}
+                    getBusinessOption={getBusinessOption}
                     getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                 />
             </div>
@@ -54,5 +56,6 @@ export default connect(mapStateToProps, {
     doesUserExists,
     setCurrentUser,
     getBusinessOptionFromUrl,
+    getBusinessOption,
     getAppStatus
 })(RegisterUser);

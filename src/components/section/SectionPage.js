@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus, getBusinessOption, getBusinessOptionFromUrl,
+    getAppStatus, getBusinessOption, getBusinessOptionFromAppUrl, getBusinessOptionFromUrl,
     setCurrentBusinessOption, setCurrentLevel, setCurrentSection
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
@@ -19,15 +19,7 @@ class SectionPage extends Component {
     }
 
     componentDidMount() {
-        const appStatus = this.props.appStatus;
-
-        if (appStatus.currentLevel && appStatus.currentLevel.id && appStatus.currentSection && appStatus.currentSection.id) {
-            const url = '/level/' + appStatus.currentLevel.id + '/section/' + appStatus.currentSection.id;
-            this.props.getBusinessOptionFromUrl(url);
-        } else {
-            this.props.history.push('/');
-        }
-
+        this.props.getBusinessOption(this.props.history.location.pathname);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -53,7 +45,7 @@ class SectionPage extends Component {
 
     render() {
         const { isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
-        const {setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
+        const {getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
@@ -68,6 +60,7 @@ class SectionPage extends Component {
                             setCurrentSection={setCurrentSection}
                             setCurrentBusinessOption={setCurrentBusinessOption}
                             getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                            getBusinessOption={getBusinessOption}
                             isFetching={isFetching}
                         />
                     }
@@ -81,6 +74,7 @@ SectionPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    getBusinessOptionFromAppUrl: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
@@ -96,6 +90,8 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps, {
     getBusinessOption,
     getBusinessOptionFromUrl,
+    getBusinessOptionFromUrl,
+    getBusinessOptionFromAppUrl,
     getAppStatus,
     setCurrentLevel,
     setCurrentSection,

@@ -28,8 +28,8 @@ class LevelIntroPage extends Component {
 
 LevelIntroPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    addFlashMessage: PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired

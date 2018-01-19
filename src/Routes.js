@@ -21,7 +21,7 @@ export default () => {
             <Route path='/level/:level' exact component={LevelPage} />
             <Route path='/level/:level/complete' exact component={LevelCompletePage} />
             <Route path='/level/:level/section/:section' exact component={SectionPage} />
-            <Route path='/level/:level/section/:section/business-option/:businessOption' exact component={BusinessOptionPage} />
+            <Route path='/level/:level/section/:section/bo/:businessOption' exact component={SectionPage} />
             <Route component={PageNotFound}/>
         </Switch>
     )

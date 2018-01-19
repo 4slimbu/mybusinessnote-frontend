@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import {getAppStatus, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {getAppStatus, getBusinessOption, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
 import TextFieldGroup from "../common/TextFieldGroup";
 import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {withRouter} from "react-router-dom";
 import {validateCreateBusiness} from "../../utils/validation/BusinessValidation";
+import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 
 class CreateBusiness extends Component {
     constructor(props) {
@@ -79,7 +80,7 @@ class CreateBusiness extends Component {
                 return;
             }
 
-            this.props.saveBusinessFormRequest(this.state, appStatus.currentBusinessOption.links.self).then(
+            this.props.saveBusinessFormRequest(this.state, '/level/1/section/3/business-option/4').then(
                 (response) => {
                     this.setState({isLoading: false});
                     const token = response.data.token;
@@ -94,7 +95,11 @@ class CreateBusiness extends Component {
                         type: "success",
                         text: "Saved successfully!"
                     });
-                    this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                    const {appStatus, history, getBusinessOption} = this.props;
+                    getBusinessOption(
+                        '/level/1/section/3/business-option/4/next?business_category_id=' + appStatus.business_category_id,
+                        true);
+                    history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
                 },
                 ( error ) => {
                     this.setState({errors: error.response.data.error, isLoading: false});
@@ -150,6 +155,7 @@ CreateBusiness.propTypes = {
     saveBusinessFormRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    getBusinessOption: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired
 };
 
@@ -164,6 +170,7 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps, {
     saveBusinessFormRequest,
     addFlashMessage,
+    getBusinessOption,
     getBusinessOptionFromUrl,
     getAppStatus
 })(CreateBusiness));

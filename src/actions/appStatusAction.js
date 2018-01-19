@@ -6,6 +6,10 @@ import {
 } from "./types";
 import * as axios from "axios";
 import {API_BASE_URL} from "../config";
+import {
+    extractBoIdFromLocation, extractLevelFromLocation,
+    extractSectionFromLocation, getApiUrlFromAppUrl
+} from "../components/navigation/helperFunctions";
 
 export function getAppStatus() {
     return {
@@ -26,16 +30,40 @@ export function getAppStatus() {
     }
 }
 
-export function getBusinessOption(appStatus) {
-    const identifier = (appStatus.currentBusinessOption.id) ? '/business-option/' + appStatus.currentBusinessOption.id : '';
-    const query = '?business_category_id=' + appStatus.business_category_id ;
-    const url = API_BASE_URL + "/level/" + appStatus.currentSection.level_id + "/section/" + appStatus.currentSection.id + identifier + query;
+export function getBusinessOption(location, apiLocation = false) {
+    //set url to provided location
+    let url = API_BASE_URL + location;
+    //if provided url isn't api-location then use it to get api location and set it to url
+    if (!apiLocation) {
+        let apiUrl = getApiUrlFromAppUrl(location);
+        url = API_BASE_URL + apiUrl;
+    }
+
     return {
         type: GET_BUSINESS_OPTION,
         payload: new Promise((resolve, reject) => {
             axios({
                 method: "GET",
                 url: url,
+                crossDomain: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            }).then(response => {
+                resolve(response.data)
+            });
+        })
+    }
+}
+
+export function getBusinessOptionFromAppUrl(query = '') {
+    return {
+        type: GET_BUSINESS_OPTION,
+        payload: new Promise((resolve, reject) => {
+            axios({
+                method: "GET",
+                url: API_BASE_URL + '/business-option?' + query,
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',

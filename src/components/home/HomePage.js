@@ -25,11 +25,4 @@ class HomePage extends Component {
     }
 }
 
-HomePage.propTypes = {
-    level: PropTypes.object.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired
-};
-
 export default withRouter(HomePage);

@@ -3,22 +3,25 @@ import PropTypes from "prop-types";
 import LevelHead from "../level/LevelHead";
 import Element from "../elements/Element";
 import {getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
+import {withRouter} from "react-router-dom";
 
 class BusinessOptionPage extends Component {
     onClickNext(e) {
-        const {
-            currentBusinessOption, getBusinessOptionFromUrl
-        } = this.props;
         e.preventDefault();
-        getBusinessOptionFromUrl(currentBusinessOption.links.next);
+        const {
+            currentBusinessOption, getBusinessOption, history
+        } = this.props;
+        getBusinessOption(currentBusinessOption.links.next);
+        history.push(getAppUrlFromApiUrl(currentBusinessOption.links.next));
     }
 
     onClickBack(e) {
         const {
-            currentBusinessOption, getBusinessOptionFromUrl
+            currentBusinessOption, getBusinessOption, history
         } = this.props;
-        e.preventDefault();
-        getBusinessOptionFromUrl(currentBusinessOption.links.prev);
+        getBusinessOption(currentBusinessOption.links.prev);
+        history.push(getAppUrlFromApiUrl(currentBusinessOption.links.prev));
     }
 
     render() {
@@ -109,8 +112,9 @@ BusinessOptionPage.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
 };
 
 
-export default BusinessOptionPage;
+export default withRouter(BusinessOptionPage);
