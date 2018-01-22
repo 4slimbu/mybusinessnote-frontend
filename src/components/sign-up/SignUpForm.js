@@ -107,7 +107,8 @@ class SignUpForm extends Component {
                                 text: "Saved Successfully!"
                             });
                         }
-                        const {appStatus, history, getBusinessOption} = this.props;
+                        const {appStatus, getAppStatus, history, getBusinessOption} = this.props;
+                        getAppStatus();
                         getBusinessOption(
                             '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
                             true);
@@ -138,7 +139,8 @@ class SignUpForm extends Component {
                             });
                         }
 
-                        const {appStatus, history, getBusinessOption} = this.props;
+                        const {appStatus, getAppStatus,  history, getBusinessOption} = this.props;
+                        getAppStatus();
                         getBusinessOption(
                             '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
                             true);

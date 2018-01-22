@@ -23,6 +23,7 @@ class ToolTip extends Component {
                     {
                         auth.isAuthenticated &&
                         <div>
+                            { auth.user.first_name + ' ' + auth.user.last_name + ' | Dashboard | ' }
                             <a href="/logout" onClick={(e) => onLogout(e)}>Logout</a>
                             <hr />
                         </div>

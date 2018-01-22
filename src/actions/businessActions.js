@@ -5,7 +5,7 @@ export function saveBusinessFormRequest(data, url) {
     return dispatch => {
         //create business using axios
         return axios({
-            method: "PUT",
+            method: "POST",
             url: API_BASE_URL + url,
             data: data,
             crossDomain: true,

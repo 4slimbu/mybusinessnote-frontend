@@ -107,7 +107,7 @@ class SocialMediaRegistration extends Component {
                     text: "Saved successfully!"
                 });
                 this.props.setCurrentBusinessOption(response.data.business_option);
-                if (this.props.appStatus.currentSection >= '100') {
+                if (this.props.appStatus.currentSection.completed_percent >= '100') {
                     this.setState({
                         isShowCompleted: true
                     })
@@ -147,7 +147,7 @@ class SocialMediaRegistration extends Component {
                 });
                 console.log('financing option: response', response.data.business_option);
                 this.props.setCurrentBusinessOption(response.data.business_option);
-                if (this.props.appStatus.currentSection >= '100') {
+                if (this.props.appStatus.currentSection.completed_percent >= '100') {
                     this.setState({
                         isShowCompleted: true
                     })
