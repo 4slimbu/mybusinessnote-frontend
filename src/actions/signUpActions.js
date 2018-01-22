@@ -21,7 +21,7 @@ export function userUpdateRequest(userData, url) {
     return dispatch => {
         //register user using axios
         return axios({
-            method: "PUT",
+            method: "POST",
             url: API_BASE_URL + url,
             data: userData,
             crossDomain: true,
