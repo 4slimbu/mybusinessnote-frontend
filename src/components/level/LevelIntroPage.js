@@ -13,7 +13,9 @@ class LevelIntroPage extends Component {
     };
 
     render() {
-        const {level, appStatus, addFlashMessage, setCurrentLevel, setCurrentSection, setCurrentBusinessOption} = this.props;
+        const {level, appStatus, addFlashMessage, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+            setToolTipContent
+        } = this.props;
         const Level = this.components[level.id];
         return <Level
             level={level}
@@ -22,6 +24,7 @@ class LevelIntroPage extends Component {
             setCurrentLevel={setCurrentLevel}
             setCurrentSection={setCurrentSection}
             setCurrentBusinessOption={setCurrentBusinessOption}
+            setToolTipContent={setToolTipContent}
         />
     }
 }
@@ -32,7 +35,8 @@ LevelIntroPage.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired
+    setCurrentBusinessOption: PropTypes.func.isRequired,
+    setToolTipContent: PropTypes.func.isRequired
 };
 
 export default LevelIntroPage;

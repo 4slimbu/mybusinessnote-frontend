@@ -10,6 +10,7 @@ import {
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import {saveBusinessOption} from "../navigation/helperFunctions";
 
 class SocialMediaRegistration extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class SocialMediaRegistration extends Component {
             isLinkedinClicked: false,
             isInstagramClicked: false,
             isShowCompleted: false,
+            isLast: true
         }
     }
 
@@ -96,30 +98,11 @@ class SocialMediaRegistration extends Component {
         if (this.state.instagram) {
             data['instagram'] = this.state.instagram
         }
-        this.props.saveBusinessOptionFormRequest({
-                business_option_id: this.props.appStatus.currentBusinessOption.id,
-                business_meta: data
-            }
-        ).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                this.props.setCurrentBusinessOption(response.data.business_option);
-                if (this.props.appStatus.currentSection.completed_percent >= '100') {
-                    this.setState({
-                        isShowCompleted: true
-                    })
-                }
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
-            }
-        );
+
+        saveBusinessOption(this, {
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
+            business_meta: data
+        });
     }
 
     onClickDone(e) {
@@ -136,30 +119,10 @@ class SocialMediaRegistration extends Component {
     onClickUpdateStatus(e, status) {
         e.preventDefault();
 
-        this.props.saveBusinessOptionFormRequest({
+        saveBusinessOption(this, {
             business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_option_status: status
-        }).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-                if (this.props.appStatus.currentSection.completed_percent >= '100') {
-                    this.setState({
-                        isShowCompleted: true
-                    })
-                }
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
-            }
-        );
+        });
     }
 
 

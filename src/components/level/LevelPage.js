@@ -8,7 +8,7 @@ import {
 } from "../navigation/helperFunctions";
 import {
     getBusinessOption, setCurrentBusinessOption, setCurrentLevel,
-    setCurrentSection
+    setCurrentSection, setToolTipContent
 } from "../../actions/appStatusAction";
 import LevelCompletePage from "./LevelCompletePage";
 import {addFlashMessage} from "../../actions/flashMessageAction";
@@ -30,7 +30,7 @@ class LevelPage extends Component {
 
     render() {
         let page;
-        const { setCurrentLevel, setCurrentSection, setCurrentBusinessOption, appStatus, addFlashMessage } = this.props;
+        const { setCurrentLevel, setCurrentSection, setCurrentBusinessOption, setToolTipContent, appStatus, addFlashMessage } = this.props;
         const { levels = [], currentLevel = {} } = this.props.appStatus;
         const nextLevel = (appStatus.levels && appStatus.levels[currentLevel.id]) ? appStatus.levels[currentLevel.id] : currentLevel;
         const completedPercent = generateLevelCompletedPercent(levels, currentLevel);
@@ -42,6 +42,7 @@ class LevelPage extends Component {
             setCurrentLevel={setCurrentLevel}
             setCurrentSection={setCurrentSection}
             setCurrentBusinessOption={setCurrentBusinessOption}
+            setToolTipContent={setToolTipContent}
         />);
 
         if (completedPercent === -1) {
@@ -77,6 +78,7 @@ LevelPage.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setToolTipContent: PropTypes.func.isRequired,
     getCurrentLevelByUrl: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };
@@ -93,5 +95,6 @@ export default connect(mapStateToProps, {
     setCurrentSection,
     setCurrentBusinessOption,
     getCurrentLevelByUrl,
-    addFlashMessage
+    addFlashMessage,
+    setToolTipContent
 } )(LevelPage);

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus, getBusinessOption, getBusinessOptionFromAppUrl, getBusinessOptionFromUrl,
-    setCurrentBusinessOption, setCurrentLevel, setCurrentSection
+    setCurrentBusinessOption, setCurrentLevel, setCurrentSection, setToolTipContent
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
 import Loading from "../Loading";
@@ -45,7 +45,9 @@ class SectionPage extends Component {
 
     render() {
         const { isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
-        const {getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
+        const {getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+            setToolTipContent,
+            getBusinessOptionFromUrl} = this.props;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
@@ -59,6 +61,7 @@ class SectionPage extends Component {
                             setCurrentLevel={setCurrentLevel}
                             setCurrentSection={setCurrentSection}
                             setCurrentBusinessOption={setCurrentBusinessOption}
+                            setToolTipContent={setToolTipContent}
                             getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                             getBusinessOption={getBusinessOption}
                             isFetching={isFetching}
@@ -78,6 +81,7 @@ SectionPage.propTypes = {
     getAppStatus: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
+    setToolTipContent: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
@@ -95,5 +99,6 @@ export default withRouter(connect(mapStateToProps, {
     getAppStatus,
     setCurrentLevel,
     setCurrentSection,
+    setToolTipContent,
     setCurrentBusinessOption
 })(SectionPage));

@@ -3,6 +3,13 @@ import PropTypes from "prop-types";
 import {Link, withRouter} from "react-router-dom";
 
 class Level1Intro extends Component {
+    componentDidMount() {
+        this.displayToolTip();
+    }
+
+    displayToolTip() {
+        this.props.setToolTipContent(null);
+    }
     render() {
         const { level, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history } = this.props;
         const { name, completed_percent, total_sections, total_completed_sections } = this.props.level;

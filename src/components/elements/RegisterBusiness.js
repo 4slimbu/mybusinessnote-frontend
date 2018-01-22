@@ -16,7 +16,7 @@ class RegisterBusiness extends Component {
         this.state = {
             type: "update_business",
             business_id: null,
-            abn: "",
+            abn: "sdfds",
             errors: {},
             isLoading: false
         };
@@ -49,8 +49,6 @@ class RegisterBusiness extends Component {
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
         const { errors, isValid } = validateRegisterBusiness(input);
-
-        console.log('is form valid', errors);
 
         if(! isValid) {
             this.setState({ errors });

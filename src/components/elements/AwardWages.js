@@ -10,6 +10,7 @@ import {
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import {saveBusinessOption} from "../navigation/helperFunctions";
 
 class AwardWages extends Component {
 
@@ -23,26 +24,11 @@ class AwardWages extends Component {
     onChangeSelect(e) {
         e.preventDefault();
 
-        this.props.saveBusinessOptionFormRequest({
+        saveBusinessOption(this, {
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
                     award_wages_option: e.target.value
                 }
-            }
-        ).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
             }
         );
     }
@@ -50,26 +36,11 @@ class AwardWages extends Component {
     onClickOption(e, option) {
         e.preventDefault();
 
-        this.props.saveBusinessOptionFormRequest({
+        saveBusinessOption(this, {
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
                     award_wages: option
                 }
-            }
-        ).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
             }
         );
     }
@@ -77,25 +48,10 @@ class AwardWages extends Component {
     onClickUpdateStatus(e, status) {
         e.preventDefault();
 
-        this.props.saveBusinessOptionFormRequest({
+        saveBusinessOption(this, {
             business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_option_status: status
-        }).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
-            }
-        );
+        });
     }
 
     render() {

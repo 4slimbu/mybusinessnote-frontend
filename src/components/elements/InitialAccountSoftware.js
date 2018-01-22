@@ -10,6 +10,7 @@ import {
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import {saveBusinessOption} from "../navigation/helperFunctions";
 
 class InitialAccountSoftware extends Component {
 
@@ -23,52 +24,21 @@ class InitialAccountSoftware extends Component {
     onClickOption(e, option) {
         e.preventDefault();
 
-        this.props.saveBusinessOptionFormRequest({
-                business_option_id: this.props.appStatus.currentBusinessOption.id,
-                business_meta: {
-                    initial_accounting_software: option
-                }
+        saveBusinessOption(this, {
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
+            business_meta: {
+                initial_accounting_software: option
             }
-        ).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
-            }
-        );
+        });
     }
 
     onClickUpdateStatus(e, status) {
         e.preventDefault();
 
-        this.props.saveBusinessOptionFormRequest({
+        saveBusinessOption(this, {
             business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_option_status: status
-        }).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
-            }
-        );
+        });
     }
 
     render() {

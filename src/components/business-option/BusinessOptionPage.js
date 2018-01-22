@@ -7,6 +7,19 @@ import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 import {withRouter} from "react-router-dom";
 
 class BusinessOptionPage extends Component {
+    componentDidMount() {
+        this.displayToolTip(this.props.currentBusinessOption.tooltip);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.currentBusinessOption.id !== this.props.currentBusinessOption.id) {
+            this.displayToolTip(nextProps.currentBusinessOption.tooltip);
+        }
+    }
+
+    displayToolTip(content) {
+        this.props.setToolTipContent(content);
+    }
     onClickNext(e) {
         e.preventDefault();
         const {
@@ -27,7 +40,6 @@ class BusinessOptionPage extends Component {
     render() {
         const {
             currentLevel, currentSection, currentBusinessOption
-
         } = this.props;
         let isComplete = false;
 

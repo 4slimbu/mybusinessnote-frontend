@@ -2,11 +2,50 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {map} from "lodash";
 import {Link, withRouter} from "react-router-dom";
+import * as classnames from "classnames";
 
 class LevelTwoIntro extends Component {
+
+    componentDidMount() {
+        this.displayToolTip();
+    }
+
+
     handleSelect(e) {
         e.preventDefault();
     }
+
+    handleToolTip(e, id) {
+        e.preventDefault();
+        this.displayToolTip(id);
+    }
+
+    displayToolTip(id) {
+        const { currentLevel } = this.props.appStatus;
+        const tipList = map(currentLevel.sections, (item, key) => {
+            return  (
+                <div className="panel panel-default" key={`tip-list-${key}` }>
+                    <div className="panel-heading " role="tab" id={`tip-heading-${key}`}>
+                        <a href={`#tip-collapse-${key}`} className={ classnames("panel-title", { "collapsed" : item.id == id})} role="button" data-toggle="collapse"
+                           data-parent="#accordion" aria-expanded="true" aria-controls={`tip-collapse-${key}`}>
+                            <h4>
+                                <span className="accordion-titles">{ item.name }</span>
+                                <span className="acc-img"></span>
+                            </h4>
+                        </a>
+                    </div>
+                    <div id={`tip-collapse-${key}`} className={ classnames("panel-collapse collapse", { "in" : item.id == id})} role="tabpanel"
+                         aria-labelledby={`heading${key}`}>
+                        <div className="panel-body">
+                            { item.tooltip }
+                        </div>
+                    </div>
+                </div>
+            )
+        });
+        this.props.setToolTipContent(tipList);
+    }
+
     render() {
         const {level, appStatus, addFlashMessage, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
         const {name, completed_percent, total_sections, total_completed_sections } = this.props.level;
@@ -68,7 +107,9 @@ class LevelTwoIntro extends Component {
                         </div>
                         <span> {section.name}</span>
                     </Link>
-                    <a className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, section.id)}>
+                    <a className="apps-question" href="#"
+                       onMouseEnter={(e) => this.handleToolTip(e, section.id)}
+                       onClick={(e) => this.handleToolTip(e, section.id)}>
                         <i className="fa fa-lightbulb-o" aria-hidden="true"></i>
                     </a>
                 </li>
@@ -106,7 +147,8 @@ LevelTwoIntro.propTypes = {
     level: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired
+    setCurrentBusinessOption: PropTypes.func.isRequired,
+    setToolTipContent: PropTypes.func.isRequired
 };
 
 export default withRouter(LevelTwoIntro);

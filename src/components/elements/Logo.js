@@ -11,6 +11,7 @@ import {
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {API_BASE_IMAGE_URL, API_BASE_URL} from "../../config";
+import {saveBusinessOption} from "../navigation/helperFunctions";
 
 class Logo extends Component {
 
@@ -27,28 +28,12 @@ class Logo extends Component {
         e.preventDefault();
         console.log('handle uploading-', this.state.file);
 
-        this.props.saveBusinessOptionFormRequest({
-                business_option_id: this.props.appStatus.currentBusinessOption.id,
-                business_meta: {
-                    logo: this.state.imagePreviewUrl
-                }
+        saveBusinessOption(this, {
+            business_option_id: this.props.appStatus.currentBusinessOption.id,
+            business_meta: {
+                logo: this.state.imagePreviewUrl
             }
-        ).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
-            }
-        );
+        });
     }
 
     _handleImageChange(e) {
@@ -63,7 +48,7 @@ class Logo extends Component {
                 imagePreviewUrl: reader.result,
                 isPreview: true
             });
-        }
+        };
 
         reader.readAsDataURL(file)
     }
@@ -86,25 +71,10 @@ class Logo extends Component {
     onClickUpdateStatus(e, status) {
         e.preventDefault();
 
-        this.props.saveBusinessOptionFormRequest({
+        saveBusinessOption(this, {
             business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_option_status: status
-        }).then(
-            (response) => {
-                this.props.addFlashMessage({
-                    type: "success",
-                    text: "Saved successfully!"
-                });
-                console.log('financing option: response', response.data.business_option);
-                this.props.setCurrentBusinessOption(response.data.business_option);
-            },
-            (error) => {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "Failed!"
-                });
-            }
-        );
+        });
     }
 
     render() {

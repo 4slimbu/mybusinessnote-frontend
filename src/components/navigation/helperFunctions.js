@@ -110,3 +110,32 @@ export function getCurrentSectionByUrl(sections, url) {
 export function generateLevelCompletedPercent(levels, currentLevel) {
     return (levels && currentLevel && levels[currentLevel.id -1]) ? levels[currentLevel.id -1].completed_percent : -1;
 }
+
+export function saveBusinessOption(currentObject, data) {
+    currentObject.props.saveBusinessOptionFormRequest(data).then(
+        (response) => {
+            currentObject.props.addFlashMessage({
+                type: "success",
+                text: "Saved successfully!"
+            });
+            console.log('financing option: response', response.data.business_option);
+            if (currentObject.state && currentObject.state.isLast && currentObject.props.appStatus.currentSection.completed_percent >= '100') {
+                currentObject.setState({
+                    isShowCompleted: true
+                });
+                return;
+            }
+            setTimeout(function () {
+                const appStatus = currentObject.props.appStatus;
+                currentObject.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                currentObject.props.history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
+            }, 1500);
+        },
+        (error) => {
+            currentObject.props.addFlashMessage({
+                type: "error",
+                text: "Failed!"
+            });
+        }
+    );
+}
