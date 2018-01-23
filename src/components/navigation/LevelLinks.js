@@ -11,7 +11,9 @@ class LevelLinks extends Component {
 
     render() {
         //get the app status object
-        const { appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl} = this.props;
+        const { appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+            setCompletedStatus,
+            getBusinessOptionFromUrl} = this.props;
         //init levels
         const levels = appStatus.levels;
         //init current levels
@@ -27,6 +29,7 @@ class LevelLinks extends Component {
                 setCurrentLevel(level);
                 setCurrentSection({});
                 setCurrentBusinessOption({});
+                setCompletedStatus({});
                 history.push(levelUrl);
             };
             return (
@@ -54,6 +57,7 @@ class LevelLinks extends Component {
                                     setCurrentLevel={setCurrentLevel}
                                     setCurrentSection={setCurrentSection}
                                     setCurrentBusinessOption={setCurrentBusinessOption}
+                                    setCompletedStatus={setCompletedStatus}
                                     getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                                 />
                             </ul>
@@ -76,6 +80,7 @@ LevelLinks.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };

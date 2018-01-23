@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {logout} from "../../actions/authActions";
 import LevelLinks from "./LevelLinks";
 import {
-    getBusinessOptionFromUrl, setCurrentBusinessOption, setCurrentLevel,
+    getBusinessOptionFromUrl, setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
     setCurrentSection
 } from "../../actions/appStatusAction";
 import {getCurrentLevelByUrl} from "./helperFunctions";
@@ -20,7 +20,9 @@ class NavigationBar extends Component {
     }
 
     render() {
-        const { appStatus, addFlashMessage, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, getBusinessOptionFromUrl, history } = this.props;
+        const { appStatus, addFlashMessage, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+            setCompletedStatus,
+            getBusinessOptionFromUrl, history } = this.props;
 
         const onClickLevelLink = function(e, url) {
             e.preventDefault();
@@ -45,6 +47,7 @@ class NavigationBar extends Component {
                             setCurrentLevel={setCurrentLevel}
                             setCurrentSection={setCurrentSection}
                             setCurrentBusinessOption={setCurrentBusinessOption}
+                            setCompletedStatus={setCompletedStatus}
                             getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                             addFlashMessage={addFlashMessage}
                         />
@@ -62,6 +65,7 @@ NavigationBar.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };
@@ -77,6 +81,7 @@ export default withRouter(connect(mapStateToProps, {
     logout,
     setCurrentLevel,
     setCurrentSection,
+    setCompletedStatus,
     addFlashMessage,
     setCurrentBusinessOption,
     getBusinessOptionFromUrl

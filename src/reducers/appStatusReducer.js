@@ -1,5 +1,6 @@
 import {
-    GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID, SET_CURRENT,
+    GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID,
+    SET_COMPLETED_STATUS, SET_CURRENT,
     SET_CURRENT_BUSINESS_CATEGORY_ID,
     SET_CURRENT_BUSINESS_OPTION,
     SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS, SET_SHOW_COMPLETED_PAGE,
@@ -112,6 +113,11 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
             return {
                 ...state,
                 showCompletedPage: action.showCompletedPage
+            };
+        case `${SET_COMPLETED_STATUS}` :
+            return {
+                ...state,
+                completed_status: action.completedStatus
             };
         default: return state;
     }

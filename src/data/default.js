@@ -26,7 +26,8 @@ export const DEFAULT_APP_STATUS = {
     businessCategories: {data: {}, links: {}},
     currentTipCategoryId: null,
     toolTip: null,
-    showCompletedPage: false
+    showCompletedPage: false,
+    completed_status: {}
 };
 
 export const DEFAULT_BUSINESS_OPTION = {};

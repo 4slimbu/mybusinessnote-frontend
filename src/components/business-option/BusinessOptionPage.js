@@ -22,23 +22,21 @@ class BusinessOptionPage extends Component {
     onClickNext(e) {
         e.preventDefault();
         const {
-            currentSection, currentLevel, currentBusinessOption, setShowCompletedPage, getBusinessOption, history
+            currentBusinessOption, getBusinessOption, history,
+            setCompletedStatus
         } = this.props;
-        if (currentBusinessOption.id === currentLevel.level_last_bo.id) {
-            setShowCompletedPage(true);
-            history.push('/level/' + currentBusinessOption.level_slug);
-            return;
-        }
         getBusinessOption(currentBusinessOption.links.next);
+        setCompletedStatus({});
         history.push(getAppUrlFromApiUrl(currentBusinessOption.links.next));
     }
 
     onClickBack(e) {
         const {
-            currentLevel, currentBusinessOption, getBusinessOption, history
+            currentLevel, currentBusinessOption, getBusinessOption, history, setCompletedStatus
         } = this.props;
         console.log('click back bo: first level bo id', currentLevel.level_first_bo.id);
         console.log('click back bo: bo id', currentBusinessOption.id);
+        setCompletedStatus({});
         if (currentBusinessOption.id === currentLevel.level_first_bo.id) {
             history.push('/level/' + currentBusinessOption.level_slug);
             return;
@@ -102,7 +100,7 @@ class BusinessOptionPage extends Component {
                                     </div>
                                 </div>
                                 {
-                                    isComplete ?
+                                    !appStatus.completed_status.level && appStatus.completed_status.section ?
                                         <div className="completed-section">
                                             <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
                                                 <p>Well done for completing this section!</p>
@@ -134,6 +132,7 @@ BusinessOptionPage.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
 };

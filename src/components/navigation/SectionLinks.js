@@ -8,7 +8,9 @@ import {withRouter} from "react-router-dom";
 class SectionLinks extends Component {
 
     render() {
-        const {appStatus, level, setCurrentLevel, setCurrentSection, history, getBusinessOptionFromUrl, addFlashMessage} = this.props;
+        const {appStatus, level, setCurrentLevel, setCurrentSection,
+            setCompletedStatus,
+            history, getBusinessOptionFromUrl, addFlashMessage} = this.props;
 
         const sectionsList = map(level.sections, (section, key) => {
             const complete = section.completed_percent == 100 ? true : false;
@@ -45,6 +47,7 @@ class SectionLinks extends Component {
                 }
                 setCurrentLevel(level);
                 setCurrentSection(section);
+                setCompletedStatus({});
                 getBusinessOptionFromUrl(generateAppRelativeUrl(level.id, section.id));
                 history.push(sectionUrl);
             };
@@ -69,6 +72,7 @@ SectionLinks.propTypes = {
     level: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };

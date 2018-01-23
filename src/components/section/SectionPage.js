@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus, getBusinessOption, getBusinessOptionFromAppUrl, getBusinessOptionFromUrl,
+    getAppStatus, getBusinessOption, getBusinessOptionFromAppUrl, getBusinessOptionFromUrl, setCompletedStatus,
     setCurrentBusinessOption, setCurrentLevel, setCurrentSection, setShowCompletedPage, setToolTipContent
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
@@ -46,7 +46,7 @@ class SectionPage extends Component {
     render() {
         const { isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
         const {appStatus, getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
-            setToolTipContent, setShowCompletedPage,
+            setToolTipContent, setShowCompletedPage,setCompletedStatus,
             getBusinessOptionFromUrl} = this.props;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
@@ -62,6 +62,7 @@ class SectionPage extends Component {
                             setCurrentLevel={setCurrentLevel}
                             setCurrentSection={setCurrentSection}
                             setCurrentBusinessOption={setCurrentBusinessOption}
+                            setCompletedStatus={setCompletedStatus}
                             setShowCompletedPage={setShowCompletedPage}
                             setToolTipContent={setToolTipContent}
                             getBusinessOptionFromUrl={getBusinessOptionFromUrl}
@@ -85,6 +86,7 @@ SectionPage.propTypes = {
     setCurrentSection: PropTypes.func.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
     setShowCompletedPage: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
@@ -104,5 +106,6 @@ export default withRouter(connect(mapStateToProps, {
     setCurrentSection,
     setToolTipContent,
     setCurrentBusinessOption,
+    setCompletedStatus,
     setShowCompletedPage
 })(SectionPage));

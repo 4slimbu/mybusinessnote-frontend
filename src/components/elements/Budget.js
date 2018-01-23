@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentBusinessOption,
+    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
+    setCurrentBusinessOption,
     setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
@@ -35,26 +36,19 @@ class Budget extends Component {
         const currentBusinessMeta = currentBusinessOption.business_meta;
 
         return (
-            this.state.isShowCompleted ?
-                <div className="completed-section">
-                    <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
-                    <p>Well done for completing this section!</p>
-                </div>
-                :
-                <div>
-                    <SelectBusinessOptionMeta
-                        current={this}
-                        currentBusinessOption={currentBusinessOption}
-                        metaKey='budget'
-                        metaValue={currentBusinessMeta.budget}
-                    />
+            <div>
+                <SelectBusinessOptionMeta
+                    current={this}
+                    currentBusinessOption={currentBusinessOption}
+                    metaKey='budget'
+                    metaValue={currentBusinessMeta.budget}
+                />
 
-                    <OptionStatusButtonGroup
-                        current={this}
-                        status={currentBusinessOption.business_business_option_status}
-                    />
-                </div>
-
+                <OptionStatusButtonGroup
+                    current={this}
+                    status={currentBusinessOption.business_business_option_status}
+                />
+            </div>
         )
 
     }
@@ -66,6 +60,7 @@ Budget.propTypes = {
     setSellGoods: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     saveBusinessOptionFormRequest: PropTypes.func.isRequired,
@@ -89,6 +84,7 @@ export default withRouter(
             setSellGoods,
             setCurrentTipCategory,
             setCurrentBusinessOption,
+            setCompletedStatus,
             getBusinessOptionFromUrl,
             saveBusinessOptionFormRequest,
             getAppStatus,

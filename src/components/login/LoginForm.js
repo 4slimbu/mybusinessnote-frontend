@@ -65,7 +65,10 @@ class LoginForm extends Component {
                     this.props.getAppStatus();
                     this.props.history.push('/');
                 },
-                ( error ) => this.setState({errors: error.response.data.error, isLoading: false})
+                ( error ) => {
+                    console.log(error);
+                    this.setState({errors: error.response.data.error, isLoading: false});
+                }
             );
         }
     }
@@ -95,7 +98,7 @@ class LoginForm extends Component {
                     field="password"
                 />
                 <div className="btn-wrap">
-                    <button disabled={ isLoading } className="btn btn-default btn-md">Login</button>
+                    <button className="btn btn-default btn-md">Login</button>
                 </div>
 
             </form>

@@ -2,7 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import {getAppStatus, getBusinessOptionFromUrl, setShowCompletedPage} from "../../actions/appStatusAction";
+import {
+    getAppStatus, getBusinessOptionFromUrl, setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
+    setCurrentSection,
+    setShowCompletedPage
+} from "../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
 import TextFieldGroup from "../common/TextFieldGroup";
@@ -78,16 +82,22 @@ class RegisterBusiness extends Component {
                 (response) => {
                     this.setState({isLoading: false});
                     const token = response.data.token;
-
                     if (token) {
                         localStorage.setItem("jwtToken", token);
                         setAuthorizationToken(token);
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
-                    this.props.getAppStatus().then(() => {
-                        this.props.setShowCompletedPage(true);
-                        this.props.history.push('/level/' + appStatus.currentLevel.slug);
-                    });
+
+                    this.props.setCompletedStatus(response.data.completed_status);
+                    if (response.data.completed_status.level) {
+                        this.props.history.push('/level/getting-started');
+                    } else {
+                        this.props.setCurrentLevel(appStatus.levels[1]);
+                        this.props.setCurrentSection({});
+                        this.props.setCurrentBusinessOption({});
+                        this.props.setCompletedStatus({});
+                        this.props.history.push('/level/setting-the-foundations');
+                    }
                 },
                 ( error ) => {
                     this.setState({errors: error.response.data.error, isLoading: false});
@@ -134,7 +144,11 @@ RegisterBusiness.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
-    setShowCompletedPage: PropTypes.func.isRequired
+    setShowCompletedPage: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
+    setCurrentLevel: PropTypes.func.isRequired,
+    setCurrentSection: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired,
 };
 
 
@@ -150,5 +164,9 @@ export default withRouter(connect(mapStateToProps, {
     saveBusinessFormRequest,
     addFlashMessage,
     getBusinessOptionFromUrl,
-    setShowCompletedPage
+    setCurrentLevel,
+    setCurrentSection,
+    setCurrentBusinessOption,
+    setShowCompletedPage,
+    setCompletedStatus
 })(RegisterBusiness));

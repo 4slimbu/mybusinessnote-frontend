@@ -5,13 +5,16 @@ import {setShowCompletedPage} from "../../actions/appStatusAction";
 
 class LevelCompletePage extends Component {
     render() {
-        const {level, nextLevel, setCurrentLevel, setShowCompletedPage, setCurrentSection, setCurrentBusinessOption, history} = this.props;
+        const {level, nextLevel, setCurrentLevel, setShowCompletedPage, setCurrentSection, setCurrentBusinessOption,
+            setCompletedStatus,
+            history} = this.props;
         const onClickLevelLink = function (e, levelUrl) {
             e.preventDefault();
             setCurrentLevel(nextLevel);
             setCurrentSection({});
             setCurrentBusinessOption({});
             setShowCompletedPage(false);
+            setCompletedStatus({});
             history.push(levelUrl);
         };
         const nextLevelUrl = '/level/' + nextLevel.slug;
@@ -49,6 +52,7 @@ LevelCompletePage.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     setShowCompletedPage: PropTypes.func.isRequired
 };
 

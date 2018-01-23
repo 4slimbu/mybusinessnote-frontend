@@ -7,7 +7,7 @@ import {
     getCurrentLevelByUrl
 } from "../navigation/helperFunctions";
 import {
-    getBusinessOption, setCurrentBusinessOption, setCurrentLevel,
+    getBusinessOption, setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
     setCurrentSection, setShowCompletedPage, setToolTipContent
 } from "../../actions/appStatusAction";
 import LevelCompletePage from "./LevelCompletePage";
@@ -31,7 +31,7 @@ class LevelPage extends Component {
     render() {
         let page;
         const { setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
-            setShowCompletedPage,
+            setShowCompletedPage, setCompletedStatus,
             setToolTipContent, appStatus, addFlashMessage } = this.props;
         const { levels = [], currentLevel = {} } = this.props.appStatus;
         const nextLevel = (appStatus.levels && appStatus.levels[currentLevel.id]) ? appStatus.levels[currentLevel.id] : currentLevel;
@@ -56,7 +56,7 @@ class LevelPage extends Component {
             );
         }
 
-        if (completedPercent >= "100" && appStatus.showCompletedPage) {
+        if (appStatus.completed_status.level) {
             page = (<LevelCompletePage
                 level={currentLevel}
                 nextLevel={nextLevel}
@@ -64,6 +64,7 @@ class LevelPage extends Component {
                 setCurrentSection={setCurrentSection}
                 setCurrentBusinessOption={setCurrentBusinessOption}
                 setShowCompletedPage={setShowCompletedPage}
+                setCompletedStatus={setCompletedStatus}
             />)
         }
 
@@ -81,6 +82,7 @@ LevelPage.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
     getCurrentLevelByUrl: PropTypes.func.isRequired,
     setShowCompletedPage: PropTypes.func.isRequired,
@@ -97,6 +99,7 @@ export default connect(mapStateToProps, {
     getBusinessOption,
     setCurrentLevel,
     setCurrentSection,
+    setCompletedStatus,
     setCurrentBusinessOption,
     getCurrentLevelByUrl,
     addFlashMessage,

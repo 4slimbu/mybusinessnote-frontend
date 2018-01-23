@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentBusinessOption,
+    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
+    setCurrentBusinessOption,
     setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
@@ -47,23 +48,19 @@ class OfficeAccessories extends Component {
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
-            this.state.isShowCompleted ?
-                <Redirect to='/level/setting-the-foundations' />
-                :
-                <div>
-                    <ul className="alert-btns">
-                        <li><a
-                            className={ currentBusinessMeta.office_accessories == 'yes' ? 'active' : '' }
-                            href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
-                        <li><a
-                            href={ affiliateLink }>Buy Some Now</a></li>
-                    </ul>
-                    <OptionStatusButtonGroup
-                        current={this}
-                        status={currentBusinessOption.business_business_option_status}
-                    />
-                </div>
-
+            <div>
+                <ul className="alert-btns">
+                    <li><a
+                        className={ currentBusinessMeta.office_accessories == 'yes' ? 'active' : '' }
+                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
+                    <li><a
+                        href={ affiliateLink }>Buy Some Now</a></li>
+                </ul>
+                <OptionStatusButtonGroup
+                    current={this}
+                    status={currentBusinessOption.business_business_option_status}
+                />
+            </div>
         )
 
     }
@@ -75,6 +72,7 @@ OfficeAccessories.propTypes = {
     setSellGoods: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     saveBusinessOptionFormRequest: PropTypes.func.isRequired,
@@ -98,6 +96,7 @@ export default withRouter(
             setSellGoods,
             setCurrentTipCategory,
             setCurrentBusinessOption,
+            setCompletedStatus,
             getBusinessOptionFromUrl,
             saveBusinessOptionFormRequest,
             getAppStatus,

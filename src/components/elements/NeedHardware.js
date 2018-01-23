@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentBusinessOption,
+    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
+    setCurrentBusinessOption,
     setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
@@ -36,24 +37,20 @@ class NeedHardware extends Component {
         const currentBusinessMeta = currentBusinessOption.business_meta;
 
         return (
-            this.state.isShowCompleted ?
-                <Redirect to='/level/building-the-business' />
-    :
-                <div>
-                    <SelectBusinessOptionMeta
-                        current={this}
-                        currentBusinessOption={currentBusinessOption}
-                        metaKey='need_hardware_option'
-                        metaValue={currentBusinessMeta.need_hardware_option}
-                    />
+            <div>
+                <SelectBusinessOptionMeta
+                    current={this}
+                    currentBusinessOption={currentBusinessOption}
+                    metaKey='need_hardware_option'
+                    metaValue={currentBusinessMeta.need_hardware_option}
+                />
 
-                    <OptionStatusButtonGroup
-                        current={this}
-                        status={currentBusinessOption.business_business_option_status}
-                    />
-                </div>
-
-    )
+                <OptionStatusButtonGroup
+                    current={this}
+                    status={currentBusinessOption.business_business_option_status}
+                />
+            </div>
+        )
 
     }
     }
@@ -64,6 +61,7 @@ class NeedHardware extends Component {
         setSellGoods: PropTypes.func.isRequired,
         setCurrentTipCategory: PropTypes.func.isRequired,
         setCurrentBusinessOption: PropTypes.func.isRequired,
+        setCompletedStatus: PropTypes.func.isRequired,
         onClickNext: PropTypes.func.isRequired,
         getBusinessOptionFromUrl: PropTypes.func.isRequired,
         saveBusinessOptionFormRequest: PropTypes.func.isRequired,
@@ -87,6 +85,7 @@ class NeedHardware extends Component {
         setSellGoods,
         setCurrentTipCategory,
         setCurrentBusinessOption,
+        setCompletedStatus,
         getBusinessOptionFromUrl,
         saveBusinessOptionFormRequest,
         getAppStatus,

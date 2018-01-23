@@ -114,22 +114,29 @@ export function generateLevelCompletedPercent(levels, currentLevel) {
 export function saveBusinessOption(currentObject, data) {
     currentObject.props.saveBusinessOptionFormRequest(data).then(
         (response) => {
+            console.log('save bo response', response);
             currentObject.props.addFlashMessage({
                 type: "success",
                 text: "Saved successfully!"
             });
-            if (currentObject.state && currentObject.state.isLast && currentObject.props.appStatus.currentSection.completed_percent >= '100') {
-                currentObject.setState({
-                    isShowCompleted: true
-                });
-                return;
-            }
             const appStatus = currentObject.props.appStatus;
-            currentObject.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.self);
-            setTimeout(function () {
-                currentObject.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
-                currentObject.props.history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
-            }, 2000);
+            currentObject.props.setCompletedStatus(response.data.completed_status);
+            currentObject.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.self).then((res) => {
+                if (response.data.completed_status.level) {
+                    currentObject.props.history.push('/level/' + appStatus.currentBusinessOption.level_slug);
+                    return;
+                }
+
+                if (response.data.completed_status.section) {
+                    return;
+                }
+
+                setTimeout(function () {
+                    currentObject.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
+                    currentObject.props.history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
+                }, 0);
+            });
+
         },
         (error) => {
             currentObject.props.addFlashMessage({

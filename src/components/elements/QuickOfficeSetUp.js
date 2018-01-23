@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentBusinessOption,
+    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
+    setCurrentBusinessOption,
     setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
@@ -66,6 +67,7 @@ QuickOfficeSetUp.propTypes = {
     setSellGoods: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     saveBusinessOptionFormRequest: PropTypes.func.isRequired,
@@ -89,6 +91,7 @@ export default withRouter(
             setSellGoods,
             setCurrentTipCategory,
             setCurrentBusinessOption,
+            setCompletedStatus,
             getBusinessOptionFromUrl,
             saveBusinessOptionFormRequest,
             getAppStatus,
