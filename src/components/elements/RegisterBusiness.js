@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import {getAppStatus, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {getAppStatus, getBusinessOptionFromUrl, setShowCompletedPage} from "../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
 import TextFieldGroup from "../common/TextFieldGroup";
@@ -85,6 +85,7 @@ class RegisterBusiness extends Component {
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
                     this.props.getAppStatus().then(() => {
+                        this.props.setShowCompletedPage(true);
                         this.props.history.push('/level/' + appStatus.currentLevel.slug);
                     });
                 },
@@ -132,7 +133,8 @@ RegisterBusiness.propTypes = {
     saveBusinessFormRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired
+    getAppStatus: PropTypes.func.isRequired,
+    setShowCompletedPage: PropTypes.func.isRequired
 };
 
 
@@ -148,4 +150,5 @@ export default withRouter(connect(mapStateToProps, {
     saveBusinessFormRequest,
     addFlashMessage,
     getBusinessOptionFromUrl,
+    setShowCompletedPage
 })(RegisterBusiness));

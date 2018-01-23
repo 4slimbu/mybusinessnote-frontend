@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     getAppStatus, getBusinessOption, getBusinessOptionFromAppUrl, getBusinessOptionFromUrl,
-    setCurrentBusinessOption, setCurrentLevel, setCurrentSection, setToolTipContent
+    setCurrentBusinessOption, setCurrentLevel, setCurrentSection, setShowCompletedPage, setToolTipContent
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
 import Loading from "../Loading";
@@ -45,8 +45,8 @@ class SectionPage extends Component {
 
     render() {
         const { isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
-        const {getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
-            setToolTipContent,
+        const {appStatus, getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+            setToolTipContent, setShowCompletedPage,
             getBusinessOptionFromUrl} = this.props;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
@@ -55,12 +55,14 @@ class SectionPage extends Component {
                     {
                         currentBusinessOption && currentBusinessOption.id &&
                         <BusinessOptionPage
+                            appStatus={appStatus}
                             currentLevel={currentLevel}
                             currentSection={currentSection}
                             currentBusinessOption={currentBusinessOption}
                             setCurrentLevel={setCurrentLevel}
                             setCurrentSection={setCurrentSection}
                             setCurrentBusinessOption={setCurrentBusinessOption}
+                            setShowCompletedPage={setShowCompletedPage}
                             setToolTipContent={setToolTipContent}
                             getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                             getBusinessOption={getBusinessOption}
@@ -82,6 +84,7 @@ SectionPage.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
+    setShowCompletedPage: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
@@ -100,5 +103,6 @@ export default withRouter(connect(mapStateToProps, {
     setCurrentLevel,
     setCurrentSection,
     setToolTipContent,
-    setCurrentBusinessOption
+    setCurrentBusinessOption,
+    setShowCompletedPage
 })(SectionPage));

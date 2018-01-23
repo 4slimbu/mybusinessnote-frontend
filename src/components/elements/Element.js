@@ -75,7 +75,7 @@ class Element extends Component {
     };
 
     render() {
-        const {element, onClickNext} = this.props;
+        const {element, onClickNext, setShowCompletedPage} = this.props;
         const DynamicElement = this.components[element];
         console.log('Element: business Categories', DynamicElement);
 

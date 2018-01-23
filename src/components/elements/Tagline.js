@@ -11,6 +11,7 @@ import {
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {saveBusinessOption} from "../navigation/helperFunctions";
+import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
 
 class Tagline extends Component {
 
@@ -35,14 +36,6 @@ class Tagline extends Component {
             business_meta: {
                 tagline: this.state.tagline
             }
-        });
-    }
-
-    onClickUpdateStatus(e, status) {
-        e.preventDefault();
-        saveBusinessOption(this, {
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_option_status: status
         });
     }
 
@@ -74,14 +67,11 @@ class Tagline extends Component {
                     tagline &&
                     <a onClick={(e) => this.onClickOption(e)} href="#" className="btn btn-default btn-lg btn-alert">Done</a>
                 }
-                <ul className="alert-f-links">
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
-                </ul>
+
+                <OptionStatusButtonGroup
+                    current={this}
+                    status={currentBusinessOption.business_business_option_status}
+                />
             </div>
 
         )

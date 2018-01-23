@@ -118,18 +118,18 @@ export function saveBusinessOption(currentObject, data) {
                 type: "success",
                 text: "Saved successfully!"
             });
-            console.log('financing option: response', response.data.business_option);
             if (currentObject.state && currentObject.state.isLast && currentObject.props.appStatus.currentSection.completed_percent >= '100') {
                 currentObject.setState({
                     isShowCompleted: true
                 });
                 return;
             }
+            const appStatus = currentObject.props.appStatus;
+            currentObject.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.self);
             setTimeout(function () {
-                const appStatus = currentObject.props.appStatus;
                 currentObject.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
                 currentObject.props.history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
-            }, 1500);
+            }, 2000);
         },
         (error) => {
             currentObject.props.addFlashMessage({

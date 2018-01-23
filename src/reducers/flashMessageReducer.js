@@ -7,7 +7,8 @@ export default (state=[], action = {}) => {
 
         case ADD_FLASH_MESSAGE:
             return [
-                ...state,
+                // commenting this will show only one flash message at a time
+                // ...state,
                 {
                     id: shortid.generate(),
                     type: action.message.type,

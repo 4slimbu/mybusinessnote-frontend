@@ -11,6 +11,7 @@ import {
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {saveBusinessOption} from "../navigation/helperFunctions";
+import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
 
 class OfficeAccessories extends Component {
     constructor(props) {
@@ -39,15 +40,6 @@ class OfficeAccessories extends Component {
         });
     }
 
-    onClickUpdateStatus(e, status) {
-        e.preventDefault();
-
-        saveBusinessOption(this, {
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_option_status: status
-        });
-    }
-
     render() {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
@@ -66,14 +58,10 @@ class OfficeAccessories extends Component {
                         <li><a
                             href={ affiliateLink }>Buy Some Now</a></li>
                     </ul>
-                    <ul className="alert-f-links">
-                        <li><a
-                            className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
-                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
-                        <li><a
-                            className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
-                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
-                    </ul>
+                    <OptionStatusButtonGroup
+                        current={this}
+                        status={currentBusinessOption.business_business_option_status}
+                    />
                 </div>
 
         )

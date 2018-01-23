@@ -2,7 +2,8 @@ import {
     GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID,
     SET_BUSINESS_META, SET_CURRENT,
     SET_CURRENT_BUSINESS_OPTION,
-    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS, SET_TOOLTIP_CONTENT
+    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS, SET_SHOW_COMPLETED_PAGE,
+    SET_TOOLTIP_CONTENT
 } from "./types";
 import * as axios from "axios";
 import {API_BASE_URL} from "../config";
@@ -187,5 +188,12 @@ export function setToolTipContent(toolTip) {
     return {
         type: SET_TOOLTIP_CONTENT,
         toolTip
+    }
+}
+
+export function setShowCompletedPage(showCompletedPage) {
+    return {
+        type: SET_SHOW_COMPLETED_PAGE,
+        showCompletedPage
     }
 }

@@ -50,7 +50,8 @@ class SectionLinks extends Component {
             };
             return (
                 <li key={section.id}><a href={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
-                    <span className={classnames("circle-span", {"complete": complete})}></span>{section.name}</a>
+                    <span className={classnames("circle-span", {"complete": complete}, {"active": appStatus.currentSection.id === section.id})}></span>
+                    {section.name}</a>
                 </li>
             )
         });

@@ -11,6 +11,8 @@ import {
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {saveBusinessOption} from "../navigation/helperFunctions";
+import SelectBusinessOptionMeta from "../common/SelectBusinessOptionMeta";
+import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
 
 class CashFlowForecasting extends Component {
     constructor(props) {
@@ -28,44 +30,10 @@ class CashFlowForecasting extends Component {
         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
     }
 
-    onChangeSelect(e) {
-        e.preventDefault();
-
-        saveBusinessOption(this, {
-                business_option_id: this.props.appStatus.currentBusinessOption.id,
-                business_meta: {
-                    cash_flow_forecasting_option: e.target.value
-                }
-            }
-        );
-    }
-
-    onClickOption(e, option) {
-        e.preventDefault();
-
-        saveBusinessOption(this, {
-                business_option_id: this.props.appStatus.currentBusinessOption.id,
-                business_meta: {
-                    cash_flow_forecasting: option
-                }
-            }
-        );
-    }
-
-    onClickUpdateStatus(e, status) {
-        e.preventDefault();
-
-        saveBusinessOption(this, {
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_option_status: status
-        });
-    }
-
     render() {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
-        const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
             this.state.isShowCompleted ?
@@ -74,28 +42,19 @@ class CashFlowForecasting extends Component {
                     <p>Well done for completing this section!</p>
                 </div>
                 :
-            <div>
-                <ul className="alert-btns">
-                    <li><a
-                        className={ currentBusinessMeta.cash_flow_forecasting == 'yes' ? 'active' : '' }
-                        href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
-                    <li>
-                        <select onChange={(e) => this.onChangeSelect(e)} value={ currentBusinessMeta.cash_flow_forecasting_option}>
-                            <option value="">Options</option>
-                            <option value="option1">Option1</option>
-                            <option value="option2">Option2</option>
-                        </select>
-                    </li>
-                </ul>
-                <ul className="alert-f-links">
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
-                    <li><a
-                        className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
-                        href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
-                </ul>
-            </div>
+                <div>
+                    <SelectBusinessOptionMeta
+                        current={this}
+                        currentBusinessOption={currentBusinessOption}
+                        metaKey='cash_flow_forecasting_option'
+                        metaValue={currentBusinessMeta.cash_flow_forecasting_option}
+                    />
+
+                    <OptionStatusButtonGroup
+                        current={this}
+                        status={currentBusinessOption.business_business_option_status}
+                    />
+                </div>
 
         )
 

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Link, withRouter} from "react-router-dom";
 
-class Level1Intro extends Component {
+class LevelOneIntro extends Component {
     componentDidMount() {
         this.displayToolTip();
     }
@@ -48,11 +48,11 @@ class Level1Intro extends Component {
     }
 }
 
-Level1Intro.propTypes = {
+LevelOneIntro.propTypes = {
     level: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
-export default withRouter(Level1Intro);
+export default withRouter(LevelOneIntro);

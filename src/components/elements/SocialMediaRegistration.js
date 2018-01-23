@@ -6,11 +6,12 @@ import {
     getAppStatus,
     getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentBusinessOption,
     setCurrentTipCategory,
-    setSellGoods
+    setSellGoods, setShowCompletedPage
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {saveBusinessOption} from "../navigation/helperFunctions";
+import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
 
 class SocialMediaRegistration extends Component {
     constructor(props) {
@@ -116,18 +117,6 @@ class SocialMediaRegistration extends Component {
         })
     }
 
-    onClickUpdateStatus(e, status) {
-        e.preventDefault();
-
-        saveBusinessOption(this, {
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_option_status: status
-        });
-    }
-
-
-
-
     render() {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
@@ -221,14 +210,10 @@ class SocialMediaRegistration extends Component {
                         </ul>
                     }
 
-                    <ul className="alert-f-links">
-                        <li><a
-                            className={currentBusinessOption.business_business_option_status == 'skipped' ? 'active' : ''}
-                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'skipped')}>Not now</a></li>
-                        <li><a
-                            className={currentBusinessOption.business_business_option_status == 'irrelevant' ? 'active' : ''}
-                            href="" onClick={(e) => this.onClickUpdateStatus(e, 'irrelevant')}>Doesn't apply to me</a></li>
-                    </ul>
+                    <OptionStatusButtonGroup
+                        current={this}
+                        status={currentBusinessOption.business_business_option_status}
+                    />
                 </div>
 
         )
@@ -240,6 +225,7 @@ SocialMediaRegistration.propTypes = {
     getBusinessCategories: PropTypes.func.isRequired,
     setBusinessCategoryId: PropTypes.func.isRequired,
     setSellGoods: PropTypes.func.isRequired,
+    setShowCompletedPage: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
@@ -268,6 +254,7 @@ export default withRouter(
             getBusinessOptionFromUrl,
             saveBusinessOptionFormRequest,
             getAppStatus,
+            setShowCompletedPage,
             addFlashMessage
         }
     )(SocialMediaRegistration))

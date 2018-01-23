@@ -28,6 +28,7 @@ class SignUpForm extends Component {
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.checkIfUserExists = this.checkIfUserExists.bind(this);
+        this.isFormValid = this.isFormValid.bind(this);
     }
 
     componentDidMount() {
@@ -67,6 +68,8 @@ class SignUpForm extends Component {
 
         if(! isValid) {
             this.setState({ errors });
+        } else {
+            this.setState({ errors: {}})
         }
 
         return isValid;
@@ -218,7 +221,7 @@ class SignUpForm extends Component {
                     label="Email *"
                     placeholder="eg. john.smith@gmail.com"
                     onChange={this.onChange}
-                    checkIfUserExists={this.checkIfUserExists}
+                    onBlur={this.checkIfUserExists}
                     value={this.state.email}
                     type="text"
                     field="email"
@@ -241,6 +244,7 @@ class SignUpForm extends Component {
                             label="Password *"
                             placeholder="xxxxxxxxxxxx"
                             onChange={this.onChange}
+                            onBlur={() => this.isFormValid({password: this.state.password})}
                             value={this.state.password}
                             type="password"
                             field="password"

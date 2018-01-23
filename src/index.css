@@ -133,3 +133,11 @@ ul.alert-btns li .upload-button.focus {
 .completed-section img {
     margin-top: 50px;
 }
+
+span.circle-span.complete {
+    background: #e8b800;
+}
+
+span.circle-span.active {
+    background: #ffffff;
+}

@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../level/LevelHead";
 import Element from "../elements/Element";
-import {getBusinessOptionFromUrl} from "../../actions/appStatusAction";
 import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 import {withRouter} from "react-router-dom";
 
@@ -23,23 +22,34 @@ class BusinessOptionPage extends Component {
     onClickNext(e) {
         e.preventDefault();
         const {
-            currentBusinessOption, getBusinessOption, history
+            currentSection, currentLevel, currentBusinessOption, setShowCompletedPage, getBusinessOption, history
         } = this.props;
+        if (currentBusinessOption.id === currentLevel.level_last_bo.id) {
+            setShowCompletedPage(true);
+            history.push('/level/' + currentBusinessOption.level_slug);
+            return;
+        }
         getBusinessOption(currentBusinessOption.links.next);
         history.push(getAppUrlFromApiUrl(currentBusinessOption.links.next));
     }
 
     onClickBack(e) {
         const {
-            currentBusinessOption, getBusinessOption, history
+            currentLevel, currentBusinessOption, getBusinessOption, history
         } = this.props;
+        console.log('click back bo: first level bo id', currentLevel.level_first_bo.id);
+        console.log('click back bo: bo id', currentBusinessOption.id);
+        if (currentBusinessOption.id === currentLevel.level_first_bo.id) {
+            history.push('/level/' + currentBusinessOption.level_slug);
+            return;
+        }
         getBusinessOption(currentBusinessOption.links.prev);
         history.push(getAppUrlFromApiUrl(currentBusinessOption.links.prev));
     }
 
     render() {
         const {
-            currentLevel, currentSection, currentBusinessOption
+            appStatus, currentLevel, currentSection, currentBusinessOption
         } = this.props;
         let isComplete = false;
 
