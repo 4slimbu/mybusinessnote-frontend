@@ -34,7 +34,8 @@ class ToolTip extends Component {
                             <h5>Hint and tips</h5>
                             <div className="acc-wrapper">
                                 <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                    { toolTip }
+                                    {toolTip.rawHtmlContent && <div dangerouslySetInnerHTML={{__html: toolTip.rawHtmlContent}} />}
+                                    {toolTip.accordion}
                                 </div>
                             </div>
                         </div>

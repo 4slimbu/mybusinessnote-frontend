@@ -26,7 +26,14 @@ class BusinessCategories extends Component {
 
     componentDidMount() {
         this.props.getBusinessCategories();
-        this.displayToolTip(1);
+        this.displayToolTip();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.appStatus.currentBusinessOption.id !== this.props.appStatus.currentBusinessOption.id) {
+            this.props.getBusinessCategories();
+            this.displayToolTip();
+        }
     }
 
     handleSelect(e, id) {
@@ -88,7 +95,10 @@ class BusinessCategories extends Component {
                 </div>
             )
         });
-        this.props.setToolTipContent(tipList);
+        const toolTip = {};
+        toolTip.rawHtmlContent = this.props.appStatus.currentBusinessOption.tooltip;
+        toolTip.accordion = tipList;
+        this.props.setToolTipContent(toolTip);
     }
 
     onClickNext(e) {
@@ -109,10 +119,10 @@ class BusinessCategories extends Component {
                 <li key={item.id} style={{ maxWidth: "150px" }} className={active}>
                     <div onClick={(e) => this.handleSelect(e, item.id)}>
                         <a className="white-icon" href="#">
-                            <img src={item.white_icon} alt=""/>
+                            <img src={item.icon} alt=""/>
                         </a>
                         <a className="red-icon" href="#">
-                            <img src={item.red_icon} alt=""/>
+                            <img src={item.hover_icon} alt=""/>
                         </a>
                         <span> <a href="#">{item.name}</a></span>
                     </div>

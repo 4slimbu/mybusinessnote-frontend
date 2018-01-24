@@ -4,11 +4,11 @@ import isEmpty from "lodash/isEmpty";
 export function validateCreateBusiness(data) {
     let errors = {};
 
-    if (Validator.isEmpty(data.business_name)) {
+    if (data.business_name === '' || data.business_name === null || Validator.isEmpty(data.business_name)) {
         errors.business_name = ["Business Name field is required"];
     }
 
-    if (! (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(data.website)) ) {
+    if ((data.business_name !== '' || data.business_name !== null) && ! (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(data.website)) ) {
         errors.website = ["Website field is invalid"];
     }
 
@@ -31,7 +31,7 @@ export function validateRegisterBusiness(data) {
         errors.abn = ["ABN field is invalid"];
     }
 
-    if (Validator.isEmpty(data.abn)) {
+    if (data.abn === '' || data.abn === null || Validator.isEmpty(data.abn)) {
         errors.abn = ["ABN field is required"];
     }
 

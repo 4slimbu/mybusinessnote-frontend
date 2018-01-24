@@ -70,10 +70,10 @@ class SellGoods extends Component {
             selectedCategory &&
             <li key={selectedCategory.id} style={{ maxWidth: "150px" }} className="active">
                 <a className="white-icon" href="#">
-                    <img src={selectedCategory.white_icon} alt=""/>
+                    <img src={selectedCategory.icon} alt=""/>
                 </a>
                 <a className="red-icon" href="#">
-                    <img src={selectedCategory.red_icon} alt=""/>
+                    <img src={selectedCategory.hover_icon} alt=""/>
                 </a>
                 <span> <a href="#">{selectedCategory.name}</a></span>
                 <a className="apps-question" href="#"><i className="fa fa-lightbulb-o" aria-hidden="true"></i>

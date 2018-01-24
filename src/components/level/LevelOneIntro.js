@@ -8,11 +8,13 @@ class LevelOneIntro extends Component {
     }
 
     displayToolTip() {
-        this.props.setToolTipContent(null);
+        const toolTip = {};
+        toolTip.rawHtmlContent = this.props.level.tooltip;
+        this.props.setToolTipContent(toolTip);
     }
     render() {
         const { level, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history } = this.props;
-        const { name, completed_percent, total_sections, total_completed_sections } = this.props.level;
+        const { name, completed_percent, total_sections, total_completed_sections, content } = this.props.level;
         const onClickStart = function (e, sectionUrl) {
             e.preventDefault();
             setCurrentLevel(level);
@@ -32,12 +34,7 @@ class LevelOneIntro extends Component {
                              aria-valuemax="100" style={{width: completed_percent + "%"}}>
                         </div>
                     </div>
-                    <h1>Getting started</h1>
-
-                    <p>
-                        Let's get you started by setting up your account. Click on continue to go through the steps
-                        to register as well as to set up your business.
-                    </p>
+                    <div dangerouslySetInnerHTML={{__html: content}} />
                     <div className="btn-wrap">
                         <button onClick={(e) => onClickStart(e, sectionUrl)} className="btn btn-default btn-md">Continue</button>
                     </div>

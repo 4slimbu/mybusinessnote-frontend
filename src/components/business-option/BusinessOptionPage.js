@@ -17,7 +17,9 @@ class BusinessOptionPage extends Component {
     }
 
     displayToolTip(content) {
-        this.props.setToolTipContent(content);
+        const toolTip = {};
+        toolTip.rawHtmlContent = content;
+        this.props.setToolTipContent(toolTip);
     }
     onClickNext(e) {
         e.preventDefault();
@@ -61,7 +63,7 @@ class BusinessOptionPage extends Component {
                     (currentLevel.id == 1) ?
                     <div>
                         <h1>{currentBusinessOption.name}</h1>
-                        <p>{currentBusinessOption.content}</p>
+                        <div dangerouslySetInnerHTML={{__html: currentBusinessOption.content}} />
                         <div>
                             {
                                 currentBusinessOption.element &&

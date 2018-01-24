@@ -5,7 +5,7 @@ import {Link, withRouter} from "react-router-dom";
 import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl} from "./helperFunctions";
-import {addFlashMessage} from "../../actions/flashMessageAction";
+import {API_BASE_IMAGE_URL} from "../../config";
 
 class LevelLinks extends Component {
 
@@ -23,7 +23,8 @@ class LevelLinks extends Component {
         const levelsList = map(levels, (level, key) => {
             //generate level Image from level id
             const levelUrl = generateAppRelativeUrl(level.slug);
-            const levelImg = (level.completed_percent >= 100) ? "badge/gold-badge-" + level.id : "img_" + level.id;
+            const levelImg = (level.completed_percent >= 100) ? API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
+                API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
             const onClickLevelLink = function(e, levelUrl) {
                 e.preventDefault();
                 setCurrentLevel(level);
@@ -42,7 +43,7 @@ class LevelLinks extends Component {
                                   to={`/level/${level.slug}#collapse${level.id}`}
                                   aria-expanded="true" aria-controls={`collapse${level.id}`}
                             >
-                                <figure className={classnames({"goldbadge-img" : (level.completed_percent >= 100)})}><img src={`${process.env.PUBLIC_URL}/assets/images/journey/${levelImg}.png`} alt="" /></figure>
+                                <figure className={classnames({"goldbadge-img" : (level.completed_percent >= 100)})}><img src={levelImg} alt="" /></figure>
                                 <h6>{ level.name }</h6>
                             </Link>
                         </div>

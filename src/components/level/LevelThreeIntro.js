@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {map} from "lodash";
 import {Link, withRouter} from "react-router-dom";
 import * as classnames from "classnames";
+import {API_BASE_IMAGE_URL} from "../../config";
 
 class LevelThreeIntro extends Component {
     componentDidMount() {
@@ -36,18 +37,21 @@ class LevelThreeIntro extends Component {
                     <div id={`tip-collapse-${key}`} className={ classnames("panel-collapse collapse", { "in" : item.id == id})} role="tabpanel"
                          aria-labelledby={`heading${key}`}>
                         <div className="panel-body">
-                            { item.tooltip }
+                            <div dangerouslySetInnerHTML={{__html: item.tooltip}} />
                         </div>
                     </div>
                 </div>
             )
         });
-        this.props.setToolTipContent(tipList);
+        const toolTip = {};
+        toolTip.rawHtmlContent = this.props.level.tooltip;
+        toolTip.accordion = tipList;
+        this.props.setToolTipContent(toolTip);
     }
 
     render() {
         const {level, addFlashMessage, appStatus, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
-        const {name, completed_percent, total_sections, total_completed_sections } = this.props.level;
+        const {name, completed_percent, total_sections, total_completed_sections, content } = this.props.level;
 
         const onClickContinue = function (e, sectionUrl) {
             e.preventDefault();
@@ -99,10 +103,7 @@ class LevelThreeIntro extends Component {
                 <li key={section.id} style={{ maxWidth: "150px" }} className={active}>
                     <Link to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
                         <div className="white-icon" >
-                            <img src={section.white_icon} alt=""/>
-                        </div>
-                        <div className="red-icon" >
-                            <img src={section.red_icon} alt=""/>
+                            <img src={API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
                         </div>
                         <span> {section.name}</span>
                     </Link>
@@ -126,8 +127,7 @@ class LevelThreeIntro extends Component {
                              aria-valuemax="100" style={{width: completed_percent + "%"}}>
                         </div>
                     </div>
-                    <h1>Which area of your business would you like to work on first?</h1>
-                    <p>Choose where to start. You must answer or skip each area to continue.Don't worry these options will always be available to you.</p>
+                    <div dangerouslySetInnerHTML={{__html: content}} />
                     <div>
                         <ul className="apps-icons clearfix level2-apps-icons">{ sections }</ul>
                     </div>
