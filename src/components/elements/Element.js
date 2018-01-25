@@ -32,6 +32,7 @@ import CashFlowForecasting from "./CashFlowForecasting";
 import OfficeSpace from "./OfficeSpace";
 import StoreLease from "./StoreLease";
 import NeedHardware from "./NeedHardware";
+import {mbjLog} from "../navigation/helperFunctions";
 
 class Element extends Component {
     constructor(props) {
@@ -77,7 +78,7 @@ class Element extends Component {
     render() {
         const {element, onClickNext, setShowCompletedPage} = this.props;
         const DynamicElement = this.components[element];
-        console.log('Element: business Categories', DynamicElement);
+        mbjLog('Element: business Categories', DynamicElement);
 
         return (
             <div>

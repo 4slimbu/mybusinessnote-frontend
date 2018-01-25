@@ -12,28 +12,28 @@ import {
 import {withRouter} from "react-router-dom";
 import {
     filterLevelsBySlug, generateAppRelativeUrl, getCurrentLevelByUrl,
-    getCurrentSectionByUrl
+    getCurrentSectionByUrl, mbjLog
 } from "./navigation/helperFunctions";
 import {logout} from "../actions/authActions";
 
 class App extends Component {
 
     componentDidMount() {
-        console.log('app: c d m');
+        mbjLog('app: c d m');
         this.props.getBusinessCategories();
         this.props.getAppStatus().then((response) => {
             const appStatus = this.props.appStatus;
             const url = this.props.history.location.pathname;
 
-            // console.log('app: get app status response', response);
-            // console.log('app: calling appStatus inside response', this.props.appStatus);
-            // console.log('app: appStatus.levels', appStatus.levels);
-            // console.log('app: url', url);
+            // mbjLog('app: get app status response', response);
+            // mbjLog('app: calling appStatus inside response', this.props.appStatus);
+            // mbjLog('app: appStatus.levels', appStatus.levels);
+            // mbjLog('app: url', url);
 
             const currentLevel = getCurrentLevelByUrl(appStatus.levels, url);
 
             if (currentLevel) {
-                console.log('app: currentLevel', currentLevel);
+                mbjLog('app: currentLevel', currentLevel);
                 this.props.setCurrentLevel(currentLevel);
 
                 const currentSection = getCurrentSectionByUrl(currentLevel.sections, url);
@@ -47,7 +47,7 @@ class App extends Component {
             }
 
         });
-        console.log('app: current url location:', this.props.history.location.pathname);
+        mbjLog('app: current url location:', this.props.history.location.pathname);
 
         // setCurrentLevel(level);
         // setCurrentSection(section);
@@ -55,7 +55,7 @@ class App extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('app: c w r p');
+        mbjLog('app: c w r p');
 
     }
 

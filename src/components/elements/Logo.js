@@ -12,7 +12,7 @@ import {
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {API_BASE_IMAGE_URL, API_BASE_URL} from "../../config";
-import {saveBusinessOption} from "../navigation/helperFunctions";
+import {mbjLog, saveBusinessOption} from "../navigation/helperFunctions";
 import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
 
 class Logo extends Component {
@@ -28,7 +28,7 @@ class Logo extends Component {
 
     _handleSubmit(e) {
         e.preventDefault();
-        console.log('handle uploading-', this.state.file);
+        mbjLog('handle uploading-', this.state.file);
 
         saveBusinessOption(this, {
             business_option_id: this.props.appStatus.currentBusinessOption.id,

@@ -9,7 +9,7 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {withRouter} from "react-router-dom";
 import {validateCreateBusiness} from "../../utils/validation/BusinessValidation";
-import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
+import {getAppUrlFromApiUrl, mbjLog} from "../navigation/helperFunctions";
 
 class CreateBusiness extends Component {
     constructor(props) {
@@ -54,7 +54,7 @@ class CreateBusiness extends Component {
         let input = (data) ? data : this.state;
         const { errors, isValid } = validateCreateBusiness(input);
 
-        console.log('is form valid', errors);
+        mbjLog('is form valid', errors);
 
         if(! isValid) {
             this.setState({ errors });

@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     generateLevelCompletedPercent,
-    getCurrentLevelByUrl
+    getCurrentLevelByUrl, mbjLog
 } from "../navigation/helperFunctions";
 import {
     getBusinessOption, setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
@@ -15,11 +15,11 @@ import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class LevelPage extends Component {
     componentDidMount() {
-        console.log('level c d m');
+        mbjLog('level c d m');
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('level c w r p');
+        mbjLog('level c w r p');
         // if (this.props.history.location.pathname != nextProps.history.location.pathname) {
         //     const currentLevel = getCurrentLevelByUrl(nextProps.appStatus.levels, nextProps.history.location.pathname);
         //     if (currentLevel && currentLevel.id) {

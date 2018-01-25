@@ -5,7 +5,7 @@ import {validateEmail, validateCreateUser, validateUpdateUser} from "../../utils
 import TextFieldGroup from "../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
-import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
+import {getAppUrlFromApiUrl, mbjLog} from "../navigation/helperFunctions";
 
 class SignUpForm extends Component {
     constructor(props) {
@@ -179,7 +179,7 @@ class SignUpForm extends Component {
                     }
                 },
                 ( error ) => {
-                    console.log('inside does user exist error', error);
+                    mbjLog('inside does user exist error', error);
                     this.setState({errors: error.response.data.errors});
                     this.props.addFlashMessage({
                         type: "error",

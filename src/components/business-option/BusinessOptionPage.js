@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../level/LevelHead";
 import Element from "../elements/Element";
-import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
+import {getAppUrlFromApiUrl, mbjLog} from "../navigation/helperFunctions";
 import {withRouter} from "react-router-dom";
 
 class BusinessOptionPage extends Component {
@@ -36,8 +36,8 @@ class BusinessOptionPage extends Component {
         const {
             currentLevel, currentBusinessOption, getBusinessOption, history, setCompletedStatus
         } = this.props;
-        console.log('click back bo: first level bo id', currentLevel.level_first_bo.id);
-        console.log('click back bo: bo id', currentBusinessOption.id);
+        mbjLog('click back bo: first level bo id', currentLevel.level_first_bo.id);
+        mbjLog('click back bo: bo id', currentBusinessOption.id);
         setCompletedStatus({});
         if (currentBusinessOption.id === currentLevel.level_first_bo.id) {
             history.push('/level/' + currentBusinessOption.level_slug);

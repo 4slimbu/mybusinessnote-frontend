@@ -7,7 +7,7 @@ import {
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
 import Loading from "../Loading";
-import {generateApiUrlFromSlug, generateApiUrlFromUrlLocation} from "../navigation/helperFunctions";
+import {generateApiUrlFromSlug, generateApiUrlFromUrlLocation, mbjLog} from "../navigation/helperFunctions";
 import {withRouter} from "react-router-dom";
 
 class SectionPage extends Component {
@@ -23,9 +23,9 @@ class SectionPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('section c w r p');
+        mbjLog('section c w r p');
         //get url part
-        console.log('url part', this.props.history.location.pathname);
+        mbjLog('url part', this.props.history.location.pathname);
         //extract route params
         //get business option
         //get component did mount

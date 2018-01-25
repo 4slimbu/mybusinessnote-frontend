@@ -3,6 +3,25 @@
 // }
 
 import {filter, map} from "lodash";
+import {APP_DEBUG_LEVEL, APP_ENV} from "../../config";
+
+export function mbjLog(name, data = null, level = 'info') {
+    if (APP_ENV === 'debug') {
+        if (APP_DEBUG_LEVEL === 'info') {
+            if (level === 'info') {
+                console.log('info:' + name, data);
+            }
+        }
+        if (APP_DEBUG_LEVEL === 'debug') {
+            if (level === 'debug') {
+                console.log('debug:' + name, data);
+            }
+        }
+        if (APP_DEBUG_LEVEL === 'all') {
+            console.log(level + ':' + name, data);
+        }
+    }
+}
 
 export function generateAppRelativeUrl(level, section = null, businessOption = null) {
     if (level && !section && !businessOption) {
@@ -19,7 +38,7 @@ export function generateAppRelativeUrl(level, section = null, businessOption = n
 }
 
 export function generateApiUrlFromSlug(appStatus, levelSlug, sectionSlug) {
-    console.log('appstatus', appStatus.levels);
+    mbjLog('appstatus', appStatus.levels);
     return '/level/' + 1 + '/section/' + 1;
 }
 
@@ -68,18 +87,18 @@ export function extractBoIdFromLocation(location) {
 }
 
 export function getCurrentLevelByUrl(levels, url) {
-    console.log('helper: levels', levels);
-    console.log('helper: url:', url);
+    mbjLog('helper: levels', levels);
+    mbjLog('helper: url:', url);
 
     let splittedArray = url.split(/\/|\?|&|=|\./g);
 
-    console.log('helper: splittedArray:', splittedArray[2]);
+    mbjLog('helper: splittedArray:', splittedArray[2]);
 
     if (splittedArray && splittedArray[2]) {
         let currentLevel = filter(levels, (level) => {
             return level.slug == splittedArray[2];
         });
-        console.log('helper: current level', currentLevel);
+        mbjLog('helper: current level', currentLevel);
 
         return (currentLevel && currentLevel[0]) ? currentLevel[0] : false;
     }
@@ -88,18 +107,18 @@ export function getCurrentLevelByUrl(levels, url) {
 }
 
 export function getCurrentSectionByUrl(sections, url) {
-    console.log('helper: sections', sections);
-    console.log('helper: url:', url);
+    mbjLog('helper: sections', sections);
+    mbjLog('helper: url:', url);
 
     let splittedArray = url.split(/\/|\?|&|=|\./g);
 
-    console.log('helper: splittedArray:', splittedArray[4]);
+    mbjLog('helper: splittedArray:', splittedArray[4]);
 
     if (splittedArray && splittedArray[4]) {
         let currentSection = filter(sections, (section) => {
             return section.slug == splittedArray[4];
         });
-        console.log('helper: current section', currentSection);
+        mbjLog('helper: current section', currentSection);
 
         return (currentSection && currentSection[0]) ? currentSection[0] : false;
     }
@@ -114,7 +133,7 @@ export function generateLevelCompletedPercent(levels, currentLevel) {
 export function saveBusinessOption(currentObject, data) {
     currentObject.props.saveBusinessOptionFormRequest(data).then(
         (response) => {
-            console.log('save bo response', response);
+            mbjLog('save bo response', response);
             currentObject.props.addFlashMessage({
                 type: "success",
                 text: "Saved successfully!"

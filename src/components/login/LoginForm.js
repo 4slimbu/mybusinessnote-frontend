@@ -5,6 +5,7 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import {validateLogin} from "../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
+import {mbjLog} from "../navigation/helperFunctions";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -66,7 +67,7 @@ class LoginForm extends Component {
                     this.props.history.push('/');
                 },
                 ( error ) => {
-                    console.log(error);
+                    mbjLog(error);
                     this.setState({errors: error.response.data.error, isLoading: false});
                 }
             );
