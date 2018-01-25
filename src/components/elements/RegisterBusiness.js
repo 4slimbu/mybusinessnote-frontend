@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {
-    getAppStatus, getBusinessOptionFromUrl, setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
+    getAppStatus, getBusinessOption, getBusinessOptionFromUrl, setCompletedStatus, setCurrentBusinessOption,
+    setCurrentLevel,
     setCurrentSection,
     setShowCompletedPage
 } from "../../actions/appStatusAction";
@@ -88,15 +89,25 @@ class RegisterBusiness extends Component {
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
 
+                    const {setCurrentLevel, setCurrentSection, setCurrentBusinessOption, setCompletedStatus,
+                        history, getBusinessOption} = this.props;
                     this.props.setCompletedStatus(response.data.completed_status);
                     if (response.data.completed_status.level) {
-                        this.props.history.push('/level/getting-started');
+                        this.props.getAppStatus();
+                        this.props.addFlashMessage({
+                            type: "success",
+                            text: "Saved successfully!"
+                        });
+                        getBusinessOption(
+                            '/level/1/section/4/business-option/5',
+                            true);
+                        history.push('/level/getting-started');
                     } else {
-                        this.props.setCurrentLevel(appStatus.levels[1]);
-                        this.props.setCurrentSection({});
-                        this.props.setCurrentBusinessOption({});
-                        this.props.setCompletedStatus({});
-                        this.props.history.push('/level/setting-the-foundations');
+                        setCurrentLevel(appStatus.levels[1]);
+                        setCurrentSection({});
+                        setCurrentBusinessOption({});
+                        setCompletedStatus({});
+                        history.push('/level/setting-the-foundations');
                     }
                 },
                 ( error ) => {
@@ -144,6 +155,7 @@ RegisterBusiness.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
+    getBusinessOption: PropTypes.func.isRequired,
     setShowCompletedPage: PropTypes.func.isRequired,
     setCompletedStatus: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
@@ -164,6 +176,7 @@ export default withRouter(connect(mapStateToProps, {
     saveBusinessFormRequest,
     addFlashMessage,
     getBusinessOptionFromUrl,
+    getBusinessOption,
     setCurrentLevel,
     setCurrentSection,
     setCurrentBusinessOption,
