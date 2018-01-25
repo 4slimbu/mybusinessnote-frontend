@@ -38,6 +38,7 @@ class PhoneSetUp extends Component {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
+        const affiliateLinkLabel = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].name : 'Set Up Now';
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
@@ -46,7 +47,9 @@ class PhoneSetUp extends Component {
                     <li><a
                         className={ currentBusinessMeta.phone_setup == 'yes' ? 'active' : '' }
                         href="" onClick={(e) => this.onClickOption(e, 'yes')}>Yes</a></li>
-                    <li><a href={ affiliateLink }>Set a phone line now</a></li>
+                    <li>
+                        <a href={ affiliateLink } target="new">{ affiliateLinkLabel }</a>
+                    </li>
                 </ul>
 
                 <OptionStatusButtonGroup

@@ -20,6 +20,9 @@ class App extends Component {
 
     componentDidMount() {
         mbjLog('app: c d m');
+        mbjLog('testing debug level', 'dta', 'debug');
+        mbjLog('testing debug level', 'dta', 'hello');
+        mbjLog('testing debug level', 'dta', 'sudip');
         this.props.getBusinessCategories();
         this.props.getAppStatus().then((response) => {
             const appStatus = this.props.appStatus;

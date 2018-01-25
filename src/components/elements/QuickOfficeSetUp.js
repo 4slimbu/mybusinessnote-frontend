@@ -39,6 +39,7 @@ class QuickOfficeSetUp extends Component {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
+        const affiliateLinkLabel = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].name : 'Set Up Now';
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
@@ -47,7 +48,9 @@ class QuickOfficeSetUp extends Component {
                     <li><a
                         className={ currentBusinessMeta.quick_office_setup == 'already_have' ? 'active' : '' }
                         href="" onClick={(e) => this.onClickOption(e, 'already_have')}>Already Have</a></li>
-                    <li><a href={ affiliateLink }>Find me an office</a></li>
+                    <li>
+                        <a href={ affiliateLink } target="new">{ affiliateLinkLabel }</a>
+                    </li>
                 </ul>
 
                 <OptionStatusButtonGroup

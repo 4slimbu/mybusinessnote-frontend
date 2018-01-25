@@ -24,8 +24,8 @@ const OptionStatusButtonGroup = ({ status, current }) => {
 };
 
 OptionStatusButtonGroup.propTypes = {
+    current: PropTypes.object.isRequired,
     status: PropTypes.string.isRequired,
-    currentBusinessOption: PropTypes.object.isRequired
 };
 
 export default OptionStatusButtonGroup;

@@ -5,18 +5,27 @@
 import {filter, map} from "lodash";
 import {APP_DEBUG_LEVEL, APP_ENV} from "../../config";
 
+/**
+ * mbjLog is a custom logging wrapper function for managing console.log
+ *
+ * @param name : any text to identify particular log. required
+ * @param data : log data. default is 'null'
+ * @param level : type of log. default is 'info'
+ */
 export function mbjLog(name, data = null, level = 'info') {
+    //log only if debug mode is on
     if (APP_ENV === 'debug') {
-        if (APP_DEBUG_LEVEL === 'info') {
-            if (level === 'info') {
-                console.log('info:' + name, data);
+        //multiple log type is supported: e.g: 'info debug my_special_log_name';
+        const allowedLevels = APP_DEBUG_LEVEL.split(' ');
+
+        //loop through the allowed log type and log only the one that matches the criteria
+        for (let i = 0; i < allowedLevels.length; i++) {
+            if (allowedLevels[i] === level) {
+                console.log(level + ':' + name, data);
             }
         }
-        if (APP_DEBUG_LEVEL === 'debug') {
-            if (level === 'debug') {
-                console.log('debug:' + name, data);
-            }
-        }
+
+        //if log type is all: log everything
         if (APP_DEBUG_LEVEL === 'all') {
             console.log(level + ':' + name, data);
         }

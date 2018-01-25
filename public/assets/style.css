@@ -1600,7 +1600,7 @@ object {
     background: #d7d7d7;
     overflow: visible;
     height: 1px;
-    margin-bottom: 0;
+    margin-bottom: 3px;
 }
 .c-progress .progress-bar {
     background-color: #bf696e;

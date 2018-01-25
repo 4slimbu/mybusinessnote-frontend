@@ -74,6 +74,7 @@ class Logo extends Component {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
+        const affiliateLinkLabel = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].name : 'Set Up Now';
         const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
         let imagePreview = null;
@@ -110,7 +111,7 @@ class Logo extends Component {
                                     </div>
                                 </li>
                                 <li>
-                                    <a href={ affiliateLink } target="new" className="upload-button">Create One</a>
+                                    <a href={ affiliateLink } target="new" className="upload-button">{ affiliateLinkLabel }</a>
                                 </li>
                             </ul>
                     }
