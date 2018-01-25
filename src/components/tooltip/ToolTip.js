@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {map} from "lodash";
 import * as classnames from "classnames";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 class ToolTip extends Component {
     render() {
@@ -21,12 +21,17 @@ class ToolTip extends Component {
             <section className="right-sec bg-white mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper">
                     {
-                        auth.isAuthenticated &&
+                        auth.isAuthenticated ?
                         <div>
                             { auth.user.first_name + ' ' + auth.user.last_name + ' | Dashboard | ' }
-                            <a href="/logout" onClick={(e) => onLogout(e)}>Logout</a>
+                            <Link to="/logout" onClick={(e) => onLogout(e)}>Logout</Link>
                             <hr />
                         </div>
+                            :
+                            <div>
+                                Hi Guest! | <Link to="/login">Login</Link>
+                                <hr />
+                            </div>
                     }
                     {
                         toolTip &&
