@@ -15,6 +15,7 @@ export default () => {
         <Switch>
             {/*<Route exact path="/" render={() => { return <Redirect to="/level/getting-started" /> }}/>*/}
             <Route exact path="/" component={HomePage} />
+            <Route path='/login/oauth/:driver/callback' exact component={LoginPage} />
             <Route path="/login" component={LoginPage}/>
             <Route path="/new-event" component={requireAuth(NewEventPage)} />
             <Route path="/:url/not-found" component={PageNotFound}/>

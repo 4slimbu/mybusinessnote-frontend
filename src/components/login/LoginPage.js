@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import LoginForm from "./LoginForm";
-import {setCurrentUser, userLoginFormRequest} from "../../actions/authActions";
+import {loginSocialUser, setCurrentUser, userLoginFormRequest} from "../../actions/authActions";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {addFlashMessage} from "../../actions/flashMessageAction";
@@ -13,7 +13,8 @@ class LoginPage extends Component {
             userLoginFormRequest,
             getAppStatus,
             setCurrentUser,
-            getBusinessOptionFromUrl
+            getBusinessOptionFromUrl,
+            loginSocialUser
         } = this.props;
 
         return (
@@ -25,6 +26,7 @@ class LoginPage extends Component {
                         getAppStatus={getAppStatus}
                         setCurrentUser={setCurrentUser}
                         getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                        loginSocialUser={loginSocialUser}
                     />
                 </div>
             </section>
@@ -37,7 +39,8 @@ LoginPage.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    setCurrentUser: PropTypes.func.isRequired
+    setCurrentUser: PropTypes.func.isRequired,
+    loginSocialUser: PropTypes.func.isRequired
 };
 
 export default connect(null, {
@@ -45,5 +48,6 @@ export default connect(null, {
     userLoginFormRequest,
     getAppStatus,
     setCurrentUser,
-    getBusinessOptionFromUrl
+    getBusinessOptionFromUrl,
+    loginSocialUser
 })(LoginPage);

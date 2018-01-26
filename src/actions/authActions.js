@@ -23,6 +23,21 @@ export function userLoginFormRequest(userData) {
     }
 }
 
+export function loginSocialUser(url) {
+    return dispatch => {
+        //register user using axios
+        return axios({
+            method: "GET",
+            url: API_BASE_URL + url,
+            crossDomain: true,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+        });
+    }
+}
+
 export function setCurrentUser(user) {
     return {
         type: SET_CURRENT_USER,

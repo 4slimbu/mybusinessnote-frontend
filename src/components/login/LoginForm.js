@@ -6,6 +6,7 @@ import {validateLogin} from "../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
 import {mbjLog} from "../navigation/helperFunctions";
+import {API_BASE_URL} from "../../config";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -20,6 +21,48 @@ class LoginForm extends Component {
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        mbjLog('login form: cdm: this.props', this.props, 'debug');
+        if (this.props.match.params.driver) {
+            mbjLog('login form: cdm: driver', this.props.match.params.driver);
+            this.props.loginSocialUser(
+                this.props.location.pathname + this.props.location.search
+            ).then(
+                (response) => {
+                    this.setState({isLoading: false});
+
+                    const token = response.data.token;
+                    if (token) {
+                        localStorage.setItem("jwtToken", token);
+                        setAuthorizationToken(token);
+                        this.props.setCurrentUser(jwt_decode(token).user);
+
+                        this.props.addFlashMessage({
+                            type: "success",
+                            text: "Logged in successfully! Welcome!"
+                        });
+                    }
+
+                    if (response.data.success === false) {
+                        if (response.data.error_code === 'user_already_exist') {
+                            this.props.addFlashMessage({
+                                type: "error",
+                                text: "User with provider email already exist"
+                            });
+                        }
+                    }
+
+                    this.props.getAppStatus();
+                    this.props.history.push('/');
+                },
+                ( error ) => {
+                    mbjLog(error);
+                    this.setState({errors: error.response.data.error, isLoading: false});
+                }
+            );
+        }
     }
 
     isFormValid(data = null) {
@@ -101,6 +144,11 @@ class LoginForm extends Component {
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Login</button>
                 </div>
+                
+                <div>
+                    <h2>Social Login</h2>
+                    <a href={ API_BASE_URL + '/login/oauth/google'} >Google</a> | <a href={ API_BASE_URL + '/login/oauth/facebook'} >Facebook</a>
+                </div>
 
             </form>
         )
@@ -112,7 +160,8 @@ LoginForm.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    loginSocialUser: PropTypes.func.isRequired
 };
 
 export default withRouter(LoginForm);
