@@ -765,13 +765,22 @@ a:focus {
     top: 6.7%;
     position: relative;
 }
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    /* Safari and Chrome */
-    
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {     
     .left-sec a.site-branding {
         position: sticky;
+        width: 100px;
+        display: inline-block;
+        margin-left: 40px;
     }
 }
+
+@media only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+    .left-sec a.site-branding {  width: 100px; }
+}
+ 
+
+
 .left-sec h3.tagline-head {
     top: 13%;
     position: relative;

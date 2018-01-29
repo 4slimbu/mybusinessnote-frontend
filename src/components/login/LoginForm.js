@@ -58,7 +58,6 @@ class LoginForm extends Component {
                     this.props.history.push('/');
                 },
                 ( error ) => {
-                    mbjLog(error);
                     this.setState({errors: error.response.data.error, isLoading: false});
                 }
             );
@@ -111,6 +110,12 @@ class LoginForm extends Component {
                 },
                 ( error ) => {
                     mbjLog(error);
+                    if (error.response.data.error.form) {
+                        this.props.addFlashMessage({
+                            type: "error",
+                            text: error.response.data.error.form
+                        });
+                    }
                     this.setState({errors: error.response.data.error, isLoading: false});
                 }
             );
