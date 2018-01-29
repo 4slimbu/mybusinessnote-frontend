@@ -1,29 +1,30 @@
-# README #
+# My Business Journey Main App #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+My Business Journey is One page app built on React/Redux. This application integrates with MBJ api https://bitbucket.org/octomedia/mbj  which is built on Laravel. 
 
-### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+## Installation
 
-### How do I get set up? ###
+### Step 1
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Begin by cloning this repository to your machine, and installing all npm dependencies.
 
-### Contribution guidelines ###
+```bash
+git clone git@bitbucket.org:octomedia/mbj_app.git
+cd mbj_app && npm install
+npm start
+```
 
-* Writing tests
-* Code review
-* Other guidelines
 
-### Who do I talk to? ###
+### Step 2
 
-* Repo owner or admin
-* Other community or team contact
+Open src/config.js and update API Base URL to work with your local API endpoint
+
+
+## Other Details
+
+Hosting: AWS
+
+### Staging Main App
+
+http://appstaging.mybusinessjourney.com.au
