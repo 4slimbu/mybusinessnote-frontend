@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import {getAppStatus, getBusinessOption, getBusinessOptionFromUrl} from "../../actions/appStatusAction";
+import {getAppStatus, getBusinessOption, getBusinessOptionFromUrl, trackClick} from "../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
 import TextFieldGroup from "../common/TextFieldGroup";
@@ -112,10 +112,23 @@ class CreateBusiness extends Component {
         }
     }
 
+    onClickAffiliateLink(e, boId, affId, link) {
+        e.preventDefault();
+
+        this.props.trackClick(boId, affId);
+
+        setTimeout(function () {
+            window.open(link, '_blank');
+        }, 1000);
+    }
+
 
     render() {
         const { appStatus } = this.props;
         const errors = this.state.errors;
+        const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
+        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].name : 'Find me a web address';
+        const affiliateLink = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].link : '#';
 
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
@@ -139,7 +152,9 @@ class CreateBusiness extends Component {
                     field="website"
                 />
 
-                <span className="find-web-span">Don’t have a web address?</span><a href={ appStatus.currentBusinessOption.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Find me a web address</a>
+                <span className="find-web-span">Don’t have a web address?</span>
+                <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
+                    href={ affiliateLink } target="new" className="btn btn-lg btn-default clearfix btn-level-5">{ affiliateLinkLabel }</a>
 
                 <div className="btn-wrap">
                     <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Continue</button>
@@ -156,7 +171,8 @@ CreateBusiness.propTypes = {
     addFlashMessage: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired
+    getAppStatus: PropTypes.func.isRequired,
+    trackClick: PropTypes.func.isRequired
 };
 
 
@@ -172,5 +188,6 @@ export default withRouter(connect(mapStateToProps, {
     addFlashMessage,
     getBusinessOption,
     getBusinessOptionFromUrl,
-    getAppStatus
+    getAppStatus,
+    trackClick
 })(CreateBusiness));

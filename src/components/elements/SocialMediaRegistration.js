@@ -7,7 +7,7 @@ import {
     getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
     setCurrentBusinessOption,
     setCurrentTipCategory,
-    setSellGoods, setShowCompletedPage
+    setSellGoods, setShowCompletedPage, trackClick
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
@@ -227,7 +227,8 @@ SocialMediaRegistration.propTypes = {
     saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     setCompletedStatus: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    trackClick: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -252,5 +253,6 @@ export default withRouter(
             getAppStatus,
             setShowCompletedPage,
             addFlashMessage,
+            trackClick
         }
     )(SocialMediaRegistration))

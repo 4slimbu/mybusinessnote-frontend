@@ -7,7 +7,7 @@ import {
     getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setBusinessMeta, setCompletedStatus,
     setCurrentBusinessOption,
     setCurrentTipCategory,
-    setSellGoods
+    setSellGoods, trackClick
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
@@ -70,12 +70,23 @@ class Logo extends Component {
         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
     }
 
+    onClickAffiliateLink(e, boId, affId, link) {
+        e.preventDefault();
+
+        this.props.trackClick(boId, affId);
+
+        setTimeout(function () {
+            window.open(link, '_blank');
+        }, 1000);
+    }
+
     render() {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
-        const affiliateLinkLabel = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].name : 'Set Up Now';
-        const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
+        const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
+        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].name : 'Set Up Now';
+        const affiliateLink = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].link : '#';
 
         let imagePreview = null;
 
@@ -111,7 +122,8 @@ class Logo extends Component {
                                     </div>
                                 </li>
                                 <li>
-                                    <a href={ affiliateLink } target="new" className="upload-button">{ affiliateLinkLabel }</a>
+                                    <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
+                                       href={ affiliateLink } target="new" className="upload-button">{ affiliateLinkLabel }</a>
                                 </li>
                             </ul>
                     }
@@ -140,7 +152,8 @@ Logo.propTypes = {
     saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     setBusinessMeta: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    trackClick: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -164,6 +177,7 @@ export default withRouter(
             saveBusinessOptionFormRequest,
             getAppStatus,
             addFlashMessage,
-            setBusinessMeta
+            setBusinessMeta,
+            trackClick
         }
     )(Logo))

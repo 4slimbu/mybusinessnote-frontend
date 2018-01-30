@@ -6,7 +6,7 @@ import {
     getAppStatus, getBusinessOption, getBusinessOptionFromUrl, setCompletedStatus, setCurrentBusinessOption,
     setCurrentLevel,
     setCurrentSection,
-    setShowCompletedPage
+    setShowCompletedPage, trackClick
 } from "../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
@@ -121,11 +121,23 @@ class RegisterBusiness extends Component {
         }
     }
 
+    onClickAffiliateLink(e, boId, affId, link) {
+        e.preventDefault();
+
+        this.props.trackClick(boId, affId);
+
+        setTimeout(function () {
+            window.open(link, '_blank');
+        }, 1000);
+    }
+
 
     render() {
         const { appStatus } = this.props;
         const errors = this.state.errors;
-
+        const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
+        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].name : 'Register for an ABN';
+        const affiliateLink = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].link : '#';
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
                 <TextFieldGroup
@@ -138,7 +150,9 @@ class RegisterBusiness extends Component {
                     field="abn"
                 />
 
-                <span className="find-web-span">Don’t have a ABN?</span><a href={ appStatus.currentBusinessOption.affiliate_links[0].link } target="new" className="btn btn-lg btn-default clearfix btn-level-5">Register for an ABN</a>
+                <span className="find-web-span">Don’t have a ABN?</span>
+                <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
+                    href={ affiliateLink } target="new" className="btn btn-lg btn-default clearfix btn-level-5">{ affiliateLinkLabel }</a>
 
                 <div className="btn-wrap">
                     <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Done</button>
@@ -161,6 +175,7 @@ RegisterBusiness.propTypes = {
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
+    trackClick: PropTypes.func.isRequired
 };
 
 
@@ -181,5 +196,6 @@ export default withRouter(connect(mapStateToProps, {
     setCurrentSection,
     setCurrentBusinessOption,
     setShowCompletedPage,
-    setCompletedStatus
+    setCompletedStatus,
+    trackClick
 })(RegisterBusiness));

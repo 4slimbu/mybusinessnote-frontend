@@ -3,7 +3,7 @@ import {
     SET_BUSINESS_META, SET_COMPLETED_STATUS, SET_CURRENT,
     SET_CURRENT_BUSINESS_OPTION,
     SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS, SET_SHOW_COMPLETED_PAGE,
-    SET_TOOLTIP_CONTENT
+    SET_TOOLTIP_CONTENT, TRACK_AFFILIATE_LINK_CLICK
 } from "./types";
 import * as axios from "axios";
 import {API_BASE_URL} from "../config";
@@ -202,5 +202,24 @@ export function setCompletedStatus(completedStatus) {
     return {
         type: SET_COMPLETED_STATUS,
         completedStatus
+    }
+}
+
+export function trackClick(boId, affId) {
+    return {
+        type: TRACK_AFFILIATE_LINK_CLICK,
+        payload: new Promise((resolve, reject) => {
+            axios({
+                method: "GET",
+                url: API_BASE_URL + '/click?bo_id=' + boId + '&aff_id=' + affId,
+                crossDomain: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            }).then(response => {
+                resolve(response.data)
+            });
+        })
     }
 }

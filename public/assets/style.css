@@ -764,9 +764,11 @@ a:focus {
 .left-sec a.site-branding {
     top: 6.7%;
     position: relative;
+    display: inline-block;
+    padding: 0 100px 0 18px;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio: 0) {     
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left-sec a.site-branding {
         position: sticky;
         width: 100px;
