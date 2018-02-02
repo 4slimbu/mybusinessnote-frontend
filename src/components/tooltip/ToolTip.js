@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {map} from "lodash";
 import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
+import {DASHBOARD_URL} from "../../config";
 
 class ToolTip extends Component {
     render() {
@@ -23,9 +24,12 @@ class ToolTip extends Component {
                     {
                         auth.isAuthenticated ?
                         <div>
-                            { auth.user.first_name + ' ' + auth.user.last_name + ' | Dashboard | ' }
-                            <Link to="/logout" onClick={(e) => onLogout(e)}>Logout</Link>
-                            <hr />
+                            <h5>Welcome { auth.user.first_name } {auth.user.last_name }</h5>
+                            <ul className="my-dashboard">
+                                <li><a target="_blank" href={DASHBOARD_URL}>My Dashboard</a></li>
+                                <li><Link to="/logout" onClick={(e) => onLogout(e)}>Logout</Link></li>
+                            </ul>
+                           
                         </div>
                             :
                             <div>

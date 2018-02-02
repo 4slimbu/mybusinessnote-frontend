@@ -1450,6 +1450,34 @@ h5.news-title {
 .news-block h5 a:hover {
     color: #bf696e;
 }
+
+
+
+
+/*--------------------------------------------------------------
+## User Dashboard
+--------------------------------------------------------------*/
+
+ul.my-dashboard {
+    padding-left: 0;
+    margin: 10px 0 30px 0;
+    border-bottom: 1px solid #ebebeb;
+    padding-bottom: 10px;
+}
+
+.my-dashboard li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.my-dashboard li a {
+    color: #bf696d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+
+
 /*--------------------------------------------------------------
 # Infinite scroll
 --------------------------------------------------------------*/
