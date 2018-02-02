@@ -768,12 +768,17 @@ a:focus {
     padding: 0 100px 0 18px;
 }
 
+.left-sec a.site-branding img{
+    max-width: 130px;
+}
+
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left-sec a.site-branding {
         position: sticky;
         width: 100px;
         display: inline-block;
-        margin-left: 40px;
+        margin-left: 80px;
     }
 }
 
