@@ -149,10 +149,16 @@ class LoginForm extends Component {
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Login</button>
                 </div>
-                
-                <div>
-                    <h2>Social Login</h2>
-                    <a href={ API_BASE_URL + '/login/oauth/google'} >Google</a> | <a href={ API_BASE_URL + '/login/oauth/facebook'} >Facebook</a>
+                <p>&nbsp;</p>
+                <p className="text-center">OR Login with</p>
+                <div className="row">
+                   
+                    <div className="col-md-6 text-right col-sm-12">
+                        <a className="btn btn-primary" href={ API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-left">
+                        <a className="btn btn-primary" href={ API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i> Facebook</a>
+                    </div>
                 </div>
 
             </form>
