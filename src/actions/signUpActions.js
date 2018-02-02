@@ -1,12 +1,11 @@
 import * as axios from "axios";
-import {API_BASE_URL} from "../config";
 
 export function userSignUpFormRequest(userData) {
     return dispatch => {
         //register user using axios
         return axios({
             method: "POST",
-            url: API_BASE_URL + '/entry-business-option',
+            url: process.env.REACT_APP_API_BASE_URL + '/entry-business-option',
             data: userData,
             crossDomain: true,
             headers: {
@@ -22,7 +21,7 @@ export function userUpdateRequest(userData, url) {
         //register user using axios
         return axios({
             method: "POST",
-            url: API_BASE_URL + url,
+            url: process.env.REACT_APP_API_BASE_URL + url,
             data: userData,
             crossDomain: true,
             headers: {
@@ -37,7 +36,7 @@ export function doesUserExists(identifier) {
     return dispatch => {
         return axios({
             method:"POST",
-            url: API_BASE_URL + "/user/check-if-exists",
+            url: process.env.REACT_APP_API_BASE_URL + "/user/check-if-exists",
             data: {"email" : identifier},
             crossDomain: true,
             headers: {

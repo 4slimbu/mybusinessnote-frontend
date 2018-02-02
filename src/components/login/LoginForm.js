@@ -6,7 +6,6 @@ import {validateLogin} from "../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
 import {mbjLog} from "../navigation/helperFunctions";
-import {API_BASE_URL} from "../../config";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -154,10 +153,10 @@ class LoginForm extends Component {
                 <div className="row">
                    
                     <div className="col-md-6 text-right col-sm-12">
-                        <a className="btn btn-primary" href={ API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
+                        <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
                     </div>
                     <div class="col-md-6 col-sm-12 text-left">
-                        <a className="btn btn-primary" href={ API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i> Facebook</a>
+                        <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i> Facebook</a>
                     </div>
                 </div>
 

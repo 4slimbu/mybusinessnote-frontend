@@ -6,7 +6,6 @@ import {
     SET_TOOLTIP_CONTENT, TRACK_AFFILIATE_LINK_CLICK
 } from "./types";
 import * as axios from "axios";
-import {API_BASE_URL} from "../config";
 import {
     extractBoIdFromLocation, extractLevelFromLocation,
     extractSectionFromLocation, getApiUrlFromAppUrl
@@ -18,7 +17,7 @@ export function getAppStatus() {
         payload: new Promise((resolve, reject) => {
             axios({
                 method: "GET",
-                url: API_BASE_URL + "/user/business-status",
+                url: process.env.REACT_APP_API_BASE_URL + "/user/business-status",
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,11 +32,11 @@ export function getAppStatus() {
 
 export function getBusinessOption(location, apiLocation = false) {
     //set url to provided location
-    let url = API_BASE_URL + location;
+    let url = process.env.REACT_APP_API_BASE_URL + location;
     //if provided url isn't api-location then use it to get api location and set it to url
     if (!apiLocation) {
         let apiUrl = getApiUrlFromAppUrl(location);
-        url = API_BASE_URL + apiUrl;
+        url = process.env.REACT_APP_API_BASE_URL + apiUrl;
     }
 
     return {
@@ -64,7 +63,7 @@ export function getBusinessOptionFromAppUrl(query = '') {
         payload: new Promise((resolve, reject) => {
             axios({
                 method: "GET",
-                url: API_BASE_URL + '/business-option?' + query,
+                url: process.env.REACT_APP_API_BASE_URL + '/business-option?' + query,
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +82,7 @@ export function getBusinessOptionFromUrl(url, query = '') {
         payload: new Promise((resolve, reject) => {
             axios({
                 method: "GET",
-                url: API_BASE_URL + url + query,
+                url: process.env.REACT_APP_API_BASE_URL + url + query,
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
@@ -142,7 +141,7 @@ export function getBusinessCategories() {
         payload: new Promise((resolve, reject) => {
             axios({
                 method: "GET",
-                url: API_BASE_URL + "/business-categories",
+                url: process.env.REACT_APP_API_BASE_URL + "/business-categories",
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',
@@ -211,7 +210,7 @@ export function trackClick(boId, affId) {
         payload: new Promise((resolve, reject) => {
             axios({
                 method: "GET",
-                url: API_BASE_URL + '/click?bo_id=' + boId + '&aff_id=' + affId,
+                url: process.env.REACT_APP_API_BASE_URL + '/click?bo_id=' + boId + '&aff_id=' + affId,
                 crossDomain: true,
                 headers: {
                     'Content-Type': 'application/json',

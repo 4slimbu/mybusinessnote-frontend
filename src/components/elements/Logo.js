@@ -11,7 +11,6 @@ import {
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import {API_BASE_IMAGE_URL, API_BASE_URL} from "../../config";
 import {mbjLog, saveBusinessOption} from "../navigation/helperFunctions";
 import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
 
@@ -91,7 +90,7 @@ class Logo extends Component {
         let imagePreview = null;
 
         const logo = (this.state.imagePreviewUrl) ? this.state.imagePreviewUrl :
-            ((currentBusinessMeta.logo) ? API_BASE_IMAGE_URL + '/images/business-options/' + currentBusinessMeta.logo : null);
+            ((currentBusinessMeta.logo) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/business-options/' + currentBusinessMeta.logo : null);
         if (logo) {
             imagePreview = (<img className="alert-frm-img" src={logo} />);
         }

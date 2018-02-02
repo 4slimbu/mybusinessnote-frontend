@@ -5,7 +5,6 @@ import {Link, withRouter} from "react-router-dom";
 import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl} from "./helperFunctions";
-import {API_BASE_IMAGE_URL} from "../../config";
 
 class LevelLinks extends Component {
 
@@ -23,8 +22,8 @@ class LevelLinks extends Component {
         const levelsList = map(levels, (level, key) => {
             //generate level Image from level id
             const levelUrl = generateAppRelativeUrl(level.slug);
-            const levelImg = (level.completed_percent >= 100) ? API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
-                API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
+            const levelImg = (level.completed_percent >= 100) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
+                process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
             const onClickLevelLink = function(e, levelUrl) {
                 e.preventDefault();
                 setCurrentLevel(level);

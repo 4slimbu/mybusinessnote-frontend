@@ -6,37 +6,27 @@ import ToolTip from "./tooltip/ToolTip";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {
-    getAppStatus, getBusinessCategories, setAppStatus, setCurrentBusinessOption, setCurrentLevel,
+    getAppStatus, getBusinessCategories,
+    setCurrentBusinessOption, setCurrentLevel,
     setCurrentSection
 } from "../actions/appStatusAction";
 import {withRouter} from "react-router-dom";
 import {
-    filterLevelsBySlug, generateAppRelativeUrl, getCurrentLevelByUrl,
-    getCurrentSectionByUrl, mbjLog
+    getCurrentLevelByUrl,
+    getCurrentSectionByUrl
 } from "./navigation/helperFunctions";
 import {logout} from "../actions/authActions";
 
 class App extends Component {
 
     componentDidMount() {
-        mbjLog('app: c d m');
-        mbjLog('testing debug level', 'dta', 'debug');
-        mbjLog('testing debug level', 'dta', 'hello');
-        mbjLog('testing debug level', 'dta', 'sudip');
         this.props.getBusinessCategories();
         this.props.getAppStatus().then((response) => {
             const appStatus = this.props.appStatus;
             const url = this.props.history.location.pathname;
-
-            // mbjLog('app: get app status response', response);
-            // mbjLog('app: calling appStatus inside response', this.props.appStatus);
-            // mbjLog('app: appStatus.levels', appStatus.levels);
-            // mbjLog('app: url', url);
-
             const currentLevel = getCurrentLevelByUrl(appStatus.levels, url);
 
             if (currentLevel) {
-                mbjLog('app: currentLevel', currentLevel);
                 this.props.setCurrentLevel(currentLevel);
 
                 const currentSection = getCurrentSectionByUrl(currentLevel.sections, url);
@@ -50,15 +40,9 @@ class App extends Component {
             }
 
         });
-        mbjLog('app: current url location:', this.props.history.location.pathname);
-
-        // setCurrentLevel(level);
-        // setCurrentSection(section);
-        // getBusinessOptionFromUrl(generateAppRelativeUrl(level.id, section.id));
     }
 
     componentWillReceiveProps(nextProps) {
-        mbjLog('app: c w r p');
 
     }
 

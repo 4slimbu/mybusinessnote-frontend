@@ -3,7 +3,6 @@
 // }
 
 import {filter, map} from "lodash";
-import {APP_DEBUG_LEVEL, APP_ENV} from "../../config";
 
 /**
  * mbjLog is a custom logging wrapper function for managing console.log
@@ -14,9 +13,9 @@ import {APP_DEBUG_LEVEL, APP_ENV} from "../../config";
  */
 export function mbjLog(name, data = null, level = 'info') {
     //log only if debug mode is on
-    if (APP_ENV === 'debug') {
+    if (process.env.REACT_APP_ENV === 'debug') {
         //multiple log type is supported: e.g: 'info debug my_special_log_name';
-        const allowedLevels = APP_DEBUG_LEVEL.split(' ');
+        const allowedLevels = process.env.REACT_APP_DEBUG_LEVEL.split(' ');
 
         //loop through the allowed log type and log only the one that matches the criteria
         for (let i = 0; i < allowedLevels.length; i++) {
@@ -26,7 +25,7 @@ export function mbjLog(name, data = null, level = 'info') {
         }
 
         //if log type is all: log everything
-        if (APP_DEBUG_LEVEL === 'all') {
+        if (process.env.REACT_APP_DEBUG_LEVEL === 'all') {
             console.log(level + ':' + name, data);
         }
     }

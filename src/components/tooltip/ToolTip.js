@@ -1,9 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {map} from "lodash";
-import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
-import {DASHBOARD_URL} from "../../config";
 
 class ToolTip extends Component {
     render() {
@@ -26,7 +23,7 @@ class ToolTip extends Component {
                         <div>
                             <h5>Welcome { auth.user.first_name } {auth.user.last_name }</h5>
                             <ul className="my-dashboard">
-                                <li><a target="_blank" href={DASHBOARD_URL}>My Dashboard</a></li>
+                                <li><a target="_blank" href={process.env.REACT_APP_DASHBOARD_URL}>My Dashboard</a></li>
                                 <li><Link to="/logout" onClick={(e) => onLogout(e)}>Logout</Link></li>
                             </ul>
                            

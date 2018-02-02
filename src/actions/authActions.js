@@ -5,14 +5,13 @@ import {SET_CURRENT_USER} from "./types";
 import {getAppStatus, setAppStatus} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../data/default";
-import {API_BASE_URL} from "../config";
 
 export function userLoginFormRequest(userData) {
     return dispatch => {
         //register user using axios
         return axios({
             method: "POST",
-            url: API_BASE_URL + "/user/login",
+            url: process.env.REACT_APP_API_BASE_URL + "/user/login",
             data: userData,
             crossDomain: true,
             headers: {
@@ -28,7 +27,7 @@ export function loginSocialUser(url) {
         //register user using axios
         return axios({
             method: "GET",
-            url: API_BASE_URL + url,
+            url: process.env.REACT_APP_API_BASE_URL + url,
             crossDomain: true,
             headers: {
                 'Content-Type': 'application/json',

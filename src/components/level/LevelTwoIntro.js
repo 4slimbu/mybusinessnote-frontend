@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import {map} from "lodash";
 import {Link, withRouter} from "react-router-dom";
 import * as classnames from "classnames";
-import {API_BASE_IMAGE_URL} from "../../config";
 
 class LevelTwoIntro extends Component {
 
@@ -104,7 +103,7 @@ class LevelTwoIntro extends Component {
                 <li key={section.id} style={{ maxWidth: "150px" }} className={active}>
                     <Link to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
                         <div className="red-icon" >
-                            <img src={API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
+                            <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
                         </div>
                         <span> {section.name}</span>
                     </Link>

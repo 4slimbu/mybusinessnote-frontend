@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {saveBusinessOption} from "../navigation/helperFunctions";
-import {map} from "lodash";
-import * as axios from "axios";
-import {API_BASE_URL} from "../../config";
 
 const SelectBusinessOptionMeta = ({ current, currentBusinessOption, metaKey, metaValue }) => {
     const affiliateLinkId = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].id : '';

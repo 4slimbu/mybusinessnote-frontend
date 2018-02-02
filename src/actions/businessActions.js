@@ -1,12 +1,11 @@
 import * as axios from "axios";
-import {API_BASE_URL} from "../config";
 
 export function saveBusinessFormRequest(data, url) {
     return dispatch => {
         //create business using axios
         return axios({
             method: "POST",
-            url: API_BASE_URL + url,
+            url: process.env.REACT_APP_API_BASE_URL + url,
             data: data,
             crossDomain: true,
             headers: {
@@ -22,7 +21,7 @@ export function saveBusinessOptionFormRequest(data) {
         //create business using axios
         return axios({
             method: "POST",
-            url: API_BASE_URL + '/business-option',
+            url: process.env.REACT_APP_API_BASE_URL + '/business-option',
             data: data,
             crossDomain: true,
             headers: {
