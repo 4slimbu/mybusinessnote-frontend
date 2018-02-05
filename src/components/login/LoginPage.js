@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import LoginForm from "./LoginForm";
-import {loginSocialUser, setCurrentUser, userLoginFormRequest} from "../../actions/authActions";
+import {
+    loginSocialUser, sendForgotPasswordEmail, setCurrentUser, updateUserPassword,
+    userLoginFormRequest
+} from "../../actions/authActions";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {addFlashMessage} from "../../actions/flashMessageAction";
@@ -14,7 +17,9 @@ class LoginPage extends Component {
             getAppStatus,
             setCurrentUser,
             getBusinessOptionFromUrl,
-            loginSocialUser
+            loginSocialUser,
+            sendForgotPasswordEmail,
+            updateUserPassword
         } = this.props;
 
         return (
@@ -27,6 +32,8 @@ class LoginPage extends Component {
                         setCurrentUser={setCurrentUser}
                         getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                         loginSocialUser={loginSocialUser}
+                        sendForgotPasswordEmail={sendForgotPasswordEmail}
+                        updateUserPassword={updateUserPassword}
                     />
                 </div>
             </section>
@@ -40,7 +47,9 @@ LoginPage.propTypes = {
     getAppStatus: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
-    loginSocialUser: PropTypes.func.isRequired
+    loginSocialUser: PropTypes.func.isRequired,
+    updateUserPassword: PropTypes.func.isRequired,
+    sendForgotPasswordEmail: PropTypes.func.isRequired
 };
 
 export default connect(null, {
@@ -49,5 +58,7 @@ export default connect(null, {
     getAppStatus,
     setCurrentUser,
     getBusinessOptionFromUrl,
-    loginSocialUser
+    loginSocialUser,
+    sendForgotPasswordEmail,
+    updateUserPassword
 })(LoginPage);

@@ -1,14 +1,13 @@
 import React from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import PageNotFound from "./components/error-page/PageNotFound";
 import LoginPage from "./components/login/LoginPage";
-import NewEventPage from "./components/events/NewEventPage";
-import requireAuth from "./utils/requireAuth";
 import LevelPage from "./components/level/LevelPage";
 import SectionPage from "./components/section/SectionPage";
-import BusinessOptionPage from "./components/business-option/BusinessOptionPage";
 import LevelCompletePage from "./components/level/LevelCompletePage";
 import HomePage from "./components/home/HomePage";
+import requireVerification from "./utils/requireVerification";
+import EmailVerificationPage from "./components/pages/EmailVerificationPage";
 
 export default () => {
     return (
@@ -17,7 +16,6 @@ export default () => {
             <Route exact path="/" component={HomePage} />
             <Route path='/login/oauth/:driver/callback' exact component={LoginPage} />
             <Route path="/login" component={LoginPage}/>
-            <Route path="/new-event" component={requireAuth(NewEventPage)} />
             <Route path="/:url/not-found" component={PageNotFound}/>
             <Route path='/level/:level' exact component={LevelPage} />
             <Route path='/level/:level/complete' exact component={LevelCompletePage} />

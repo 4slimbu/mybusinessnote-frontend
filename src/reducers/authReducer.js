@@ -7,10 +7,12 @@ const initialState = {
 };
 
 export default (state = initialState, action = {}) => {
+    const isVerified = action.user ? action.user.verified : 0;
     switch(action.type) {
         case SET_CURRENT_USER :
             return {
                 isAuthenticated: !isEmpty(action.user),
+                isVerified: isVerified,
                 user: action.user
             };
         default: return state;

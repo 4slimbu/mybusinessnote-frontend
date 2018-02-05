@@ -5,20 +5,20 @@ import {withRouter} from "react-router-dom";
 import {addFlashMessage} from "../actions/flashMessageAction";
 
 export default function (ComposedComponent) {
-    class Authenticate extends Component {
+    class RequireVerification extends Component {
         componentDidMount() {
-            if (!this.props.isAuthenticated) {
+            if (!this.props.isVerified) {
                 this.props.addFlashMessage({
                     type: "error",
-                    text: "You need to login to access this page"
+                    text: "Verification of email needed"
                 });
 
-                this.props.history.push("/login");
+                this.props.history.push("/");
             }
         }
 
         // componentWillUpdate(nextProps) {
-        //     if (!nextProps.isAuthenticated) {
+        //     if (!nextProps.isVerified) {
         //         this.props.history.push("/");
         //     }
         // }
@@ -30,16 +30,16 @@ export default function (ComposedComponent) {
         }
     }
 
-    Authenticate.propTypes = {
-        isAuthenticated: PropTypes.bool.isRequired,
+    RequireVerification.propTypes = {
+        isVerified: PropTypes.bool.isRequired,
         addFlashMessage: PropTypes.func.isRequired
     };
 
     function mapStateToProps(state) {
         return {
-            isAuthenticated: state.authReducer.isAuthenticated
+            isVerified: state.authReducer.isVerified
         }
     }
 
-    return connect(mapStateToProps, {addFlashMessage})(withRouter(Authenticate));
+    return connect(mapStateToProps, {addFlashMessage})(withRouter(RequireVerification));
 };

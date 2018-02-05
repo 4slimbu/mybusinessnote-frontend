@@ -7,8 +7,9 @@ import {
 } from "../../actions/appStatusAction";
 import BusinessOptionPage from "../business-option/BusinessOptionPage";
 import Loading from "../Loading";
-import {generateApiUrlFromSlug, generateApiUrlFromUrlLocation, mbjLog} from "../navigation/helperFunctions";
+import {generateApiUrlFromUrlLocation, mbjLog} from "../navigation/helperFunctions";
 import {withRouter} from "react-router-dom";
+import {isEmpty} from "lodash";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -23,18 +24,9 @@ class SectionPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        mbjLog('section c w r p');
-        //get url part
-        mbjLog('url part', this.props.history.location.pathname);
-        //extract route params
-        //get business option
-        //get component did mount
-        // if (this.props.history.location.pathname != nextProps.history.location.pathname) {
-        //     const levelSlug = nextProps.match.params.level;
-        //     const sectionSlug = nextProps.match.params.section;
-        //     const appStatus = this.props.appStatus;
-        //     generateApiUrlFromSlug(appStatus, levelSlug, sectionSlug);
-        // }
+        if (this.props.auth.isAuthenticated && ! this.props.auth.isVerified) {
+            this.props.history.push('/');
+        }
     }
 
 
@@ -77,6 +69,7 @@ class SectionPage extends Component {
 }
 
 SectionPage.propTypes = {
+    auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
@@ -92,13 +85,13 @@ SectionPage.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        appStatus: state.appStatusReducer
+        appStatus: state.appStatusReducer,
+        auth: state.authReducer
     }
 }
 
 export default withRouter(connect(mapStateToProps, {
     getBusinessOption,
-    getBusinessOptionFromUrl,
     getBusinessOptionFromUrl,
     getBusinessOptionFromAppUrl,
     getAppStatus,

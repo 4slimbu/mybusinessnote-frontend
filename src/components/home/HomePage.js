@@ -2,13 +2,36 @@ import React, {Component} from "react";
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
+import EmailVerificationForm from "./EmailVerificationForm";
+import {sendVerificationEmail} from "../../actions/authActions";
+import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class HomePage extends Component {
     render() {
-        const { auth, appStatus } = this.props;
+        const { auth, appStatus, sendVerificationEmail, addFlashMessage } = this.props;
 
         const lastVisitedPath = appStatus.history && appStatus.history.last_visited ?
             appStatus.history.last_visited : '/level/getting-started';
+
+        const onSendVerificationEmail = function(e) {
+            e.preventDefault();
+            sendVerificationEmail().then(
+                (response) => {
+                    addFlashMessage({
+                        type: "success",
+                        text: "Verification Email Sent"
+                    });
+                },
+                ( error ) => {
+                    if (error.response.data.error) {
+                        addFlashMessage({
+                            type: "error",
+                            text: 'Unable to send Verification Email'
+                        });
+                    }
+                }
+            );
+        };
 
         const welcomePage = (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
@@ -23,6 +46,26 @@ class HomePage extends Component {
                         <div className="btn-wrap">
                             <p>Continue from where I left</p>
                             <Link to={getAppUrlFromApiUrl(lastVisitedPath)} className="btn btn-default btn-md">Continue</Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const emailVerificationPage = (
+            <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
+                <div className="content-wrapper step-one">
+                    <div className="col-md-12">
+                        <div className="btn-wrap">
+                            <h3>Verification Needed</h3>
+                            <p>Please copy and paste the verification code sent to your email and click on verify to continue. </p>
+                            <EmailVerificationForm />
+                        </div>
+                    </div>
+                    <div className="col-md-12">
+                        <div className="btn-wrap">
+                            <p>Didn't receive any verification email. Send me the verification email again!</p>
+                            <button onClick={(e) => onSendVerificationEmail(e)} className="btn btn-default btn-md">Send Verification Email</button>
                         </div>
                     </div>
                 </div>
@@ -48,7 +91,7 @@ class HomePage extends Component {
             </section>
         );
         return (
-            auth.isAuthenticated ? welcomePage : guestPage
+            auth.isAuthenticated ? ((auth.isVerified) ? welcomePage: emailVerificationPage) : guestPage
         );
     }
 }
@@ -61,4 +104,4 @@ function mapStateToProps(state) {
 }
 
 
-export default withRouter(connect(mapStateToProps, {})(HomePage));
+export default withRouter(connect(mapStateToProps, {sendVerificationEmail, addFlashMessage})(HomePage));
