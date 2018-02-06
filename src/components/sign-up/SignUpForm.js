@@ -144,10 +144,10 @@ class SignUpForm extends Component {
 
                         const {appStatus, getAppStatus,  history, getBusinessOption} = this.props;
                         getAppStatus();
-                        getBusinessOption(
-                            '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
-                            true);
-                        history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
+                        // getBusinessOption(
+                        //     '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
+                        //     true);
+                        history.push('/');
                     },
                     ( error ) => {
                         this.setState({errors: error.response.data.errors, isLoading: false});

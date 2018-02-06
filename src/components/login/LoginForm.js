@@ -33,9 +33,10 @@ class LoginForm extends Component {
     }
 
     componentDidMount() {
-        if (getAllUrlParams(this.props.location.search).password_reset_token) {
+        if (getAllUrlParams(this.props.location.search).forgot_password_token) {
             this.setState({
-                showUpdatePasswordForm : true
+                showUpdatePasswordForm : true,
+                forgot_password_token : getAllUrlParams(this.props.location.search).forgot_password_token
             })
         }
 
@@ -241,15 +242,6 @@ class LoginForm extends Component {
                 <h1>Reset Password</h1>
 
                 { errors.form && <div className="alert alert-danger">{errors.form}</div> }
-
-                <TextFieldGroup
-                    error={errors.forgot_password_token}
-                    label="Reset Code"
-                    onChange={this.onChange}
-                    value={forgot_password_token}
-                    type="text"
-                    field="forgot_password_token"
-                />
 
                 <TextFieldGroup
                     error={errors.password}

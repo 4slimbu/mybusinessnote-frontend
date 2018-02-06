@@ -1,12 +1,64 @@
 import React, {Component} from "react";
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
-import EmailVerificationForm from "./EmailVerificationForm";
-import {sendVerificationEmail} from "../../actions/authActions";
+import jwt_decode from "jwt-decode";
+import {getAllUrlParams, getAppUrlFromApiUrl} from "../navigation/helperFunctions";
+import {sendVerificationEmail, setCurrentUser, verifyEmail} from "../../actions/authActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import setAuthorizationToken from "../../utils/setAuthorizationToken";
 
 class HomePage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showVerifyLink: false,
+            email_verification_token: ''
+        };
+
+        this.onVerifyAccount = this.onVerifyAccount.bind(this);
+    }
+
+    componentDidMount() {
+        if (getAllUrlParams(this.props.location.search).email_verification_token) {
+            this.setState({
+                showVerifyLink : true,
+                email_verification_token: getAllUrlParams(this.props.location.search).email_verification_token
+            })
+        }
+    }
+
+    onVerifyAccount(e) {
+        e.preventDefault();
+
+        this.props.verifyEmail({
+            email_verification_token: this.state.email_verification_token
+        }).then(
+            (response) => {
+                const token = response.data.token;
+                if (token) {
+                    localStorage.setItem("jwtToken", token);
+                    setAuthorizationToken(token);
+                    this.props.setCurrentUser(jwt_decode(token).user);
+
+                    this.props.addFlashMessage({
+                        type: "success",
+                        text: "Successfully verified! Welcome!"
+                    });
+                }
+                this.props.getAppStatus();
+                this.props.history.push('/');
+            },
+            ( error ) => {
+                if (error.response.data.error) {
+                    this.props.addFlashMessage({
+                        type: "error",
+                        text: 'Unable to verify account'
+                    });
+                }
+            }
+        );
+    }
+
     render() {
         const { auth, appStatus, sendVerificationEmail, addFlashMessage } = this.props;
 
@@ -57,14 +109,25 @@ class HomePage extends Component {
                 <div className="content-wrapper step-one">
                     <div className="col-md-12">
                         <div className="btn-wrap">
-                            <h3>Verification Needed</h3>
-                            <p>Please follow the link on your welcome email to verify your account. </p>
+                            {
+                                this.state.showVerifyLink ?
+                                    <div className="btn-wrap">
+                                        <p>Click on verify to verify your account.</p>
+                                        <button onClick={(e) => this.onVerifyAccount(e)} className="btn btn-default btn-md">Verify</button>
+                                    </div>
+                                    :
+                                    <div>
+                                        <h3>Verification Needed</h3>
+                                        <p>Please follow the link on your welcome email to verify your account. </p>
+                                    </div>
+
+                            }
                         </div>
                     </div>
                     <div className="col-md-12">
                         <div className="btn-wrap">
-                            <p>Didn't receive any verification email. Send me the verification email again!</p>
-                            <button onClick={(e) => onSendVerificationEmail(e)} className="btn btn-default btn-md">Send Verification Email</button>
+                            <p>Send me the verification email again!</p>
+                            <button onClick={(e) => onSendVerificationEmail(e)} className="btn btn-default btn-md">Send Verification Email Again!</button>
                         </div>
                     </div>
                 </div>
@@ -103,4 +166,4 @@ function mapStateToProps(state) {
 }
 
 
-export default withRouter(connect(mapStateToProps, {sendVerificationEmail, addFlashMessage})(HomePage));
+export default withRouter(connect(mapStateToProps, {setCurrentUser, sendVerificationEmail, addFlashMessage, verifyEmail})(HomePage));
