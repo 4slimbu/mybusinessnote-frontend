@@ -13,7 +13,7 @@ class ToolTip extends Component {
             history.push('/');
         };
 
-
+        const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL + '/?token=' + localStorage.getItem("jwtToken");
 
         return (
             <section className="right-sec bg-white mCustomScrollbar" data-mcs-theme="dark">
@@ -23,7 +23,7 @@ class ToolTip extends Component {
                         <div>
                             <h5>Welcome { auth.user.first_name } {auth.user.last_name }</h5>
                             <ul className="my-dashboard">
-                                <li><a target="_blank" href={process.env.REACT_APP_DASHBOARD_URL}>My Dashboard</a></li>
+                                <li><a target="_blank" href={ dashboardUrl }>My Dashboard</a></li>
                                 <li><Link to="/logout" onClick={(e) => onLogout(e)}>Logout</Link></li>
                             </ul>
                            

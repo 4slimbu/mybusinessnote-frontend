@@ -14,6 +14,7 @@ import {logger} from "redux-logger";
 import promise from "redux-promise-middleware";
 import {DEFAULT_APP_STATUS} from "./data/default";
 import {setAppStatus} from "./actions/appStatusAction";
+import {getAllUrlParams} from "./components/navigation/helperFunctions";
 // import registerObserver from "react-perf-devtool";
 
 // monitor react component performance
@@ -28,13 +29,26 @@ const store = createStore(
     )
 );
 
-if (localStorage.getItem("jwtToken")) {
-    const decodedToken = jwt_decode(localStorage.getItem("jwtToken"));
-    if (decodedToken.exp > (new Date().getTime() / 1000)) {
-        setAuthorizationToken(localStorage.getItem("jwtToken"));
-        store.dispatch(setCurrentUser(jwt_decode(localStorage.getItem("jwtToken")).user));
+//set jwt token to local storage if it is present in url param
+let token = getAllUrlParams(window.location.href).token;
+if (token) {
+    localStorage.setItem("jwtToken", token);
+}
 
-    } else {
+//check if jwtToken exist in local storage and is valid
+if (localStorage.getItem("jwtToken")) {
+    try {
+        const decodedToken = jwt_decode(localStorage.getItem("jwtToken"));
+        if (decodedToken.exp > (new Date().getTime() / 1000)) {
+            setAuthorizationToken(localStorage.getItem("jwtToken"));
+            store.dispatch(setCurrentUser(jwt_decode(localStorage.getItem("jwtToken")).user));
+        } else {
+            localStorage.removeItem("jwtToken");
+            setAuthorizationToken(false);
+            store.dispatch(setCurrentUser({}));
+            store.dispatch(setAppStatus(DEFAULT_APP_STATUS));
+        }
+    } catch (err) {
         localStorage.removeItem("jwtToken");
         setAuthorizationToken(false);
         store.dispatch(setCurrentUser({}));

@@ -58,8 +58,7 @@ class HomePage extends Component {
                     <div className="col-md-12">
                         <div className="btn-wrap">
                             <h3>Verification Needed</h3>
-                            <p>Please copy and paste the verification code sent to your email and click on verify to continue. </p>
-                            <EmailVerificationForm />
+                            <p>Please follow the link on your welcome email to verify your account. </p>
                         </div>
                     </div>
                     <div className="col-md-12">
