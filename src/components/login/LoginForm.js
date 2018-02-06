@@ -5,8 +5,8 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import {validateLogin} from "../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
-import {mbjLog} from "../navigation/helperFunctions";
-import {validateEmail, validateUpdatePassword, validateUpdateUser} from "../../utils/validation/UserValidation";
+import {validateEmail, validateUpdatePassword} from "../../utils/validation/UserValidation";
+import {getAllUrlParams} from "../navigation/helperFunctions";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -21,6 +21,7 @@ class LoginForm extends Component {
             isForgotPassword: false,
             isResetEmailSent: false,
             showUpdatePasswordForm: false,
+            showEmailSentResponse: false,
             isLoading: false
         };
 
@@ -32,9 +33,13 @@ class LoginForm extends Component {
     }
 
     componentDidMount() {
-        mbjLog('login form: cdm: this.props', this.props, 'debug');
+        if (getAllUrlParams(this.props.location.search).password_reset_token) {
+            this.setState({
+                showUpdatePasswordForm : true
+            })
+        }
+
         if (this.props.match.params.driver) {
-            mbjLog('login form: cdm: driver', this.props.match.params.driver);
             this.props.loginSocialUser(
                 this.props.location.pathname + this.props.location.search
             ).then(
@@ -116,20 +121,9 @@ class LoginForm extends Component {
                 email: this.state.email
             }).then(
                 (response) => {
-                    this.setState({showUpdatePasswordForm: true});
-
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "Password reset email sent"
-                    });
+                    this.setState({showEmailSentResponse: true});
                 },
                 ( error ) => {
-                    if (error.response.data.error) {
-                        this.props.addFlashMessage({
-                            type: "error",
-                            text: 'Unable to send password reset email'
-                        });
-                    }
                 }
             );
         }
@@ -199,7 +193,6 @@ class LoginForm extends Component {
                     this.props.history.push('/');
                 },
                 ( error ) => {
-                    mbjLog(error);
                     if (error.response.data.error.form) {
                         this.props.addFlashMessage({
                             type: "error",
@@ -222,12 +215,26 @@ class LoginForm extends Component {
     onClickBackToLogin(e) {
         e.preventDefault();
         this.setState({
-            isForgotPassword: false
+            email: '',
+            isForgotPassword: false,
+            isResetEmailSent: false,
+            showUpdatePasswordForm: false,
+            showEmailSentResponse: false,
         })
     }
 
     render() {
-        const {errors, email, password, confirm_password, forgot_password_token} = this.state;
+        const {errors, email, password, confirm_password, forgot_password_token, showEmailSentResponse} = this.state;
+
+        const emailSentResponse = (
+              <div>
+                  <h1>Forgot Password</h1>
+                  <p>If your email exists on our records, you will receive a password reset email. Please contact hello@mybusinessjourney.com.au if you still have any problems.</p>
+                  <div className="btn-wrap">
+                      <a onClick={(e) => this.onClickBackToLogin(e)} className="btn btn-default btn-md">Back</a>
+                  </div>
+              </div>
+        );
 
         const updatePasswordForm = (
             <form className="apps-form" onSubmit={this.onUpdatePasswordFormSubmit}>
@@ -262,18 +269,18 @@ class LoginForm extends Component {
                     field="confirm_password"
                 />
                 <div className="btn-wrap">
-                    <button className="btn btn-default btn-md">Update Password</button>
+                    <button className="btn btn-default btn-md">Reset Password</button>
                     <a onClick={(e) => this.onClickBackToLogin(e)} className="btn btn-default btn-md">Back</a>
                 </div>
             </form>
         );
 
         const forgotPasswordForm = (
-                this.state.showUpdatePasswordForm ?
-                    updatePasswordForm :
+                this.state.showEmailSentResponse ?
+                    emailSentResponse :
                     <form className="apps-form" onSubmit={this.onSendForgotPasswordEmailFormSubmit}>
-                        <h1>Reset Password</h1>
-
+                        <h1>Forgot Password</h1>
+                        <p>Please enter your email address to reset your password.</p>
                         { errors.form && <div className="alert alert-danger">{errors.form}</div> }
 
                         <TextFieldGroup
@@ -293,40 +300,33 @@ class LoginForm extends Component {
         );
 
         const loginForm = (
-            <form className="apps-form" onSubmit={this.onLoginFormSubmit}>
-                <h1>Login</h1>
-
-                { errors.form && <div className="alert alert-danger">{errors.form}</div> }
-
-                <TextFieldGroup
-                    error={errors.email}
-                    label="Email"
-                    onChange={this.onChange}
-                    value={email}
-                    type="text"
-                    field="email"
-                />
-                <TextFieldGroup
-                    error={errors.password}
-                    label="Password"
-                    onChange={this.onChange}
-                    value={password}
-                    type="password"
-                    field="password"
-                />
-                <div className="btn-wrap">
-                    <button className="btn btn-default btn-md">Login</button>
-                    <a onClick={(e) => this.onClickForgotPassword(e)} className="btn btn-default btn-md">Forgot Password</a>
-                </div>
-            </form>
-        );
-        return (
             <div>
+                <form className="apps-form" onSubmit={this.onLoginFormSubmit}>
+                    <h1>Login</h1>
 
-                {
-                    this.state.isForgotPassword ? forgotPasswordForm : loginForm
-                }
+                    { errors.form && <div className="alert alert-danger">{errors.form}</div> }
 
+                    <TextFieldGroup
+                        error={errors.email}
+                        label="Email"
+                        onChange={this.onChange}
+                        value={email}
+                        type="text"
+                        field="email"
+                    />
+                    <TextFieldGroup
+                        error={errors.password}
+                        label="Password"
+                        onChange={this.onChange}
+                        value={password}
+                        type="password"
+                        field="password"
+                    />
+                    <a href="#" onClick={(e) => this.onClickForgotPassword(e)}>Forgot Password ?</a>
+                    <div className="btn-wrap">
+                        <button className="btn btn-default btn-md">Login</button>
+                    </div>
+                </form>
                 <p>&nbsp;</p>
                 <p className="text-center">OR Login with</p>
                 <div className="row">
@@ -334,10 +334,18 @@ class LoginForm extends Component {
                     <div className="col-md-6 text-right col-sm-12">
                         <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
                     </div>
-                    <div class="col-md-6 col-sm-12 text-left">
+                    <div className="col-md-6 col-sm-12 text-left">
                         <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i> Facebook</a>
                     </div>
                 </div>
+            </div>
+        );
+        return (
+            <div>
+
+                {
+                    this.state.showUpdatePasswordForm ? updatePasswordForm : (this.state.isForgotPassword ? forgotPasswordForm : loginForm)
+                }
             </div>
         )
     }

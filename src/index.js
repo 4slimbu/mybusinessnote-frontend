@@ -10,12 +10,10 @@ import rootReducer from "./rootReducer";
 import setAuthorizationToken from "./utils/setAuthorizationToken";
 import {setCurrentUser} from "./actions/authActions";
 import jwt_decode from "jwt-decode";
-import {logger} from "redux-logger";
 import promise from "redux-promise-middleware";
 import {DEFAULT_APP_STATUS} from "./data/default";
-import {setAppStatus} from "./actions/appStatusAction";
+import {getAppStatus, setAppStatus} from "./actions/appStatusAction";
 import {getAllUrlParams} from "./components/navigation/helperFunctions";
-// import registerObserver from "react-perf-devtool";
 
 // monitor react component performance
 // registerObserver();
@@ -47,12 +45,14 @@ if (localStorage.getItem("jwtToken")) {
             setAuthorizationToken(false);
             store.dispatch(setCurrentUser({}));
             store.dispatch(setAppStatus(DEFAULT_APP_STATUS));
+            store.dispatch(getAppStatus());
         }
     } catch (err) {
         localStorage.removeItem("jwtToken");
         setAuthorizationToken(false);
         store.dispatch(setCurrentUser({}));
         store.dispatch(setAppStatus(DEFAULT_APP_STATUS));
+        store.dispatch(getAppStatus());
     }
 }
 
