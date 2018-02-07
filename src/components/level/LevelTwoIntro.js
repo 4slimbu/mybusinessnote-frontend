@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {map} from "lodash";
 import {Link, withRouter} from "react-router-dom";
 import * as classnames from "classnames";
+import ProgressBar from "../common/ProgressBar";
 
 class LevelTwoIntro extends Component {
 
@@ -37,7 +38,7 @@ class LevelTwoIntro extends Component {
                     <div id={`tip-collapse-${key}`} className={ classnames("panel-collapse collapse", { "in" : item.id == id})} role="tabpanel"
                          aria-labelledby={`heading${key}`}>
                         <div className="panel-body">
-                            <div dangerouslySetInnerHTML={{__html: item.tooltip}} />
+                            <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}} />
                         </div>
                     </div>
                 </div>
@@ -120,15 +121,13 @@ class LevelTwoIntro extends Component {
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
                     <h5 className="obvious-h5">{ name }</h5>
-                    <span className="progress-label">{ completed_percent }% complete</span> <span
-                    className="pull-right progress-label">{ total_completed_sections }/{ total_sections }</span>
-                    <div className="progress">
-                        <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                             aria-valuemax="100" style={{width: completed_percent + "%"}}>
-                        </div>
-                    </div>
+                    <ProgressBar
+                        completed_percent={completed_percent}
+                        total_completed_sections={total_completed_sections}
+                        total_sections={total_sections}
+                    />
 
-                    <div dangerouslySetInnerHTML={{__html: content}} />
+                    <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}} />
                     <div>
                         <ul className="apps-icons clearfix level2-apps-icons">{ sections }</ul>
                     </div>

@@ -63,13 +63,11 @@ class BusinessOptionPage extends Component {
                     (currentLevel.id == 1) ?
                     <div>
                         <h1>{currentBusinessOption.name}</h1>
-                        <div dangerouslySetInnerHTML={{__html: currentBusinessOption.content}} />
-                        <div>
-                            {
-                                currentBusinessOption.element &&
-                                <Element element={currentBusinessOption.element} onComplete={(bool) => onComplete(bool)} onClick={(e) => this.onClickNext(e).bind(this)}/>
-                            }
-                        </div>
+                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: currentBusinessOption.content}} />
+                        {
+                            currentBusinessOption.element &&
+                            <Element element={currentBusinessOption.element} onComplete={(bool) => onComplete(bool)} onClick={(e) => this.onClickNext(e).bind(this)}/>
+                        }
                     </div>
                     :
                         <div>

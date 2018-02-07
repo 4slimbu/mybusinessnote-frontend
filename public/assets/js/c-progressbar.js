@@ -1,7 +1,6 @@
-;
 (function ($) {
 	$.fn.loading = function () {
-		var DEFAULTS = {
+		let DEFAULTS = {
 			backgroundColor: '#b3cef6',
 			progressColor: '#4b86db',
 			percent: 75,
@@ -9,9 +8,11 @@
 		};	
 		
 		$(this).each(function () {
-			var $target  = $(this);
+			let $target  = $(this);
 
-			var opts = {
+            console.log($target);
+
+			let opts = {
 			backgroundColor: $target.data('color') ? $target.data('color').split(',')[0] : DEFAULTS.backgroundColor,
 			progressColor: $target.data('color') ? $target.data('color').split(',')[1] : DEFAULTS.progressColor,
 			percent: $target.data('percent') ? $target.data('percent') : DEFAULTS.percent,
@@ -26,7 +27,7 @@
 			$target.find('.rotate').css('background-color', opts.progressColor);
 			$target.find('.right').css('background-color', opts.progressColor);
 	
-			var $rotate = $target.find('.rotate');
+			let $rotate = $target.find('.rotate');
 			setTimeout(function () {	
 				$rotate.css({
 					'transition': 'transform ' + opts.duration + 'ms linear',
@@ -35,8 +36,8 @@
 			},1);		
 
 			if (opts.percent > 50) {
-				var animationRight = 'toggle ' + (opts.duration / opts.percent * 50) + 'ms step-end';
-				var animationLeft = 'toggle ' + (opts.duration / opts.percent * 50) + 'ms step-start';  
+				let animationRight = 'toggle ' + (opts.duration / opts.percent * 50) + 'ms step-end';
+				let animationLeft = 'toggle ' + (opts.duration / opts.percent * 50) + 'ms step-start';
 				$target.find('.right').css({
 					animation: animationRight,
 					opacity: 1

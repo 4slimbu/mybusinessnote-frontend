@@ -7,7 +7,6 @@ import {
     getBusinessCategories, getBusinessOption, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
     setSellGoods
 } from "../../actions/appStatusAction";
-import {map} from "lodash";
 import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
@@ -97,9 +96,7 @@ class SellGoods extends Component {
 
         return (
             <div>
-                <ul className="apps-icons clearfix apps-h-effect">
-                    { sellGoodsQuestion }
-                </ul>
+                { sellGoodsQuestion }
                 <div className="btn-wrap">
                     {next && <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
                 </div>
@@ -107,9 +104,6 @@ class SellGoods extends Component {
 
         )
 
-        // return (
-        //     <div>here</div>
-        // )
     }
 }
 

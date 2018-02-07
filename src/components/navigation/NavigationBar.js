@@ -8,8 +8,8 @@ import {
     getBusinessOptionFromUrl, setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
     setCurrentSection
 } from "../../actions/appStatusAction";
-import {getCurrentLevelByUrl} from "./helperFunctions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import MobileNavLinks from "./MobileNavLinks";
 
 class NavigationBar extends Component {
 
@@ -23,6 +23,7 @@ class NavigationBar extends Component {
         const { appStatus, addFlashMessage, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
             setCompletedStatus,
             getBusinessOptionFromUrl, history } = this.props;
+        const completed_percent = appStatus.currentLevel.completed_percent ? appStatus.currentLevel.completed_percent : 0 ;
 
         const onClickLevelLink = function(e, url) {
             e.preventDefault();
@@ -33,27 +34,46 @@ class NavigationBar extends Component {
         };
 
         return (
-            <section className="left-sec bg-navy">
-                <Link to="/"
-                      onClick={(e) => onClickLevelLink(e, '/' )}
-                      className="site-branding">
-                    <img src={`${process.env.PUBLIC_URL}/assets/images/apps-logo.png`} alt="" />
-                </Link>
-                <h3 className="tagline-head">Let your <br/>journey begins</h3>
-                <div className="menu-accordion">
-                    <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
-                        <LevelLinks
-                            appStatus={appStatus}
-                            setCurrentLevel={setCurrentLevel}
-                            setCurrentSection={setCurrentSection}
-                            setCurrentBusinessOption={setCurrentBusinessOption}
-                            setCompletedStatus={setCompletedStatus}
-                            getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                            addFlashMessage={addFlashMessage}
-                        />
+            <div>
+                <section className="hidden-xs left-sec bg-navy">
+                    <Link to="/"
+                          onClick={(e) => onClickLevelLink(e, '/' )}
+                          className="site-branding">
+                        <img src={`${process.env.PUBLIC_URL}/assets/images/apps-logo.png`} alt="" />
+                    </Link>
+                    <h3 className="tagline-head">Let your <br/>journey begins</h3>
+                    <div className="menu-accordion">
+                        <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                            <LevelLinks
+                                appStatus={appStatus}
+                                setCurrentLevel={setCurrentLevel}
+                                setCurrentSection={setCurrentSection}
+                                setCurrentBusinessOption={setCurrentBusinessOption}
+                                setCompletedStatus={setCompletedStatus}
+                                getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                                addFlashMessage={addFlashMessage}
+                            />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+                <section className="hidden-sm hidden-md hidden-lg content-block">
+                    <MobileNavLinks
+                        appStatus={appStatus}
+                        setCurrentLevel={setCurrentLevel}
+                        setCurrentSection={setCurrentSection}
+                        setCurrentBusinessOption={setCurrentBusinessOption}
+                        setCompletedStatus={setCompletedStatus}
+                        getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                        addFlashMessage={addFlashMessage}
+                    />
+
+                    <div className="progress">
+                        <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                             aria-valuemax="100" style={{width: completed_percent + "%"}}>
+                        </div>
+                    </div>
+                </section>
+            </div>
         )
     }
 }

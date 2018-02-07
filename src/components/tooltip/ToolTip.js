@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Link, withRouter} from "react-router-dom";
+import UserInfoLinks from "../navigation/UserInfoLinks";
 
 class ToolTip extends Component {
     render() {
@@ -16,31 +17,18 @@ class ToolTip extends Component {
         const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL + '/?token=' + localStorage.getItem("jwtToken");
 
         return (
-            <section className="right-sec bg-white mCustomScrollbar" data-mcs-theme="dark">
+            <section className="right-sec bg-white mCustomScrollbar f-right bg-white" data-mcs-theme="dark">
                 <div className="content-wrapper">
-                    {
-                        auth.isAuthenticated ?
-                        <div>
-                            <h5>Welcome { auth.user.first_name } {auth.user.last_name }</h5>
-                            <ul className="my-dashboard">
-                                <li><a target="_blank" href={ dashboardUrl }>My Dashboard</a></li>
-                                <li><Link to="/logout" onClick={(e) => onLogout(e)}>Logout</Link></li>
-                            </ul>
-                           
-                        </div>
-                            :
-                            <div>
-                                Hi Guest! | <Link to="/login">Login</Link>
-                                <hr />
-                            </div>
-                    }
+                    <div className="hidden-xs">
+                        <UserInfoLinks />
+                    </div>
                     {
                         toolTip &&
                         <div>
                             <h5>Hint and tips</h5>
+                            {toolTip.rawHtmlContent && <div className="content-wrap" dangerouslySetInnerHTML={{__html: toolTip.rawHtmlContent}} />}
                             <div className="acc-wrapper">
                                 <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                    {toolTip.rawHtmlContent && <div dangerouslySetInnerHTML={{__html: toolTip.rawHtmlContent}} />}
                                     {toolTip.accordion}
                                 </div>
                             </div>
