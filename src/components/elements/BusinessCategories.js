@@ -116,7 +116,7 @@ class BusinessCategories extends Component {
         const businessCategories = map(appStatus.businessCategories.data, (item, key) => {
             const active = appStatus.business_category_id == item.id ? 'active' : '';
             return (
-                <li key={item.id} style={{ maxWidth: "150px" }} className={active}>
+                <li key={item.id} className={active}>
                     <div onClick={(e) => this.handleSelect(e, item.id)}>
                         <a className="white-icon" href="#">
                             <img src={item.icon} alt=""/>
