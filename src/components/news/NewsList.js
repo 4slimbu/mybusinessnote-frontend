@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as axios from "axios";
 import {formatDate} from "../navigation/helperFunctions";
+import {map} from "lodash";
 
 class NewsList extends Component {
 
@@ -10,6 +11,11 @@ class NewsList extends Component {
         this.state = {
             posts: []
         };
+    }
+
+    componentWillReceiveProps() {
+        this.fetchNews(this.props.currentNewsTerm);
+
     }
 
     fetchNews(newsTerm) {
@@ -35,19 +41,11 @@ class NewsList extends Component {
 
     }
 
-
-    componentWillReceiveProps() {
-
-        this.fetchNews(this.props.currentNewsTerm);
-
-    }
-
-
     render() {
 
-        const NewsItem = this.state.posts.map((post, index) => {
+        const NewsItem = map(this.state.posts, (post, key) => {
             return(
-                <div key={index} className="news-block clearfix">
+                <div key={key} className="news-block clearfix">
                     <a target="_blank" href={ post.link }><img src={ post.featured_image_url } alt={ post.title } /></a>
                     <h6><a href="#">{ formatDate(post.date) }</a></h6>
                     <h5><a target="_blank" href={ post.link }>{ post.title }</a></h5>
