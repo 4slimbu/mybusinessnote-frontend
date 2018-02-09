@@ -232,3 +232,10 @@ export function saveBusinessOption(currentObject, data) {
         }
     );
 }
+
+export function formatDate(dateString) {
+    let options = { day: 'numeric', month: 'long', year: 'numeric' };
+    let date = new Date(dateString);
+
+    return date.toLocaleString("en-US", options);
+}

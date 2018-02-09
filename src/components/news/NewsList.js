@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as axios from "axios";
+import {formatDate} from "../navigation/helperFunctions";
 
 class NewsList extends Component {
 
@@ -48,7 +49,7 @@ class NewsList extends Component {
             return(
                 <div key={index} className="news-block clearfix">
                     <a href="#"><img src={`${process.env.PUBLIC_URL}/assets/images/news_events/img_1.jpg`} alt=""/></a>
-                    <h6><a href="#">{ post.date }</a></h6>
+                    <h6><a href="#">{ formatDate(post.date) }</a></h6>
                     <h5><a target="_blank" href={ post.link }>{ post.title.rendered }</a></h5>
                     <ul>
                         <li><a href=""><i className="fa fa-share-alt" aria-hidden="true"></i></a></li>
