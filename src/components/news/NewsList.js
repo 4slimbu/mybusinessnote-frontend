@@ -48,15 +48,9 @@ class NewsList extends Component {
         const NewsItem = this.state.posts.map((post, index) => {
             return(
                 <div key={index} className="news-block clearfix">
-                    <a href="#"><img src={`${process.env.PUBLIC_URL}/assets/images/news_events/img_1.jpg`} alt=""/></a>
+                    <a target="_blank" href={ post.link }><img src={ post.featured_image_url } alt={ post.title.rendered } /></a>
                     <h6><a href="#">{ formatDate(post.date) }</a></h6>
                     <h5><a target="_blank" href={ post.link }>{ post.title.rendered }</a></h5>
-                    <ul>
-                        <li><a href=""><i className="fa fa-share-alt" aria-hidden="true"></i></a></li>
-                        <li><a href=""><i className="fa fa-twitter" aria-hidden="true"></i></a></li>
-                        <li><a href=""><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
-                        <li><a href=""><i className="fa fa-linkedin" aria-hidden="true"></i></a></li>
-                    </ul>
                 </div>
             )
         });
