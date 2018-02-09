@@ -91,7 +91,7 @@ class SignUpForm extends Component {
     onSubmit(e) {
         e.preventDefault();
         const appStatus = this.props.appStatus;
-        if (this.isFormValid() || true) {
+        if (this.isFormValid()) {
             this.setState({
                 errors: {},
                 isLoading: true,
