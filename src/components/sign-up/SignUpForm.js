@@ -6,6 +6,7 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
 import {getAppUrlFromApiUrl, mbjLog} from "../navigation/helperFunctions";
+import ReCAPTCHA from "react-google-recaptcha";
 
 class SignUpForm extends Component {
     constructor(props) {
@@ -22,11 +23,13 @@ class SignUpForm extends Component {
             phone_number: "",
             password: "",
             confirm_password: "",
+            captcha_response: "",
             errors: {},
             isLoading: false
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onReceiveCaptchaResponse = this.onReceiveCaptchaResponse.bind(this);
         this.checkIfUserExists = this.checkIfUserExists.bind(this);
         this.isFormValid = this.isFormValid.bind(this);
     }
@@ -190,6 +193,12 @@ class SignUpForm extends Component {
         }
     }
 
+    onReceiveCaptchaResponse(captchaResponse) {
+        this.setState({
+           captcha_response: captchaResponse
+        });
+    }
+
     render() {
         const { appStatus } = this.props;
         const errors = this.state.errors;
@@ -265,8 +274,13 @@ class SignUpForm extends Component {
                     </div>
                 }
 
-
-
+                <div className="form-group">
+                    <ReCAPTCHA
+                        sitekey="6LfTLEUUAAAAAH0_f9L8VcdN2c_oJHqEFyAncjMX"
+                        onChange={this.onReceiveCaptchaResponse}
+                    />
+                    { errors.captcha_response && <span className="form-error-message">{errors.captcha_response}</span> }
+                </div>
                 <div className="btn-wrap">
                     <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Continue</button>
                 </div>

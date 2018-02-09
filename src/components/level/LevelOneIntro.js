@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Link, withRouter} from "react-router-dom";
+import ProgressBar from "../common/ProgressBar";
 
 class LevelOneIntro extends Component {
     componentDidMount() {
@@ -27,14 +28,12 @@ class LevelOneIntro extends Component {
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
                     <h5 className="obvious-h5">{ name }</h5>
-                    <span className="progress-label">{ completed_percent }% complete</span> <span
-                    className="pull-right progress-label">{ total_completed_sections }/{ total_sections }</span>
-                    <div className="progress">
-                        <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                             aria-valuemax="100" style={{width: completed_percent + "%"}}>
-                        </div>
-                    </div>
-                    <div dangerouslySetInnerHTML={{__html: content}} />
+                    <ProgressBar
+                        completed_percent={completed_percent}
+                        total_completed_sections={total_completed_sections}
+                        total_sections={total_sections}
+                    />
+                    <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}} />
                     <div className="btn-wrap">
                         <button onClick={(e) => onClickStart(e, sectionUrl)} className="btn btn-default btn-md">Continue</button>
                     </div>

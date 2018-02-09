@@ -22,8 +22,8 @@ class LevelCompletePage extends Component {
             <div className="level-7">
                 <section className="mid-sec bg-red">
                     <div className="content-wrapper step-one">
-                        <h5 className="obvious-h5">{ level.name }</h5>
-                        {level.badge_message && <div dangerouslySetInnerHTML={{__html: level.badge_message}} />}
+                        <h5 className="obvious-h5 hidden-xs">{ level.name }</h5>
+                        {level.badge_message && <div className="content-wrap" dangerouslySetInnerHTML={{__html: level.badge_message}} />}
                         <img className="complete-block-img"
                              src={`${process.env.PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
                         <div className="bottom-block-complete">

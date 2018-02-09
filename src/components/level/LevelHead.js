@@ -1,19 +1,19 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import ProgressBar from "../common/ProgressBar";
 
 class LevelHead extends Component {
     render() {
         const {currentLevel} = this.props;
+        const {name, completed_percent, total_completed_sections, total_sections } = currentLevel;
         return (
             <div>
-                <h5 className="obvious-h5">{currentLevel.name}</h5>
-                <span className="progress-label">{currentLevel.completed_percent}% complete</span> <span
-                className="pull-right progress-label">{currentLevel.total_completed_sections}/ {currentLevel.total_sections}</span>
-                <div className="progress">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                         aria-valuemax="100" style={{width: currentLevel.completed_percent + "%"}}>
-                    </div>
-                </div>
+                <h5 className="obvious-h5">{name}</h5>
+                <ProgressBar
+                    completed_percent={completed_percent}
+                    total_completed_sections={total_completed_sections}
+                    total_sections={total_sections}
+                />
             </div>
         )
     }
