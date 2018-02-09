@@ -23,7 +23,8 @@
      .news-block img {
          margin-bottom: 0;
     }
-     .news-block h5, .news-block ul {
+     .news-block h5, .news-block ul,
+     .news-block h6 {
          padding-left: 125px;
     }
 }
@@ -201,16 +202,14 @@
      .menu-accordion .panel-group .panel-faq.active::after {
          height: 238px;
     }
-     .news-block h5 {
-         padding-left: 110px;
-    }
      .news-block img {
          width: 110px;
     }
-     .news-block ul {
-         padding-left: 112px;
+    .news-block ul,
+    .news-block h5{
+          padding-left: 126px; 
     }
-     ul.apps-icons li {
+    ul.apps-icons li {
          min-height: 120px;
          padding: 0 5px;
          width: 30%;
@@ -450,11 +449,12 @@
     }
      .news-block h5 {
          font-size: 11px;
-         padding-left: 64px;
     }
-     .news-block ul {
-         padding-left: 64px;
+    .news-block ul,
+    .news-block h5{
+          padding-left: 82px; 
     }
+
      .news-block i {
          font-size: 10px;
     }
