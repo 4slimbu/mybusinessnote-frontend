@@ -1,10 +1,16 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Link, withRouter} from "react-router-dom";
+import NewsList from '../../components/news/NewsList';
+
+
 
 class ToolTip extends Component {
+
+
     render() {
-        const { toolTip, logout, history, auth } = this.props;
+       
+        const { toolTip, currentNewsTerm, logout, history, auth } = this.props;
 
         const onLogout = function(e) {
             e.preventDefault();
@@ -13,6 +19,8 @@ class ToolTip extends Component {
             history.push('/');
         };
 
+
+      
         const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL + '/?token=' + localStorage.getItem("jwtToken");
 
         return (
@@ -47,43 +55,8 @@ class ToolTip extends Component {
                         </div>
                     }
                     <div className="news-events-wrap">
-                        <h5 className="news-title">News & Information</h5>
-                        <div className="news-block clearfix">
-                            <a href="#"><img src={`${process.env.PUBLIC_URL}/assets/images/news_events/img_1.jpg`}
-                                             alt=""/></a>
-                            <h6><a href="#">21 October 2017</a></h6>
-                            <h5><a href="#">Ali Baba and Le Wrap join force</a></h5>
-                            <ul>
-                                <li><a href=""><i className="fa fa-share-alt" aria-hidden="true"></i>
-                                </a>
-                                </li>
-                                <li><a href=""><i className="fa fa-twitter" aria-hidden="true"></i>
-                                </a>
-                                </li>
-                                <li><a href=""><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <li><a href=""><i className="fa fa-linkedin" aria-hidden="true"></i>
-                                </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="news-block clearfix">
-                            <a href="#"><img src={`${process.env.PUBLIC_URL}/assets/images/news_events/img_2.jpg`}
-                                             alt=""/></a>
-                            <h6><a href="#">13 October 2017</a></h6>
-                            <h5><a href="#">Banking on business pays off for award winning franchisee</a></h5>
-                            <ul>
-                                <li><a href=""><i className="fa fa-share-alt" aria-hidden="true"></i>
-                                </a>
-                                </li>
-                                <li><a href=""><i className="fa fa-twitter" aria-hidden="true"></i>
-                                </a>
-                                </li>
-                                <li><a href=""><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <li><a href=""><i className="fa fa-linkedin" aria-hidden="true"></i>
-                                </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <h5 className="news-title">News & Informations</h5>
+                        <NewsList currentNewsTerm= {currentNewsTerm}/>
                     </div>
                 </div>
             </section>

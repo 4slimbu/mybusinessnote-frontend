@@ -19,6 +19,7 @@ import {logout} from "../actions/authActions";
 
 class App extends Component {
 
+
     componentDidMount() {
         this.props.getBusinessCategories();
         this.props.getAppStatus().then((response) => {
@@ -47,8 +48,11 @@ class App extends Component {
     }
 
     render() {
+
+     
         const { auth, logout, appStatus } = this.props;
         const { businessCategories, currentTipCategoryId } = this.props.appStatus;
+
         return (
             <div id="page" className="hfeed site">
                 <div id="content" className="site-content">
@@ -60,6 +64,7 @@ class App extends Component {
                                 <Routes/>
                                 <ToolTip
                                     toolTip={appStatus.toolTip}
+                                    currentNewsTerm={appStatus.currentBusinessOption.section_slug}
                                     businessCategories={businessCategories}
                                     currentTipCategoryId={currentTipCategoryId}
                                     auth={auth}
