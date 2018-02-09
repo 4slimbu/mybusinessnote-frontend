@@ -101,7 +101,7 @@ class LevelTwoIntro extends Component {
                 history.push(sectionUrl);
             };
             return (
-                <li key={section.id} style={{ maxWidth: "150px" }} className={active}>
+                <li key={section.id} className={active}>
                     <Link to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
                         <div className="red-icon" >
                             <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
