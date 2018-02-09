@@ -15,7 +15,7 @@ class NewsList extends Component {
     fetchNews(newsTerm) {
        
         const currentNewsTerm = ( newsTerm === undefined) ? 'General' : newsTerm;
-        const fetchURL = 'http://staging.mybusinessjourney.com.au/wp-json/wp/v2/posts?filter[tag]='+currentNewsTerm;
+        const fetchURL = 'http://staging.mybusinessjourney.com.au/wp-json/mbj-feed/v1/posts?tag='+currentNewsTerm;
         console.log(fetchURL);
         axios({
                 method: "GET",
@@ -48,9 +48,9 @@ class NewsList extends Component {
         const NewsItem = this.state.posts.map((post, index) => {
             return(
                 <div key={index} className="news-block clearfix">
-                    <a target="_blank" href={ post.link }><img src={ post.featured_image_url } alt={ post.title.rendered } /></a>
+                    <a target="_blank" href={ post.link }><img src={ post.featured_image_url } alt={ post.title } /></a>
                     <h6><a href="#">{ formatDate(post.date) }</a></h6>
-                    <h5><a target="_blank" href={ post.link }>{ post.title.rendered }</a></h5>
+                    <h5><a target="_blank" href={ post.link }>{ post.title }</a></h5>
                 </div>
             )
         });
