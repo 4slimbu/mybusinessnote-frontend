@@ -157,7 +157,7 @@ class SocialMediaRegistration extends Component {
                     <ul className="apps-social-media">
                         <li>
                             <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)} className="alert-form">
+                            <form onSubmit={(e)=> this.onClickDone(e)}>
                                 <input type="text" onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
                                 <button className="btn btn-default btn-lg btn-alert">Done</button>
                             </form>
