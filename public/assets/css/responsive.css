@@ -215,6 +215,19 @@
          width: 30%;
     }
 }
+
+@media only screen and (max-width: 991px) {
+ 
+    .col-md-6.col-sm-12.text-right,
+    .col-md-6.col-sm-12.text-left{
+        text-align: center;
+    }
+
+    .col-md-6.col-sm-12.text-left{
+        margin-top: 15px;
+    }
+}
+
  @media only screen and (min-width: 864px) and (max-width: 991px) {
      .menu-accordion .panel-group .panel-faq.active::after {
          height: 192px;
@@ -232,6 +245,10 @@
     }
 }
  @media only screen and (min-width: 768px) and (max-width: 991px) {
+
+    ul.my-dashboard li a {
+    font-size: 10px;
+    }
 
     .btn-done,
     .btn-alert{
@@ -485,6 +502,7 @@
      ul.getting-start-list li {
          line-height: 13px;
          font-size: 11px;
+         padding-left: 25px;
     }
      span.circle-span {
          margin-bottom: 5px;

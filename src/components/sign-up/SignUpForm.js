@@ -274,7 +274,7 @@ class SignUpForm extends Component {
                     </div>
                 }
 
-                <div className="form-group">
+                <div className="form-group re-captcha">
                     <ReCAPTCHA
                         sitekey="6LfTLEUUAAAAAH0_f9L8VcdN2c_oJHqEFyAncjMX"
                         onChange={this.onReceiveCaptchaResponse}

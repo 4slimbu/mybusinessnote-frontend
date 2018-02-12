@@ -30,7 +30,7 @@
     }
     .btn-wrap button.btn,
 	.step-one a.btn{
-    	font-size: 16px !important;
+    	font-size: 12px !important;
 		padding: 8px 43px !important;
     }
 	.step-one a.btn{
@@ -52,6 +52,9 @@
          top: -2px;
          position: relative;
          padding: 15px 15px 5px;
+    }
+    .navbar-inverse .navbar-collapse div a{
+         color: #bf696e;   
     }
     .navbar-inverse .navbar-nav > .open > a,
     .navbar-inverse .navbar-nav > .open > a:focus{
@@ -166,16 +169,20 @@
          font-size: 15px;
          float: none;
          overflow: auto;
-         padding: 12% 0 35%;
+         /*padding: 12% 0 35%;*/
+         /*padding: 14% 0 35%;*/
+         padding: 50px 0 120px;
          display: block;
          text-align: center;
     }
     .mid-sec h1{
-         margin-bottom: 30px;
+         /*margin-bottom: 30px;*/
+         margin-bottom: 5px;
          font-size: 24px;
     }
      .right-sec h5{
          text-transform: capitalize;
+         margin-bottom: 5px;
     }
      .right-sec p {
          font-size: 14px;
@@ -187,11 +194,11 @@
          float: none;
          overflow: auto;
          position: relative;
-         top: -60px;
-         margin-bottom: -60px;
+         /*top: -60px;*/
+         /*margin-bottom: -60px;*/
          border-radius: 5px 5px 0 0;
          padding: 25px;
-         margin: 0 15px;
+         margin: -60px 15px 0;
     }
 
 	.f-right .content-wrapper{
@@ -202,6 +209,7 @@
          font-size: 15px;
     }
      .acc-wrapper {
+        margin-top: 0;
       /*   margin-left: -25px;
          margin-right: -25px;*/
     }
@@ -306,12 +314,13 @@
      .selling-goods-btns{
          /*margin-bottom: 40px;*/
          margin-bottom: 0;
+         margin-top: 5px;
     }
      .selling-goods-btns a.btn:hover{
          color: #bf696e !important;
     }
      form.apps-form {
-         margin: 0 auto 40px;
+         margin: 0 auto 0;
         /*width: 80%;
         */
     }
@@ -435,8 +444,79 @@
 	ul.apps-icons li:nth-child(3n){
 	margin-right: 0;
 	}
+
+     .complete-block-img{
+        width: auto;
+     }
+
+    .complete-block-img,
+    .bottom-block-complete{
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
+    width: auto;
+    }
+
+    a.back-link i {
+    padding-right: 5px;
+    }
+
+    a.back-link,
+    a.front-link {
+    font-size: 15px;
+    }
+
+    .alert-head div {
+    padding: 10px 0;
+    }
+
+    ul.alert-btns li {
+    vertical-align: baseline;
+    }
+
+    ul.alert-f-links li a {
+    font-size: 12px;
+    }
+
+    ul.alert-btns {
+    margin: 26px 0 55px;
+    }
+    
+    .alert-form p {
+    margin-top: 45px;
+    padding: 0 15px;
+    }
+
+    form.alert-form {
+    width: 85%;
+    margin: 18px auto 40px;
+    }
+
+    .apps-social-media {
+    margin: 20px 15px 50px;
+    }
+
+    ul.alert-brands-colors {
+    margin: 14px 15px 0px;
+    }
+
+    .btn-wrap {
+    margin-top: 40px;
+    }
+
+    .news-events-wrap {
+    margin-top: 20px;   
+    }
+
+    .re-captcha div{
+        margin: 0 auto;
+        width: 291px !important;
+    }
+
 }
- @media only screen and (max-width: 480px){
+
+@media only screen and (max-width: 480px){
     
     ul.apps-icons li {
     width: 47%;
@@ -450,9 +530,28 @@
     margin-right: 0;
     }
 
-    
+    ul.alert-btns li .upload-button,
+    ul.alert-btns li a, .alert-btns select {
+    font-size: 8px !important;
+    }
 
+    ul.alert-btns li .upload-btn-wrapper .upload-button{
+    padding: 8px 32px;
+    }
 
-
+    ul.alert-btns li:first-child {
+    padding-right: 8px;
+    }
 }
+
+@media only screen and (max-width: 360px){
+    .news-block img {
+    max-width: 70px;
+    }
+
+    .news-block h6, .news-block h5, .news-block ul {
+    padding-left: 90px;
+    }
+}
+
  

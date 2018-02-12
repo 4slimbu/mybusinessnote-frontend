@@ -205,10 +205,9 @@
      font-family: 'Montserrat', sans-serif;
      color: #646464;
      font-weight: 300;
+     overflow-x: hidden;
     /*margin: 0;
-     overflow: hidden;
-    */
-    /* Fallback for when there is no custom background color defined. */
+     overflow: hidden;*/
 }
  blockquote, q {
      quotes: "" "";
@@ -1183,6 +1182,7 @@ form.apps-form a{
 /*News wrap section*/
  h5.news-title {
      font-size: 20px;
+     margin-bottom: 10px;
 }
  .news-events-wrap {
      margin-top: 29px;
@@ -1194,7 +1194,7 @@ form.apps-form a{
  .news-block img {
      float: left;
      margin-right: 15px;
-     margin-bottom: 30px;
+    /* margin-bottom: 30px;*/
      max-width: 110px;
 }
  .news-block h6, .news-block h5 {
@@ -1208,7 +1208,7 @@ form.apps-form a{
 }
  .news-block h5 {
      font-size: 16px;
-     margin: 10px 0;
+     margin: 10px 0 0;
 }
  .news-block h5 a {
      color: #000;
@@ -1837,3 +1837,6 @@ ul.alert-btns li .upload-button{
     max-width: 280px !important;
 }
 
+.right-sec .content-wrapper .hidden-xs div a{
+     color: #bf696e;
+}
