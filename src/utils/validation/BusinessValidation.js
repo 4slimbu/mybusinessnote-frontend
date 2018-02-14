@@ -12,7 +12,7 @@ export function validateCreateBusiness(data) {
         errors.website = ["Website field is invalid"];
     }
 
-    if (Validator.isEmpty(data.website)) {
+    if (data.website === '' || data.website === null || Validator.isEmpty(data.website)) {
         errors.website = ["Website field is required"];
     }
 
