@@ -40,7 +40,7 @@ class BusinessCategories extends Component {
         e.preventDefault();
         this.props.setBusinessCategoryId(id);
         const appStatus = this.props.appStatus;
-        if (this.props.auth.isAuthenticated) {
+        if (this.props.auth.isAuthenticated){
             this.props.saveBusinessFormRequest({
                     business_option_id: appStatus.currentBusinessOption.id,
                     business_category_id: id
