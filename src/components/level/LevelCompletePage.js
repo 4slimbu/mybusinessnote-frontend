@@ -18,6 +18,7 @@ class LevelCompletePage extends Component {
             history.push(levelUrl);
         };
         const nextLevelUrl = '/level/' + nextLevel.slug;
+        const isLast = (level.id === nextLevel.id);
         return (
             <div className="level-7">
                 <section className="mid-sec bg-red">
@@ -27,16 +28,26 @@ class LevelCompletePage extends Component {
                         <img className="complete-block-img"
                              src={`${process.env.PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
                         <div className="bottom-block-complete">
-                            <div className="btn-wrap">
-                                <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
-                                      to={nextLevelUrl} className="btn btn-default btn-md">Continue to
-                                    level {nextLevel.id}</Link>
-                            </div>
-                            <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
-                                  to={nextLevelUrl} className="next-session-link"><i
-                                className="fa fa-chevron-down" aria-hidden="true"></i>
-                            </Link>
-                            <h6>{ nextLevel.name }</h6>
+                            {
+                                isLast ?
+                                    <div className="btn-wrap">
+                                        <a href="/level/getting-started" className="btn btn-default btn-md">Review from the Start</a>
+                                        <br/><br/>
+                                    </div>
+                                    :
+                                    <div>
+                                        <div className="btn-wrap">
+                                            <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
+                                                  to={nextLevelUrl} className="btn btn-default btn-md">Continue to
+                                                level {nextLevel.id}</Link>
+                                        </div>
+                                        <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
+                                              to={nextLevelUrl} className="next-session-link"><i
+                                            className="fa fa-chevron-down" aria-hidden="true"></i>
+                                        </Link>
+                                        <h6>{ nextLevel.name }</h6>
+                                    </div>
+                            }
                         </div>
                     </div>
                 </section>
