@@ -126,10 +126,10 @@ class SocialMediaRegistration extends Component {
         const facebook = (this.state.isChanged) ? this.state.facebook : currentBusinessMeta.facebook;
         const linkedin = (this.state.isChanged) ? this.state.linkedin : currentBusinessMeta.linkedin;
         const instagram = (this.state.isChanged) ? this.state.instagram : currentBusinessMeta.instagram;
-        const twitter_icon = (currentBusinessMeta.twitter || this.state.twitter) ? 'twitter_grey.png' : 'twitter.png';
-        const facebook_icon = (currentBusinessMeta.facebook || this.state.facebook) ? 'facebook_grey.png' : 'facebook.png';
-        const linkedin_icon = (currentBusinessMeta.linkedin || this.state.linkedin) ? 'linkedin_grey.png' : 'linkedin.png';
-        const instagram_icon = (currentBusinessMeta.instagram || this.state.instagram) ? 'instagram_grey.png' : 'instagram.png';
+        const twitter_icon = (currentBusinessMeta.twitter || this.state.twitter) ? 'twitter.png' : 'twitter_grey.png';
+        const facebook_icon = (currentBusinessMeta.facebook || this.state.facebook) ? 'facebook.png' : 'facebook_grey.png';
+        const linkedin_icon = (currentBusinessMeta.linkedin || this.state.linkedin) ? 'linkedin.png' : 'linkedin_grey.png';
+        const instagram_icon = (currentBusinessMeta.instagram || this.state.instagram) ? 'instagram.png' : 'instagram_grey.png';
 
         return (
             <div>
