@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../level/LevelHead";
 import Element from "../elements/Element";
-import {getAppUrlFromApiUrl, mbjLog} from "../navigation/helperFunctions";
+import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 import {withRouter} from "react-router-dom";
 
 class BusinessOptionPage extends Component {
@@ -36,8 +36,6 @@ class BusinessOptionPage extends Component {
         const {
             currentLevel, currentBusinessOption, getBusinessOption, history, setCompletedStatus
         } = this.props;
-        mbjLog('click back bo: first level bo id', currentLevel.level_first_bo.id);
-        mbjLog('click back bo: bo id', currentBusinessOption.id);
         setCompletedStatus({});
         if (currentBusinessOption.id === currentLevel.level_first_bo.id) {
             history.push('/level/' + currentBusinessOption.level_slug);
@@ -104,6 +102,7 @@ class BusinessOptionPage extends Component {
                                         <div className="completed-section">
                                             <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
                                                 <p>Well done for completing this section!</p>
+                                            <a href="#" onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-lg btn-alert">Continue</a>
                                         </div>
                                         :
                                     <div>
