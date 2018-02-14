@@ -302,23 +302,14 @@
      background: #ffffff;
 }
 /*-------------------------------------------------------------- ## Links --------------------------------------------------------------*/
- a {
-     color: royalblue;
+a {
+     color: #3b2c3b;
 }
- a:visited {
-     color: purple;
-}
- a:hover, a:focus, a:active {
-     color: midnightblue;
-}
- a:focus {
+a:focus {
      outline: thin dotted;
 }
- a:hover, a:active {
+a:hover, a:active {
      outline: 0;
-}
- a:hover, a.active, a.active, a.focus, a:focus {
-     text-decoration: none;
 }
 /*-------------------------------------------------------------- ## Menus --------------------------------------------------------------*/
  .main-navigation {
@@ -754,6 +745,18 @@
      flex-direction: column;
      justify-content: center;
      align-items: center;
+}
+
+ ul.apps-icons li div{
+     width: 100%;
+     height: 100%;
+     position: absolute;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     border-radius: 10px;
+     padding: 0 5px;
 }
 /*ul.apps-icons li:first-child {
      padding-top: 40px;
@@ -1649,19 +1652,16 @@ a.social-media-icon {
     left: 8%;
     top: 10%;
 }
-.colors-sample li:first-child a {
+.colors-sample li a {
     height: 35px;
     width: 35px;
     z-index: 1;
-}
-.colors-sample li:first-child a{
-    height: 30px;
-    width: 30px;
     left: 5%;
     top: 8%;
 }
+
 .colors-sample li{
-    margin-left: -3px;
+    margin-left: -7px;
     position: relative;
 }
 .add-colrs {
@@ -1688,6 +1688,10 @@ a.add-colrs {
 }
 .colors-sample li:last-child a{
     background: #d6d6d6;
+    z-index: 0;
+}
+.colors-sample li.active a {
+     z-index: 10;
 }
 .alert-brands-colors li:first-child a{
     background: #f7e461;
@@ -1840,3 +1844,9 @@ ul.alert-btns li .upload-button{
 .right-sec .content-wrapper .hidden-xs div a{
      color: #bf696e;
 }
+
+a:hover, a.active, a.active, a.focus, a:focus,a:visited{
+    color: #4b384a;
+    text-decoration: underline;
+}
+
