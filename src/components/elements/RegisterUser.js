@@ -25,6 +25,23 @@ class RegisterUser extends Component {
                     getBusinessOption={getBusinessOption}
                     getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                 />
+
+                {
+                    !auth.isAuthenticated &&
+                    <div>
+                        <p>&nbsp;</p>
+                        <p className="text-center">OR Login with</p>
+                        <div className="row">
+
+                            <div className="col-md-6 text-right col-sm-12">
+                                <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
+                            </div>
+                            <div className="col-md-6 col-sm-12 text-left">
+                                <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i> Facebook</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         );
     }
