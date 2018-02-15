@@ -38,7 +38,7 @@ class HrPolicy extends Component {
         return (
             this.state.isShowCompleted ?
                 <div className="completed-section">
-                    <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
+                    <img className="complete-tick" src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
                     <p>Well done for completing this section!</p>
                 </div>
                 :

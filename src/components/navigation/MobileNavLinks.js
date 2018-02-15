@@ -157,7 +157,7 @@ class MobileLevelLinks extends Component {
                             <Link to="/"
                                   onClick={(e) => onClickLevelLink(e, '/' )}
                                   className="navbar-brand">
-                                <img src={`${process.env.PUBLIC_URL}/assets/images/mobile-icons/mob-logo.png`} alt="" />
+                                <img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/mobile-icons/mob-logo.png`} alt="" />
                             </Link>
                         </div>
                         <div id="navbar" className="navbar-collapse collapse" aria-expanded="false" style={{ height: '1px'}}>

@@ -100,7 +100,7 @@ class BusinessOptionPage extends Component {
                                 {
                                     !appStatus.completed_status.level && appStatus.completed_status.section ?
                                         <div className="completed-section">
-                                            <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
+                                            <img className="complete-tick" src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
                                                 <p>Well done for completing this section!</p>
                                             <a href="#" onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-lg btn-alert">Continue</a>
                                         </div>

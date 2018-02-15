@@ -140,10 +140,10 @@ class SocialMediaRegistration extends Component {
                     <div>
 
                         <ul className="apps-social-media">
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a></li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a></li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a></li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a></li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a></li>
                         </ul>
                         {
                             (this.state.facebook || this.state.twitter || this.state.linkedin || this.state.instagram)
@@ -156,7 +156,7 @@ class SocialMediaRegistration extends Component {
                     this.state.isTwitterClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a>
+                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a>
                             <form onSubmit={(e)=> this.onClickDone(e)}>
                                 <input type="text" onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
                                 <button className="btn btn-default btn-lg btn-alert">Done</button>
@@ -169,7 +169,7 @@ class SocialMediaRegistration extends Component {
                     this.state.isFacebookClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a>
+                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a>
                             <form onSubmit={(e)=> this.onClickDone(e)}>
                                 <input type="text" onChange={(e) => this.onChangeInput(e, 'facebook')} value={facebook}/>
                                 <button className="btn btn-default btn-lg btn-alert">Done</button>
@@ -182,7 +182,7 @@ class SocialMediaRegistration extends Component {
                     this.state.isLinkedinClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a>
+                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a>
                             <form onSubmit={(e)=> this.onClickDone(e)}>
                                 <input type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
                                 <button className="btn btn-default btn-lg btn-alert">Done</button>
@@ -195,7 +195,7 @@ class SocialMediaRegistration extends Component {
                     this.state.isInstagramClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a>
+                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a>
                             <form onSubmit={(e)=> this.onClickDone(e)}>
                                 <input type="text" onChange={(e) => this.onChangeInput(e, 'instagram')} value={instagram}/>
                                 <button className="btn btn-default btn-lg btn-alert">Done</button>

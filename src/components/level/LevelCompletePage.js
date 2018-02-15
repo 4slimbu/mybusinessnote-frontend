@@ -26,7 +26,7 @@ class LevelCompletePage extends Component {
                         <h5 className="obvious-h5 hidden-xs">{ level.name }</h5>
                         {level.badge_message && <div className="content-wrap" dangerouslySetInnerHTML={{__html: level.badge_message}} />}
                         <img className="complete-block-img"
-                             src={`${process.env.PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
+                             src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
                         <div className="bottom-block-complete">
                             {
                                 isLast ?
