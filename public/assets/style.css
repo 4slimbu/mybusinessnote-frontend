@@ -677,9 +677,6 @@ a:hover, a:active {
  .progress-img-adj {
      margin-bottom: 27px;
 }
- a.back-link, a.back-link i, a.front-link, a.front-link i{
-     color: #ffffff;
-}
  a.back-link i {
      padding-right: 10px;
 }
@@ -1653,17 +1650,42 @@ a.social-media-icon {
     top: 10%;
 }
 .colors-sample li a {
-    height: 35px;
-    width: 35px;
-    z-index: 1;
-    left: 5%;
-    top: 8%;
-}
+     height: 35px;
+     width: 35px;
+     z-index: 1;
+     left: 5%;
+     top: 8%;
+     }
 
 .colors-sample li{
-    margin-left: -7px;
+    margin-left: 0;
     position: relative;
 }
+
+/*.colors-sample li.active a{
+     height: 35px;
+     width: 35px;
+     border-color: #bf696e;
+     border-width: 3px;
+}*/
+
+.colors-sample li:first-child.active{
+     position: relative;
+     left: 12px;
+}
+
+/*.colors-sample li:first-child.active a,
+.colors-sample li:last-child.active a{
+     border-color: #bf696e;
+     border-width: 3px;
+}*/
+
+.colors-sample li:last-child.active{
+     position: relative;
+     right: 12px;
+     z-index: 10;
+}
+
 .add-colrs {
     font-weight: 300;
     font-size: 12px;
@@ -1690,9 +1712,9 @@ a.add-colrs {
     background: #d6d6d6;
     z-index: 0;
 }
-.colors-sample li.active a {
+/*.colors-sample li:first-child a {
      z-index: 10;
-}
+}*/
 .alert-brands-colors li:first-child a{
     background: #f7e461;
 }
@@ -1849,4 +1871,6 @@ a:hover, a.active, a.active, a.focus, a:focus,a:visited{
     color: #4b384a;
     text-decoration: underline;
 }
-
+a.back-link, a.back-link i, a.front-link, a.front-link i{
+     color: #ffffff;
+}
