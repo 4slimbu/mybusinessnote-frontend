@@ -139,7 +139,7 @@ class HomePage extends Component {
                 <div className="content-wrapper step-one">
                     <div className="col-md-12">
                         <div className="btn-wrap">
-                            <p>Want to start a fresh new business journey? <Link to="/level/getting-started">Click here</Link>.</p>
+                            <p>Want to start a fresh new business journey? <Link to="/level/getting-started">Click here</Link></p>
                         </div>
                     </div>
                     <div className="col-md-12">
