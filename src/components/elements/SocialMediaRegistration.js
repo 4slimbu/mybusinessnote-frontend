@@ -13,6 +13,7 @@ import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {saveBusinessOption} from "../navigation/helperFunctions";
 import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
+import {isSocialMediaLinksValid} from "../../utils/validation/BusinessValidation";
 
 class SocialMediaRegistration extends Component {
     constructor(props) {
@@ -28,7 +29,8 @@ class SocialMediaRegistration extends Component {
             isLinkedinClicked: false,
             isInstagramClicked: false,
             isShowCompleted: false,
-            isLast: true
+            isLast: true,
+            errors: {},
         }
     }
 
@@ -107,8 +109,24 @@ class SocialMediaRegistration extends Component {
         });
     }
 
-    onClickDone(e) {
+    isFormValid(socialName, url) {
+        const { errors, isValid } = isSocialMediaLinksValid(socialName, url);
+
+        if(! isValid) {
+            this.setState({ errors });
+        }
+
+        return isValid;
+    }
+
+    onClickDone(e, socialName) {
         e.preventDefault();
+
+        if (!this.isFormValid(socialName, this.state[socialName])) {
+            return;
+        } else {
+            this.setState({ errors: {}});
+        }
 
         this.setState({
             isFacebookClicked: false,
@@ -157,9 +175,11 @@ class SocialMediaRegistration extends Component {
                     <ul className="apps-social-media">
                         <li>
                             <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)}>
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
+                            <form onSubmit={(e)=> this.onClickDone(e, 'twitter')}>
+                                <input placeholder="https://twitter.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
+                                { this.state.errors.twitter && <div><span className="form-error-message">{this.state.errors.twitter}</span></div> }
+
+                                <button className="btn btn-default btn-lg btn-alert">{(twitter) ? 'Done' : 'Cancel'}</button>
                             </form>
                         </li>
                     </ul>
@@ -170,9 +190,10 @@ class SocialMediaRegistration extends Component {
                     <ul className="apps-social-media">
                         <li>
                             <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)}>
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'facebook')} value={facebook}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
+                            <form onSubmit={(e)=> this.onClickDone(e, 'facebook')}>
+                                <input placeholder="https://facebook.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'facebook')} value={facebook}/>
+                                { this.state.errors.facebook && <div><span className="form-error-message">{this.state.errors.facebook}</span></div> }
+                                <button className="btn btn-default btn-lg btn-alert">{(facebook) ? 'Done' : 'Cancel'}</button>
                             </form>
                         </li>
                     </ul>
@@ -183,9 +204,10 @@ class SocialMediaRegistration extends Component {
                     <ul className="apps-social-media">
                         <li>
                             <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)}>
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
+                            <form onSubmit={(e)=> this.onClickDone(e, 'linkedin')}>
+                                <input placeholder="http://linkedin.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
+                                { this.state.errors.linkedin && <div><span className="form-error-message">{this.state.errors.linkedin}</span></div> }
+                                <button className="btn btn-default btn-lg btn-alert">{(linkedin) ? 'Done' : 'Cancel'}</button>
                             </form>
                         </li>
                     </ul>
@@ -196,9 +218,10 @@ class SocialMediaRegistration extends Component {
                     <ul className="apps-social-media">
                         <li>
                             <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e)}>
-                                <input type="text" onChange={(e) => this.onChangeInput(e, 'instagram')} value={instagram}/>
-                                <button className="btn btn-default btn-lg btn-alert">Done</button>
+                            <form onSubmit={(e)=> this.onClickDone(e, 'instagram')}>
+                                <input placeholder="https://instagram.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'instagram')} value={instagram}/>
+                                { this.state.errors.instagram && <div><span className="form-error-message">{this.state.errors.instagram}</span></div> }
+                                <button className="btn btn-default btn-lg btn-alert">{(instagram) ? 'Done' : 'Cancel'}</button>
                             </form>
 
                         </li>

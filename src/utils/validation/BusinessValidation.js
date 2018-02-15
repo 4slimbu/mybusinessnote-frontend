@@ -16,13 +16,24 @@ export function validateCreateBusiness(data) {
         errors.website = ["Website field is required"];
     }
 
-
     return {
         errors,
         isValid: isEmpty(errors)
     }
 }
 
+export function isSocialMediaLinksValid(socialName, url) {
+    let errors = {};
+
+    if ((url !== '' && url !== null) && ! (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)) ) {
+        errors[socialName] = [socialName + " field is invalid"];
+    }
+
+    return {
+        errors,
+        isValid: isEmpty(errors)
+    }
+}
 
 export function validateRegisterBusiness(data) {
     let errors = {};

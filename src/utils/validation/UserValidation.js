@@ -116,7 +116,6 @@ export function validateEmail(email) {
     }
 }
 
-
 export function validateUpdatePassword(data) {
     let errors = {};
 
