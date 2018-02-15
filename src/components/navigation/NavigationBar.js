@@ -39,7 +39,7 @@ class NavigationBar extends Component {
                     <Link to="/"
                           onClick={(e) => onClickLevelLink(e, '/' )}
                           className="site-branding">
-                        <img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/apps-logo.png`} alt="" />
+                        <img src={`${process.env.PUBLIC_URL}/assets/images/apps-logo.png`} alt="" />
                     </Link>
                     <h3 className="tagline-head">Let your <br/>journey begins</h3>
                     <div className="menu-accordion">

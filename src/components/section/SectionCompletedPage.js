@@ -21,7 +21,7 @@ class SectionCompletedPage extends Component {
                         <h1>Congratulations</h1>
                         <p>Level {level.id} complete!</p>
                         <img className="complete-block-img"
-                             src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
+                             src={`${process.env.PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
                         <div className="bottom-block-complete">
                             <div className="btn-wrap">
                                 <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}

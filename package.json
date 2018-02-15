@@ -2,6 +2,7 @@
   "name": "mbj-front",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/mbj/public/start",
   "dependencies": {
     "axios": "^0.17.1",
     "classnames": "^2.2.5",

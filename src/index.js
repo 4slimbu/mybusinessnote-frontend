@@ -58,7 +58,7 @@ if (localStorage.getItem("jwtToken")) {
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router basename={`${process.env.REACT_APP_PUBLIC_URL}`}>
+        <Router basename={`${process.env.PUBLIC_URL}`}>
             <App/>
         </Router>
     </Provider>
