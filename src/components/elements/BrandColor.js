@@ -13,6 +13,7 @@ import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {saveBusinessOption} from "../navigation/helperFunctions";
 import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
+import * as classnames from "classnames";
 
 class BrandColor extends Component {
     constructor(props) {
@@ -20,7 +21,9 @@ class BrandColor extends Component {
         this.state = {
             isChanged: false,
             isOwnColor: false,
-            brand_color: ''
+            isBrandColorActive: true,
+            brand_color: '',
+            sec_brand_color: '',
         }
     }
 
@@ -34,16 +37,40 @@ class BrandColor extends Component {
     onClickOption(e, option) {
         e.preventDefault();
 
-        this.setState({
-            isChanged: true,
-            brand_color: option
-        })
+        if (this.state.isBrandColorActive) {
+            this.setState({
+                isChanged: true,
+                brand_color: option
+            })
+        } else {
+            this.setState({
+                isChanged: true,
+                sec_brand_color: option
+            })
+        }
+
     }
 
     onClickOwnColor(e) {
         e.preventDefault();
         this.setState({
             isOwnColor: ! this.state.isOwnColor
+        })
+    }
+
+    onClickBrandColor(e) {
+        e.preventDefault();
+
+        this.setState({
+            isBrandColorActive: true
+        })
+    }
+
+    onClickSecBrandColor(e) {
+        e.preventDefault();
+
+        this.setState({
+            isBrandColorActive: false
         })
     }
 
@@ -54,13 +81,21 @@ class BrandColor extends Component {
         })
     }
 
+    onChangeSecBrandColor(e) {
+        e.preventDefault();
+        this.setState({
+            sec_brand_color: e.target.value
+        })
+    }
+
     onClickDone(e) {
         e.preventDefault();
 
         saveBusinessOption(this, {
             business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_meta: {
-                brand_color: this.state.brand_color
+                brand_color: this.state.brand_color,
+                sec_brand_color: this.state.sec_brand_color
             }
         });
     }
@@ -70,6 +105,7 @@ class BrandColor extends Component {
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const brandColor = (this.state.isChanged) ? this.state.brand_color : currentBusinessMeta.brand_color;
+        const secBrandColor = (this.state.isChanged) ? this.state.sec_brand_color : currentBusinessMeta.sec_brand_color;
         return (
             <div>
                 <ul className="alert-brands-colors">
@@ -94,12 +130,17 @@ class BrandColor extends Component {
                                    className="form-control" name="brand-color" placeholder="eg. #3c5693"
                                    value={brandColor}
                             />
+                            <input type="text"
+                                   onChange={(e) => this.onChangeSecBrandColor(e)}
+                                   className="form-control" name="sec-brand-color" placeholder="eg. #3c5693"
+                                   value={secBrandColor}
+                            />
                         </div>
                     </form>
                 }
                 <ul className="colors-sample">
-                    <li><a href="" style={{ backgroundColor: this.state.brand_color }}></a></li>
-                    <li><a href="" style={{ backgroundColor: currentBusinessMeta.brand_color }}></a></li>
+                    <li className={classnames("", {"active" : this.state.isBrandColorActive })}><a href="" onClick={(e) => this.onClickBrandColor(e)} style={{ backgroundColor: brandColor }}></a></li>
+                    <li className={classnames("", {"active" : !this.state.isBrandColorActive })}><a href="" onClick={(e) => this.onClickSecBrandColor(e)} style={{ backgroundColor: secBrandColor }}></a></li>
                 </ul>
                 <a href="#" onClick={(e) => this.onClickDone(e)} className="btn btn-default btn-lg btn-alert">Done</a>
 
