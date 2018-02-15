@@ -4,7 +4,7 @@ import {saveBusinessOption} from "../navigation/helperFunctions";
 
 const SelectBusinessOptionMeta = ({ current, currentBusinessOption, metaKey, metaValue }) => {
     const affiliateLinkId = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].id : '';
-    const affiliateLinkLabel = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].name : 'Set Up Now';
+    const affiliateLinkLabel = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].label : 'Set Up Now';
     const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
     const onClickOption = function(e, option) {

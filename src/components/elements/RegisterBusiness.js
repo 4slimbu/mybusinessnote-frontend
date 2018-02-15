@@ -136,7 +136,7 @@ class RegisterBusiness extends Component {
         const { appStatus } = this.props;
         const errors = this.state.errors;
         const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
-        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].name : 'Register for an ABN';
+        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].label : 'Register for an ABN';
         const affiliateLink = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].link : '#';
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>

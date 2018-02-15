@@ -107,7 +107,7 @@ class BusinessOptionPage extends Component {
                                         :
                                     <div>
                                         <p>{ currentBusinessOption.name }</p>
-
+                                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: currentBusinessOption.content}} />
                                         <div>
                                             {
                                                 currentBusinessOption.element &&

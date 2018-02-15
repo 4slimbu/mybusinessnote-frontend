@@ -84,7 +84,7 @@ class Logo extends Component {
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
-        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].name : 'Set Up Now';
+        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].label : 'Set Up Now';
         const affiliateLink = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].link : '#';
 
         let imagePreview = null;
