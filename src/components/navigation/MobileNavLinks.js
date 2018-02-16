@@ -73,15 +73,38 @@ class MobileLevelLinks extends Component {
                 const onClickSectionLink = function (e, sectionUrl) {
                     e.preventDefault();
                     if ((key - 1) >= 0) {
-                        if (level.sections[key - 1].completed_percent < '100') {
-                            addFlashMessage({
-                                type: "error",
-                                text: "Section Locked!"
-                            });
-                            return;
+                        if (level.id === 3) {
+                            //check if higher section isn't touched
+                            for(let i = key; i < level.sections.length; i++) {
+                                if(level.sections[i].completed_percent > 0) continue;
+                                if (level.sections[key - 1].completed_percent < '100') {
+                                    addFlashMessage({
+                                        type: "error",
+                                        text: "Section Locked!"
+                                    });
+                                    return;
+                                }
+                            }
+                        } else {
+                            //check if higher level isn't touched
+                            if (appStatus.levels[level.id].completed_percent === 0) {
+                                //check if higher section isn't touched
+                                for(let i = key; i < level.sections.length; i++) {
+                                    if(level.sections[i].completed_percent > 0) continue;
+                                    if (level.sections[key - 1].completed_percent < '100') {
+                                        addFlashMessage({
+                                            type: "error",
+                                            text: "Section Locked!"
+                                        });
+                                        return;
+                                    }
+                                }
+
+                            }
                         }
+
                     } else {
-                        if (level.id === 2) {
+                        if (level.id == 2) {
                             if (appStatus.levels[0].completed_percent < '100') {
                                 addFlashMessage({
                                     type: "error",
@@ -90,7 +113,7 @@ class MobileLevelLinks extends Component {
                                 return;
                             }
                         }
-                        if (level.id === 3) {
+                        if (level.id == 3) {
                             if (appStatus.levels[1].completed_percent < '100') {
                                 addFlashMessage({
                                     type: "error",
