@@ -103,9 +103,9 @@ class LevelThreeIntro extends Component {
             return (
                 <li key={section.id} className={active}>
                     <Link to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
-                        <div className="white-icon" >
+                        <a className="red-icon" href="#">
                             <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
-                        </div>
+                        </a>
                         <span> {section.name}</span>
                     </Link>
                     <a className="apps-question" href="#"
