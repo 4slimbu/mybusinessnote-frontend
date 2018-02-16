@@ -103,14 +103,12 @@ class LevelTwoIntro extends Component {
             };
             return (
                 <li key={section.id} className={active}>
-                    <div>
-                        <Link to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
-                            <a className="red-icon" href="#">
-                                <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
-                            </a>
-                            <span> <a href="#">{section.name}</a></span>
-                        </Link>
-                    </div>
+                    <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
+                        <div className="red-icon">
+                            <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
+                        </div>
+                        <span>{section.name}</span>
+                    </Link>
                     <a className="apps-question" href="#"
                        onMouseEnter={(e) => this.handleToolTip(e, section.id)}
                        onClick={(e) => this.handleToolTip(e, section.id)}>

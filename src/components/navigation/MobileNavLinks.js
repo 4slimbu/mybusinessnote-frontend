@@ -8,19 +8,20 @@ import {generateAppRelativeUrl} from "./helperFunctions";
 import UserInfoLinks from "./UserInfoLinks";
 
 class MobileLevelLinks extends Component {
-
     render() {
         //get the app status object
-        const { appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+        const {
+            appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl} = this.props;
+            getBusinessOptionFromUrl
+        } = this.props;
         //init levels
         const levels = appStatus.levels;
         //init current levels
         const currentLevel = appStatus.currentLevel;
 
         //navigate
-        const onClickLevelLink = function(e, url) {
+        const onClickLevelLink = function (e, url) {
             e.preventDefault();
             setCurrentLevel(appStatus.levels[0]);
             setCurrentSection({});
@@ -34,7 +35,7 @@ class MobileLevelLinks extends Component {
             const levelUrl = generateAppRelativeUrl(level.slug);
             const levelImg = (level.completed_percent >= 100) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
                 process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
-            const onClickLevelLink = function(e, levelUrl) {
+            const onClickLevelLink = function (e, levelUrl) {
                 e.preventDefault();
                 setCurrentLevel(level);
                 setCurrentSection({});
@@ -43,32 +44,33 @@ class MobileLevelLinks extends Component {
                 history.push(levelUrl);
             };
             return (
-                <li key={level.slug} className={classnames("", { "active" : currentLevel.id === level.id})}>
-                    <Link data-toggle="tab" onClick={(e) => onClickLevelLink(e, levelUrl )}
+                <li key={level.slug} className={classnames("", {"active": currentLevel.id === level.id})}>
+                    <Link data-toggle="tab" onClick={(e) => onClickLevelLink(e, levelUrl)}
                           to={`/level/${level.slug}`}
                     >
                         {
                             level.completed_percent >= 100 ?
-                                <img src={levelImg} alt="" />
+                                <img src={levelImg} alt=""/>
                                 :
                                 <div>
-                                    <div className="progress-bar" data-percent={ level.completed_percent }  data-duration="1000" data-color="#6f6170,#bf696e">
-                                        <img src={levelImg} alt="" />
+                                    <div className="progress-bar" data-percent={level.completed_percent}
+                                         data-duration="1000" data-color="#6f6170,#bf696e">
+                                        <img src={levelImg} alt=""/>
                                     </div>
                                 </div>
 
                         }
-                        <br/>{ level.name }
+                        <br/>{level.name}
                     </Link>
                 </li>
             )
         });
 
-        const sectionsList = function(level) {
+        const sectionsList = function (level) {
             return map(level.sections, (section, key) => {
                 const complete = section.completed_percent == 100 ? true : false;
                 const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-                const onClickSectionLink= function(e, sectionUrl) {
+                const onClickSectionLink = function (e, sectionUrl) {
                     e.preventDefault();
                     if ((key - 1) >= 0) {
                         if (level.sections[key - 1].completed_percent < '100') {
@@ -118,7 +120,7 @@ class MobileLevelLinks extends Component {
             const levelUrl = generateAppRelativeUrl(level.slug);
             const levelImg = (level.completed_percent >= 100) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
                 process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
-            const onClickLevelLink = function(e, levelUrl) {
+            const onClickLevelLink = function (e, levelUrl) {
                 e.preventDefault();
                 setCurrentLevel(level);
                 setCurrentSection({});
@@ -127,16 +129,17 @@ class MobileLevelLinks extends Component {
                 history.push(levelUrl);
             };
             return (
-                <li key={level.slug} className={classnames("dropdown", { "active open" : currentLevel.id === level.id})}>
-                    <Link onClick={(e) => onClickLevelLink(e, levelUrl )}
+                <li key={level.slug} className={classnames("dropdown", {"active open": currentLevel.id === level.id})}>
+                    <Link onClick={(e) => onClickLevelLink(e, levelUrl)}
                           to={`/level/${level.slug}`}
-                          className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                          className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                          aria-expanded="false"
                     >
-                       { level.name }
+                        {level.name}
                         <span className="caret"></span>
                     </Link>
                     <ul className="dropdown-menu">
-                        { sectionsList(level) }
+                        {sectionsList(level)}
                     </ul>
                 </li>
             )
@@ -148,28 +151,30 @@ class MobileLevelLinks extends Component {
                 <nav className="navbar navbar-inverse navbar-fixed-top">
                     <div className="container">
                         <div className="navbar-header">
-                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
+                                    data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                                 <span className="sr-only">Toggle navigation</span>
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                             </button>
                             <Link to="/"
-                                  onClick={(e) => onClickLevelLink(e, '/' )}
+                                  onClick={(e) => onClickLevelLink(e, '/')}
                                   className="navbar-brand">
-                                <img src={`${process.env.PUBLIC_URL}/assets/images/mobile-icons/mob-logo.png`} alt="" />
+                                <img src={`${process.env.PUBLIC_URL}/assets/images/mobile-icons/mob-logo.png`} alt=""/>
                             </Link>
                         </div>
-                        <div id="navbar" className="navbar-collapse collapse" aria-expanded="false" style={{ height: '1px'}}>
-                            <UserInfoLinks />
+                        <div id="navbar" className="navbar-collapse collapse" aria-expanded="false"
+                             style={{height: '1px'}}>
+                            <UserInfoLinks/>
                             <ul className="nav navbar-nav">
-                                { hamLevelList }
+                                {hamLevelList}
                             </ul>
                         </div>
                     </div>
                 </nav>
                 <ul className="nav nav-tabs">
-                    { levelsList }
+                    {levelsList}
                 </ul>
             </div>
         )

@@ -102,10 +102,10 @@ class LevelThreeIntro extends Component {
             };
             return (
                 <li key={section.id} className={active}>
-                    <Link to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
-                        <a className="red-icon" href="#">
+                    <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
+                        <div className="red-icon" href="#">
                             <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
-                        </a>
+                        </div>
                         <span> {section.name}</span>
                     </Link>
                     <a className="apps-question" href="#"
@@ -141,7 +141,7 @@ class LevelThreeIntro extends Component {
 
 LevelThreeIntro.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    addFlashMessage: PropTypes.object.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
     level: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,

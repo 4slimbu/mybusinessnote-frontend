@@ -118,7 +118,7 @@ class BusinessCategories extends Component {
             const active = appStatus.business_category_id == item.id ? 'active' : '';
             return (
                 <li key={item.id} className={active} onTouchStart={(e) => this.handleSelect(e, item.id)}  onClick={(e) => this.handleSelect(e, item.id)}>
-                    <div>
+                    <div className="link-box">
                         <a className="white-icon" href="#">
                             <img src={item.icon} alt=""/>
                         </a>

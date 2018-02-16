@@ -1,9 +1,18 @@
-.flash-message {
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  width: 250px;
-  z-index: 99999;
+.alert-sticky {
+    z-index: 9999;
+    position: fixed;
+    top: 60px;
+    right: -500px;
+    animation-name: alert-sticky-animation;
+    animation-duration: 4s;
+
+}
+
+@keyframes alert-sticky-animation {
+    0%   {right: -500px;}
+    15%  {right: 10px;}
+    86%  {right: 10px;}
+    100% {right: -500px;}
 }
 
 .btn-wrap button.btn {

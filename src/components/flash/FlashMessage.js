@@ -8,7 +8,7 @@ class FlashMessage extends Component {
         this.onClick = this.onClick.bind(this);
         setTimeout(() => {
             this.props.deleteFlashMessage(this.props.message.id);
-        }, 2500);
+        }, 4000);
     }
 
     onClick() {
@@ -18,7 +18,7 @@ class FlashMessage extends Component {
     render() {
         const {type, text} = this.props.message;
         return (
-            <div className={classnames("alert", {
+            <div className={classnames("alert alert-sticky", {
                 "alert-success": type === "success",
                 "alert-danger": type === "error"
             })}>
