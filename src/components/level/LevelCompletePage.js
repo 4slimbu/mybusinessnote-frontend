@@ -19,6 +19,7 @@ class LevelCompletePage extends Component {
         };
         const nextLevelUrl = '/level/' + nextLevel.slug;
         const isLast = (level.id === nextLevel.id);
+        const dashboardUrl = process.env.REACT_APP_DASHBOARD_URL + '/?token=' + localStorage.getItem("jwtToken");
         return (
             <div className="level-7">
                 <section className="mid-sec bg-red">
@@ -31,7 +32,7 @@ class LevelCompletePage extends Component {
                             {
                                 isLast ?
                                     <div className="btn-wrap">
-                                        <a href="/level/getting-started" className="btn btn-default btn-md">Review from the Start</a>
+                                        <a href={dashboardUrl} className="btn btn-default btn-md">Go to Dashboard</a>
                                         <br/><br/>
                                     </div>
                                     :

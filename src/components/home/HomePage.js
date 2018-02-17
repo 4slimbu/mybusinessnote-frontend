@@ -139,13 +139,20 @@ class HomePage extends Component {
                 <div className="content-wrapper step-one">
                     <div className="col-md-12">
                         <div className="btn-wrap">
-                            <p>Want to start a fresh new business journey? <Link to="/level/getting-started">Click here.</Link></p>
+                            <p>Want to start a fresh new business journey?</p>
+                            <Link className="btn btn-default btn-md" to="/level/getting-started">Click Here.</Link>
                         </div>
                     </div>
                     <div className="col-md-12">
                         <div className="btn-wrap">
                             <p>Already Registered? Continue your Business Journey.</p>
                             <Link to="/login" className="btn btn-default btn-md">Login</Link>
+                        </div>
+                    </div>
+                    <div className="col-md-12">
+                        <div className="btn-wrap">
+                            <p>Want to buy a business or franchise?</p>
+                            <a href="http://www.franchisebusiness.com.au/" target="_blank" className="btn btn-default btn-md">Click Here</a>
                         </div>
                     </div>
                 </div>
