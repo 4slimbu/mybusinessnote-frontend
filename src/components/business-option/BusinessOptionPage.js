@@ -24,9 +24,16 @@ class BusinessOptionPage extends Component {
     onClickNext(e) {
         e.preventDefault();
         const {
-            currentBusinessOption, getBusinessOption, history,
-            setCompletedStatus
+            currentLevel, currentBusinessOption, getBusinessOption, history,
+            setCompletedStatus, addFlashMessage
         } = this.props;
+        if (currentLevel.id === 3 &&(currentBusinessOption.id === currentLevel.level_last_bo.id)) {
+            addFlashMessage({
+                type: "success",
+                text: "Your journey ends here"
+            });
+            return;
+        }
         getBusinessOption(currentBusinessOption.links.next);
         setCompletedStatus({});
         history.push(getAppUrlFromApiUrl(currentBusinessOption.links.next));
@@ -54,6 +61,7 @@ class BusinessOptionPage extends Component {
         const onComplete = function(bool) {
             isComplete = bool;
         };
+        const isEnd = (currentLevel.id === 3 &&(currentBusinessOption.id === currentLevel.level_last_bo.id));
         return (
             <div>
                 <LevelHead currentLevel={currentLevel}/>
@@ -79,7 +87,7 @@ class BusinessOptionPage extends Component {
                                         currentBusinessOption.business_business_option_status === 'skipped' ||
                                         currentBusinessOption.business_business_option_status === 'irrelevant'
 
-                                    ) &&
+                                    ) && !isEnd &&
                                     <a className="pull-right front-link" href="#" onClick={(e) => this.onClickNext(e)}>
                                         next
                                         <i className="fa fa-chevron-right" aria-hidden="true"></i>
@@ -134,6 +142,7 @@ BusinessOptionPage.propTypes = {
     setCompletedStatus: PropTypes.func.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
 };
 
 

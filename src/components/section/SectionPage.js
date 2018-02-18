@@ -10,6 +10,7 @@ import Loading from "../Loading";
 import {generateApiUrlFromUrlLocation, mbjLog} from "../navigation/helperFunctions";
 import {withRouter} from "react-router-dom";
 import {isEmpty} from "lodash";
+import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ class SectionPage extends Component {
         const { isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
         const {appStatus, getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
             setToolTipContent, setShowCompletedPage,setCompletedStatus,
-            getBusinessOptionFromUrl} = this.props;
+            getBusinessOptionFromUrl, addFlashMessage} = this.props;
         return (
             <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
@@ -60,6 +61,7 @@ class SectionPage extends Component {
                             getBusinessOptionFromUrl={getBusinessOptionFromUrl}
                             getBusinessOption={getBusinessOption}
                             isFetching={isFetching}
+                            addFlashMessage={addFlashMessage}
                         />
                     }
                 </div>
@@ -80,7 +82,8 @@ SectionPage.propTypes = {
     setToolTipContent: PropTypes.func.isRequired,
     setShowCompletedPage: PropTypes.func.isRequired,
     setCompletedStatus: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired
+    setCurrentBusinessOption: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -100,5 +103,6 @@ export default withRouter(connect(mapStateToProps, {
     setToolTipContent,
     setCurrentBusinessOption,
     setCompletedStatus,
-    setShowCompletedPage
+    setShowCompletedPage,
+    addFlashMessage,
 })(SectionPage));
