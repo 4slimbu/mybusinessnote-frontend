@@ -90,12 +90,24 @@ class BrandColor extends Component {
 
     onClickDone(e) {
         e.preventDefault();
+        const { appStatus, addFlashMessage } = this.props;
+        const currentBusinessOption = appStatus.currentBusinessOption;
+        const currentBusinessMeta = currentBusinessOption.business_meta;
+        const brandColor = (this.state.isChanged) ? this.state.brand_color : currentBusinessMeta.brand_color;
+        const secBrandColor = (this.state.isChanged) ? this.state.sec_brand_color : currentBusinessMeta.sec_brand_color;
+        if (typeof brandColor === 'undefined' || brandColor === '' || typeof secBrandColor === 'undefined' || secBrandColor === '') {
+            addFlashMessage({
+                type: "error",
+                text: "Please select both colours"
+            });
+            return;
+        }
 
         saveBusinessOption(this, {
             business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_meta: {
-                brand_color: this.state.brand_color,
-                sec_brand_color: this.state.sec_brand_color
+                brand_color: brandColor,
+                sec_brand_color: secBrandColor
             }
         });
     }
