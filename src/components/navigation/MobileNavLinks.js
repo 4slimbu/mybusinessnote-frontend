@@ -171,7 +171,7 @@ class MobileLevelLinks extends Component {
 
         return (
             <div>
-                <nav className="navbar navbar-inverse navbar-fixed-top">
+                <nav className="navbar navbar-inverse navbar-fixed-top mobile-navbar">
                     <div className="container">
                         <div className="navbar-header">
                             <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
