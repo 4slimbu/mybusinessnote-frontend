@@ -19,7 +19,8 @@ class Tagline extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tagline: ''
+            tagline: '',
+            isChanged: false
         };
     }
 
@@ -43,7 +44,8 @@ class Tagline extends Component {
     onChangeTagline(e) {
         e.preventDefault();
         this.setState({
-            tagline: e.target.value
+            tagline: e.target.value,
+            isChanged: true
         })
     }
 
@@ -51,7 +53,7 @@ class Tagline extends Component {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
-        const tagline = (this.state.tagline) ? this.state.tagline : ((currentBusinessMeta.tagline) ? currentBusinessMeta.tagline : '');
+        const tagline = (this.state.isChanged) ? this.state.tagline : ((currentBusinessMeta.tagline) ? currentBusinessMeta.tagline : '');
 
         return (
             <div>
