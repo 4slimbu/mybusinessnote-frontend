@@ -4,7 +4,7 @@ import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
 import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
-import {generateAppRelativeUrl} from "./helperFunctions";
+import {generateAppRelativeUrl, isSectionLocked} from "./helperFunctions";
 import UserInfoLinks from "./UserInfoLinks";
 
 class MobileLevelLinks extends Component {
@@ -72,65 +72,19 @@ class MobileLevelLinks extends Component {
                 const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
                 const onClickSectionLink = function (e, sectionUrl) {
                     e.preventDefault();
-                    if ((key - 1) >= 0) {
-                        if (level.id === 3) {
-                            //check if higher section isn't touched
-                            for(let i = key; i < level.sections.length; i++) {
-                                if(level.sections[i].completed_percent > 0) continue;
-                                if (level.sections[key - 1].completed_percent < '100') {
-                                    addFlashMessage({
-                                        type: "error",
-                                        text: "Section Locked!"
-                                    });
-                                    return;
-                                }
-                            }
-                        } else {
-                            //check if higher level isn't touched
-                            if (appStatus.levels[level.id].completed_percent === 0) {
-                                //check if higher section isn't touched
-                                for(let i = key; i < level.sections.length; i++) {
-                                    if(level.sections[i].completed_percent > 0) continue;
-                                    if (level.sections[key - 1].completed_percent < '100') {
-                                        addFlashMessage({
-                                            type: "error",
-                                            text: "Section Locked!"
-                                        });
-                                        return;
-                                    }
-                                }
-
-                            }
-                        }
-
-                    } else {
-                        if (level.id == 2) {
-                            if (appStatus.levels[0].completed_percent < '100') {
-                                addFlashMessage({
-                                    type: "error",
-                                    text: "Section Locked!"
-                                });
-                                return;
-                            }
-                        }
-                        if (level.id == 3) {
-                            if (appStatus.levels[1].completed_percent < '100') {
-                                addFlashMessage({
-                                    type: "error",
-                                    text: "Section Locked!"
-                                });
-                                return;
-                            }
-                        }
+                    if (isSectionLocked(appStatus, level, key)) {
+                        return;
                     }
+
                     setCurrentLevel(level);
                     setCurrentSection(section);
                     setCompletedStatus({});
                     getBusinessOptionFromUrl(generateAppRelativeUrl(level.id, section.id));
                     history.push(sectionUrl);
                 };
+                const lockedClass = isSectionLocked(appStatus, level, key) ? 'locked' : '';
                 return (
-                    <li key={section.id}><a href={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
+                    <li key={section.id} className={classnames(lockedClass)}><a href={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
                         {section.name}</a>
                     </li>
                 )

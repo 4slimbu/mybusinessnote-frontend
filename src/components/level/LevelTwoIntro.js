@@ -4,6 +4,7 @@ import {map} from "lodash";
 import {Link, withRouter} from "react-router-dom";
 import * as classnames from "classnames";
 import ProgressBar from "../common/ProgressBar";
+import {isSectionLocked} from "../navigation/helperFunctions";
 
 class LevelTwoIntro extends Component {
 
@@ -68,64 +69,17 @@ class LevelTwoIntro extends Component {
             const sectionUrl = '/level/' + level.slug + '/section/' + section.slug;
             const onClickSectionLink = function (e) {
                 e.preventDefault();
-                if ((key - 1) >= 0) {
-                    if (level.id === 3) {
-                        //check if higher section isn't touched
-                        for(let i = key; i < level.sections.length; i++) {
-                            if(level.sections[i].completed_percent > 0) continue;
-                            if (level.sections[key - 1].completed_percent < '100') {
-                                addFlashMessage({
-                                    type: "error",
-                                    text: "Section Locked!"
-                                });
-                                return;
-                            }
-                        }
-                    } else {
-                        //check if higher level isn't touched
-                        if (appStatus.levels[level.id].completed_percent === 0) {
-                            //check if higher section isn't touched
-                            for(let i = key; i < level.sections.length; i++) {
-                                if(level.sections[i].completed_percent > 0) continue;
-                                if (level.sections[key - 1].completed_percent < '100') {
-                                    addFlashMessage({
-                                        type: "error",
-                                        text: "Section Locked!"
-                                    });
-                                    return;
-                                }
-                            }
-
-                        }
-                    }
-
-                } else {
-                    if (level.id == 2) {
-                        if (appStatus.levels[0].completed_percent < '100') {
-                            addFlashMessage({
-                                type: "error",
-                                text: "Section Locked!"
-                            });
-                            return;
-                        }
-                    }
-                    if (level.id == 3) {
-                        if (appStatus.levels[1].completed_percent < '100') {
-                            addFlashMessage({
-                                type: "error",
-                                text: "Section Locked!"
-                            });
-                            return;
-                        }
-                    }
+                if (isSectionLocked(appStatus, level, key)) {
+                    return;
                 }
                 setCurrentLevel(level);
                 setCurrentSection(section);
                 setCurrentBusinessOption({});
                 history.push(sectionUrl);
             };
+            const lockedClass = isSectionLocked(appStatus, level, key) ? 'locked' : '';
             return (
-                <li key={section.id} className={active}>
+                <li key={section.id} className={classnames(active, lockedClass)}>
                     <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
                         <div className="red-icon">
                             <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>

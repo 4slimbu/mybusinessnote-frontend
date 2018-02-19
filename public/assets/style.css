@@ -614,7 +614,8 @@ a:hover, a:active {
      cursor: pointer;
      padding-left: 35px;
 }
- ul.getting-start-list a {
+
+ul.getting-start-list a {
      color: #ffffff;
 }
  ul.getting-start-list li:hover span.circle-span {
@@ -1873,4 +1874,36 @@ a:hover, a.active, a.active, a.focus, a:focus,a:visited{
 }
 a.back-link, a.back-link i, a.front-link, a.front-link i{
      color: #ffffff;
+}
+
+.apps-icons .locked {
+    background: #d8a1a1 !important;
+    border: none;
+}
+
+.locked a,
+.locked a:hover,
+.locked a.active,
+.locked a:active,
+.locked a.focus,
+.locked a:focus,
+.locked a:visited{
+    text-decoration: none;
+    cursor: default;
+}
+
+.dropdown-menu > li.locked > a,
+ul.getting-start-list li.locked a{
+     color: #4b384b !important;
+}
+
+ul.getting-start-list li.locked span.circle-span,
+ul.getting-start-list li.locked:hover span.circle-span,
+ul.getting-start-list li.locked:active span.circle-span,
+ul.getting-start-list li.locked.active span.circle-span,
+ul.getting-start-list li.locked:focus span.circle-span,
+ul.getting-start-list li.locked.focus span.circle-span,
+ul.getting-start-list li.locked:visited span.circle-span{
+     background: #4b384b;
+     border-color: #4b384b;
 }
