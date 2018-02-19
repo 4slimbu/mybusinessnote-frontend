@@ -21,11 +21,11 @@ jQuery(document).ready(function ($) {
 });
 
 (function($){
-        // $(window).on("load",function(){
-        //     alert('on load window');
-        //
-        //     $(".content").mCustomScrollbar();
-        // });
+        $(window).on("load",function(){
+            alert('on load window');
+
+            $(".content").mCustomScrollbar();
+        });
 })(jQuery);
 
 

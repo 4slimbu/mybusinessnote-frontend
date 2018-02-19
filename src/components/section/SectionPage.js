@@ -11,6 +11,7 @@ import {generateApiUrlFromUrlLocation, mbjLog} from "../navigation/helperFunctio
 import {withRouter} from "react-router-dom";
 import {isEmpty} from "lodash";
 import {addFlashMessage} from "../../actions/flashMessageAction";
+import $ from "jquery";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -22,10 +23,14 @@ class SectionPage extends Component {
 
     componentDidMount() {
         this.props.getBusinessOption(this.props.history.location.pathname);
+        this.$el = $(this.el);
+        this.$el.mCustomScrollbar({
+            mouseWheel:{ scrollAmount: 300 }
+        });
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.auth.isAuthenticated && ! this.props.auth.isVerified) {
+        if (this.props.auth.isAuthenticated && !this.props.auth.isVerified) {
             this.props.history.push('/');
         }
     }
@@ -37,14 +42,16 @@ class SectionPage extends Component {
     }
 
     render() {
-        const { isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
-        const {appStatus, getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
-            setToolTipContent, setShowCompletedPage,setCompletedStatus,
-            getBusinessOptionFromUrl, addFlashMessage} = this.props;
+        const {isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
+        const {
+            appStatus, getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+            setToolTipContent, setShowCompletedPage, setCompletedStatus,
+            getBusinessOptionFromUrl, addFlashMessage
+        } = this.props;
         return (
-            <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
+            <section ref={el => this.el = el} className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
-                    { isFetching && <Loading /> }
+                    {isFetching && <Loading/>}
                     {
                         currentBusinessOption && currentBusinessOption.id &&
                         <BusinessOptionPage

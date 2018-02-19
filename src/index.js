@@ -14,6 +14,8 @@ import promise from "redux-promise-middleware";
 import {DEFAULT_APP_STATUS} from "./data/default";
 import {getAppStatus, setAppStatus} from "./actions/appStatusAction";
 import {getAllUrlParams} from "./components/navigation/helperFunctions";
+import "malihu-custom-scrollbar-plugin";
+import "jquery-mousewheel";
 
 // monitor react component performance
 // registerObserver();
