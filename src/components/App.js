@@ -16,6 +16,7 @@ import {
     getCurrentSectionByUrl
 } from "./navigation/helperFunctions";
 import {logout} from "../actions/authActions";
+import $ from "jquery";
 
 class App extends Component {
 
@@ -41,6 +42,9 @@ class App extends Component {
             }
 
         });
+        $('.mCustomScrollbar').mCustomScrollbar({
+            mouseWheel: {scrollAmount: 300}
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -49,9 +53,9 @@ class App extends Component {
 
     render() {
 
-     
-        const { auth, logout, appStatus } = this.props;
-        const { businessCategories, currentTipCategoryId } = this.props.appStatus;
+
+        const {auth, logout, appStatus} = this.props;
+        const {businessCategories, currentTipCategoryId} = this.props.appStatus;
 
         return (
             <div id="page" className="hfeed site">

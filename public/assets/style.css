@@ -491,7 +491,7 @@ a:hover, a:active {
 /*General*/
  .left-sec, .mid-sec, .right-sec {
      display: inline-block;
-     height: 100vh;
+     height: calc(100vh + 1px); /* adding 1px is stopping custom scroll-bar flickering on test device */
      float: left;
 }
  .left-sec {
