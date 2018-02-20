@@ -102,7 +102,7 @@ class BusinessCategories extends Component {
         const toolTip = {};
         toolTip.rawHtmlContent = this.props.appStatus.currentBusinessOption.tooltip;
         toolTip.accordion = (
-            <PanelGroup accordion id={`accordion-uncontrolled-${uniqueId}`} activeKey={activeKey} onSelect={(newKey) => handleSelect(newKey)}>
+            <PanelGroup accordion id={`accordion-uncontrolled-categories-tooltip`} activeKey={activeKey} onSelect={(newKey) => handleSelect(newKey)}>
                 { tipList }
             </PanelGroup>
         );

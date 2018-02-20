@@ -1,10 +1,11 @@
 import React, {Component} from "react";
-import {map} from "lodash";
+import {map, uniqueId} from "lodash";
 import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
 import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl} from "./helperFunctions";
+import {Panel, PanelGroup} from "react-bootstrap";
 
 class LevelLinks extends Component {
 
@@ -33,45 +34,40 @@ class LevelLinks extends Component {
                 history.push(levelUrl);
             };
             return (
-                <div key={level.slug} className={classnames("panel panel-default panel-faq", { "active" : currentLevel.id === level.id})}>
-                    <div className="panel-heading" role="tab" id={`menu${level.id}`}>
-                        <div className="panel-title clearfix">
+                <Panel eventKey={level.slug} className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
+                    <Panel.Heading>
+                        <Panel.Title toggle>
                             <Link onClick={(e) => onClickLevelLink(e, levelUrl )}
-                                  role="button" data-toggle="collapse"
-                                  data-parent="#accordion2"
                                   to={`/level/${level.slug}#collapse${level.id}`}
-                                  aria-expanded="true" aria-controls={`collapse${level.id}`}
                             >
                                 <figure className={classnames({"goldbadge-img" : (level.completed_percent >= 100)})}><img src={levelImg} alt="" /></figure>
                                 <h6>{ level.name }</h6>
                             </Link>
-                        </div>
-                    </div>
-                    <div id={`collapse${level.id}`} className={classnames("panel-collapse collapse", {"in" : currentLevel.id === level.id })} role="tabpanel" aria-labelledby="menu2">
-                        <div className="panel-body">
-                            <ul className="getting-start-list">
-                                <SectionLinks
-                                    level={level}
-                                    appStatus={appStatus}
-                                    addFlashMessage={addFlashMessage}
-                                    setCurrentLevel={setCurrentLevel}
-                                    setCurrentSection={setCurrentSection}
-                                    setCurrentBusinessOption={setCurrentBusinessOption}
-                                    setCompletedStatus={setCompletedStatus}
-                                    getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                                />
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                        </Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Body collapsible>
+                        <ul className="getting-start-list">
+                            <SectionLinks
+                                level={level}
+                                appStatus={appStatus}
+                                addFlashMessage={addFlashMessage}
+                                setCurrentLevel={setCurrentLevel}
+                                setCurrentSection={setCurrentSection}
+                                setCurrentBusinessOption={setCurrentBusinessOption}
+                                setCompletedStatus={setCompletedStatus}
+                                getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                            />
+                        </ul>
+                    </Panel.Body>
+                </Panel>
             )
         });
 
         return (
-            <div>
-                { levelsList }
-            </div>
-        )
+            <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.slug}>
+                {levelsList}
+            </PanelGroup>
+        );
     }
 }
 

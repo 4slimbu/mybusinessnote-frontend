@@ -6,10 +6,15 @@ import * as classnames from "classnames";
 import ProgressBar from "../common/ProgressBar";
 import {isSectionLocked} from "../navigation/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
+import $ from "jquery";
 
 class LevelThreeIntro extends Component {
     componentDidMount() {
         this.displayToolTip();
+        this.$el = $(this.el);
+        this.$el.mCustomScrollbar({
+            mouseWheel: {scrollAmount: 300}
+        });
     }
 
 
@@ -19,35 +24,36 @@ class LevelThreeIntro extends Component {
     }
 
     displayToolTip(id) {
-        const { currentLevel } = this.props.appStatus;
+        const {currentLevel} = this.props.appStatus;
         const currentObject = this;
         const tipList = map(currentLevel.sections, (item, key) => {
-            const title = (item.id === id) ? <strong>{ item.name }</strong> : item.name ;
-            return  (
+            const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
+            return (
                 <Panel key={key} eventKey={item.id}>
                     <Panel.Heading>
                         <Panel.Title toggle>
                             <h4>
-                                <span className="accordion-titles">{ title }</span>
+                                <span className="accordion-titles">{title}</span>
                                 <span className="acc-img"></span>
                             </h4>
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>
-                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}} />
+                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}}/>
                     </Panel.Body>
                 </Panel>
             )
         });
         let activeKey = id;
-        const handleSelect = function(newKey) {
+        const handleSelect = function (newKey) {
             currentObject.displayToolTip(newKey);
         };
         const toolTip = {};
         toolTip.rawHtmlContent = this.props.level.tooltip;
         toolTip.accordion = (
-            <PanelGroup accordion id={`accordion-uncontrolled-${uniqueId}`} activeKey={activeKey} onSelect={(newKey) => handleSelect(newKey)}>
-                { tipList }
+            <PanelGroup accordion id={`accordion-uncontrolled-level-three-sections`} activeKey={activeKey}
+                        onSelect={(newKey) => handleSelect(newKey)}>
+                {tipList}
             </PanelGroup>
         );
         this.props.setToolTipContent(toolTip);
@@ -55,7 +61,7 @@ class LevelThreeIntro extends Component {
 
     render() {
         const {level, addFlashMessage, appStatus, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
-        const {name, completed_percent, total_sections, total_completed_sections, content } = this.props.level;
+        const {name, completed_percent, total_sections, total_completed_sections, content} = this.props.level;
 
         const onClickContinue = function (e, sectionUrl) {
             e.preventDefault();
@@ -81,9 +87,10 @@ class LevelThreeIntro extends Component {
             const lockedClass = isSectionLocked(appStatus, level, key) ? 'locked' : '';
             return (
                 <li key={section.id} className={classnames(active, lockedClass)}>
-                    <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)} >
+                    <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
                         <div className="red-icon" href="#">
-                            <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon} alt=""/>
+                            <img src={process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/sections/' + section.icon}
+                                 alt=""/>
                         </div>
                         <span> {section.name}</span>
                     </Link>
@@ -97,20 +104,20 @@ class LevelThreeIntro extends Component {
         });
 
         return (
-            <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
+            <section ref={el => this.el = el} className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
                 <div className="content-wrapper step-one">
-                    <h5 className="obvious-h5">{ name }</h5>
+                    <h5 className="obvious-h5">{name}</h5>
                     <ProgressBar
                         completed_percent={completed_percent}
                         total_completed_sections={total_completed_sections}
                         total_sections={total_sections}
                     />
-                    <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}} />
+                    <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}}/>
                     <div>
-                        <ul className="apps-icons clearfix level2-apps-icons">{ sections }</ul>
+                        <ul className="apps-icons clearfix level2-apps-icons">{sections}</ul>
                     </div>
                     <div className="btn-wrap">
-                        <a href="#" onClick={(e) => onClickContinue(e)}  className="btn btn-default btn-md">Continue</a>
+                        <a href="#" onClick={(e) => onClickContinue(e)} className="btn btn-default btn-md">Continue</a>
                     </div>
                 </div>
             </section>
