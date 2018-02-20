@@ -7,10 +7,9 @@ import {
     getBusinessCategories, getBusinessOption, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
     setSellGoods, setToolTipContent
 } from "../../actions/appStatusAction";
-import {map, uniqueId} from "lodash";
+import {map} from "lodash";
 import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import * as classnames from "classnames";
 import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
 

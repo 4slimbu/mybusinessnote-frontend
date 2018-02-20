@@ -34,15 +34,14 @@ class LevelLinks extends Component {
                 history.push(levelUrl);
             };
             return (
-                <Panel eventKey={level.slug} className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
+                <Panel key={level.slug} eventKey={level.slug} className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
                     <Panel.Heading>
                         <Panel.Title toggle>
-                            <Link onClick={(e) => onClickLevelLink(e, levelUrl )}
-                                  to={`/level/${level.slug}#collapse${level.id}`}
+                            <div onClick={(e) => onClickLevelLink(e, levelUrl )}
                             >
                                 <figure className={classnames({"goldbadge-img" : (level.completed_percent >= 100)})}><img src={levelImg} alt="" /></figure>
                                 <h6>{ level.name }</h6>
-                            </Link>
+                            </div>
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>
@@ -63,8 +62,12 @@ class LevelLinks extends Component {
             )
         });
 
+        const handleSelect = (newKey) => {
+            //do nothing
+        };
+
         return (
-            <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.slug}>
+            <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.slug} onSelect={(newKey)=>handleSelect(newKey)}>
                 {levelsList}
             </PanelGroup>
         );

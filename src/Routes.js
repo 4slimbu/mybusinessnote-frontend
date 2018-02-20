@@ -6,8 +6,6 @@ import LevelPage from "./components/level/LevelPage";
 import SectionPage from "./components/section/SectionPage";
 import LevelCompletePage from "./components/level/LevelCompletePage";
 import HomePage from "./components/home/HomePage";
-import requireVerification from "./utils/requireVerification";
-import EmailVerificationPage from "./components/pages/EmailVerificationPage";
 
 export default () => {
     return (

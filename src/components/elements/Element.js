@@ -90,7 +90,7 @@ class Element extends Component {
 
 Element.propTypes = {
     element: PropTypes.string.isRequired,
-    onClickNext: PropTypes.func.isRequired
+    onClickNext: PropTypes.func
 };
 
 export default Element;
