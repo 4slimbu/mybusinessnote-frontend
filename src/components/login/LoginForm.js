@@ -22,7 +22,8 @@ class LoginForm extends Component {
             isResetEmailSent: false,
             showUpdatePasswordForm: false,
             showEmailSentResponse: false,
-            isLoading: false
+            isLoading: false,
+            isSocialLoginProcessing: false,
         };
 
         this.onChange = this.onChange.bind(this);
@@ -41,6 +42,9 @@ class LoginForm extends Component {
         }
 
         if (this.props.match.params.driver) {
+            this.setState({
+               isSocialLoginProcessing: true
+            });
             this.props.loginSocialUser(
                 this.props.location.pathname + this.props.location.search
             ).then(
@@ -227,6 +231,12 @@ class LoginForm extends Component {
     render() {
         const {errors, email, password, confirm_password, forgot_password_token, showEmailSentResponse} = this.state;
 
+        const socialLoginProcessing= (
+            <div>
+                <p>logging in ...</p>
+            </div>
+        );
+
         const emailSentResponse = (
               <div>
                   <h1>Forgot Password</h1>
@@ -334,10 +344,13 @@ class LoginForm extends Component {
         );
         return (
             <div>
-
                 {
-                    this.state.showUpdatePasswordForm ? updatePasswordForm : (this.state.isForgotPassword ? forgotPasswordForm : loginForm)
+                    this.state.isSocialLoginProcessing ? socialLoginProcessing :
+                        (
+                            this.state.showUpdatePasswordForm ? updatePasswordForm : (this.state.isForgotPassword ? forgotPasswordForm : loginForm)
+                        )
                 }
+
             </div>
         )
     }
