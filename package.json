@@ -15,6 +15,7 @@
     "react": "^16.2.0",
     "react-app-env": "^1.2.0",
     "react-async-script": "^0.9.1",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-google-recaptcha": "^0.9.9",
     "react-loading": "^1.0.3",

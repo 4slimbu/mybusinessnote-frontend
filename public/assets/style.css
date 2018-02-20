@@ -1174,10 +1174,10 @@ form.apps-form a{
      content: "images/accordion-arrow.png";
 }
 */
- a.panel-title span.acc-img:after{
+ .panel-title span.acc-img:after{
      content: url('images/accordion-arrow-up.png');
 }
- a.panel-title.collapsed span.acc-img:after{
+ .panel-title .collapsed span.acc-img:after{
      content: url('images/accordion-arrow.png');
 }
 /*News wrap section*/

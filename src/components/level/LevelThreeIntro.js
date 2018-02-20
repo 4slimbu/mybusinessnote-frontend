@@ -1,20 +1,17 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {map} from "lodash";
+import {map, uniqueId} from "lodash";
 import {Link, withRouter} from "react-router-dom";
 import * as classnames from "classnames";
 import ProgressBar from "../common/ProgressBar";
 import {isSectionLocked} from "../navigation/helperFunctions";
+import {Panel, PanelGroup} from "react-bootstrap";
 
 class LevelThreeIntro extends Component {
     componentDidMount() {
         this.displayToolTip();
     }
 
-
-    handleSelect(e) {
-        e.preventDefault();
-    }
 
     handleToolTip(e, id) {
         e.preventDefault();
@@ -23,31 +20,36 @@ class LevelThreeIntro extends Component {
 
     displayToolTip(id) {
         const { currentLevel } = this.props.appStatus;
+        const currentObject = this;
         const tipList = map(currentLevel.sections, (item, key) => {
             const title = (item.id === id) ? <strong>{ item.name }</strong> : item.name ;
             return  (
-                <div className="panel panel-default" key={`tip-list-${key}` }>
-                    <div className="panel-heading " role="tab" id={`tip-heading-${key}`}>
-                        <a href={`#tip-collapse-${key}`} className={ classnames("panel-title", { "collapsed" : item.id === id})} role="button" data-toggle="collapse"
-                           data-parent="#accordion" aria-expanded="true" aria-controls={`tip-collapse-${key}`}>
+                <Panel key={key} eventKey={item.id}>
+                    <Panel.Heading>
+                        <Panel.Title toggle>
                             <h4>
                                 <span className="accordion-titles">{ title }</span>
                                 <span className="acc-img"></span>
                             </h4>
-                        </a>
-                    </div>
-                    <div id={`tip-collapse-${key}`} className={ classnames("panel-collapse collapse", { "in" : item.id === id})} role="tabpanel"
-                         aria-labelledby={`heading${key}`}>
-                        <div className="panel-body">
-                            <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}} />
-                        </div>
-                    </div>
-                </div>
+                        </Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Body collapsible>
+                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}} />
+                    </Panel.Body>
+                </Panel>
             )
         });
+        let activeKey = id;
+        const handleSelect = function(newKey) {
+            currentObject.displayToolTip(newKey);
+        };
         const toolTip = {};
         toolTip.rawHtmlContent = this.props.level.tooltip;
-        toolTip.accordion = tipList;
+        toolTip.accordion = (
+            <PanelGroup accordion id={`accordion-uncontrolled-${uniqueId}`} activeKey={activeKey} onSelect={(newKey) => handleSelect(newKey)}>
+                { tipList }
+            </PanelGroup>
+        );
         this.props.setToolTipContent(toolTip);
     }
 
