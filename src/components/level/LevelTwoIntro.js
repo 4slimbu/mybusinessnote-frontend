@@ -93,6 +93,7 @@ class LevelTwoIntro extends Component {
                         <span>{section.name}</span>
                     </Link>
                     <a className="apps-question" href="#"
+                       onTouchEnd={(e) => this.handleToolTip(e, section.id)}
                        onMouseEnter={(e) => this.handleToolTip(e, section.id)}
                        onClick={(e) => this.handleToolTip(e, section.id)}>
                         <i className="fa fa-lightbulb-o" aria-hidden="true"></i>

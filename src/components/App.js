@@ -39,11 +39,10 @@ class App extends Component {
                     this.props.setCurrentSection({});
                     this.props.setCurrentBusinessOption({});
                 }
+            } else {
+                this.props.setCurrentLevel({});
             }
 
-        });
-        $('.mCustomScrollbar').mCustomScrollbar({
-            mouseWheel: {scrollAmount: 300}
         });
     }
 

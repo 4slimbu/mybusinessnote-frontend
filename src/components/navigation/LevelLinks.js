@@ -67,9 +67,11 @@ class LevelLinks extends Component {
         };
 
         return (
+            (levels.length > 1) ?
             <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.slug} onSelect={(newKey)=>handleSelect(newKey)}>
                 {levelsList}
-            </PanelGroup>
+            </PanelGroup> :
+                <div></div>
         );
     }
 }

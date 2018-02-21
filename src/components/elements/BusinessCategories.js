@@ -133,7 +133,8 @@ class BusinessCategories extends Component {
                         </a>
                         <span> <a href="#">{item.name}</a></span>
                     </div>
-                    <a onMouseEnter={(e) => this.handleToolTip(e, item.id)}
+                    <a onTouchEnd={(e) => this.handleToolTip(e, item.id)}
+                       onMouseEnter={(e) => this.handleToolTip(e, item.id)}
                         className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, item.id)}>
                         <i className="fa fa-lightbulb-o" aria-hidden="true"></i>
                     </a>

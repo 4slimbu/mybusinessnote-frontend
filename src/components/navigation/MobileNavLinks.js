@@ -150,9 +150,12 @@ class MobileLevelLinks extends Component {
                         </div>
                     </div>
                 </nav>
-                <ul className="nav nav-tabs">
-                    {levelsList}
-                </ul>
+                {
+                    (levels.length > 1) &&
+                    <ul className="nav nav-tabs">
+                        {levelsList}
+                    </ul>
+                }
             </div>
         )
     }
