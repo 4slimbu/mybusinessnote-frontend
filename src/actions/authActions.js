@@ -1,7 +1,7 @@
 import * as axios from "axios";
 import setAuthorizationToken from "../utils/setAuthorizationToken";
 import jwt_decode from "jwt-decode";
-import {SET_CURRENT_USER} from "./types";
+import {SET_CURRENT_USER} from "../constants/action-types";
 import {getAppStatus, setAppStatus} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../data/default";

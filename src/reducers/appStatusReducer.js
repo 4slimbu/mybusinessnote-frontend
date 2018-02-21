@@ -5,7 +5,7 @@ import {
     SET_CURRENT_BUSINESS_OPTION,
     SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS, SET_SHOW_COMPLETED_PAGE,
     SET_TOOLTIP_CONTENT
-} from "../actions/types";
+} from "../constants/action-types";
 import {DEFAULT_APP_STATUS} from "../data/default";
 
 export default (state = DEFAULT_APP_STATUS, action = {}) => {

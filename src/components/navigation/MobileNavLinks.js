@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {map} from "lodash";
 import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
-import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl, isSectionLocked} from "./helperFunctions";
 import UserInfoLinks from "./UserInfoLinks";

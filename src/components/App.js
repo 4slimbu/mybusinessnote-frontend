@@ -16,7 +16,7 @@ import {
     getCurrentSectionByUrl
 } from "./navigation/helperFunctions";
 import {logout} from "../actions/authActions";
-import $ from "jquery";
+import ErrorBoundary from "./ErrorBoundary";
 
 class App extends Component {
 
@@ -62,17 +62,19 @@ class App extends Component {
                     <div id="primary" className="content-area">
                         <main id="main" className="site-main">
                             <div className="section-wrapper">
-                                <NavigationBar/>
-                                <FlashMessageList/>
-                                <Routes/>
-                                <ToolTip
-                                    toolTip={appStatus.toolTip}
-                                    currentNewsTerm={appStatus.currentBusinessOption.section_slug}
-                                    businessCategories={businessCategories}
-                                    currentTipCategoryId={currentTipCategoryId}
-                                    auth={auth}
-                                    logout={logout}
-                                />
+                                <ErrorBoundary>
+                                    <NavigationBar/>
+                                    <FlashMessageList/>
+                                    <Routes/>
+                                    <ToolTip
+                                        toolTip={appStatus.toolTip}
+                                        currentNewsTerm={appStatus.currentBusinessOption.section_slug}
+                                        businessCategories={businessCategories}
+                                        currentTipCategoryId={currentTipCategoryId}
+                                        auth={auth}
+                                        logout={logout}
+                                    />
+                                </ErrorBoundary>
                             </div>
                         </main>
                         {/* #main */}

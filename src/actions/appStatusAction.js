@@ -4,12 +4,9 @@ import {
     SET_CURRENT_BUSINESS_OPTION,
     SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_SELL_GOODS, SET_SHOW_COMPLETED_PAGE,
     SET_TOOLTIP_CONTENT, TRACK_AFFILIATE_LINK_CLICK
-} from "./types";
+} from "../constants/action-types";
 import * as axios from "axios";
-import {
-    extractBoIdFromLocation, extractLevelFromLocation,
-    extractSectionFromLocation, getApiUrlFromAppUrl
-} from "../components/navigation/helperFunctions";
+import {getApiUrlFromAppUrl} from "../components/navigation/helperFunctions";
 
 export function getAppStatus() {
     return {
@@ -153,7 +150,6 @@ export function getBusinessCategories() {
         })
     }
 }
-
 
 export function setBusinessCategoryId(id) {
     return {
