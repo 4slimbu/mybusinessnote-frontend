@@ -16,7 +16,6 @@ import {
     getCurrentSectionByUrl
 } from "./navigation/helperFunctions";
 import {logout} from "../actions/authActions";
-import $ from "jquery";
 
 class App extends Component {
 

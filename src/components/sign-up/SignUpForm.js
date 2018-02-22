@@ -63,6 +63,11 @@ class SignUpForm extends Component {
         this.setState({
             [e.target.name]: e.target.value
         });
+        if (e.target.name === 'password' && e.target.value === '') {
+            this.setState({
+                confirm_password: ""
+            })
+        }
     }
 
     isFormValid(data = null) {
