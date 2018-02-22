@@ -12,6 +12,7 @@ import {saveBusinessFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {getAppUrlFromApiUrl} from "../navigation/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
+import * as classnames from "classnames";
 
 class BusinessCategories extends Component {
     constructor(props) {
@@ -78,7 +79,7 @@ class BusinessCategories extends Component {
         const tipList = map(businessCategories.data, (item, key) => {
             const title = (item.id === id) ? <strong>{ item.name }</strong> : item.name ;
             return  (
-                <Panel eventKey={item.id}>
+                <Panel key={item.id} eventKey={item.id}>
                     <Panel.Heading>
                         <Panel.Title toggle>
                             <h4>
@@ -121,9 +122,9 @@ class BusinessCategories extends Component {
         const { appStatus } = this.props;
         const next = (appStatus.currentBusinessOption.links && appStatus.business_category_id !== null) ? appStatus.currentBusinessOption.links.next : null;
         const businessCategories = map(appStatus.businessCategories.data, (item, key) => {
-            const active = appStatus.business_category_id == item.id ? 'active' : '';
+            const active = appStatus.business_category_id == item.id;
             return (
-                <li key={item.id} className={active} onTouchEnd={(e) => this.handleSelect(e, item.id)}  onClick={(e) => this.handleSelect(e, item.id)}>
+                <li key={item.id} className={classnames("", {"active" : active})} onTouchEnd={(e) => this.handleSelect(e, item.id)}  onClick={(e) => this.handleSelect(e, item.id)}>
                     <div className="link-box">
                         <a className="white-icon" href="#">
                             <img src={item.icon} alt=""/>

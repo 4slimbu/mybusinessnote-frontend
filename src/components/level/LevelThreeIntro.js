@@ -65,6 +65,9 @@ class LevelThreeIntro extends Component {
 
         const onClickContinue = function (e, sectionUrl) {
             e.preventDefault();
+            if (isSectionLocked(appStatus, level, 0)) {
+                return;
+            }
             setCurrentLevel(level);
             setCurrentSection(level.sections[0]);
             setCurrentBusinessOption({});

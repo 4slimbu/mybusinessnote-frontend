@@ -29,7 +29,7 @@ class LevelTwoIntro extends Component {
         const tipList = map(currentLevel.sections, (item, key) => {
             const title = (item.id === id) ? <strong>{ item.name }</strong> : item.name ;
             return  (
-                    <Panel eventKey={item.id}>
+                    <Panel key={item.id} eventKey={item.id}>
                         <Panel.Heading>
                             <Panel.Title toggle>
                                 <h4>

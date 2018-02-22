@@ -148,7 +148,7 @@ class HomePage extends Component {
                     <div className="col-md-12">
                         <div className="btn-wrap">
                             <p>Want to start a fresh new business journey?</p>
-                            <Link className="btn btn-default btn-md" to="/level/getting-started">Click Here.</Link>
+                            <Link className="btn btn-default btn-md" to="/level/getting-started" onClick={(e) => this.onClickStart(e)}>Click Here.</Link>
                         </div>
                     </div>
                     <div className="col-md-12">
