@@ -173,40 +173,13 @@ class LoginForm extends Component {
     onLoginFormSubmit(e) {
         e.preventDefault();
 
-        if (this.isFormValid()) {
+        if (true) {
             this.setState({errors: {}, isLoading: true});
 
             this.props.userLoginFormRequest({
-                siwps: this.state.email,
-                sdlkw: this.state.password
-            }).then(
-                (response) => {
-                    this.setState({isLoading: false});
-
-                    const token = response.data.token;
-                    if (token) {
-                        localStorage.setItem("jwtToken", token);
-                        setAuthorizationToken(token);
-                        this.props.setCurrentUser(jwt_decode(token).user);
-
-                        this.props.addFlashMessage({
-                            type: "success",
-                            text: "Logged in successfully! Welcome!"
-                        });
-                    }
-                    this.props.getAppStatus();
-                    this.props.history.push('/');
-                },
-                ( error ) => {
-                    if (error.response.data.error.form) {
-                        this.props.addFlashMessage({
-                            type: "error",
-                            text: error.response.data.error.form
-                        });
-                    }
-                    this.setState({errors: error.response.data.error, isLoading: false});
-                }
-            );
+                email: this.state.email,
+                password: this.state.password
+            }, this);
         }
     }
 

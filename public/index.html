@@ -27,14 +27,38 @@
     <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/style.css">
     <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/responsive.css">
     <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/mobile.css">
-    <script type='text/javascript'>
-        (function (d, t) {
-            var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
-            bh.type = 'text/javascript';
-            bh.src = 'https://www.bugherd.com/sidebarv2.js?apikey=kpy6enkbl6fiisvx1mfgug';
-            s.parentNode.insertBefore(bh, s);
-        })(document, 'script');
-    </script>
+    <style>
+        .app-loading {
+            width: 100%;
+            height: 100vh;
+            background: #4b384b !important;
+        }
+
+        .app-loading .logo {
+            display: block;
+            width: 120px;
+            margin: 0 auto;
+            padding: 46vh 0;
+            animation-name: app-loading-logo-animation;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes app-loading-logo-animation {
+            0% {
+                opacity: 0;
+            }
+            40% {
+                opacity: 1;
+            }
+            60% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
 <noscript>

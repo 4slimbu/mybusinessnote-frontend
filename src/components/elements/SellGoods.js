@@ -25,7 +25,7 @@ class SellGoods extends Component {
         e.preventDefault();
         const {appStatus, history} = this.props;
         this.props.getBusinessOption(
-            '/level/1/section/1/business-option/2/next?business_category_id=' + appStatus.business_category_id,
+            appStatus.currentBusinessOption.links.next + '&business_category_id=' + appStatus.business_category_id,
             true);
         history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
     }

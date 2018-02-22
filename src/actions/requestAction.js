@@ -6,7 +6,7 @@ import {getAppStatus, setAppStatus} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../data/default";
 
-export function userLoginFormRequest(userData, that) {
+export function post(userData, that) {
     return dispatch => {
         //register user using axios
         return axios({
