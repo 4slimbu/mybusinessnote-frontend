@@ -38,7 +38,7 @@ class ToolTip extends Component {
                     {
                         toolTip &&
                         <div>
-                            <h5>Hint and tips</h5>
+                            <h5>Hints and tips</h5>
                             {toolTip.rawHtmlContent &&
                             <div className="content-wrap" dangerouslySetInnerHTML={{__html: toolTip.rawHtmlContent}}/>}
                             <div className="acc-wrapper">

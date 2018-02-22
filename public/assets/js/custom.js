@@ -1,14 +1,14 @@
 jQuery(document).ready(function ($) {
-	$(".progress-bar").loading();
-	$('.panel-faq').on('show.bs.collapse', function () {
-        $(this).addClass('active');
-    });
-	$('.panel-faq').on('hide.bs.collapse', function () {
-        $(this).removeClass('active');
-    });
+    $(".progress-bar").loading();
+    // $('.panel-faq').on('show.bs.collapse', function () {
+    //     $(this).addClass('active');
+    // });
+    // $('.panel-faq').on('hide.bs.collapse', function () {
+    //     $(this).removeClass('active');
+    // });
     $(document).mouseup(function(e)
     {
-        let container = $(".mobile-navbar");
+        let container = $("ul.navbar-nav");
 
         // if the target of the click isn't the container nor a descendant of the container
         if (!container.is(e.target) && container.has(e.target).length === 0)

@@ -6,6 +6,7 @@ import {getAllUrlParams, getAppUrlFromApiUrl} from "../navigation/helperFunction
 import {sendVerificationEmail, setCurrentUser, verifyEmail} from "../../actions/authActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import setAuthorizationToken from "../../utils/setAuthorizationToken";
+import {setCurrentLevel} from "../../actions/appStatusAction";
 
 class HomePage extends Component {
     constructor(props) {
@@ -59,6 +60,13 @@ class HomePage extends Component {
         );
     }
 
+    onClickStart(e) {
+        e.preventDefault();
+        const {appStatus, history, setCurrentLevel} = this.props;
+        setCurrentLevel(appStatus.levels[0]);
+        history.push('/level/getting-started');
+    };
+
     render() {
         const { auth, appStatus, sendVerificationEmail, addFlashMessage } = this.props;
 
@@ -91,7 +99,7 @@ class HomePage extends Component {
                     <div className="col-md-12">
                         <div className="btn-wrap">
                             <p>Take me to the start. </p>
-                            <Link to="/level/getting-started" className="btn btn-default btn-md">Start</Link>
+                            <Link to="/level/getting-started" onClick={(e) => this.onClickStart(e)} className="btn btn-default btn-md">Start</Link>
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -140,7 +148,7 @@ class HomePage extends Component {
                     <div className="col-md-12">
                         <div className="btn-wrap">
                             <p>Want to start a fresh new business journey?</p>
-                            <Link className="btn btn-default btn-md" to="/level/getting-started">Click Here.</Link>
+                            <Link className="btn btn-default btn-md" to="/level/getting-started" onClick={(e) => this.onClickStart(e)}>Click Here.</Link>
                         </div>
                     </div>
                     <div className="col-md-12">
@@ -172,4 +180,4 @@ function mapStateToProps(state) {
 }
 
 
-export default withRouter(connect(mapStateToProps, {setCurrentUser, sendVerificationEmail, addFlashMessage, verifyEmail})(HomePage));
+export default withRouter(connect(mapStateToProps, {setCurrentLevel, setCurrentUser, sendVerificationEmail, addFlashMessage, verifyEmail})(HomePage));
