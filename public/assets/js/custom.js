@@ -8,7 +8,7 @@ jQuery(document).ready(function ($) {
     });
     $(document).mouseup(function(e)
     {
-        let container = $(".mobile-navbar");
+        let container = $("ul.navbar-nav");
 
         // if the target of the click isn't the container nor a descendant of the container
         if (!container.is(e.target) && container.has(e.target).length === 0)
