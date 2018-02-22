@@ -205,7 +205,7 @@ class SocialMediaRegistration extends Component {
                         <li>
                             <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a>
                             <form onSubmit={(e)=> this.onClickDone(e, 'linkedin')}>
-                                <input placeholder="http://linkedin.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
+                                <input placeholder="https://linkedin.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
                                 { this.state.errors.linkedin && <div><span className="form-error-message">{this.state.errors.linkedin}</span></div> }
                                 <button className="btn btn-default btn-lg btn-alert">{(linkedin) ? 'Done' : 'Cancel'}</button>
                             </form>
