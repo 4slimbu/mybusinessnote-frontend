@@ -1,21 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import {BrowserRouter as Router} from "react-router-dom";
-import App from "./components/App";
 import {Provider} from "react-redux";
 import {applyMiddleware, compose, createStore} from "redux";
 import thunk from "redux-thunk";
-import rootReducer from "./rootReducer";
-import setAuthorizationToken from "./utils/setAuthorizationToken";
-import {setCurrentUser} from "./actions/authActions";
-import jwt_decode from "jwt-decode";
 import promise from "redux-promise-middleware";
-import {DEFAULT_APP_STATUS} from "./data/default";
-import {getAppStatus, setAppStatus} from "./actions/appStatusAction";
-import {getAllUrlParams} from "./components/navigation/helperFunctions";
+import jwt_decode from "jwt-decode";
 import "malihu-custom-scrollbar-plugin";
 import "jquery-mousewheel";
+
+import App from "./views/App";
+import rootReducer from "./rootReducer";
+import {DEFAULT_APP_STATUS} from "./data/default/defaultValues";
+import setAuthorizationToken from "./utils/axios/setAuthorizationToken";
+import {setCurrentUser} from "./services/actions/authActions";
+import {getAppStatus, setAppStatus} from "./services/actions/appStatusAction";
+import {getAllUrlParams} from "./utils/helper/helperFunctions";
 
 // monitor react component performance
 // registerObserver();

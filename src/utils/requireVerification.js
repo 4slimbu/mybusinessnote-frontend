@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {addFlashMessage} from "../actions/flashMessageAction";
+import {addFlashMessage} from "../services/actions/flashMessageAction";
 
 export default function (ComposedComponent) {
     class RequireVerification extends Component {

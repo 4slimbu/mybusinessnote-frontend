@@ -1,11 +1,11 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
-import PageNotFound from "./components/error-page/PageNotFound";
-import LoginPage from "./components/login/LoginPage";
-import LevelPage from "./components/level/LevelPage";
-import SectionPage from "./components/section/SectionPage";
-import LevelCompletePage from "./components/level/LevelCompletePage";
-import HomePage from "./components/home/HomePage";
+import PageNotFound from "./views/error-page/PageNotFound";
+import LoginPage from "./views/login/LoginPage";
+import LevelPage from "./views/level/LevelPage";
+import SectionPage from "./views/section/SectionPage";
+import LevelCompletePage from "./views/level/LevelCompletePage";
+import HomePage from "./views/home/HomePage";
 
 export default () => {
     return (
