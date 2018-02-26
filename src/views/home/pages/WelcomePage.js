@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {getAppUrlFromApiUrl} from "../../utils/helper/helperFunctions";
+import {getAppUrlFromApiUrl} from "../../../utils/helper/helperFunctions";
 
 const WelcomePage = (props) => {
     const { onClickStart, lastVisitedPath} = props;

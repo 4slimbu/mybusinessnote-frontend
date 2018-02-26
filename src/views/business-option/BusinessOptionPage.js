@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import LevelHead from "../level/LevelHead";
+import LevelHead from "../level/includes/LevelHead";
 import {getAppUrlFromApiUrl} from "../../utils/helper/helperFunctions";
 import {withRouter} from "react-router-dom";
 import Element from "./elements/old/Element";

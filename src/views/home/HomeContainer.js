@@ -7,11 +7,11 @@ import {sendVerificationEmail, setCurrentUser, verifyEmail} from "../../services
 import {addFlashMessage} from "../../services/actions/flashMessageAction";
 import setAuthorizationToken from "../../utils/axios/setAuthorizationToken";
 import {setCurrentLevel} from "../../services/actions/appStatusAction";
-import WelcomePage from "./WelcomePage";
-import GuestPage from "./GuestPage";
-import EmailVerificationPage from "./EmailVerificationPage";
+import WelcomePage from "./pages/WelcomePage";
+import GuestPage from "./pages/GuestPage";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
 
-class HomePageContainer extends Component {
+class HomeContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,6 +32,38 @@ class HomePageContainer extends Component {
             })
         }
         this.props.setCurrentLevel({});
+    }
+
+    render() {
+        const { auth, appStatus } = this.props;
+
+        const lastVisitedPath = appStatus.history && appStatus.history.last_visited ?
+            appStatus.history.last_visited : '/level/getting-started';
+
+        const welcomePageProps = {
+            onClickStart: this.onClickStart,
+            lastVisitedPath: lastVisitedPath
+        };
+
+        const guestPageProps = {
+            onClickStart: this.onClickStart
+        };
+
+        const emailVerificationPageProps = {
+            showVerifyLink: this.state.showVerifyLink,
+            onVerifyAccount: this.onVerifyAccount,
+            onSendVerificationEmail: this.onSendVerificationEmail,
+        };
+
+        return (
+            auth.isAuthenticated ?
+                (
+                    (auth.isVerified) ?
+                        <WelcomePage {...welcomePageProps}/>:
+                        <EmailVerificationPage {...emailVerificationPageProps}/>
+                )
+                : <GuestPage {...guestPageProps}/>
+        );
     }
 
     onClickStart(e) {
@@ -93,38 +125,6 @@ class HomePageContainer extends Component {
             }
         );
     };
-
-    render() {
-        const { auth, appStatus } = this.props;
-
-        const lastVisitedPath = appStatus.history && appStatus.history.last_visited ?
-            appStatus.history.last_visited : '/level/getting-started';
-
-        const welcomePageProps = {
-            onClickStart: this.onClickStart,
-            lastVisitedPath: lastVisitedPath
-        };
-
-        const guestPageProps = {
-            onClickStart: this.onClickStart
-        };
-
-        const emailVerificationPageProps = {
-            showVerifyLink: this.state.showVerifyLink,
-            onVerifyAccount: this.onVerifyAccount,
-            onSendVerificationEmail: this.onSendVerificationEmail,
-        };
-
-        return (
-            auth.isAuthenticated ?
-                (
-                    (auth.isVerified) ?
-                        <WelcomePage {...welcomePageProps}/>:
-                        <EmailVerificationPage {...emailVerificationPageProps}/>
-                )
-                : <GuestPage {...guestPageProps}/>
-        );
-    }
 }
 
 function mapStateToProps(state) {
@@ -135,4 +135,4 @@ function mapStateToProps(state) {
 }
 
 
-export default withRouter(connect(mapStateToProps, {setCurrentLevel, setCurrentUser, sendVerificationEmail, addFlashMessage, verifyEmail})(HomePageContainer));
+export default withRouter(connect(mapStateToProps, {setCurrentLevel, setCurrentUser, sendVerificationEmail, addFlashMessage, verifyEmail})(HomeContainer));

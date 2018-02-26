@@ -1,7 +1,25 @@
 import {filter} from "lodash";
 
-export function publicUrl() {
+/**
+ * Return url relative to the PUBLIC_URL set in package.json "homepage" key
+ *
+ * @return {string}
+ */
+export function publicUrl(url = null) {
+    if (url) {
+        return process.env.PUBLIC_URL + url;
+    }
     return process.env.PUBLIC_URL;
+}
+
+/**
+ * Gets the dashboard Url of current logged in user
+ */
+export function dashboardUrl() {
+    if (localStorage.getItem("jwtToken")) {
+        return getEnv('DASHBOARD_URL') + '/?token=' + localStorage.getItem("jwtToken");
+    }
+    return '#';
 }
 
 /**
@@ -12,7 +30,7 @@ export function publicUrl() {
  * @return {string}
  */
 export function getEnv(key) {
-    return `process.env.REACT_APP_${key}`;
+    return process.env['REACT_APP_' + key];
 }
 
 /**
@@ -193,7 +211,7 @@ export function getCurrentSectionByUrl(sections, url) {
 }
 
 export function generateLevelCompletedPercent(levels, currentLevel) {
-    return (levels && currentLevel && levels[currentLevel.id -1]) ? levels[currentLevel.id -1].completed_percent : -1;
+    return (levels && currentLevel && levels[currentLevel.id -1]) ? levels[currentLevel.id -1].completed_percent : false;
 }
 
 export function saveBusinessOption(currentObject, data) {
