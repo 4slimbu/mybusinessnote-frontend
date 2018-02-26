@@ -126,11 +126,8 @@ class BusinessCategories extends Component {
             return (
                 <li key={item.id} className={classnames("", {"active" : active})} onTouchEnd={(e) => this.handleSelect(e, item.id)}  onClick={(e) => this.handleSelect(e, item.id)}>
                     <div className="link-box">
-                        <a className="white-icon" href="#">
-                            <img src={item.icon} alt=""/>
-                        </a>
-                        <a className="red-icon" href="#">
-                            <img src={item.hover_icon} alt=""/>
+                        <a className={active ? "red-icon" : "white-icon"} href="#">
+                            <img src={active ? item.hover_icon : item.icon} alt=""/>
                         </a>
                         <span> <a href="#">{item.name}</a></span>
                     </div>

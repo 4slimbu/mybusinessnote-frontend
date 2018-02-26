@@ -7,13 +7,15 @@ import {
     getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
     setCurrentBusinessOption,
     setCurrentTipCategory,
-    setSellGoods, setShowCompletedPage, trackClick
+    setSellGoods, setShowCompletedPage, setToolTipContent, trackClick
 } from "../../actions/appStatusAction";
 import { saveBusinessOptionFormRequest} from "../../actions/businessActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {saveBusinessOption} from "../navigation/helperFunctions";
 import OptionStatusButtonGroup from "../common/OptionStatusButtonGroup";
 import {isSocialMediaLinksValid} from "../../utils/validation/BusinessValidation";
+import {map} from "lodash";
+import {Panel, PanelGroup} from "react-bootstrap";
 
 class SocialMediaRegistration extends Component {
     constructor(props) {
@@ -34,7 +36,11 @@ class SocialMediaRegistration extends Component {
         }
     }
 
-    componentWillReceiveProps() {
+    componentDidMount() {
+        this.displayToolTip();
+    }
+
+    componentWillReceiveProps(nextProps) {
         const { appStatus } = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
@@ -47,8 +53,96 @@ class SocialMediaRegistration extends Component {
             facebook: facebook,
             linkedin: linkedin,
             instagram: instagram
-        })
+        });
+        if (nextProps.appStatus.currentBusinessOption.id !== this.props.appStatus.currentBusinessOption.id) {
+            this.displayToolTip();
+        }
 
+    }
+
+    handleToolTip(e, id) {
+        e.preventDefault();
+        this.displayToolTip(id);
+    }
+
+    displayToolTip(id) {
+        const currentObject = this;
+        const tooltips = [
+            {
+                id: 1,
+                name: "Twitter",
+                tooltip: "<p>With at least 300 million users and a varied demographic, Twitter is a good platform for content marketing. The social media channel is a good way to engage with audiences using #hashtags, @mentions, short links, images, videos and conversations. Here are a handful of tips to use Twitter effectively: </p>" +
+                "<ul>" +
+                "<li><strong>Use the right hashtag:</strong> This can help your tweet get discovered by more active users, especially if it is related to a trending topic. Twitter analytics can identify which hashtags perform better.</li>" +
+                "<li><strong>Tag relevant profiles:</strong> Mention industry personalities and thought leaders in your post or image to boost engagement.</li>" +
+                "<li><strong>Tweet at optimal times:</strong> Know which time of the day is the best chance to deliver your posts to your target audience.</li>" +
+                "</ul>"
+            },
+            {
+                id: 2,
+                name: "Facebook",
+                tooltip: "<p>With 65 million pages and eight million business profiles, Facebook is a useful platform for small businesses worldwide. The social media channel has tools to help SMEs reach their audience more effectively. These tools include:</p>" +
+                "<ul>" +
+                "<li><strong>Ads Manager:</strong> This app helps schedule advertising campaigns, plan the budget and monitor each week how the ad account performs.</li>" +
+                "<li><strong>Creative Studio:</strong> Create mock-ups of ads and get a preview of how they will enhance audience interaction with your marketing pages.</li>" +
+                "<li><strong>Blueprint:</strong> Learn the modules about Facebook advertising tools and get certified using the Blueprint Certification program.</li>" +
+                "<li><strong>Single Inbox:</strong> Manage all your messages across Facebook, Messenger and Instagram to be able to reply and reach your audiences.</li>" +
+                "</ul>"
+            },
+            {
+                id: 3,
+                name: "Linkedin",
+                tooltip: "<p>Over 400 million users have a Linkedin page, making it a good platform when starting your social media marketing strategy, especially with the recommendations function. Here are some tips:</p>" +
+                "<ul>" +
+                "<li><strong>Create a profile for lead generation:</strong> Make sure that your profile has your updated details and contact information and will lead people to go to your corporate website for more information.</li>" +
+                "<li><strong>Post your best content:</strong> Highlight your business milestones and provides useful content that can help solve your audience’s problems.</li>" +
+                "<li><strong>Advocate for your brand:</strong> Add a human angle to your posts to engage with your audiences. Fun, behind-the-scenes content can also promote connections with your audience and turn them into active followers.</li>" +
+                "</ul>"
+            },
+            {
+                id: 4,
+                name: "Instagram",
+                tooltip: "<p>With over seven million monthly active Instagram users on the platform in Australia, there is a real opportunity for you to engage customers with the right visual content strategy.</p>" +
+                "<ul>" +
+                "<li><strong>Set up a business account:</strong> Use a consistent photo and name that goes along with your branding strategy.</li>" +
+                "<li><strong>Showcase fresh content:</strong> Simple images that tell a story is a powerful way to connect with your audience.</li>" +
+                "<li><strong>Use Business Tools:</strong> This free tool gives you business insights and to identify which posts work best for audience engagement.</li>" +
+                "<li><strong>Link your account with Facebook:</strong> Connecting these two can help boost your marketing efforts.</li>" +
+                "<li><strong>Create interactive hashtags:</strong> When planned well, the use of correct hashtags related to your brand or new product can result in free advertising once your followers use them to tag their own photos.</li>" +
+                "</ul>"
+            }
+        ];
+        const tipList = map(tooltips, (item, key) => {
+            const title = (item.id === id) ? <strong>{ item.name }</strong> : item.name ;
+            return  (
+                <Panel key={item.id} eventKey={item.id}>
+                    <Panel.Heading>
+                        <Panel.Title toggle>
+                            <h4>
+                                <span className="accordion-titles">{ title }</span>
+                                <span className="acc-img"></span>
+                            </h4>
+                        </Panel.Title>
+                    </Panel.Heading>
+                    <Panel.Body collapsible>
+                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}} />
+                    </Panel.Body>
+                </Panel>
+            )
+        });
+
+        let activeKey = id;
+        const handleSelect = function(newKey) {
+            currentObject.displayToolTip(newKey);
+        };
+        const toolTip = {};
+        toolTip.rawHtmlContent = this.props.appStatus.currentBusinessOption.tooltip;
+        toolTip.accordion = (
+            <PanelGroup accordion id={`accordion-uncontrolled-social-links`} activeKey={activeKey} onSelect={(newKey) => handleSelect(newKey)}>
+                { tipList }
+            </PanelGroup>
+        );
+        this.props.setToolTipContent(toolTip);
     }
 
     onClickNext(e) {
@@ -64,15 +158,19 @@ class SocialMediaRegistration extends Component {
         switch(icon) {
             case 'twitter':
                 this.setState({isTwitterClicked: true});
+                this.handleToolTip(e, 1);
                 break;
             case 'facebook':
                 this.setState({isFacebookClicked: true});
+                this.handleToolTip(e, 2);
                 break;
             case 'linkedin':
                 this.setState({isLinkedinClicked: true});
+                this.handleToolTip(e, 3);
                 break;
             case 'instagram':
                 this.setState({isInstagramClicked: true});
+                this.handleToolTip(e, 4);
                 break;
             default:
         }
@@ -128,6 +226,7 @@ class SocialMediaRegistration extends Component {
             this.setState({ errors: {}});
         }
 
+        this.handleToolTip(e, 0);
         this.setState({
             isFacebookClicked: false,
             isTwitterClicked: false,
@@ -251,7 +350,8 @@ SocialMediaRegistration.propTypes = {
     getAppStatus: PropTypes.func.isRequired,
     setCompletedStatus: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
-    trackClick: PropTypes.func.isRequired
+    trackClick: PropTypes.func.isRequired,
+    setToolTipContent: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -276,6 +376,7 @@ export default withRouter(
             getAppStatus,
             setShowCompletedPage,
             addFlashMessage,
-            trackClick
+            trackClick,
+            setToolTipContent
         }
     )(SocialMediaRegistration))
