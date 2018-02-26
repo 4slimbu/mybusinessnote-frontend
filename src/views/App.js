@@ -17,6 +17,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import LayoutContainer from "./layout/LayoutContainer";
 import LeftSideBar from "./layout/left-sidebar/LeftSideBar";
 import RightSideBar from "./layout/right-sidebar/RightSideBar";
+import MainContentContainer from "./layout/main-content/MainContentContainer";
 
 class App extends Component {
 
@@ -59,7 +60,9 @@ class App extends Component {
                     <FlashMessageList/>
                     <LeftSideBar/>
 
-                    <Routes/>
+                    <MainContentContainer>
+                        <Routes/>
+                    </MainContentContainer>
 
                     <RightSideBar/>
                 </LayoutContainer>

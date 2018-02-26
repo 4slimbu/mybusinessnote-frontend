@@ -49,30 +49,28 @@ class SectionPage extends Component {
             getBusinessOptionFromUrl, addFlashMessage
         } = this.props;
         return (
-            <section ref={el => this.el = el} className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
-                <div className="content-wrapper step-one">
-                    {isFetching && <Loading/>}
-                    {
-                        currentBusinessOption && currentBusinessOption.id &&
-                        <BusinessOptionPage
-                            appStatus={appStatus}
-                            currentLevel={currentLevel}
-                            currentSection={currentSection}
-                            currentBusinessOption={currentBusinessOption}
-                            setCurrentLevel={setCurrentLevel}
-                            setCurrentSection={setCurrentSection}
-                            setCurrentBusinessOption={setCurrentBusinessOption}
-                            setCompletedStatus={setCompletedStatus}
-                            setShowCompletedPage={setShowCompletedPage}
-                            setToolTipContent={setToolTipContent}
-                            getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                            getBusinessOption={getBusinessOption}
-                            isFetching={isFetching}
-                            addFlashMessage={addFlashMessage}
-                        />
-                    }
-                </div>
-            </section>
+            <div>
+                {isFetching && <Loading/>}
+                {
+                    currentBusinessOption && currentBusinessOption.id &&
+                    <BusinessOptionPage
+                        appStatus={appStatus}
+                        currentLevel={currentLevel}
+                        currentSection={currentSection}
+                        currentBusinessOption={currentBusinessOption}
+                        setCurrentLevel={setCurrentLevel}
+                        setCurrentSection={setCurrentSection}
+                        setCurrentBusinessOption={setCurrentBusinessOption}
+                        setCompletedStatus={setCompletedStatus}
+                        setShowCompletedPage={setShowCompletedPage}
+                        setToolTipContent={setToolTipContent}
+                        getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                        getBusinessOption={getBusinessOption}
+                        isFetching={isFetching}
+                        addFlashMessage={addFlashMessage}
+                    />
+                }
+            </div>
         );
     }
 }

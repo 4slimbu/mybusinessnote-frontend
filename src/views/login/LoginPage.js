@@ -23,20 +23,16 @@ class LoginPage extends Component {
         } = this.props;
 
         return (
-            <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
-                <div className="content-wrapper step-one">
-                    <LoginForm
-                        addFlashMessage={addFlashMessage}
-                        userLoginFormRequest={userLoginFormRequest}
-                        getAppStatus={getAppStatus}
-                        setCurrentUser={setCurrentUser}
-                        getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                        loginSocialUser={loginSocialUser}
-                        sendForgotPasswordEmail={sendForgotPasswordEmail}
-                        updateUserPassword={updateUserPassword}
-                    />
-                </div>
-            </section>
+            <LoginForm
+                addFlashMessage={addFlashMessage}
+                userLoginFormRequest={userLoginFormRequest}
+                getAppStatus={getAppStatus}
+                setCurrentUser={setCurrentUser}
+                getBusinessOptionFromUrl={getBusinessOptionFromUrl}
+                loginSocialUser={loginSocialUser}
+                sendForgotPasswordEmail={sendForgotPasswordEmail}
+                updateUserPassword={updateUserPassword}
+            />
         )
     }
 }

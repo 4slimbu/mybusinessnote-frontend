@@ -14,20 +14,6 @@ import LevelCompletePage from "./LevelCompletePage";
 import {addFlashMessage} from "../../services/actions/flashMessageAction";
 
 class LevelPage extends Component {
-    componentDidMount() {
-        mbjLog('level c d m');
-    }
-
-    componentWillReceiveProps(nextProps) {
-        mbjLog('level c w r p');
-        // if (this.props.history.location.pathname != nextProps.history.location.pathname) {
-        //     const currentLevel = getCurrentLevelByUrl(nextProps.appStatus.levels, nextProps.history.location.pathname);
-        //     if (currentLevel && currentLevel.id) {
-        //         nextProps.setCurrentLevel(currentLevel);
-        //     }
-        // }
-    }
-
     render() {
         let page;
         const { setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
@@ -49,10 +35,7 @@ class LevelPage extends Component {
 
         if (completedPercent === -1) {
             page = (
-                <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
-                    <div className="content-wrapper step-one">
-                    </div>
-                </section>
+                <div></div>
             );
         }
 

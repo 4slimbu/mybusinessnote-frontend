@@ -108,23 +108,21 @@ class LevelThreeIntro extends Component {
         });
 
         return (
-            <section ref={el => this.el = el} className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
-                <div className="content-wrapper step-one">
-                    <h5 className="obvious-h5">{name}</h5>
-                    <ProgressBar
-                        completed_percent={completed_percent}
-                        total_completed_sections={total_completed_sections}
-                        total_sections={total_sections}
-                    />
-                    <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}}/>
-                    <div>
-                        <ul className="apps-icons clearfix level2-apps-icons">{sections}</ul>
-                    </div>
-                    <div className="btn-wrap">
-                        <a href="#" onClick={(e) => onClickContinue(e)} className="btn btn-default btn-md">Continue</a>
-                    </div>
+            <div>
+                <h5 className="obvious-h5">{name}</h5>
+                <ProgressBar
+                    completed_percent={completed_percent}
+                    total_completed_sections={total_completed_sections}
+                    total_sections={total_sections}
+                />
+                <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}}/>
+                <div>
+                    <ul className="apps-icons clearfix level2-apps-icons">{sections}</ul>
                 </div>
-            </section>
+                <div className="btn-wrap">
+                    <a href="#" onClick={(e) => onClickContinue(e)} className="btn btn-default btn-md">Continue</a>
+                </div>
+            </div>
         );
     }
 }

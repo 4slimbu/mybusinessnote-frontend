@@ -114,13 +114,13 @@
     a.front-link{
          font-size: 14px;
     }
-     .level-7 .step-one a.btn {
+     .step-one .level-complete a.btn {
          padding: 8px 26px;
     }
-     .level-7 .mid-sec p {
+     .mid-sec .level-complete p {
          font-size: 14px;
     }
-     .level-7 .mid-sec h1 {
+     .mid-sec .level-complete h1 {
          font-size: 26px;
     }
      .find-web-span {
@@ -370,10 +370,10 @@
      .menu-accordion .panel-group .panel.active:last-child::after {
          height: 215px;
     }
-     .level-7 .step-one a.btn {
+     .step-one .level-complete a.btn {
          padding: 6px 26px;
     }
-     .level-7 .mid-sec h1 {
+     .mid-sec .level-complete h1 {
          font-size: 22px;
     }
      form.apps-form label {
@@ -431,7 +431,7 @@
          font-size: 15px;
          padding: 5px 43px;
     }
-     .level-7 .step-one a.btn, .operation-7 .step-one a.btn {
+     .step-one .level-complete a.btn, .operation-7 .step-one a.btn {
          padding: 8px 26px;
          font-size: 13px;
     }

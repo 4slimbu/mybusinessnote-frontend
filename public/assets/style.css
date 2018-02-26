@@ -961,25 +961,25 @@ form.apps-form a{
  a.next-session-link i {
      color: #ffffff;
 }
- .level-7 .mid-sec .content-wrapper, .operation-7 .mid-sec .content-wrapper {
+ .mid-sec .content-wrapper .level-complete, .operation-7 .mid-sec .content-wrapper {
      text-align: center;
 }
- .level-7 .mid-sec p {
+ .mid-sec .level-complete p {
      margin-top: 8px;
 }
- .level-7 i {
+ .level-complete i {
      font-size: 16px;
 }
- .level-7 .mid-sec h6, .operation-7 .mid-sec h6 {
+ .mid-sec .level-complete h6, .operation-7 .mid-sec h6 {
      font-size: 13px;
      line-height: 15.6px;
      text-transform: capitalize;
      margin-bottom: 32px;
 }
- .level-7 .bottom-block-complete h6, .operation-7 .bottom-block-complete h6 {
+ .level-complete .bottom-block-complete h6, .operation-7 .bottom-block-complete h6 {
      font-weight: 500;
 }
- .level-7 .step-one a.btn, .operation-7 .step-one a.btn {
+.step-one .level-complete a.btn, .operation-7 .step-one a.btn {
      padding: 10px 26px;
 }
  a.next-session-link i {

@@ -25,21 +25,18 @@ class LevelOneIntro extends Component {
         };
         const sectionUrl = '/level/' + level.slug + '/section/' + level.sections[0].slug;
         return (
-            <section className="mid-sec bg-red mCustomScrollbar" data-mcs-theme="dark">
-                <div className="content-wrapper step-one">
-                    <h5 className="obvious-h5">{ name }</h5>
-                    <ProgressBar
-                        completed_percent={completed_percent}
-                        total_completed_sections={total_completed_sections}
-                        total_sections={total_sections}
-                    />
-                    <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}} />
-                    <div className="btn-wrap">
-                        <button onClick={(e) => onClickStart(e, sectionUrl)} className="btn btn-default btn-md">Continue</button>
-                    </div>
-
+            <div>
+                <h5 className="obvious-h5">{ name }</h5>
+                <ProgressBar
+                    completed_percent={completed_percent}
+                    total_completed_sections={total_completed_sections}
+                    total_sections={total_sections}
+                />
+                <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}} />
+                <div className="btn-wrap">
+                    <button onClick={(e) => onClickStart(e, sectionUrl)} className="btn btn-default btn-md">Continue</button>
                 </div>
-            </section>
+            </div>
         );
     }
 }
