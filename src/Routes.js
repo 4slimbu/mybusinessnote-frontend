@@ -1,7 +1,7 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import PageNotFound from "./views/error-page/PageNotFound";
-import LoginPage from "./views/login/LoginPage";
+import LoginPage from "./views/login/LoginContainer";
 import LevelPage from "./views/level/LevelContainer";
 import SectionPage from "./views/section/SectionPage";
 import LevelCompletePage from "./views/level/pages/LevelCompletePage";

@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import LoginForm from "./LoginForm";
 import {
     loginSocialUser, sendForgotPasswordEmail, setCurrentUser, updateUserPassword,
     userLoginFormRequest
@@ -8,8 +7,22 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {addFlashMessage} from "../../services/actions/flashMessageAction";
 import {getAppStatus, getBusinessOptionFromUrl} from "../../services/actions/appStatusAction";
+import LoginPage from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import SocialLoginProcessingPage from "./pages/SocialLoginProcessingPage";
+import UpdatePasswordPage from "./pages/UpdatePasswordPage";
 
-class LoginPage extends Component {
+class LoginContainer extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowLoginForm: true,
+            isShowForgotPasswordForm: false,
+            isShowUpdatePasswordForm: false,
+            isShowSocialLoginProcessingPage: false,
+        }
+    }
     render() {
         const {
             addFlashMessage,
@@ -23,21 +36,17 @@ class LoginPage extends Component {
         } = this.props;
 
         return (
-            <LoginForm
-                addFlashMessage={addFlashMessage}
-                userLoginFormRequest={userLoginFormRequest}
-                getAppStatus={getAppStatus}
-                setCurrentUser={setCurrentUser}
-                getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                loginSocialUser={loginSocialUser}
-                sendForgotPasswordEmail={sendForgotPasswordEmail}
-                updateUserPassword={updateUserPassword}
-            />
+            <div>
+                {
+                    this.state.isShowSocialLoginProcessingPage ? <SocialLoginProcessingPage/> :
+                        (this.state.isForgotPassword ? <ForgotPasswordPage/> : <LoginPage/>)
+                }
+            </div>
         )
     }
 }
 
-LoginPage.propTypes = {
+LoginContainer.propTypes = {
     userLoginFormRequest: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
@@ -57,4 +66,4 @@ export default connect(null, {
     loginSocialUser,
     sendForgotPasswordEmail,
     updateUserPassword
-})(LoginPage);
+})(LoginContainer);
