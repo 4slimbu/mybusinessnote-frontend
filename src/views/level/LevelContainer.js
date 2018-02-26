@@ -12,7 +12,7 @@ import {
 } from "../../services/actions/appStatusAction";
 import LevelCompletePage from "./pages/LevelCompletePage";
 import {addFlashMessage} from "../../services/actions/flashMessageAction";
-import map from "lodash";
+import {map} from "lodash";
 import {Panel, PanelGroup} from "react-bootstrap";
 
 class LevelContainer extends Component {
@@ -27,6 +27,7 @@ class LevelContainer extends Component {
         this.onClickContinue = this.onClickContinue.bind(this);
         this.onClickSectionLink = this.onClickSectionLink.bind(this);
         this.onHandleToolTip = this.onHandleToolTip.bind(this);
+        this.onHandleToolTipSelect = this.onHandleToolTipSelect.bind(this);
     }
 
     componentDidMount() {
@@ -95,10 +96,14 @@ class LevelContainer extends Component {
         this.displayToolTip(id);
     }
 
-    displayToolTip(id) {
+    onHandleToolTipSelect(newKey) {
+        this.displayToolTip(newKey);
+    }
+
+    displayToolTip(id = 0) {
         const {setToolTipContent, appStatus} = this.props;
         const {currentLevel} = appStatus;
-        const tipList = map(currentLevel.sections, (item, key) => {
+        const toolTipList = map(currentLevel.sections, (item, key) => {
             const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
             return (
                 <Panel key={key} eventKey={item.id}>
@@ -116,16 +121,13 @@ class LevelContainer extends Component {
                 </Panel>
             )
         });
-        let activeKey = id;
-        const handleSelect = function (newKey) {
-            this.displayToolTip(newKey);
-        };
+
         const toolTip = {};
         toolTip.rawHtmlContent = currentLevel.tooltip;
         toolTip.accordion = (
-            <PanelGroup accordion id={`accordion-uncontrolled-level-three-sections`} activeKey={activeKey}
-                        onSelect={(newKey) => handleSelect(newKey)}>
-                {tipList}
+            <PanelGroup accordion id={`accordion-uncontrolled-level-three-sections`} activeKey={id}
+                        onSelect={(newKey) => this.onHandleToolTipSelect(newKey)}>
+                {toolTipList}
             </PanelGroup>
         );
         setToolTipContent(toolTip);

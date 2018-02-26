@@ -32,7 +32,7 @@ class RightSideBar extends Component {
                     </div>
                     {
                         toolTip &&
-                        <ToolTip toolTip={toolTip}/>
+                        <ToolTip {...toolTip}/>
                     }
                     <div className="news-events-wrap">
                         <h5 className="news-title">News & Informations</h5>
