@@ -13,6 +13,18 @@ export function publicUrl(url = null) {
 }
 
 /**
+ * Return url relative to the API_BASE_URL
+ *
+ * @return {string}
+ */
+export function apiBaseUrl(url = null) {
+    if (url) {
+        return process.env.REACT_APP_API_BASE_URL + url;
+    }
+    return process.env.REACT_APP_API_BASE_URL;
+}
+
+/**
  * Gets the dashboard Url of current logged in user
  */
 export function dashboardUrl() {

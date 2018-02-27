@@ -5,46 +5,50 @@ import {SET_CURRENT_USER} from "../../constants/actionTypes";
 import {getAppStatus, setAppStatus} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../../data/default/defaultValues";
+import {ERROR_CODES} from "../../constants/errorCodes";
+import {POST_LOGIN_FORM_URL} from "../../constants/apiUrls";
 
 export function userLoginFormRequest(userData, that) {
     return dispatch => {
         //register user using axios
         return axios({
             method: "POST",
-            url: process.env.REACT_APP_API_BASE_URL + "/user/login",
+            url: POST_LOGIN_FORM_URL,
             data: userData,
             crossDomain: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-        }).then(
-            (response) => {
-                const token = response.data.token;
-                that.setState({isLoading: false});
-                if (token) {
-                    localStorage.setItem("jwtToken", token);
-                    setAuthorizationToken(token);
-                    dispatch(setCurrentUser(jwt_decode(token).user));
-                    dispatch(addFlashMessage({
-                        type: "success",
-                        text: "Logged in successfully! Welcome!"
-                    }))
-                }
-                dispatch(getAppStatus());
-                that.props.history.push('/');
-            },
-            ( error ) => {
-                if (error.response.data.error.form) {
-                    that.props.addFlashMessage({
-                        type: "error",
-                        text: error.response.data.error.form
-                    });
-                }
-                that.setState({errors: error.response.data.error, isLoading: false});
-            }
-        );
+        });
     }
+}
+
+export function handleSuccessResponse(responseData) {
+    return dispatch => {
+        const token = responseData.token;
+        if (token) {
+            localStorage.setItem("jwtToken", token);
+            setAuthorizationToken(token);
+            dispatch(setCurrentUser(jwt_decode(token).user));
+            dispatch(addFlashMessage({
+                type: "success",
+                text: "Logged in successfully! Testing!"
+            }))
+        }
+        dispatch(getAppStatus());
+    }
+}
+
+export function handleErrorResponse(errorData) {
+    const errorMessage = ERROR_CODES[errorData.errorCode] ? ERROR_CODES[errorData.errorCode] : ERROR_CODES.ERR_UNKNOWN;
+    return dispatch => {
+        dispatch(addFlashMessage({
+            type: "error",
+            text: errorMessage
+        }))
+    }
+
 }
 
 export function sendForgotPasswordEmail(userData) {

@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {
+    handleErrorResponse,
+    handleSuccessResponse,
     loginSocialUser, sendForgotPasswordEmail, setCurrentUser, updateUserPassword,
     userLoginFormRequest
 } from "../../services/actions/authActions";
@@ -86,11 +88,17 @@ class LoginContainer extends Component {
             updateUserPassword
         } = this.props;
 
+        const loginFormProps = {
+            userLoginFormRequest: userLoginFormRequest,
+            handleSuccessResponse: handleSuccessResponse,
+            handleErrorResponse: handleErrorResponse
+        };
+
         return (
             <div>
                 {
                     this.state.isShowSocialLoginProcessingPage ? <SocialLoginProcessingPage/> :
-                        (this.state.isForgotPassword ? <ForgotPasswordPage/> : <LoginPage/>)
+                        (this.state.isForgotPassword ? <ForgotPasswordPage/> : <LoginPage {...loginFormProps}/>)
                 }
             </div>
         )
@@ -105,7 +113,9 @@ LoginContainer.propTypes = {
     setCurrentUser: PropTypes.func.isRequired,
     loginSocialUser: PropTypes.func.isRequired,
     updateUserPassword: PropTypes.func.isRequired,
-    sendForgotPasswordEmail: PropTypes.func.isRequired
+    sendForgotPasswordEmail: PropTypes.func.isRequired,
+    handleSuccessResponse: PropTypes.func.isRequired,
+    handleErrorResponse: PropTypes.func.isRequired,
 };
 
 export default connect(null, {
@@ -116,5 +126,7 @@ export default connect(null, {
     getBusinessOptionFromUrl,
     loginSocialUser,
     sendForgotPasswordEmail,
-    updateUserPassword
+    updateUserPassword,
+    handleSuccessResponse,
+    handleErrorResponse
 })(LoginContainer);

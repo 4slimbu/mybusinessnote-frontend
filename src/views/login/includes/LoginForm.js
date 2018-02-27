@@ -3,30 +3,48 @@ import PropTypes from "prop-types";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import {validateLogin} from "../../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
+import SocialLoginButton from "./SocialLoginButton";
 
 class LoginForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            email: "",
-            password: "",
-            confirm_password: "",
-            forgot_password_token: "",
+            email: {
+                isChanged: false,
+                label: "Email",
+                name: "email",
+                placeholder: "Your email",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
+            password: {
+                isChanged: false,
+                label: "Password",
+                name: "password",
+                placeholder: "Enter your password",
+                value: "",
+                oldValue: "",
+                type: "password"
+            },
             errors: {},
-            isForgotPassword: false,
-            isResetEmailSent: false,
-            showUpdatePasswordForm: false,
-            showEmailSentResponse: false,
-            isLoading: false,
-            isSocialLoginProcessing: false,
+            isChanged: false
         };
 
         this.onChange = this.onChange.bind(this);
         this.onLoginFormSubmit = this.onLoginFormSubmit.bind(this);
-        this.onClickForgotPassword = this.onClickForgotPassword.bind(this);
-        this.onSendForgotPasswordEmailFormSubmit = this.onSendForgotPasswordEmailFormSubmit.bind(this);
-        this.onUpdatePasswordFormSubmit = this.onUpdatePasswordFormSubmit.bind(this);
+    }
+
+    onChange(e) {
+        this.setState({
+            [e.target.name]: {
+                ...this.state[e.target.name],
+                value: e.target.value,
+                isChanged: true
+            },
+            isChanged: true
+        });
     }
 
     isFormValid(data = null) {
@@ -44,32 +62,21 @@ class LoginForm extends Component {
     onLoginFormSubmit(e) {
         e.preventDefault();
 
-        if (true) {
-            this.setState({errors: {}, isLoading: true});
+        this.setState({errors: {}, isLoading: true});
 
-            this.props.userLoginFormRequest({
-                email: this.state.email,
-                password: this.state.password
-            }, this);
-        }
-    }
-
-    onClickForgotPassword(e) {
-        e.preventDefault();
-        this.setState({
-            isForgotPassword: true
-        })
-    }
-
-    onClickBackToLogin(e) {
-        e.preventDefault();
-        this.setState({
-            email: '',
-            isForgotPassword: false,
-            isResetEmailSent: false,
-            showUpdatePasswordForm: false,
-            showEmailSentResponse: false,
-        })
+        this.props.userLoginFormRequest({
+            email: this.state.email.value,
+            password: this.state.password.value
+        }).then(
+            (response) => {
+                this.props.handleSuccessResponse(response.data);
+                this.props.history.push('/');
+            },
+            (error) => {
+                this.props.handleErrorResponse(error.response.data);
+                this.setState({errors: error.response.data.errors});
+            }
+        );
     }
 
     render() {
@@ -82,38 +89,16 @@ class LoginForm extends Component {
 
                     { errors.form && <div className="alert alert-danger">{errors.form}</div> }
 
-                    <TextFieldGroup
-                        error={errors.email}
-                        label="Email"
-                        onChange={this.onChange}
-                        value={email}
-                        type="text"
-                        field="email"
-                    />
-                    <TextFieldGroup
-                        error={errors.password}
-                        label="Password"
-                        onChange={this.onChange}
-                        value={password}
-                        type="password"
-                        field="password"
-                    />
+                    <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email} />
+                    <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password} />
+
                     <a href="#" onClick={(e) => this.onClickForgotPassword(e)}>Forgot Password ?</a>
                     <div className="btn-wrap">
                         <button className="btn btn-default btn-md">Login</button>
                     </div>
                 </form>
                 <p>&nbsp;</p>
-                <p className="text-center">OR Login with</p>
-                <div className="row">
-
-                    <div className="col-md-6 text-right col-sm-12">
-                        <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
-                    </div>
-                    <div className="col-md-6 col-sm-12 text-left">
-                        <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i> Facebook</a>
-                    </div>
-                </div>
+                <SocialLoginButton/>
             </div>
         )
     }
@@ -127,7 +112,9 @@ LoginForm.propTypes = {
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     loginSocialUser: PropTypes.func.isRequired,
     updateUserPassword: PropTypes.func.isRequired,
-    sendForgotPasswordEmail: PropTypes.func.isRequired
+    sendForgotPasswordEmail: PropTypes.func.isRequired,
+    handleSuccessResponse: PropTypes.func.isRequired,
+    handleErrorResponse: PropTypes.func.isRequired,
 };
 
 export default withRouter(LoginForm);

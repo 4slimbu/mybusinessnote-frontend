@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import * as axios from "axios";
 import {formatDate} from "../../../../utils/helper/helperFunctions";
 import {map} from "lodash";
-import {NEWS_FEED_API_URL} from "../../../../constants/apiUrls";
+import {NEWS_FEED_URL} from "../../../../constants/apiUrls";
 
 class NewsList extends Component {
 
@@ -22,7 +22,7 @@ class NewsList extends Component {
     fetchNews(newsTerm) {
        
         const currentNewsTerm = ( newsTerm === undefined) ? 'General' : newsTerm;
-        const fetchURL = NEWS_FEED_API_URL + '?tag='+currentNewsTerm;
+        const fetchURL = NEWS_FEED_URL + '?tag='+currentNewsTerm;
         axios({
                 method: "GET",
                 url: fetchURL,
