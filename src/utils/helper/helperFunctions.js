@@ -1,4 +1,5 @@
 import {filter} from "lodash";
+import {ERROR_CODES} from "../../constants/errorCodes";
 
 /**
  * Return url relative to the PUBLIC_URL set in package.json "homepage" key
@@ -43,6 +44,16 @@ export function dashboardUrl() {
  */
 export function getEnv(key) {
     return process.env['REACT_APP_' + key];
+}
+
+/**
+ * Use error code to get error message
+ *
+ * @param errorCode
+ * @return {string}
+ */
+export function getErrorCodeMessage(errorCode) {
+    return ERROR_CODES[errorCode] ? ERROR_CODES[errorCode] : ERROR_CODES.ERR_UNKNOWN;
 }
 
 /**

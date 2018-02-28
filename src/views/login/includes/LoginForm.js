@@ -2,8 +2,10 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import {validateLogin} from "../../../utils/validation/LoginFormValidation";
-import {withRouter} from "react-router-dom";
 import SocialLoginButton from "./SocialLoginButton";
+import {withRouter} from "react-router-dom";
+import {POST_LOGIN_FORM_URL} from "../../../constants/apiUrls";
+import {getErrorCodeMessage} from "../../../utils/helper/helperFunctions";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -28,6 +30,7 @@ class LoginForm extends Component {
                 oldValue: "",
                 type: "password"
             },
+            errorCode: '',
             errors: {},
             isChanged: false
         };
@@ -47,9 +50,11 @@ class LoginForm extends Component {
         });
     }
 
-    isFormValid(data = null) {
-        let input = (data) ? data : this.state;
-        const {errors, isValid} = validateLogin(input);
+    isFormValid() {
+        const {errors, isValid} = validateLogin({
+            email: this.state.email.value,
+            password: this.state.password.value
+        });
 
         if (!isValid) {
             this.setState({errors});
@@ -61,33 +66,40 @@ class LoginForm extends Component {
 
     onLoginFormSubmit(e) {
         e.preventDefault();
+        if (this.isFormValid()) {
+            this.submitForm();
+        }
+    }
 
-        this.setState({errors: {}, isLoading: true});
-
-        this.props.userLoginFormRequest({
+    submitForm() {
+        this.props.postRequest(POST_LOGIN_FORM_URL, {
             email: this.state.email.value,
             password: this.state.password.value
         }).then(
             (response) => {
-                this.props.handleSuccessResponse(response.data);
+                const responseData = response.data;
+                this.props.handleSuccessResponse(responseData);
                 this.props.history.push('/');
             },
             (error) => {
-                this.props.handleErrorResponse(error.response.data);
-                this.setState({errors: error.response.data.errors});
+                const errorData = error.response.data;
+                this.props.handleErrorResponse(errorData);
+                this.setState({
+                    errorCode: errorData.errorCode ? errorData.errorCode : '',
+                    errors: errorData.errors ? errorData.errors : {}
+                });
             }
         );
     }
 
     render() {
-        const {errors, email, password} = this.state;
-
+        const {errors,errorCode} = this.state;
         return (
             <div>
                 <form className="apps-form" onSubmit={this.onLoginFormSubmit}>
                     <h1>Login</h1>
 
-                    { errors.form && <div className="alert alert-danger">{errors.form}</div> }
+                    { errorCode && <div className="alert alert-danger">{getErrorCodeMessage(errorCode)}</div> }
 
                     <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email} />
                     <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password} />
@@ -105,14 +117,7 @@ class LoginForm extends Component {
 }
 
 LoginForm.propTypes = {
-    userLoginFormRequest: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
-    setCurrentUser: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    loginSocialUser: PropTypes.func.isRequired,
-    updateUserPassword: PropTypes.func.isRequired,
-    sendForgotPasswordEmail: PropTypes.func.isRequired,
+    postRequest: PropTypes.func.isRequired,
     handleSuccessResponse: PropTypes.func.isRequired,
     handleErrorResponse: PropTypes.func.isRequired,
 };

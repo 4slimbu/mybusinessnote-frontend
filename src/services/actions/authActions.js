@@ -7,8 +7,9 @@ import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../../data/default/defaultValues";
 import {ERROR_CODES} from "../../constants/errorCodes";
 import {POST_LOGIN_FORM_URL} from "../../constants/apiUrls";
+import {MESSAGES} from "../../constants/messages";
 
-export function userLoginFormRequest(userData, that) {
+export function userLoginFormRequest(userData) {
     return dispatch => {
         //register user using axios
         return axios({
@@ -31,10 +32,7 @@ export function handleSuccessResponse(responseData) {
             localStorage.setItem("jwtToken", token);
             setAuthorizationToken(token);
             dispatch(setCurrentUser(jwt_decode(token).user));
-            dispatch(addFlashMessage({
-                type: "success",
-                text: "Logged in successfully! Testing!"
-            }))
+            dispatch(addFlashMessage({type: "success", text: MESSAGES.LOGIN_SUCCESS}))
         }
         dispatch(getAppStatus());
     }
@@ -43,12 +41,8 @@ export function handleSuccessResponse(responseData) {
 export function handleErrorResponse(errorData) {
     const errorMessage = ERROR_CODES[errorData.errorCode] ? ERROR_CODES[errorData.errorCode] : ERROR_CODES.ERR_UNKNOWN;
     return dispatch => {
-        dispatch(addFlashMessage({
-            type: "error",
-            text: errorMessage
-        }))
+        dispatch(addFlashMessage({type: "error", text: errorMessage}))
     }
-
 }
 
 export function sendForgotPasswordEmail(userData) {

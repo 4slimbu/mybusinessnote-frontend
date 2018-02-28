@@ -21,7 +21,7 @@ const TextFieldGroup = ({ fieldObject, error, onChange, onBlur }) => {
 };
 
 TextFieldGroup.propTypes = {
-    fieldObject: PropTypes.string.isRequired,
+    fieldObject: PropTypes.object.isRequired,
     error: PropTypes.array,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func

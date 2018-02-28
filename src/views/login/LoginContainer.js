@@ -1,16 +1,12 @@
 import React, {Component} from "react";
-import {
-    loginSocialUser, sendForgotPasswordEmail, setCurrentUser, updateUserPassword,
-    userLoginFormRequest
-} from "../../services/actions/authActions";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {addFlashMessage} from "../../services/actions/flashMessageAction";
-import {getAppStatus, getBusinessOptionFromUrl} from "../../services/actions/appStatusAction";
-import LoginPage from "./pages/LoginPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import SocialLoginProcessingPage from "./pages/SocialLoginProcessingPage";
-import UpdatePasswordPage from "./pages/UpdatePasswordPage";
+import {doesUserExists} from "../../services/actions/signUpActions";
+import {addFlashMessage} from "../../services/actions/flashMessageAction";
+import LoginPage from "./pages/LoginPage";
+import {handleErrorResponse, handleSuccessResponse, postRequest} from "../../services/actions/requestAction";
 
 class LoginContainer extends Component {
 
@@ -24,22 +20,20 @@ class LoginContainer extends Component {
         }
     }
     render() {
-        const {
-            addFlashMessage,
-            userLoginFormRequest,
-            getAppStatus,
-            setCurrentUser,
-            getBusinessOptionFromUrl,
-            loginSocialUser,
-            sendForgotPasswordEmail,
-            updateUserPassword
-        } = this.props;
+        const {postRequest, handleSuccessResponse, handleErrorResponse, doesUserExists, addFlashMessage} = this.props;
+        const loginPageProps = {
+            postRequest: postRequest,
+            handleSuccessResponse: handleSuccessResponse,
+            handleErrorResponse: handleErrorResponse,
+            doesUserExists: doesUserExists,
+            addFlashMessage: addFlashMessage
+        };
 
         return (
             <div>
                 {
                     this.state.isShowSocialLoginProcessingPage ? <SocialLoginProcessingPage/> :
-                        (this.state.isForgotPassword ? <ForgotPasswordPage/> : <LoginPage/>)
+                        (this.state.isForgotPassword ? <ForgotPasswordPage/> : <LoginPage {...loginPageProps}/>)
                 }
             </div>
         )
@@ -47,23 +41,16 @@ class LoginContainer extends Component {
 }
 
 LoginContainer.propTypes = {
-    userLoginFormRequest: PropTypes.func.isRequired,
+    postRequest: PropTypes.func.isRequired,
+    handleSuccessResponse: PropTypes.func.isRequired,
+    handleErrorResponse: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    setCurrentUser: PropTypes.func.isRequired,
-    loginSocialUser: PropTypes.func.isRequired,
-    updateUserPassword: PropTypes.func.isRequired,
-    sendForgotPasswordEmail: PropTypes.func.isRequired
 };
 
 export default connect(null, {
-    addFlashMessage,
-    userLoginFormRequest,
-    getAppStatus,
-    setCurrentUser,
-    getBusinessOptionFromUrl,
-    loginSocialUser,
-    sendForgotPasswordEmail,
-    updateUserPassword
+    postRequest,
+    handleSuccessResponse,
+    handleErrorResponse,
+    doesUserExists,
+    addFlashMessage
 })(LoginContainer);
