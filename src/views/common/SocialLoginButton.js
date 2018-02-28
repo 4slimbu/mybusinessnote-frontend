@@ -1,5 +1,5 @@
 import React from "react";
-import {getEnv} from "../../../utils/helper/helperFunctions";
+import {getEnv} from "../../utils/helper/helperFunctions";
 
 const SocialLoginButton = () => {
     return (

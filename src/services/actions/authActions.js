@@ -5,9 +5,9 @@ import {SET_CURRENT_USER} from "../../constants/actionTypes";
 import {getAppStatus, setAppStatus} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../../data/default/defaultValues";
-import {ERROR_CODES} from "../../constants/errorCodes";
 import {POST_LOGIN_FORM_URL} from "../../constants/apiUrls";
 import {MESSAGES} from "../../constants/messages";
+import {getErrorCodeMessage} from "../../utils/helper/helperFunctions";
 
 export function userLoginFormRequest(userData) {
     return dispatch => {
@@ -25,7 +25,7 @@ export function userLoginFormRequest(userData) {
     }
 }
 
-export function handleSuccessResponse(responseData) {
+export function handleSuccessResponseData(responseData) {
     return dispatch => {
         const token = responseData.token;
         if (token) {
@@ -38,10 +38,9 @@ export function handleSuccessResponse(responseData) {
     }
 }
 
-export function handleErrorResponse(errorData) {
-    const errorMessage = ERROR_CODES[errorData.errorCode] ? ERROR_CODES[errorData.errorCode] : ERROR_CODES.ERR_UNKNOWN;
+export function handleErrorResponseData(errorData) {
     return dispatch => {
-        dispatch(addFlashMessage({type: "error", text: errorMessage}))
+        dispatch(addFlashMessage({type: "error", text: getErrorCodeMessage(errorData.errorCode)}))
     }
 }
 

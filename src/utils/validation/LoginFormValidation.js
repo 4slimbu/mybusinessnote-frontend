@@ -1,19 +1,20 @@
 import Validator from "validator";
 import isEmpty from "lodash/isEmpty";
+import {MESSAGES} from "../../constants/messages";
 
 export function validateLogin(data) {
     let errors = {};
 
     if (!Validator.isEmail(data.email)) {
-        errors.email = ["Email is invalid"];
+        errors.email = MESSAGES.ERR_EMAIL_INVALID;
     }
 
     if (Validator.isEmpty(data.email)) {
-        errors.email = ["Email field is required"];
+        errors.email = MESSAGES.ERR_EMAIL_REQUIRED;
     }
 
     if (Validator.isEmpty(data.password)) {
-        errors.password = ["Password field is required"];
+        errors.password = MESSAGES.ERR_PASSWORD_REQUIRED;
     }
 
     return {

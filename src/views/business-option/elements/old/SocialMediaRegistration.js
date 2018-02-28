@@ -7,13 +7,15 @@ import {
     getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
     setCurrentBusinessOption,
     setCurrentTipCategory,
-    setSellGoods, setShowCompletedPage, trackClick
+    setSellGoods, setShowCompletedPage, setToolTipContent, trackClick
 } from "../../../../services/actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../services/actions/businessActions";
+import {saveBusinessOptionFormRequest} from "../../../../services/actions/businessActions";
 import {addFlashMessage} from "../../../../services/actions/flashMessageAction";
 import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
 import {isSocialMediaLinksValid} from "../../../../utils/validation/BusinessValidation";
+import {map} from "lodash";
+import {Panel, PanelGroup} from "react-bootstrap";
 
 class SocialMediaRegistration extends Component {
     constructor(props) {
@@ -39,7 +41,7 @@ class SocialMediaRegistration extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const twitter = (currentBusinessMeta.twitter) ? currentBusinessMeta.twitter : null;
@@ -111,33 +113,34 @@ class SocialMediaRegistration extends Component {
             }
         ];
         const tipList = map(tooltips, (item, key) => {
-            const title = (item.id === id) ? <strong>{ item.name }</strong> : item.name ;
-            return  (
+            const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
+            return (
                 <Panel key={item.id} eventKey={item.id}>
                     <Panel.Heading>
                         <Panel.Title toggle>
                             <h4>
-                                <span className="accordion-titles">{ title }</span>
+                                <span className="accordion-titles">{title}</span>
                                 <span className="acc-img"></span>
                             </h4>
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>
-                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}} />
+                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}}/>
                     </Panel.Body>
                 </Panel>
             )
         });
 
         let activeKey = id;
-        const handleSelect = function(newKey) {
+        const handleSelect = function (newKey) {
             currentObject.displayToolTip(newKey);
         };
         const toolTip = {};
         toolTip.rawHtmlContent = this.props.appStatus.currentBusinessOption.tooltip;
         toolTip.accordion = (
-            <PanelGroup accordion id={`accordion-uncontrolled-social-links`} activeKey={activeKey} onSelect={(newKey) => handleSelect(newKey)}>
-                { tipList }
+            <PanelGroup accordion id={`accordion-uncontrolled-social-links`} activeKey={activeKey}
+                        onSelect={(newKey) => handleSelect(newKey)}>
+                {tipList}
             </PanelGroup>
         );
         this.props.setToolTipContent(toolTip);
@@ -153,7 +156,7 @@ class SocialMediaRegistration extends Component {
     onClickSocialIcon(e, icon) {
         e.preventDefault();
 
-        switch(icon) {
+        switch (icon) {
             case 'twitter':
                 this.setState({isTwitterClicked: true});
                 this.handleToolTip(e, 1);
@@ -206,10 +209,10 @@ class SocialMediaRegistration extends Component {
     }
 
     isFormValid(socialName, url) {
-        const { errors, isValid } = isSocialMediaLinksValid(socialName, url);
+        const {errors, isValid} = isSocialMediaLinksValid(socialName, url);
 
-        if(! isValid) {
-            this.setState({ errors });
+        if (!isValid) {
+            this.setState({errors});
         }
 
         return isValid;
@@ -221,7 +224,7 @@ class SocialMediaRegistration extends Component {
         if (!this.isFormValid(socialName, this.state[socialName])) {
             return;
         } else {
-            this.setState({ errors: {}});
+            this.setState({errors: {}});
         }
 
         this.handleToolTip(e, 0);
@@ -234,7 +237,7 @@ class SocialMediaRegistration extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const twitter = (this.state.isChanged) ? this.state.twitter : currentBusinessMeta.twitter;
@@ -255,15 +258,23 @@ class SocialMediaRegistration extends Component {
                     <div>
 
                         <ul className="apps-social-media">
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a></li>
-                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a></li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt=""/></a></li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt=""/></a>
+                            </li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt=""/></a>
+                            </li>
+                            <li><a href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt=""/></a>
+                            </li>
                         </ul>
                         {
                             (this.state.facebook || this.state.twitter || this.state.linkedin || this.state.instagram)
                             &&
-                            <a href="#" onClick={(e) => this.onClickFinished(e)} className="btn btn-default btn-lg btn-alert">Finished</a>
+                            <a href="#" onClick={(e) => this.onClickFinished(e)}
+                               className="btn btn-default btn-lg btn-alert">Finished</a>
                         }
                     </div>
                 }
@@ -271,12 +282,17 @@ class SocialMediaRegistration extends Component {
                     this.state.isTwitterClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e, 'twitter')}>
-                                <input placeholder="https://twitter.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
-                                { this.state.errors.twitter && <div><span className="form-error-message">{this.state.errors.twitter}</span></div> }
+                            <a className="social-media-icon" href=""
+                               onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${twitter_icon}`} alt=""/></a>
+                            <form onSubmit={(e) => this.onClickDone(e, 'twitter')}>
+                                <input placeholder="https://twitter.com/page" type="text"
+                                       onChange={(e) => this.onChangeInput(e, 'twitter')} value={twitter}/>
+                                {this.state.errors.twitter &&
+                                <div><span className="form-error-message">{this.state.errors.twitter}</span></div>}
 
-                                <button className="btn btn-default btn-lg btn-alert">{(twitter) ? 'Done' : 'Cancel'}</button>
+                                <button
+                                    className="btn btn-default btn-lg btn-alert">{(twitter) ? 'Done' : 'Cancel'}</button>
                             </form>
                         </li>
                     </ul>
@@ -286,11 +302,16 @@ class SocialMediaRegistration extends Component {
                     this.state.isFacebookClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e, 'facebook')}>
-                                <input placeholder="https://facebook.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'facebook')} value={facebook}/>
-                                { this.state.errors.facebook && <div><span className="form-error-message">{this.state.errors.facebook}</span></div> }
-                                <button className="btn btn-default btn-lg btn-alert">{(facebook) ? 'Done' : 'Cancel'}</button>
+                            <a className="social-media-icon" href=""
+                               onClick={(e) => this.onClickSocialIcon(e, 'facebook')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${facebook_icon}`} alt=""/></a>
+                            <form onSubmit={(e) => this.onClickDone(e, 'facebook')}>
+                                <input placeholder="https://facebook.com/page" type="text"
+                                       onChange={(e) => this.onChangeInput(e, 'facebook')} value={facebook}/>
+                                {this.state.errors.facebook &&
+                                <div><span className="form-error-message">{this.state.errors.facebook}</span></div>}
+                                <button
+                                    className="btn btn-default btn-lg btn-alert">{(facebook) ? 'Done' : 'Cancel'}</button>
                             </form>
                         </li>
                     </ul>
@@ -300,11 +321,16 @@ class SocialMediaRegistration extends Component {
                     this.state.isLinkedinClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e, 'linkedin')}>
-                                <input placeholder="https://linkedin.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
-                                { this.state.errors.linkedin && <div><span className="form-error-message">{this.state.errors.linkedin}</span></div> }
-                                <button className="btn btn-default btn-lg btn-alert">{(linkedin) ? 'Done' : 'Cancel'}</button>
+                            <a className="social-media-icon" href=""
+                               onClick={(e) => this.onClickSocialIcon(e, 'linkedin')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${linkedin_icon}`} alt=""/></a>
+                            <form onSubmit={(e) => this.onClickDone(e, 'linkedin')}>
+                                <input placeholder="https://linkedin.com/page" type="text"
+                                       onChange={(e) => this.onChangeInput(e, 'linkedin')} value={linkedin}/>
+                                {this.state.errors.linkedin &&
+                                <div><span className="form-error-message">{this.state.errors.linkedin}</span></div>}
+                                <button
+                                    className="btn btn-default btn-lg btn-alert">{(linkedin) ? 'Done' : 'Cancel'}</button>
                             </form>
                         </li>
                     </ul>
@@ -314,11 +340,16 @@ class SocialMediaRegistration extends Component {
                     this.state.isInstagramClicked &&
                     <ul className="apps-social-media">
                         <li>
-                            <a className="social-media-icon" href="" onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt="" /></a>
-                            <form onSubmit={(e)=> this.onClickDone(e, 'instagram')}>
-                                <input placeholder="https://instagram.com/page" type="text" onChange={(e) => this.onChangeInput(e, 'instagram')} value={instagram}/>
-                                { this.state.errors.instagram && <div><span className="form-error-message">{this.state.errors.instagram}</span></div> }
-                                <button className="btn btn-default btn-lg btn-alert">{(instagram) ? 'Done' : 'Cancel'}</button>
+                            <a className="social-media-icon" href=""
+                               onClick={(e) => this.onClickSocialIcon(e, 'instagram')}><img
+                                src={`${process.env.PUBLIC_URL}/assets/images/social/${instagram_icon}`} alt=""/></a>
+                            <form onSubmit={(e) => this.onClickDone(e, 'instagram')}>
+                                <input placeholder="https://instagram.com/page" type="text"
+                                       onChange={(e) => this.onChangeInput(e, 'instagram')} value={instagram}/>
+                                {this.state.errors.instagram &&
+                                <div><span className="form-error-message">{this.state.errors.instagram}</span></div>}
+                                <button
+                                    className="btn btn-default btn-lg btn-alert">{(instagram) ? 'Done' : 'Cancel'}</button>
                             </form>
 
                         </li>

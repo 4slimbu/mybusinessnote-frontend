@@ -1,8 +1,9 @@
 import React from "react";
+import Loading from "../../common/Loading";
 
 const SocialLoginProcessingPage = (props) => {
     return(
-        <div>Forgot Password Page</div>
+        <Loading/>
     )
 };
 

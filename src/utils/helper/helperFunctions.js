@@ -1,5 +1,5 @@
 import {filter} from "lodash";
-import {ERROR_CODES} from "../../constants/errorCodes";
+import {MESSAGES} from "../../constants/messages";
 
 /**
  * Return url relative to the PUBLIC_URL set in package.json "homepage" key
@@ -53,7 +53,7 @@ export function getEnv(key) {
  * @return {string}
  */
 export function getErrorCodeMessage(errorCode) {
-    return ERROR_CODES[errorCode] ? ERROR_CODES[errorCode] : ERROR_CODES.ERR_UNKNOWN;
+    return MESSAGES[errorCode] ? MESSAGES[errorCode] : MESSAGES.ERR_UNKNOWN;
 }
 
 /**

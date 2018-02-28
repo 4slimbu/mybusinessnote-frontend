@@ -2,13 +2,13 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import {validateLogin} from "../../../utils/validation/LoginFormValidation";
-import SocialLoginButton from "../../common/SocialLoginButton";
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {POST_LOGIN_FORM_URL} from "../../../constants/apiUrls";
 import {getErrorCodeMessage} from "../../../utils/helper/helperFunctions";
 import {ROUTES} from "../../../constants/routes";
+import {validateFields} from "../../../utils/validation/FieldValidator";
 
-class LoginForm extends Component {
+class ForgotPasswordForm extends Component {
     constructor(props) {
         super(props);
 
@@ -21,15 +21,6 @@ class LoginForm extends Component {
                 value: "",
                 oldValue: "",
                 type: "text"
-            },
-            password: {
-                isChanged: false,
-                label: "Password",
-                name: "password",
-                placeholder: "Enter your password",
-                value: "",
-                oldValue: "",
-                type: "password"
             },
             errorCode: '',
             errors: {},
@@ -52,10 +43,12 @@ class LoginForm extends Component {
     }
 
     isFormValid() {
-        const {errors, isValid} = validateLogin({
+        const rules = {
+            email: 'required|email'
+        };
+        const {errors, isValid} = validateFields({
             email: this.state.email.value,
-            password: this.state.password.value
-        });
+        }, rules);
 
         if (!isValid) {
             this.setState({errors});
@@ -74,12 +67,11 @@ class LoginForm extends Component {
     submitForm() {
         this.props.callApi(POST_LOGIN_FORM_URL, {
             email: this.state.email.value,
-            password: this.state.password.value
         }).then(
             (response) => {
                 const responseData = response.data;
                 this.props.handleSuccessResponseData(responseData);
-                this.props.history.push('/');
+                this.props.redirectTo('/');
             },
             (error) => {
                 const errorData = error.response.data;
@@ -94,34 +86,28 @@ class LoginForm extends Component {
 
     render() {
         const {errors,errorCode} = this.state;
-        const {onShowForgotPasswordPage} = this.props;
         return (
-            <div>
-                <form className="apps-form" onSubmit={this.onSubmit}>
-                    <h1>Login</h1>
+            <form className="apps-form" onSubmit={this.onSubmit}>
+                <h1>Forgot Password</h1>
+                <p>Please enter your email address to reset your password.</p>
+                { errorCode && <div className="alert alert-danger">{getErrorCodeMessage(errorCode)}</div> }
 
-                    { errorCode && <div className="alert alert-danger">{getErrorCodeMessage(errorCode)}</div> }
+                <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email} />
 
-                    <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email} />
-                    <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password} />
-
-                    <Link to={ROUTES.FORGOT_PASSWORD}>Forgot Password ?</Link>
-                    <div className="btn-wrap">
-                        <button className="btn btn-default btn-md">Login</button>
-                    </div>
-                </form>
-                <p>&nbsp;</p>
-                <SocialLoginButton/>
-            </div>
+                <div className="btn-wrap">
+                    <button className="btn btn-default btn-md">Send Reset Password Email</button>
+                    <Link to={ROUTES.LOGIN} className="btn btn-default btn-md">Back</Link>
+                </div>
+            </form>
         )
     }
 }
 
-LoginForm.propTypes = {
+ForgotPasswordForm.propTypes = {
     callApi: PropTypes.func.isRequired,
     handleSuccessResponseData: PropTypes.func.isRequired,
     handleErrorResponseData: PropTypes.func.isRequired,
-    onShowForgotPasswordPage: PropTypes.func.isRequired
+    redirectTo: PropTypes.func.isRequired,
 };
 
-export default withRouter(LoginForm);
+export default ForgotPasswordForm;
