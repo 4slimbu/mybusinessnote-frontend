@@ -9,12 +9,12 @@ import jwt_decode from "jwt-decode";
 import "malihu-custom-scrollbar-plugin";
 import "jquery-mousewheel";
 
-import App from "./views/App";
+import App from "./components/App";
 import rootReducer from "./rootReducer";
-import {DEFAULT_APP_STATUS} from "./data/default/defaultValues";
+import {DEFAULT_APP_STATUS} from "./data/default";
 import setAuthorizationToken from "./utils/axios/setAuthorizationToken";
-import {setCurrentUser} from "./services/actions/authActions";
-import {getAppStatus, setAppStatus} from "./services/actions/appStatusAction";
+import {setCurrentUser} from "./actions/authActions";
+import {getAppStatus, setAppStatus} from "./actions/appStatusAction";
 import {getAllUrlParams} from "./utils/helper/helperFunctions";
 
 // monitor react component performance

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {addFlashMessage} from "../services/actions/flashMessageAction";
+import {addFlashMessage} from "../actions/flashMessageAction";
 
 export default function (ComposedComponent) {
     class Authenticate extends Component {
