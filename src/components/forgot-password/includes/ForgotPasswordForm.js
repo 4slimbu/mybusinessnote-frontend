@@ -1,12 +1,10 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../common/TextFieldGroup";
-import {validateLogin} from "../../../utils/validation/LoginFormValidation";
 import {Link} from "react-router-dom";
-import {POST_LOGIN_FORM_URL} from "../../../constants/apiUrls";
-import {getErrorCodeMessage} from "../../../utils/helper/helperFunctions";
 import {ROUTES} from "../../../constants/routes";
 import {validateFields} from "../../../utils/validation/FieldValidator";
+import request from "../../../services/request";
 
 class ForgotPasswordForm extends Component {
     constructor(props) {
@@ -24,7 +22,7 @@ class ForgotPasswordForm extends Component {
             },
             errorCode: '',
             errors: {},
-            isChanged: false
+            isChanged: false,
         };
 
         this.onChange = this.onChange.bind(this);
@@ -39,7 +37,8 @@ class ForgotPasswordForm extends Component {
                 isChanged: true
             },
             isChanged: true
-        });
+        }, () => this.isFormValid());
+
     }
 
     isFormValid() {
@@ -50,9 +49,9 @@ class ForgotPasswordForm extends Component {
             email: this.state.email.value,
         }, rules);
 
-        if (!isValid) {
-            this.setState({errors});
-        }
+        this.setState({
+            errors: isValid ? {} : errors
+        });
 
         return isValid;
     }
@@ -60,22 +59,17 @@ class ForgotPasswordForm extends Component {
     onSubmit(e) {
         e.preventDefault();
         if (this.isFormValid()) {
-            this.submitForm();
+            this.submitForm(e);
         }
     }
 
     submitForm() {
-        this.props.callApi(POST_LOGIN_FORM_URL, {
-            email: this.state.email.value,
-        }).then(
-            (response) => {
-                const responseData = response.data;
-                this.props.handleSuccessResponseData(responseData);
-                this.props.redirectTo('/');
+        const data = {email: this.state.email.value};
+        this.props.makeRequest(request.Auth.forgotPassword, data).then(
+            (responseData) => {
+                this.props.showEmailSentResponsePage();
             },
-            (error) => {
-                const errorData = error.response.data;
-                this.props.handleErrorResponseData(errorData);
+            (errorData) => {
                 this.setState({
                     errorCode: errorData.errorCode ? errorData.errorCode : '',
                     errors: errorData.errors ? errorData.errors : {}
@@ -85,12 +79,11 @@ class ForgotPasswordForm extends Component {
     }
 
     render() {
-        const {errors,errorCode} = this.state;
+        const {errors} = this.state;
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
                 <h1>Forgot Password</h1>
                 <p>Please enter your email address to reset your password.</p>
-                { errorCode && <div className="alert alert-danger">{getErrorCodeMessage(errorCode)}</div> }
 
                 <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email} />
 
@@ -104,10 +97,8 @@ class ForgotPasswordForm extends Component {
 }
 
 ForgotPasswordForm.propTypes = {
-    callApi: PropTypes.func.isRequired,
-    handleSuccessResponseData: PropTypes.func.isRequired,
-    handleErrorResponseData: PropTypes.func.isRequired,
-    redirectTo: PropTypes.func.isRequired,
+    makeRequest: PropTypes.func.isRequired,
+    showEmailSentResponsePage: PropTypes.func.isRequired,
 };
 
 export default ForgotPasswordForm;

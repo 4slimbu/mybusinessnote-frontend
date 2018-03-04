@@ -24,6 +24,9 @@ const requests = (type, url, userData = {}) => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
+            // validateStatus: (status) => {
+            //     return true;
+            // },
         });
     }
 };
@@ -34,17 +37,16 @@ const requests = (type, url, userData = {}) => {
 const Auth = {
     current: () =>
         requests('GET', '/user'),
-    login: (loginData) =>
-        requests('POST', apiBaseUrl("/user/login"), loginData),
-    register: (username, email, password) =>
-        requests('POST', '/user', {user: {username, email, password}}),
-    save: (user) =>
-        requests('PUT', '/user', {user}),
-    forgotPassword: (email) =>
-        requests('POST', '/user/forgot-password', {user: {email}}),
-    resetPassword: (password, confirmPassword) => {
-        requests('PUT', '/user/forgot-password', {user: {password, confirmPassword}})
-    }
+    login: (data) =>
+        requests('POST', apiBaseUrl("/user/login"), data),
+    register: (data) =>
+        requests('POST', '/user', data),
+    save: (data) =>
+        requests('POST', '/user', data),
+    forgotPassword: (data) =>
+        requests('POST', apiBaseUrl("/user/send-forgot-password-email"), data),
+    updatePassword: (data) =>
+        requests('POST', apiBaseUrl("/user/update-password"), data),
 };
 
 /**
@@ -108,9 +110,9 @@ const BusinessOption = {
  */
 const News = {
     all: () =>
-        requests('GET', '/news'),
+        requests('GET', 'http://staging.mybusinessjourney.com.au/wp-json/mbj-feed/v1/posts'),
     byTag: (tag) =>
-        requests('GET', `/news?tag=${tag}`)
+        requests('GET', `http://staging.mybusinessjourney.com.au/wp-json/mbj-feed/v1/posts?tag=${tag}`)
 };
 
 export default {

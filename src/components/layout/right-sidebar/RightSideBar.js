@@ -7,6 +7,8 @@ import NewsList from "./news/NewsList";
 import {connect} from "react-redux";
 import {getAppStatus} from "../../../actions/appStatusAction";
 import ToolTip from "./tooltip/ToolTip";
+import {makeRequest} from "../../../actions/requestAction";
+import {setNews} from "../../../actions/newsAction";
 
 class RightSideBar extends Component {
 
@@ -19,9 +21,15 @@ class RightSideBar extends Component {
 
     render() {
 
-        const {appStatus} = this.props;
+        const {appStatus, makeRequest, setNews, news} = this.props;
         const toolTip = appStatus.toolTip;
-        const currentNewsTerm = appStatus.currentBusinessOption.section_slug;
+        const newsTerm = appStatus.currentBusinessOption.section_slug;
+        const newsListProps = {
+            newsTerm: newsTerm,
+            makeRequest: makeRequest,
+            setNews: setNews,
+            news: news
+        };
 
         return (
             <section ref={el => this.el = el} className="right-sec bg-white mCustomScrollbar f-right bg-white"
@@ -36,7 +44,7 @@ class RightSideBar extends Component {
                     }
                     <div className="news-events-wrap">
                         <h5 className="news-title">News & Informations</h5>
-                        <NewsList currentNewsTerm={currentNewsTerm}/>
+                        <NewsList {...newsListProps}/>
                     </div>
                 </div>
             </section>
@@ -46,14 +54,18 @@ class RightSideBar extends Component {
 
 RightSideBar.propTypes = {
     appStatus: PropTypes.object.isRequired,
+    news: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         appStatus: state.appStatusReducer,
+        news: state.newsReducer
     }
 }
 
 export default withRouter(connect(mapStateToProps, {
+    makeRequest,
+    setNews,
     getAppStatus,
 })(RightSideBar));

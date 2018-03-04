@@ -4,6 +4,8 @@ export const MESSAGES = {
     LOGIN_SUCCESS: "Logged in successfully",
     SAVED: "Saved",
     UPDATED: "Updated",
+    FORGOT_EMAIL_SENT: "Forgot password email sent",
+    PASSWORD_UPDATED: "Password updated successfully",
 
     // Error Messages
     ERR_VALIDATION_FAILED: "Validation Failed",
@@ -31,6 +33,8 @@ export const MESSAGES = {
     ERR_TOKEN_USER_NOT_FOUND: "User not found",
 
     //Page Error Codes
+    ERR_INVALID_REQUEST: "Invalid Request",
+    ERR_MODEL_NOT_FOUND: "Couldn't find the user email",
     ERR_NOT_FOUND: "Couldn't find the page",
     ERR_RESTRICTED: "You don't have enough permission to view this page",
 

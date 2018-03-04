@@ -1,35 +1,35 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../common/TextFieldGroup";
-import SocialLoginButton from "../../common/SocialLoginButton";
 import {Link} from "react-router-dom";
 import {ROUTES} from "../../../constants/routes";
-import request from "../../../services/request";
 import {validateFields} from "../../../utils/validation/FieldValidator";
+import request from "../../../services/request";
 
-class LoginForm extends Component {
+class UpdatePasswordForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            email: {
-                isChanged: false,
-                label: "Email",
-                name: "email",
-                placeholder: "Your email",
-                value: "",
-                oldValue: "",
-                type: "text"
-            },
             password: {
                 isChanged: false,
                 label: "Password",
                 name: "password",
-                placeholder: "Enter your password",
+                placeholder: "Your Password",
                 value: "",
                 oldValue: "",
                 type: "password"
             },
+            confirm_password: {
+                isChanged: false,
+                label: "Confirm Password",
+                name: "confirm_password",
+                placeholder: "Confirm Your Password",
+                value: "",
+                oldValue: "",
+                type: "password"
+            },
+            forgot_password_token: '',
             errorCode: '',
             errors: {},
             isChanged: false,
@@ -39,10 +39,21 @@ class LoginForm extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentDidMount() {
+        this.setState({
+            forgot_password_token: this.props.forgotPasswordToken
+        });
+    }
+
     resetFields() {
         this.setState({
             password: {
                 ...this.state.password,
+                isChanged: false,
+                value: ''
+            },
+            confirm_password: {
+                ...this.state.confirm_password,
                 isChanged: false,
                 value: ''
             }
@@ -57,31 +68,24 @@ class LoginForm extends Component {
                 isChanged: true
             },
             isChanged: true
-        }, function() {
+        }, () => {
             const dataObject = {};
-            if (this.state.email.isChanged) {
-                dataObject.email = this.state.email.value
-            }
             if (this.state.password.isChanged) {
                 dataObject.password = this.state.password.value
+            }
+            if (this.state.confirm_password.isChanged) {
+                dataObject.confirm_password = this.state.confirm_password.value
             }
 
             this.isFormValid(dataObject);
         });
 
-
     }
 
-    /**
-     * Validates Form fields
-     *
-     * @param dataObject - is an object containing field key:value pair
-     * @returns bool
-     */
     isFormValid(dataObject) {
         const rules = {
-            email: 'required|email',
-            password: 'required'
+            password: 'required|min:8|lowercase|uppercase|num|specialChar|max:20',
+            confirm_password: 'match:password'
         };
         const {errors, isValid} = validateFields(dataObject, rules);
 
@@ -94,13 +98,9 @@ class LoginForm extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        if (this.state.isSubmitting) {
-            return;
-        }
-
         const dataObject = {
-            email: this.state.email.value,
-            password: this.state.password.value
+            password: this.state.password.value,
+            confirm_password: this.state.confirm_password.value,
         };
 
         if (this.isFormValid(dataObject)) {
@@ -110,13 +110,13 @@ class LoginForm extends Component {
 
     submitForm() {
         const data = {
-            email: this.state.email.value,
-            password: this.state.password.value
+            password: this.state.password.value,
+            confirm_password: this.state.confirm_password.value,
+            forgot_password_token: this.state.forgot_password_token
         };
-
-        this.props.makeRequest(request.Auth.login, data).then(
+        this.props.makeRequest(request.Auth.updatePassword, data).then(
             (responseData) => {
-                this.props.redirectTo('/');
+                this.props.showPasswordUpdatedResponsePage();
             },
             (errorData) => {
                 this.resetFields();
@@ -131,29 +131,26 @@ class LoginForm extends Component {
     render() {
         const {errors} = this.state;
         return (
-            <div>
-                <form className="apps-form" onSubmit={this.onSubmit}>
-                    <h1>Login</h1>
+            <form className="apps-form" onSubmit={this.onSubmit}>
+                <h1>Reset Password</h1>
 
-                    <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email}/>
-                    <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password}/>
+                <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password} />
+                <TextFieldGroup fieldObject={this.state.confirm_password} onChange={this.onChange} error={errors.confirm_password} />
 
-                    <Link to={ROUTES.FORGOT_PASSWORD}>Forgot Password ?</Link>
-                    <div className="btn-wrap">
-                        <button className="btn btn-default btn-md">Login</button>
-                    </div>
-                </form>
-                <p>&nbsp;</p>
-                <SocialLoginButton/>
-            </div>
+                <div className="btn-wrap">
+                    <button className="btn btn-default btn-md">Reset Password</button>
+                    <Link to={ROUTES.LOGIN} className="btn btn-default btn-md">Back</Link>
+                </div>
+            </form>
         )
     }
 }
 
-LoginForm.propTypes = {
+UpdatePasswordForm.propTypes = {
     makeRequest: PropTypes.func.isRequired,
     redirectTo: PropTypes.func.isRequired,
+    showPasswordUpdatedResponsePage: PropTypes.func.isRequired,
+    forgotPasswordToken: PropTypes.string.isRequired
 };
 
-
-export default LoginForm;
+export default UpdatePasswordForm;

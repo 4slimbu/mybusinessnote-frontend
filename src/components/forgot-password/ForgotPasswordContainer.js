@@ -3,10 +3,12 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {doesUserExists} from "../../actions/signUpActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
-import {handleErrorResponseData, handleSuccessResponseData, callApi} from "../../actions/requestAction";
+import {handleErrorResponseData, handleSuccessResponseData, callApi, makeRequest} from "../../actions/requestAction";
 import EmailSentResponsePage from "./pages/EmailSentResponsePage";
 import UpdatePasswordPage from "./pages/UpdatePasswordPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import {getAllUrlParams} from "../../utils/helper/helperFunctions";
+import PasswordUpdatedResponsePage from "./pages/PasswordUpdatedResponsePage";
 
 class ForgotPasswordContainer extends Component {
 
@@ -16,38 +18,59 @@ class ForgotPasswordContainer extends Component {
             isShowForgotPasswordPage: true,
             isShowUpdatePasswordPage: false,
             isShowEmailSentResponsePage: false,
+            isShowPasswordUpdatedResponsePage: false,
+            forgot_password_token: ''
         };
 
-        this.onShowForgotPasswordPage = this.onShowForgotPasswordPage.bind(this);
-        this.onShowUpdatePasswordPage = this.onShowUpdatePasswordPage.bind(this);
-        this.onShowEmailSentResponsePage = this.onShowEmailSentResponsePage.bind(this);
+        this.showForgotPasswordPage = this.showForgotPasswordPage.bind(this);
+        this.showUpdatePasswordPage = this.showUpdatePasswordPage.bind(this);
+        this.showEmailSentResponsePage = this.showEmailSentResponsePage.bind(this);
+        this.showPasswordUpdatedResponsePage = this.showPasswordUpdatedResponsePage.bind(this);
         this.redirectTo = this.redirectTo.bind(this);
     }
 
-    onShowForgotPasswordPage(e) {
-        e.preventDefault();
+    componentDidMount() {
+        if (getAllUrlParams(this.props.location.search).forgot_password_token) {
+            this.setState({
+                forgot_password_token : getAllUrlParams(this.props.location.search).forgot_password_token
+            });
+            this.showUpdatePasswordPage();
+        }
+    }
+
+    showForgotPasswordPage() {
         this.setState({
             isShowForgotPasswordPage: true,
             isShowUpdatePasswordPage: false,
             isShowEmailSentResponsePage: false,
+            isShowPasswordUpdatedResponsePage: false
         })
     }
 
-    onShowUpdatePasswordPage(e) {
-        e.preventDefault();
+    showUpdatePasswordPage() {
         this.setState({
             isShowForgotPasswordPage: false,
             isShowUpdatePasswordPage: true,
             isShowEmailSentResponsePage: false,
+            isShowPasswordUpdatedResponsePage: false
         })
     }
 
-    onShowEmailSentResponsePage(e) {
-        e.preventDefault();
+    showEmailSentResponsePage() {
         this.setState({
             isShowForgotPasswordPage: false,
             isShowUpdatePasswordPage: false,
             isShowEmailSentResponsePage: true,
+            isShowPasswordUpdatedResponsePage: false
+        })
+    }
+
+    showPasswordUpdatedResponsePage() {
+        this.setState({
+            isShowForgotPasswordPage: false,
+            isShowUpdatePasswordPage: false,
+            isShowEmailSentResponsePage: false,
+            isShowPasswordUpdatedResponsePage: true
         })
     }
 
@@ -56,22 +79,26 @@ class ForgotPasswordContainer extends Component {
     }
 
     render() {
-        const {handleSuccessResponseData, handleErrorResponseData} = this.props;
+        const {makeRequest} = this.props;
         const forgotPasswordPageProps = {
-            handleSuccessResponseData: handleSuccessResponseData,
-            handleErrorResponseData: handleErrorResponseData,
-            redirectTo: this.redirectTo
+            makeRequest: makeRequest,
+            showEmailSentResponsePage: this.showEmailSentResponsePage
         };
 
-        const emailSentResponsePageProps = {};
-        const updatePasswordPageProps = {};
+        const updatePasswordPageProps = {
+            makeRequest: makeRequest,
+            forgotPasswordToken: this.state.forgot_password_token,
+            showPasswordUpdatedResponsePage: this.showPasswordUpdatedResponsePage,
+            redirectTo: this.redirectTo
+        };
 
         return (
             <div>
                 {
-                    this.state.isShowEmailSentResponsePage ? <EmailSentResponsePage {...emailSentResponsePageProps}/> :
-                        (this.state.isShowUpdatePasswordPage ? <UpdatePasswordPage {...updatePasswordPageProps}/> :
-                            <ForgotPasswordPage {...forgotPasswordPageProps}/>)
+                    this.state.isShowEmailSentResponsePage ? <EmailSentResponsePage/> :
+                        this.state.isShowUpdatePasswordPage ? <UpdatePasswordPage {...updatePasswordPageProps}/> :
+                            this.state.isShowPasswordUpdatedResponsePage ? <PasswordUpdatedResponsePage/> :
+                            <ForgotPasswordPage {...forgotPasswordPageProps}/>
                 }
             </div>
         )
@@ -79,14 +106,9 @@ class ForgotPasswordContainer extends Component {
 }
 
 ForgotPasswordContainer.propTypes = {
-    handleSuccessResponseData: PropTypes.func.isRequired,
-    handleErrorResponseData: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired,
+    makeRequest: PropTypes.func.isRequired,
 };
 
 export default connect(null, {
-    handleSuccessResponseData,
-    handleErrorResponseData,
-    doesUserExists,
-    addFlashMessage
+    makeRequest,
 })(ForgotPasswordContainer);

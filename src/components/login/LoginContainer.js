@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import LoginPage from "./pages/LoginPage";
-import {handleErrorResponseData, handleSuccessResponseData, callApi} from "../../actions/requestAction";
+import {handleErrorResponseData, handleSuccessResponseData, callApi, makeRequest} from "../../actions/requestAction";
 import Loading from "../common/Loading";
 
 class LoginContainer extends Component {
@@ -21,11 +21,10 @@ class LoginContainer extends Component {
     }
 
     render() {
-        const {handleSuccessResponseData, handleErrorResponseData} = this.props;
+        const {makeRequest} = this.props;
 
         const loginPageProps = {
-            handleSuccessResponseData: handleSuccessResponseData,
-            handleErrorResponseData: handleErrorResponseData,
+            makeRequest: makeRequest,
             redirectTo: this.redirectTo,
         };
 
@@ -40,11 +39,17 @@ class LoginContainer extends Component {
 }
 
 LoginContainer.propTypes = {
-    handleSuccessResponseData: PropTypes.func.isRequired,
-    handleErrorResponseData: PropTypes.func.isRequired,
+    makeRequest: PropTypes.func.isRequired,
 };
 
-export default connect(null, {
-    handleSuccessResponseData,
-    handleErrorResponseData,
+function mapStateToProps(state) {
+    return {
+        auth: state.authReducer,
+        appStatus: state.appStatusReducer
+    }
+}
+
+
+export default connect(mapStateToProps, {
+    makeRequest,
 })(LoginContainer);

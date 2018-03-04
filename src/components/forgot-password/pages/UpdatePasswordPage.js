@@ -1,8 +1,9 @@
 import React from "react";
+import UpdatePasswordForm from "../includes/UpdatePasswordForm";
 
 const UpdatePasswordPage = (props) => {
     return(
-        <div>Forgot Password Page</div>
+        <UpdatePasswordForm {...props}/>
     )
 };
 

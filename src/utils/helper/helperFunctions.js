@@ -52,7 +52,7 @@ export function getEnv(key) {
  * @param errorCode
  * @return {string}
  */
-export function getErrorCodeMessage(errorCode) {
+export function getCodeMessage(errorCode) {
     return MESSAGES[errorCode] ? MESSAGES[errorCode] : MESSAGES.ERR_UNKNOWN;
 }
 

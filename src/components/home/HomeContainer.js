@@ -10,6 +10,7 @@ import {setCurrentLevel} from "../../actions/appStatusAction";
 import WelcomePage from "./pages/WelcomePage";
 import GuestPage from "./pages/GuestPage";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
+import {ROUTES} from "../../constants/routes";
 
 class HomeContainer extends Component {
     constructor(props) {
@@ -32,38 +33,6 @@ class HomeContainer extends Component {
             })
         }
         this.props.setCurrentLevel({});
-    }
-
-    render() {
-        const { auth, appStatus } = this.props;
-
-        const lastVisitedPath = appStatus.history && appStatus.history.last_visited ?
-            appStatus.history.last_visited : '/level/getting-started';
-
-        const welcomePageProps = {
-            onClickStart: this.onClickStart,
-            lastVisitedPath: lastVisitedPath
-        };
-
-        const guestPageProps = {
-            onClickStart: this.onClickStart
-        };
-
-        const emailVerificationPageProps = {
-            showVerifyLink: this.state.showVerifyLink,
-            onVerifyAccount: this.onVerifyAccount,
-            onSendVerificationEmail: this.onSendVerificationEmail,
-        };
-
-        return (
-            auth.isAuthenticated ?
-                (
-                    (auth.isVerified) ?
-                        <WelcomePage {...welcomePageProps}/>:
-                        <EmailVerificationPage {...emailVerificationPageProps}/>
-                )
-                : <GuestPage {...guestPageProps}/>
-        );
     }
 
     onClickStart(e) {
@@ -125,6 +94,38 @@ class HomeContainer extends Component {
             }
         );
     };
+
+    render() {
+        const { auth, appStatus } = this.props;
+
+        const lastVisitedPath = appStatus.history && appStatus.history.last_visited ?
+            appStatus.history.last_visited : ROUTES.LEVEL_ONE;
+
+        const welcomePageProps = {
+            onClickStart: this.onClickStart,
+            lastVisitedPath: lastVisitedPath
+        };
+
+        const guestPageProps = {
+            onClickStart: this.onClickStart
+        };
+
+        const emailVerificationPageProps = {
+            showVerifyLink: this.state.showVerifyLink,
+            onVerifyAccount: this.onVerifyAccount,
+            onSendVerificationEmail: this.onSendVerificationEmail,
+        };
+
+        return (
+            auth.isAuthenticated ?
+                (
+                    (auth.isVerified) ?
+                        <WelcomePage {...welcomePageProps}/>:
+                        <EmailVerificationPage {...emailVerificationPageProps}/>
+                )
+                : <GuestPage {...guestPageProps}/>
+        );
+    }
 }
 
 function mapStateToProps(state) {
