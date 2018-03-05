@@ -2,10 +2,12 @@
 export const MESSAGES = {
     // Success Message
     LOGIN_SUCCESS: "Logged in successfully",
+    LOGOUT_SUCCESS: "Logged out successfully",
     SAVED: "Saved",
     UPDATED: "Updated",
     FORGOT_EMAIL_SENT: "Forgot password email sent",
     PASSWORD_UPDATED: "Password updated successfully",
+    USER_REGISTERED: "Registered successfully",
 
     // Error Messages
     ERR_VALIDATION_FAILED: "Validation Failed",
@@ -34,9 +36,12 @@ export const MESSAGES = {
 
     //Page Error Codes
     ERR_INVALID_REQUEST: "Invalid Request",
-    ERR_MODEL_NOT_FOUND: "Couldn't find the user email",
+    ERR_DATABASE: "Database error",
+    ERR_MODEL_NOT_FOUND: "Couldn't find the user",
+    ERR_METHOD_NOT_ALLOWED: "Request method not allowed",
     ERR_NOT_FOUND: "Couldn't find the page",
     ERR_RESTRICTED: "You don't have enough permission to view this page",
+    ERR_MULTIPLE_BUSINESS: "You can't have multiple business",
 
     //Unknown Error Codes
     ERR_UNKNOWN: "Something went wrong",

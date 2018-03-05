@@ -54,7 +54,7 @@ class RightSideBar extends Component {
 
 RightSideBar.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    news: PropTypes.object.isRequired,
+    news: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state) {

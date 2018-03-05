@@ -1,9 +1,17 @@
 import * as axios from "axios";
 import setAuthorizationToken from "../utils/axios/setAuthorizationToken";
-import {SET_CURRENT_USER} from "../constants/actionTypes";
+import {SET_AUTH, SET_CURRENT_USER} from "../constants/actionTypes";
 import {getAppStatus, setAppStatus} from "./appStatusAction";
-import {addFlashMessage} from "./flashMessageAction";
 import {DEFAULT_APP_STATUS} from "../data/default";
+import {makeRequest} from "./requestAction";
+import request from "../services/request";
+
+export function setAuth(user) {
+    return {
+        type: SET_AUTH,
+        user
+    }
+}
 
 export function sendForgotPasswordEmail(userData) {
     return dispatch => {
@@ -88,14 +96,11 @@ export function setCurrentUser(user) {
 
 export function logout() {
     return dispatch => {
+        dispatch(makeRequest(request.Auth.logout));
         localStorage.removeItem("jwtToken");
         setAuthorizationToken(false);
         dispatch(setCurrentUser({}));
         dispatch(setAppStatus(DEFAULT_APP_STATUS));
         dispatch(getAppStatus());
-        dispatch(addFlashMessage({
-            type: "success",
-            text: "You have logged out successfully!"
-        }));
     }
 }

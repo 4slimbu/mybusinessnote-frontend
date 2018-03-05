@@ -1,4 +1,4 @@
-import {LOGIN, SET_CURRENT_USER} from "../constants/actionTypes";
+import {LOGIN, SET_AUTH, SET_CURRENT_USER} from "../constants/actionTypes";
 import {isEmpty} from "lodash";
 
 const initialState = {
@@ -28,6 +28,12 @@ export default (state = initialState, action = {}) => {
             return {
                 isAuthenticated: !isEmpty(action.user),
                 isVerified: isVerified,
+                user: action.user
+            };
+        case SET_AUTH:
+            return {
+                isAuthenticated: !isEmpty(action.user),
+                isVerified: action.user.verified,
                 user: action.user
             };
         default: return state;

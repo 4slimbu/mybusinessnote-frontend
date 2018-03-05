@@ -36,17 +36,21 @@ const requests = (type, url, userData = {}) => {
  */
 const Auth = {
     current: () =>
-        requests('GET', '/user'),
+        requests('GET', apiBaseUrl("/user")),
     login: (data) =>
         requests('POST', apiBaseUrl("/user/login"), data),
+    logout: (data) =>
+        requests('POST', apiBaseUrl("/user/logout"), data),
     register: (data) =>
-        requests('POST', '/user', data),
+        requests('POST', apiBaseUrl("/user"), data),
     save: (data) =>
-        requests('POST', '/user', data),
+        requests('PUT', apiBaseUrl("/user"), data),
     forgotPassword: (data) =>
         requests('POST', apiBaseUrl("/user/send-forgot-password-email"), data),
     updatePassword: (data) =>
         requests('POST', apiBaseUrl("/user/update-password"), data),
+    checkIfExists: (data) =>
+        requests('POST', apiBaseUrl("/user/check-if-exists"), data),
 };
 
 /**
@@ -54,9 +58,11 @@ const Auth = {
  */
 const Business = {
     get: () =>
-        requests('GET', '/business'),
+        requests('GET', apiBaseUrl("/user/business")),
     getStatus: () =>
-        requests('GET', '/business/status'),
+        requests('GET', apiBaseUrl("/user/business/status")),
+    save: (data) =>
+        requests('PUT', apiBaseUrl("/user/business"), data),
 };
 
 /**
@@ -74,11 +80,11 @@ const Level = {
     all: () =>
         requests('GET', '/levels'),
     allWithSections: () =>
-        requests('GET', '/levels?sections=true'),
+        requests('GET', '/levels?with=sections'),
     get: (id) =>
         requests('GET', `/levels/${id}`),
     getWithSections: (id) =>
-        requests('GET', `/levels/${id}?sections=true`)
+        requests('GET', `/levels/${id}?with=sections`)
 };
 
 /**
@@ -88,7 +94,7 @@ const Section = {
     all: () =>
         requests('GET', '/sections'),
     allWithBusinessOptions: () =>
-        requests('GET', '/sections?business-options=true')
+        requests('GET', '/sections?with=business-options')
 };
 
 /**
@@ -102,7 +108,9 @@ const BusinessOption = {
     get: (id) =>
         requests('GET', `/business-options/${id}`),
     getWithBusinessMeta: (id) =>
-        requests('GET', `/business-options/${id}?business-meta=true`)
+        requests('GET', `/business-options/${id}?with=business-meta`),
+    save: (data) =>
+        requests('POST', `/business-options`)
 };
 
 /**

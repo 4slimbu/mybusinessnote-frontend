@@ -2,11 +2,11 @@ import setAuthorizationToken from "../utils/axios/setAuthorizationToken";
 import jwt_decode from "jwt-decode";
 import {getAppStatus, setIsFetching} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
-import {setCurrentUser} from "./authActions";
+import {logout, setAuth, setCurrentUser} from "./authActions";
 import {getCodeMessage} from "../utils/helper/helperFunctions";
 import {MESSAGES} from "../constants/messages";
 
-export function makeRequest(apiCallFunction, data) {
+export function makeRequest(apiCallFunction, data = {}) {
     return dispatch => {
         dispatch(setIsFetching(true));
         return new Promise((resolve, reject) => {
@@ -33,8 +33,7 @@ export function handleSuccessResponseData(dispatch, responseData) {
     if (token) {
         localStorage.setItem("jwtToken", token);
         setAuthorizationToken(token);
-        dispatch(setCurrentUser(jwt_decode(token).user));
-        dispatch(addFlashMessage({type: "success", text: MESSAGES.LOGIN_SUCCESS}));
+        dispatch(setAuth(jwt_decode(token).user));
     }
     if (responseData.successCode) {
         dispatch(addFlashMessage({type: "success", text: getCodeMessage(responseData.successCode)}))
@@ -43,8 +42,15 @@ export function handleSuccessResponseData(dispatch, responseData) {
 }
 
 export function handleErrorResponseData(dispatch, errorData) {
-    dispatch(addFlashMessage({
-        type: "error",
-        text: getCodeMessage(errorData.errorCode)
-    }));
+    if (errorData.errorCode) {
+        if (
+            getCodeMessage(errorData.errorCode) === MESSAGES.ERR_TOKEN_EXPIRED ||
+            getCodeMessage(errorData.errorCode) === MESSAGES.ERR_TOKEN_INVALID ||
+            getCodeMessage(errorData.errorCode) === MESSAGES.ERR_TOKEN_USER_NOT_FOUND
+        ) {
+            dispatch(logout());
+        }
+
+        dispatch(addFlashMessage({type: "error", text: getCodeMessage(errorData.errorCode)}));
+    }
 }

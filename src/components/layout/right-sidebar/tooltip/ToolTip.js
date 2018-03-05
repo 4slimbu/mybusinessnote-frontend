@@ -17,7 +17,7 @@ const ToolTip = (toolTip) => {
 };
 
 ToolTip.propTypes = {
-    toolTip: PropTypes.object.isRequired,
+    toolTip: PropTypes.object,
 };
 
 export default ToolTip;

@@ -3,6 +3,7 @@ import request from "../../../../services/request";
 import {formatDate} from "../../../../utils/helper/helperFunctions";
 import {map} from "lodash";
 import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
 
 class NewsList extends Component {
 
@@ -17,12 +18,10 @@ class NewsList extends Component {
         this.fetchNews(this.props.newsTerm);
     }
 
-    componentWillReceiveProps() {
-        // alert(this.props.newsTerm);
-        //if
-        //will check if news exist for the given term in newsStore
-        //if yes retrieve news and populate the state
-        //if no, call api and populate the newsStore
+    componentWillReceiveProps(nextProps) {
+        if (this.props.location.pathname !== nextProps.location.pathname) {
+            this.fetchNews(this.props.newsTerm);
+        }
     }
 
     fetchNews(newsTerm) {
@@ -36,16 +35,14 @@ class NewsList extends Component {
                     news: responseData
                 });
             });
-        } else {
-            this.setState({
-                posts: news
-            })
         }
     }
 
     render() {
-
-        const NewsItem = map(this.state.posts, (post, key) => {
+        const newsTerm = this.props.newsTerm;
+        const tag = ( newsTerm) ? newsTerm : 'general';
+        const news = this.props.news[tag] ? this.props.news[tag] : this.props.news['general'];
+        const NewsItem = map(news, (post, key) => {
             return(
                 <div key={key} className="news-block clearfix">
                     <a target="_blank" href={ post.link }><img src={ post.featured_image_url } alt={ post.title } /></a>
@@ -67,9 +64,9 @@ class NewsList extends Component {
 
 NewsList.propTypes = {
     makeRequest: PropTypes.func.isRequired,
-    news: PropTypes.object.isRequired,
+    news: PropTypes.array.isRequired,
     setNews: PropTypes.func.isRequired,
-    newsTerm: PropTypes.string.isRequired
+    newsTerm: PropTypes.string
 };
 
-export default NewsList;
+export default withRouter(NewsList);
