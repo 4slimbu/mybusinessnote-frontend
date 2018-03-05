@@ -35,8 +35,6 @@ const requests = (type, url, userData = {}) => {
  * Handles all Auth related requests
  */
 const Auth = {
-    current: () =>
-        requests('GET', apiBaseUrl("/user")),
     login: (data) =>
         requests('POST', apiBaseUrl("/user/login"), data),
     logout: (data) =>
@@ -77,24 +75,9 @@ const BusinessCategory = {
  * Handles all Level related requests
  */
 const Level = {
+    // lets get everything we want including sections and keep it simple
     all: () =>
         requests('GET', '/levels'),
-    allWithSections: () =>
-        requests('GET', '/levels?with=sections'),
-    get: (id) =>
-        requests('GET', `/levels/${id}`),
-    getWithSections: (id) =>
-        requests('GET', `/levels/${id}?with=sections`)
-};
-
-/**
- * Handle all Section related requests
- */
-const Section = {
-    all: () =>
-        requests('GET', '/sections'),
-    allWithBusinessOptions: () =>
-        requests('GET', '/sections?with=business-options')
 };
 
 /**
@@ -128,7 +111,6 @@ export default {
     Business,
     BusinessCategory,
     Level,
-    Section,
     BusinessOption,
     News
 };
