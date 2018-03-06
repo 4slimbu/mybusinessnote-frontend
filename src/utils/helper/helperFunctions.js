@@ -26,6 +26,16 @@ export function apiBaseUrl(url = null) {
 }
 
 /**
+ * Return url relative to NEWS_FEED_API_BASE_URL
+ */
+export function newsFeedApiBaseUrl(url = null) {
+    if (url) {
+        return process.env.REACT_APP_NEWS_FEED_API_BASE_URL + url;
+    }
+    return process.env.REACT_APP_NEWS_FEED_API_BASE_URL;
+}
+
+/**
  * Gets the dashboard Url of current logged in user
  */
 export function dashboardUrl() {

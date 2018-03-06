@@ -1,5 +1,5 @@
 import * as axios from "axios";
-import {apiBaseUrl, getEnv} from "../utils/helper/helperFunctions";
+import {apiBaseUrl, getEnv, newsFeedApiBaseUrl} from "../utils/helper/helperFunctions";
 
 /**
  * This handles all the api request. If REACT_APP_ENV = mock-api, then the data
@@ -36,19 +36,19 @@ const requests = (type, url, userData = {}) => {
  */
 const Auth = {
     login: (data) =>
-        requests('POST', apiBaseUrl("/user/login"), data),
-    logout: (data) =>
-        requests('POST', apiBaseUrl("/user/logout"), data),
+        requests('POST', apiBaseUrl("/user/login"), data.credentials),
+    logout: () =>
+        requests('POST', apiBaseUrl("/user/logout")),
     register: (data) =>
-        requests('POST', apiBaseUrl("/user"), data),
+        requests('POST', apiBaseUrl("/user"), data.user),
     save: (data) =>
-        requests('PUT', apiBaseUrl("/user"), data),
+        requests('PUT', apiBaseUrl("/user"), data.user),
     forgotPassword: (data) =>
-        requests('POST', apiBaseUrl("/user/send-forgot-password-email"), data),
+        requests('POST', apiBaseUrl("/user/send-forgot-password-email"), data.email),
     updatePassword: (data) =>
-        requests('POST', apiBaseUrl("/user/update-password"), data),
+        requests('POST', apiBaseUrl("/user/update-password"), data.input),
     checkIfExists: (data) =>
-        requests('POST', apiBaseUrl("/user/check-if-exists"), data),
+        requests('POST', apiBaseUrl("/user/check-if-exists"), data.email),
 };
 
 /**
@@ -60,7 +60,7 @@ const Business = {
     getStatus: () =>
         requests('GET', apiBaseUrl("/user/business/status")),
     save: (data) =>
-        requests('PUT', apiBaseUrl("/user/business"), data),
+        requests('PUT', apiBaseUrl("/user/business"), data.business),
 };
 
 /**
@@ -75,25 +75,18 @@ const BusinessCategory = {
  * Handles all Level related requests
  */
 const Level = {
-    // lets get everything we want including sections and keep it simple
     all: () =>
         requests('GET', '/levels'),
 };
 
 /**
- * Handle all BusinessOption related requests
+ * Handle all Business Option related requests
  */
 const BusinessOption = {
-    all: () =>
-        requests('GET', '/business-options'),
-    byBusiness: (businessId) =>
-        requests('GET', `/business-options?business=${businessId}`),
-    get: (id) =>
-        requests('GET', `/business-options/${id}`),
-    getWithBusinessMeta: (id) =>
-        requests('GET', `/business-options/${id}?with=business-meta`),
+    get: (data) =>
+        requests('GET', `/business-options/${data.id}`),
     save: (data) =>
-        requests('POST', `/business-options`)
+        requests('POST', `/business-options/${data.id}`, data.businessOption)
 };
 
 /**
@@ -101,9 +94,9 @@ const BusinessOption = {
  */
 const News = {
     all: () =>
-        requests('GET', 'http://staging.mybusinessjourney.com.au/wp-json/mbj-feed/v1/posts'),
-    byTag: (tag) =>
-        requests('GET', `http://staging.mybusinessjourney.com.au/wp-json/mbj-feed/v1/posts?tag=${tag}`)
+        requests('GET', newsFeedApiBaseUrl("/wp-json/mbj-feed/v1/posts")),
+    byTag: (data) =>
+        requests('GET', newsFeedApiBaseUrl(`/wp-json/mbj-feed/v1/posts?tag=${data.tag}`))
 };
 
 export default {

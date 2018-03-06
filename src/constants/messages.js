@@ -8,6 +8,7 @@ export const MESSAGES = {
     FORGOT_EMAIL_SENT: "Forgot password email sent",
     PASSWORD_UPDATED: "Password updated successfully",
     USER_REGISTERED: "Registered successfully",
+    VERIFICATION_EMAIL_SENT: "Verification email sent",
 
     // Error Messages
     ERR_VALIDATION_FAILED: "Validation Failed",
