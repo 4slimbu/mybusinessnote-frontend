@@ -290,7 +290,14 @@ export function formatDate(dateString) {
 }
 
 export function isSectionLocked(businessOptionStatuses, section) {
-    return false;
+    if (section.id === 1 || section.id === 2) {
+        return false;
+    }
+    let statusObject = find(businessOptionStatuses, (item) => {
+        return item.section_id === section.id && item.status !== 'locked';
+    });
+
+    return !statusObject;
 }
 
 export function findStatus(statusCollection, levelId) {

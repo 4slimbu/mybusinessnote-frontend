@@ -3,13 +3,13 @@ import {map} from "lodash";
 import * as classnames from "classnames";
 import {findStatus, generateAppRelativeUrl, isSectionLocked} from "../../../../utils/helper/helperFunctions";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 class SectionLinks extends Component {
 
     render() {
         const {
-            level, sectionStatuses, onClickSectionLink, businessOptionStatuses, currentSectionId
+            level, sectionStatuses, businessOptionStatuses, currentSectionId
         } = this.props;
 
         const sectionsList = map(level.sections, (section, key) => {
@@ -18,10 +18,10 @@ class SectionLinks extends Component {
             const lockedClass = isSectionLocked(businessOptionStatuses, section) ? 'locked' : '';
             return (
                 <li key={section.id} className={classnames(lockedClass)}>
-                    <a href={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
+                    <Link to={sectionUrl}>
                         <span className={classnames("circle-span", {"complete": sectionStatus.completed_percent === 100}, {"active": currentSectionId === section.id})}></span>
                         {section.name}
-                    </a>
+                    </Link>
                 </li>
             )
         });
