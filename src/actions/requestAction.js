@@ -1,6 +1,6 @@
 import setAuthorizationToken from "../utils/axios/setAuthorizationToken";
 import jwt_decode from "jwt-decode";
-import {getAppStatus, setIsFetching} from "./appStatusAction";
+import {getAppStatus, setBusinessStatus, setIsFetching, setLevels} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {logout, setAuth, setCurrentUser} from "./authActions";
 import {getCodeMessage} from "../utils/helper/helperFunctions";
@@ -35,7 +35,16 @@ export function handleSuccessResponseData(dispatch, responseData) {
         setAuthorizationToken(token);
         dispatch(setAuth(jwt_decode(token).user));
     }
-    if (responseData.successCode) {
+
+    if (responseData.levels) {
+        dispatch(setLevels(responseData.levels));
+    }
+
+    if (responseData.businessStatus) {
+        dispatch(setBusinessStatus(responseData.businessStatus));
+    }
+
+    if (responseData.successCode && responseData.successCode !== 'RECEIVED') {
         dispatch(addFlashMessage({type: "success", text: getCodeMessage(responseData.successCode)}))
     }
     dispatch(getAppStatus());

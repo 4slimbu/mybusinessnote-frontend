@@ -1,8 +1,9 @@
     import {
     GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID,
+        SET_BUSINESS_STATUS,
     SET_COMPLETED_STATUS, SET_CURRENT,
     SET_CURRENT_BUSINESS_OPTION,
-    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_IS_FETCHING, SET_SELL_GOODS,
+    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_IS_FETCHING, SET_LEVELS, SET_SELL_GOODS,
     SET_SHOW_COMPLETED_PAGE,
     SET_TOOLTIP_CONTENT
 } from "../constants/actionTypes";
@@ -10,6 +11,16 @@ import {DEFAULT_APP_STATUS} from "../data/default";
 
 export default (state = DEFAULT_APP_STATUS, action = {}) => {
     switch(action.type) {
+        case `${SET_LEVELS}`:
+            return {
+                ...state,
+                levels: action.levels
+            };
+        case `${SET_BUSINESS_STATUS}`:
+            return {
+                ...state,
+                businessStatus: action.businessStatus
+            };
         case `${GET_APP_STATUS}_PENDING` :
             return {
                 ...state,
@@ -30,9 +41,9 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
         case `${SET_CURRENT}` :
             return {
                 ...state,
-                currentLevel: action.current.level,
-                currentSection: action.current.section,
-                currentBusinessOption: action.current.businessOption
+                currentLevelId: action.current.levelId,
+                currentSectionId: action.current.sectionId,
+                currentBusinessOptionId: action.current.businessOptionId
             };
         case `${SET_IS_FETCHING}` :
             return {

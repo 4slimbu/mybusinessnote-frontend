@@ -1,4 +1,9 @@
 export const DEFAULT_APP_STATUS = {
+    currentLevelId: null,
+    currentSectionId: null,
+    currentBusinessOptionId: null,
+    levels: [],
+    businessStatus: [],
     business_id: null,
     user_id: null,
     first_name: "",
@@ -12,7 +17,7 @@ export const DEFAULT_APP_STATUS = {
     business_name: "",
     website: "",
     abn: "",
-    levels: [{slug: ""}],
+
     defaultLevel: {},
     previousLevel: {},
     currentLevel: {},

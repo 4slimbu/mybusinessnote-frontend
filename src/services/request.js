@@ -36,19 +36,19 @@ const requests = (type, url, userData = {}) => {
  */
 const Auth = {
     login: (data) =>
-        requests('POST', apiBaseUrl("/user/login"), data.credentials),
-    logout: () =>
-        requests('POST', apiBaseUrl("/user/logout")),
+        requests('POST', apiBaseUrl("/user/login"), data),
+    logout: (data) =>
+        requests('POST', apiBaseUrl("/user/logout"), data),
     register: (data) =>
-        requests('POST', apiBaseUrl("/user"), data.user),
+        requests('POST', apiBaseUrl("/user"), data),
     save: (data) =>
-        requests('PUT', apiBaseUrl("/user"), data.user),
+        requests('PUT', apiBaseUrl("/user"), data),
     forgotPassword: (data) =>
-        requests('POST', apiBaseUrl("/user/send-forgot-password-email"), data.email),
+        requests('POST', apiBaseUrl("/user/send-forgot-password-email"), data),
     updatePassword: (data) =>
-        requests('POST', apiBaseUrl("/user/update-password"), data.input),
+        requests('POST', apiBaseUrl("/user/update-password"), data),
     checkIfExists: (data) =>
-        requests('POST', apiBaseUrl("/user/check-if-exists"), data.email),
+        requests('POST', apiBaseUrl("/user/check-if-exists"), data),
 };
 
 /**
@@ -60,7 +60,7 @@ const Business = {
     getStatus: () =>
         requests('GET', apiBaseUrl("/user/business/status")),
     save: (data) =>
-        requests('PUT', apiBaseUrl("/user/business"), data.business),
+        requests('PUT', apiBaseUrl("/user/business"), data),
 };
 
 /**
@@ -68,7 +68,7 @@ const Business = {
  */
 const BusinessCategory = {
     all: () =>
-        requests('GET', '/business-categories'),
+        requests('GET', apiBaseUrl("/business-categories")),
 };
 
 /**
@@ -76,17 +76,17 @@ const BusinessCategory = {
  */
 const Level = {
     all: () =>
-        requests('GET', '/levels'),
+        requests('GET', apiBaseUrl("/levels")),
 };
 
 /**
  * Handle all Business Option related requests
  */
 const BusinessOption = {
-    get: (data) =>
-        requests('GET', `/business-options/${data.id}`),
+    get: (id) =>
+        requests('GET', apiBaseUrl(`/business-options/${id}`)),
     save: (data) =>
-        requests('POST', `/business-options/${data.id}`, data.businessOption)
+        requests('POST', apiBaseUrl(`/business-options/${data.id}`), data.input)
 };
 
 /**
@@ -95,8 +95,8 @@ const BusinessOption = {
 const News = {
     all: () =>
         requests('GET', newsFeedApiBaseUrl("/wp-json/mbj-feed/v1/posts")),
-    byTag: (data) =>
-        requests('GET', newsFeedApiBaseUrl(`/wp-json/mbj-feed/v1/posts?tag=${data.tag}`))
+    byTag: (tag) =>
+        requests('GET', newsFeedApiBaseUrl(`/wp-json/mbj-feed/v1/posts?tag=${tag}`))
 };
 
 export default {

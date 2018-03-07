@@ -10,26 +10,26 @@ import {
 import {withRouter} from "react-router-dom";
 import {
     getCurrentLevelByUrl,
-    getCurrentSectionByUrl
+    getCurrentSectionByUrl, publicUrl
 } from "../utils/helper/helperFunctions";
 import ErrorBoundary from "./ErrorBoundary";
 import LayoutContainer from "./layout/LayoutContainer";
-import LeftSideBar from "./layout/left-sidebar/LeftSideBar";
+import LeftSideBar from "./layout/left-sidebar/LeftSideBarContainer";
 import RightSideBar from "./layout/right-sidebar/RightSideBar";
 import MainContentContainer from "./layout/main-content/MainContentContainer";
 import Loading from "./common/Loading";
 import RouteSwitch from "../RouteSwitch";
+import {makeRequest} from "../actions/requestAction";
+import request from "../services/request";
 
 class App extends Component {
 
     componentDidMount() {
-        //do app bootstrapping stuff here
-        //call appBootstrap() action which will set:
-        //user if exist
-        //business if exist
-        //levels and sections
+        this.props.makeRequest(request.Level.all);
+        this.props.makeRequest(request.Business.getStatus);
+        this.props.makeRequest(request.News.byTag, {tag: 'general'});
+        //if auth make
 
-        this.props.getBusinessCategories();
         this.props.getAppStatus().then((response) => {
             const appStatus = this.props.appStatus;
             const url = this.props.history.location.pathname;
@@ -54,21 +54,26 @@ class App extends Component {
     }
 
     render() {
-        const { auth, appStatus } = this.props;
+        const {auth, appStatus} = this.props;
         return (
-            <ErrorBoundary>
-                <LayoutContainer>
-                    {(auth.isFetching || appStatus.isFetching) && <Loading/>}
-                    <FlashMessageList/>
-                    <LeftSideBar/>
+            appStatus.levels && (appStatus.businessStatus) ?
+                <ErrorBoundary>
+                    <LayoutContainer>
+                        {(auth.isFetching || appStatus.isFetching) && <Loading/>}
+                        <FlashMessageList/>
+                        <LeftSideBar/>
 
-                    <MainContentContainer>
-                        <RouteSwitch/>
-                    </MainContentContainer>
+                        <MainContentContainer>
+                            <RouteSwitch/>
+                        </MainContentContainer>
 
-                    <RightSideBar/>
-                </LayoutContainer>
-            </ErrorBoundary>
+                        <RightSideBar/>
+                    </LayoutContainer>
+                </ErrorBoundary>
+                :
+                <div className="app-loading">
+                    <img className="logo" src={publicUrl("/assets/images/app_logo_256.png")} alt=""/>
+                </div>
         )
     }
 }
@@ -90,8 +95,8 @@ function mapStateToProps(state) {
     }
 }
 
-
 export default withRouter(connect(mapStateToProps, {
+    makeRequest,
     getAppStatus,
     getBusinessCategories,
     setCurrentLevel,

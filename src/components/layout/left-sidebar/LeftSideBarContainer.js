@@ -7,25 +7,60 @@ import MobileNavLinks from "./navigation/MobileNavLinks";
 import {logout} from "../../../actions/authActions";
 import {
     getBusinessOptionFromUrl,
-    setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
+    setCompletedStatus, setCurrent, setCurrentBusinessOption, setCurrentLevel,
     setCurrentSection
 } from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import PropTypes from "prop-types";
+import {generateAppRelativeUrl} from "../../../utils/helper/helperFunctions";
 
 class LeftSideBarContainer extends Component {
+    constructor(props) {
+        super(props);
+
+        this.onClickLevelLink = this.onClickLevelLink.bind(this);
+        this.onClickSectionLink = this.onClickSectionLink.bind(this);
+    }
+
     logout(e) {
         e.preventDefault();
         this.props.logout();
         this.props.history.push("/");
     }
 
+    onClickLevelLink(e, level) {
+        e.preventDefault();
+
+        const levelUrl = generateAppRelativeUrl(level.slug);
+        this.props.setCurrent(level.id);
+        this.props.history.push(levelUrl);
+    }
+
+    onClickSectionLink(e, level, section) {
+        e.preventDefault();
+
+        const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
+        this.props.setCurrent(level.id, section.id);
+        this.props.history.push(sectionUrl);
+    }
+
     render() {
         const {
-            appStatus, addFlashMessage, setCurrentLevel,
-            setCurrentSection, setCurrentBusinessOption,
+            appStatus, addFlashMessage, setCurrent,
             setCompletedStatus, getBusinessOptionFromUrl
         } = this.props;
+
+        const levelLinksProps = {
+            appStatus: appStatus,
+            setCurrent: setCurrent,
+            setCompletedStatus: setCompletedStatus,
+            getBusinessOptionFromUrl: getBusinessOptionFromUrl,
+            addFlashMessage: addFlashMessage,
+            onClickLevelLink: this.onClickLevelLink,
+            onClickSectionLink: this.onClickSectionLink
+        };
+
+        const mobileNavLinksProps = {};
 
         const completed_percent = appStatus.currentLevel.completed_percent ? appStatus.currentLevel.completed_percent : 0;
 
@@ -35,28 +70,12 @@ class LeftSideBarContainer extends Component {
                     <Brand/>
                     <div className="menu-accordion">
                         <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
-                            <LevelLinks
-                                appStatus={appStatus}
-                                setCurrentLevel={setCurrentLevel}
-                                setCurrentSection={setCurrentSection}
-                                setCurrentBusinessOption={setCurrentBusinessOption}
-                                setCompletedStatus={setCompletedStatus}
-                                getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                                addFlashMessage={addFlashMessage}
-                            />
+                            <LevelLinks {...levelLinksProps}/>
                         </div>
                     </div>
                 </section>
                 <section className="hidden-sm hidden-md hidden-lg content-block">
-                    <MobileNavLinks
-                        appStatus={appStatus}
-                        setCurrentLevel={setCurrentLevel}
-                        setCurrentSection={setCurrentSection}
-                        setCurrentBusinessOption={setCurrentBusinessOption}
-                        setCompletedStatus={setCompletedStatus}
-                        getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                        addFlashMessage={addFlashMessage}
-                    />
+                    {/*<MobileNavLinks {...mobileNavLinksProps}/>*/}
 
                     <div className="progress">
                         <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
@@ -73,9 +92,7 @@ LeftSideBarContainer.propTypes = {
     auth: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
     appStatus: PropTypes.object.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCurrent: PropTypes.func.isRequired,
     setCompletedStatus: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
@@ -91,10 +108,8 @@ function mapStateToProps(state) {
 
 export default withRouter(connect(mapStateToProps, {
     logout,
-    setCurrentLevel,
-    setCurrentSection,
+    setCurrent,
     setCompletedStatus,
     addFlashMessage,
-    setCurrentBusinessOption,
     getBusinessOptionFromUrl
 })(LeftSideBarContainer));
