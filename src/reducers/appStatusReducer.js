@@ -41,9 +41,9 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
         case `${SET_CURRENT}` :
             return {
                 ...state,
-                currentLevelId: action.current.levelId,
-                currentSectionId: action.current.sectionId,
-                currentBusinessOptionId: action.current.businessOptionId
+                currentLevel: action.current.level,
+                currentSection: action.current.section,
+                currentBusinessOption: action.current.businessOption
             };
         case `${SET_IS_FETCHING}` :
             return {

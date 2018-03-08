@@ -3,11 +3,12 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
+    extractLevelFromLocation, findLevelBySlug,
     generateLevelCompletedPercent,
     getCurrentLevelByUrl, isSectionLocked
 } from "../../utils/helper/helperFunctions";
 import {
-    getBusinessOption, setCompletedStatus, setCurrentBusinessOption, setCurrentLevel,
+    getBusinessOption, setCompletedStatus, setCurrent, setCurrentBusinessOption, setCurrentLevel,
     setCurrentSection, setShowCompletedPage, setToolTipContent
 } from "../../actions/appStatusAction";
 import LevelCompletePage from "./pages/LevelCompletePage";
@@ -31,21 +32,23 @@ class LevelContainer extends Component {
     }
 
     componentDidMount() {
-        this.populateLevelData(this.props.appStatus);
+        this.bootstrap(this.props.appStatus.levels, this.props.location.pathname);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.populateLevelData(nextProps.appStatus);
+        if (this.props.location.pathname !== nextProps.location.pathname) {
+            this.bootstrap(this.props.appStatus.levels, nextProps.location.pathname)
+        }
     }
 
-    populateLevelData(appStatus) {
-        const {levels = [{}], currentLevel = {}} = appStatus;
-        const levelCompletePercent = generateLevelCompletedPercent(levels, currentLevel);
-        this.setState({
-            isCurrentLevelSet: !(Object.keys(currentLevel).length === 0 && currentLevel.constructor === Object),
-            isCurrentLevelComplete: levelCompletePercent === 100
-        });
+    bootstrap(levels, location) {
+        if (this.props.appStatus.levels) {
+            let levelSlug = extractLevelFromLocation(location);
+            let currentLevel = findLevelBySlug(levels, levelSlug);
+            this.props.setCurrent(currentLevel);
+        }
     }
+
 
     onClickLevelLink(e, levelUrl) {
         e.preventDefault();
@@ -152,8 +155,8 @@ class LevelContainer extends Component {
         };
 
         return (
-            this.state.isCurrentLevelSet ?
-                this.state.isCurrentLevelComplete ?
+            this.props.appStatus.currentLevel ?
+                this.props.appStatus.isShowLevelCompletePage ?
                     <LevelCompletePage {...levelCompletePageProps}/>
                     :
                     <LevelIntroPage {...levelIntroPageProps}/>
@@ -184,6 +187,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
     getBusinessOption,
+    setCurrent,
     setCurrentLevel,
     setCurrentSection,
     setCompletedStatus,

@@ -2,7 +2,7 @@ import setAuthorizationToken from "../utils/axios/setAuthorizationToken";
 import jwt_decode from "jwt-decode";
 import {getAppStatus, setBusinessStatus, setIsFetching, setLevels} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
-import {logout, setAuth, setCurrentUser} from "./authActions";
+import {logout, setAuth} from "./authActions";
 import {getCodeMessage} from "../utils/helper/helperFunctions";
 import {MESSAGES} from "../constants/messages";
 
@@ -33,7 +33,7 @@ export function handleSuccessResponseData(dispatch, responseData) {
     if (token) {
         localStorage.setItem("jwtToken", token);
         setAuthorizationToken(token);
-        dispatch(setAuth(jwt_decode(token).user));
+        dispatch(setAuth(jwt_decode(token)));
     }
 
     if (responseData.levels) {

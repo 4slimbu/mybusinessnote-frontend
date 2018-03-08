@@ -10,11 +10,11 @@ import SectionLinks from "./SectionLinks";
 class LevelLinks extends Component {
 
     render() {
-        const { appStatus, onClickLevelLink, onClickSectionLink } = this.props;
+        const { appStatus, onClickLevelLink } = this.props;
 
-        const {levels, currentLevelId, businessStatus} = appStatus;
+        const {levels, currentLevel, businessStatus} = appStatus;
 
-        const {levelStatuses, sectionStatuses, businessOptionStatuses} = businessStatus;
+        const {levelStatuses} = businessStatus;
 
         //generate level list from levels
         const levelsList = map(levels, (level, key) => {
@@ -25,13 +25,11 @@ class LevelLinks extends Component {
 
             const sectionLinksProps = {
                 level: level,
-                onClickSectionLink: onClickSectionLink,
-                sectionStatuses: sectionStatuses,
-                businessOptionStatuses: businessOptionStatuses,
-                currentSectionId: appStatus.currentSectionId
+                appStatus: appStatus,
             };
+
             return (
-                <Panel key={level.slug} eventKey={level.id} className={classnames("panel-faq", {"active": currentLevelId === level.id})}>
+                <Panel key={level.slug} eventKey={level.id} className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
                     <Panel.Heading>
                         <Panel.Title toggle>
                             <a onClick={(e) => onClickLevelLink(e, level )} href={levelUrl}
@@ -56,7 +54,7 @@ class LevelLinks extends Component {
 
         return (
             (levels.length > 1) ?
-            <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevelId} onSelect={(newKey)=>handleSelect(newKey)}>
+            <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.id} onSelect={(newKey)=>handleSelect(newKey)}>
                 {levelsList}
             </PanelGroup> :
                 <div></div>

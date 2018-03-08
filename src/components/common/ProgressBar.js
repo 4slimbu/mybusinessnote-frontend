@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {saveBusinessOption} from "../../utils/helper/helperFunctions";
 
 const ProgressBar = ({ completed_percent, total_completed_sections, total_sections }) => {
     return (

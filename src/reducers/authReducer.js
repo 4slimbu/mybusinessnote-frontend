@@ -7,34 +7,16 @@ const initialState = {
 };
 
 export default (state = initialState, action = {}) => {
-    const isVerified = action.user ? action.user.verified : 0;
+    const user = action.payload && action.payload.user ? action.payload.user : {};
+    const scope = action.payload && action.payload.scope ? action.payload.scope : {};
+    const isVerified = user.verified ? user.verified : 0;
     switch(action.type) {
-        case `${LOGIN}_PENDING`:
-            return {
-                ...state,
-                isFetching: true
-            };
-        case `${LOGIN}_FULFILLED`:
-            return {
-                ...state,
-                isFetching: false
-            };
-        case `${LOGIN}_REJECTED`:
-            return {
-                ...state,
-                isFetching: false
-            };
-        case SET_CURRENT_USER :
-            return {
-                isAuthenticated: !isEmpty(action.user),
-                isVerified: isVerified,
-                user: action.user
-            };
         case SET_AUTH:
             return {
-                isAuthenticated: !isEmpty(action.user),
-                isVerified: action.user.verified,
-                user: action.user
+                isAuthenticated: !isEmpty(user),
+                isVerified: isVerified,
+                user: user,
+                scope: scope
             };
         default: return state;
     }

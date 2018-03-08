@@ -8,9 +8,9 @@ import {Link, withRouter} from "react-router-dom";
 class SectionLinks extends Component {
 
     render() {
-        const {
-            level, sectionStatuses, businessOptionStatuses, currentSectionId
-        } = this.props;
+        const {appStatus, level} = this.props;
+        const {currentSection, businessStatus} = appStatus;
+        const {sectionStatuses, businessOptionStatuses} = businessStatus;
 
         const sectionsList = map(level.sections, (section, key) => {
             const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
@@ -19,7 +19,7 @@ class SectionLinks extends Component {
             return (
                 <li key={section.id} className={classnames(lockedClass)}>
                     <Link to={sectionUrl}>
-                        <span className={classnames("circle-span", {"complete": sectionStatus.completed_percent === 100}, {"active": currentSectionId === section.id})}></span>
+                        <span className={classnames("circle-span", {"complete": sectionStatus.completed_percent === 100}, {"active": currentSection.id === section.id})}></span>
                         {section.name}
                     </Link>
                 </li>

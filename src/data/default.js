@@ -2,6 +2,7 @@ export const DEFAULT_APP_STATUS = {
     currentLevelId: null,
     currentSectionId: null,
     currentBusinessOptionId: null,
+    isShowLevelCompletePage: null,
     levels: [],
     businessStatus: [],
     business_id: null,

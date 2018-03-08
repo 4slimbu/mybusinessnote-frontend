@@ -9,7 +9,7 @@ const sections = (appStatus, level, onClickSectionLink, onHandleToolTip) => map(
     const active = 'active';
     const sectionUrl = '/level/' + level.slug + '/section/' + section.slug;
 
-    const isLocked = !!isSectionLocked(appStatus, level, key);
+    const isLocked = !!isSectionLocked(appStatus.businessStatus.businessOptionStatuses, section);
     const lockedClass = isLocked ? 'locked' : '';
 
     return (

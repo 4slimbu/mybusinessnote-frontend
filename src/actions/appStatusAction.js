@@ -114,13 +114,13 @@ export function setBusinessStatus(businessStatus) {
     }
 }
 
-export function setCurrent(levelId = null, sectionId = null, businessOptionId = null) {
+export function setCurrent(level = {}, section = {}, businessOption = {}) {
     return {
         type: SET_CURRENT,
         current: {
-            levelId: levelId,
-            sectionId: sectionId,
-            businessOptionId: businessOptionId
+            level: level,
+            section: section,
+            businessOption: businessOption
         }
     }
 }

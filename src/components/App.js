@@ -28,35 +28,12 @@ class App extends Component {
         this.props.makeRequest(request.Level.all);
         this.props.makeRequest(request.Business.getStatus);
         this.props.makeRequest(request.News.byTag, {tag: 'general'});
-        //if auth make
-
-        this.props.getAppStatus().then((response) => {
-            const appStatus = this.props.appStatus;
-            const url = this.props.history.location.pathname;
-            const currentLevel = getCurrentLevelByUrl(appStatus.levels, url);
-
-            if (currentLevel) {
-                this.props.setCurrentLevel(currentLevel);
-
-                const currentSection = getCurrentSectionByUrl(currentLevel.sections, url);
-
-                if (currentSection) {
-                    this.props.setCurrentSection(currentSection);
-                } else {
-                    this.props.setCurrentSection({});
-                    this.props.setCurrentBusinessOption({});
-                }
-            } else {
-                this.props.setCurrentLevel({});
-            }
-
-        });
     }
 
     render() {
         const {auth, appStatus} = this.props;
         return (
-            appStatus.levels && (appStatus.businessStatus) ?
+            appStatus.levels.length > 0 && appStatus.businessStatus ?
                 <ErrorBoundary>
                     <LayoutContainer>
                         {(auth.isFetching || appStatus.isFetching) && <Loading/>}

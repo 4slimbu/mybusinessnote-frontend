@@ -6,10 +6,10 @@ import {DEFAULT_APP_STATUS} from "../data/default";
 import {makeRequest} from "./requestAction";
 import request from "../services/request";
 
-export function setAuth(user) {
+export function setAuth(payload) {
     return {
         type: SET_AUTH,
-        user
+        payload
     }
 }
 

@@ -289,12 +289,34 @@ export function formatDate(dateString) {
     return date.toLocaleString("en-US", options);
 }
 
+export function isLevelLocked(levelStatuses, level) {
+    // all levels are open
+    return false;
+}
+
 export function isSectionLocked(businessOptionStatuses, section) {
+    // some sections are open by default
     if (section.id === 1 || section.id === 2) {
         return false;
     }
     let statusObject = find(businessOptionStatuses, (item) => {
+        if (! item) {
+            debugger;
+        }
         return item.section_id === section.id && item.status !== 'locked';
+    });
+
+    return !statusObject;
+}
+
+export function isBusinessOptionLocked(businessOptionStatuses, businessOption) {
+    //some business options are open by default
+    if (businessOption.id === 1 || businessOption.id === 2 || businessOption.id === 3) {
+        return false;
+    }
+
+    let statusObject = find(businessOptionStatuses, (item) => {
+        return item.id === businessOption.id && item.status !== 'locked';
     });
 
     return !statusObject;
@@ -304,4 +326,61 @@ export function findStatus(statusCollection, levelId) {
     let statusObject = find(statusCollection, {id: levelId});
 
     return statusObject ? statusObject : {};
+}
+
+export function findLevelById(levels, id) {
+    let level = find(levels, {id: id});
+
+    return level ? level : {};
+}
+
+export function findLevelBySlug(levels, slug) {
+    let level = find(levels, {slug: slug});
+
+    return level ? level : {};
+}
+
+export function findSectionById(sections, id) {
+    let section = find(sections, {id: id});
+
+    return section ? section : {};
+}
+
+export function findSectionBySlug(sections, slug) {
+    let section = find(sections, {slug: slug});
+
+    return section ? section : {};
+}
+
+export function findBusinessOptionById(businessOptions, id) {
+    let businessOption = find(businessOptions, {id: id});
+
+    return businessOption ? businessOption : {};
+}
+
+export function findBusinessOptionBySlug(businessOptions, slug) {
+    let businessOption = find(businessOptions, {slug: slug});
+
+    return businessOption ? businessOption : {};
+}
+
+export function getPreviousLevel(levels, level) {
+
+}
+
+export function getNextLevel() {
+
+}
+
+export function getPreviousSection() {
+}
+
+export function getNextSection() {
+
+}
+
+export function getPreviousBusinessOption() {
+}
+
+export function getNextBusinessOption() {
 }

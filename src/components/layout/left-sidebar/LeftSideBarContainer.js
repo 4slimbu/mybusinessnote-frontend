@@ -32,7 +32,7 @@ class LeftSideBarContainer extends Component {
         e.preventDefault();
 
         const levelUrl = generateAppRelativeUrl(level.slug);
-        this.props.setCurrent(level.id);
+        this.props.setCurrent(level);
         this.props.history.push(levelUrl);
     }
 
@@ -40,7 +40,7 @@ class LeftSideBarContainer extends Component {
         e.preventDefault();
 
         const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-        this.props.setCurrent(level.id, section.id);
+        this.props.setCurrent(level, section);
         this.props.history.push(sectionUrl);
     }
 
@@ -65,6 +65,7 @@ class LeftSideBarContainer extends Component {
         const completed_percent = appStatus.currentLevel.completed_percent ? appStatus.currentLevel.completed_percent : 0;
 
         return (
+            appStatus.levels &&
             <div>
                 <section className="hidden-xs left-sec bg-navy">
                     <Brand/>
