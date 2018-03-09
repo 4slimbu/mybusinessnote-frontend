@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {map} from "lodash";
 import * as classnames from "classnames";
-import {findStatus, generateAppRelativeUrl, isSectionLocked} from "../../../../utils/helper/helperFunctions";
+import {findStatus, generateAppRelativeUrl, getStatus, isSectionLocked} from "../../../../utils/helper/helperFunctions";
 import PropTypes from "prop-types";
 import {Link, withRouter} from "react-router-dom";
 
@@ -14,7 +14,7 @@ class SectionLinks extends Component {
 
         const sectionsList = map(level.sections, (section, key) => {
             const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-            const sectionStatus = findStatus(sectionStatuses, section.id);
+            const sectionStatus = getStatus(sectionStatuses, section.id);
             const lockedClass = isSectionLocked(businessOptionStatuses, section) ? 'locked' : '';
             return (
                 <li key={section.id} className={classnames(lockedClass)}>

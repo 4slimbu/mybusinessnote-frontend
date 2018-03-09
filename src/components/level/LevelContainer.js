@@ -3,9 +3,8 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    extractLevelFromLocation, findLevelBySlug,
-    generateLevelCompletedPercent,
-    getCurrentLevelByUrl, isSectionLocked
+    extractLevelFromLocation, getBySlug,
+    getCurrentLevelByUrl, getFirst, getLast, getNext, getPrevious, isSectionLocked
 } from "../../utils/helper/helperFunctions";
 import {
     getBusinessOption, setCompletedStatus, setCurrent, setCurrentBusinessOption, setCurrentLevel,
@@ -42,11 +41,12 @@ class LevelContainer extends Component {
     }
 
     bootstrap(levels, location) {
-        if (this.props.appStatus.levels) {
-            let levelSlug = extractLevelFromLocation(location);
-            let currentLevel = findLevelBySlug(levels, levelSlug);
-            this.props.setCurrent(currentLevel);
-        }
+        let levelSlug = extractLevelFromLocation(location);
+        let currentLevel = getBySlug(levels, levelSlug);
+        this.props.setCurrent(currentLevel);
+        console.log(getPrevious(levels, currentLevel.id));
+        console.log(getFirst(levels));
+        console.log(getLast(levels));
     }
 
 

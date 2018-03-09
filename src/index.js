@@ -13,7 +13,7 @@ import App from "./components/App";
 import rootReducer from "./rootReducer";
 import {DEFAULT_APP_STATUS} from "./data/default";
 import setAuthorizationToken from "./utils/axios/setAuthorizationToken";
-import {setCurrentUser} from "./actions/authActions";
+import {setAuth, setCurrentUser} from "./actions/authActions";
 import {getAppStatus, setAppStatus} from "./actions/appStatusAction";
 import {getAllUrlParams} from "./utils/helper/helperFunctions";
 
@@ -41,18 +41,18 @@ if (localStorage.getItem("jwtToken")) {
         const decodedToken = jwt_decode(localStorage.getItem("jwtToken"));
         if (decodedToken.exp > (new Date().getTime() / 1000)) {
             setAuthorizationToken(localStorage.getItem("jwtToken"));
-            store.dispatch(setCurrentUser(jwt_decode(localStorage.getItem("jwtToken")).user));
+            store.dispatch(setAuth(decodedToken));
         } else {
             localStorage.removeItem("jwtToken");
             setAuthorizationToken(false);
-            store.dispatch(setCurrentUser({}));
+            store.dispatch(setAuth({}));
             store.dispatch(setAppStatus(DEFAULT_APP_STATUS));
             store.dispatch(getAppStatus());
         }
     } catch (err) {
         localStorage.removeItem("jwtToken");
         setAuthorizationToken(false);
-        store.dispatch(setCurrentUser({}));
+        store.dispatch(setAuth({}));
         store.dispatch(setAppStatus(DEFAULT_APP_STATUS));
         store.dispatch(getAppStatus());
     }

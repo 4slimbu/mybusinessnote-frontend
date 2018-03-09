@@ -4,13 +4,11 @@ import PropTypes from "prop-types";
 import {
     getAppStatus, getBusinessOption, getBusinessOptionFromAppUrl, getBusinessOptionFromUrl, setCompletedStatus,
     setCurrentBusinessOption, setCurrentLevel, setCurrentSection, setShowCompletedPage, setToolTipContent
-} from "../../actions/appStatusAction";
-import BusinessOptionPage from "../business-option/BusinessOptionPage";
-import Loading from "../common/Loading";
-import {generateApiUrlFromUrlLocation, mbjLog} from "../../utils/helper/helperFunctions";
+} from "../../../actions/appStatusAction";
+import BusinessOptionPage from "../../business-option/BusinessOptionPage";
+import Loading from "../../common/Loading";
 import {withRouter} from "react-router-dom";
-import {isEmpty} from "lodash";
-import {addFlashMessage} from "../../actions/flashMessageAction";
+import {addFlashMessage} from "../../../actions/flashMessageAction";
 import $ from "jquery";
 
 class SectionPage extends Component {

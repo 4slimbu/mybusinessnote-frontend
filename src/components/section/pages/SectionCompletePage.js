@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 
-class SectionCompletedPage extends Component {
+class SectionCompletePage extends Component {
     render() {
         const {level, nextLevel, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
         const onClickLevelLink = function (e, levelUrl) {
@@ -37,7 +37,7 @@ class SectionCompletedPage extends Component {
     }
 }
 
-SectionCompletedPage.propTypes = {
+SectionCompletePage.propTypes = {
     level: PropTypes.object.isRequired,
     nextLevel: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
@@ -45,4 +45,4 @@ SectionCompletedPage.propTypes = {
     setCurrentBusinessOption: PropTypes.func.isRequired
 };
 
-export default withRouter(SectionCompletedPage);
+export default withRouter(SectionCompletePage);

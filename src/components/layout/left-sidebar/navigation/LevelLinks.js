@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {map} from "lodash";
 import * as classnames from "classnames";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {findStatus, generateAppRelativeUrl} from "../../../../utils/helper/helperFunctions";
+import {findStatus, generateAppRelativeUrl, getStatus} from "../../../../utils/helper/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
 import SectionLinks from "./SectionLinks";
 
@@ -19,7 +19,7 @@ class LevelLinks extends Component {
         //generate level list from levels
         const levelsList = map(levels, (level, key) => {
             //generate level Image from level id
-            const levelStatus = findStatus(levelStatuses, level.id);
+            const levelStatus = getStatus(levelStatuses, level.id);
             const levelImg = (levelStatus.completed_percent >= 100) ? level.badge_icon : level.icon;
             const levelUrl = generateAppRelativeUrl(level.slug);
 

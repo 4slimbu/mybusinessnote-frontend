@@ -9,6 +9,7 @@ import {getAppStatus} from "../../../actions/appStatusAction";
 import ToolTip from "./tooltip/ToolTip";
 import {makeRequest} from "../../../actions/requestAction";
 import {setNews} from "../../../actions/newsAction";
+import {extractSectionFromLocation} from "../../../utils/helper/helperFunctions";
 
 class RightSideBar extends Component {
 
@@ -23,7 +24,7 @@ class RightSideBar extends Component {
 
         const {appStatus, makeRequest, setNews, news} = this.props;
         const toolTip = appStatus.toolTip;
-        const newsTerm = appStatus.currentBusinessOption.section_slug;
+        const newsTerm = extractSectionFromLocation(this.props.location.pathname);
         const newsListProps = {
             newsTerm: newsTerm,
             makeRequest: makeRequest,

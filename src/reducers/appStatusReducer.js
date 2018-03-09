@@ -1,6 +1,8 @@
-    import {
-    GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS_CATEGORY_ID,
-        SET_BUSINESS_STATUS,
+import {
+    GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS,
+    SET_BUSINESS_CATEGORY_ID,
+    SET_BUSINESS_OPTION,
+    SET_BUSINESS_STATUS,
     SET_COMPLETED_STATUS, SET_CURRENT,
     SET_CURRENT_BUSINESS_OPTION,
     SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_IS_FETCHING, SET_LEVELS, SET_SELL_GOODS,
@@ -24,13 +26,11 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
         case `${GET_APP_STATUS}_PENDING` :
             return {
                 ...state,
-                isFetching: true,
             };
         case `${GET_APP_STATUS}_FULFILLED` :
             return {
                 ...state,
                 ...action.payload,
-                isFetching: false,
                 currentLevel: action.payload.levels[0]
             };
         case `${SET_APP_STATUS}` :
@@ -60,46 +60,29 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 ...state,
                 currentSection: action.currentSection
             };
+        case `${SET_BUSINESS}` :
+            return {
+                ...state,
+                business: action.business
+            };
+            break;
         case `${GET_BUSINESS_OPTION}_PENDING` :
             return {
                 ...state,
-                isFetching: true
             };
-        case `${GET_BUSINESS_OPTION}_FULFILLED` :
-            if (action.payload.level && action.payload.section && action.payload.levels) {
+        case `${SET_BUSINESS_OPTION}` :
+            if (action.businessOption) {
                 return {
                     ...state,
-                    isFetching: false,
-                    currentBusinessOption: action.payload,
-                    currentLevel: action.payload.level,
-                    currentSection: action.payload.section,
-                    levels: action.payload.levels
+                    currentBusinessOption: action.businessOption,
                 };
             } else {
                 return {
                     ...state,
-                    isFetching: false,
                     currentBusinessOption: action.payload
                 };
             }
 
-        case `${SET_CURRENT_BUSINESS_OPTION}` :
-            if (action.currentBusinessOption.level && action.currentBusinessOption.section && action.currentBusinessOption.levels) {
-                return {
-                    ...state,
-                    isFetching: false,
-                    currentBusinessOption: action.currentBusinessOption,
-                    currentLevel: action.currentBusinessOption.level,
-                    currentSection: action.currentBusinessOption.section,
-                    levels: action.currentBusinessOption.levels
-                };
-            } else {
-                return {
-                    ...state,
-                    isFetching: false,
-                    currentBusinessOption: action.currentBusinessOption
-                };
-            }
         case `${GET_BUSINESS_CATEGORIES}_FULFILLED` :
             return {
                 ...state,

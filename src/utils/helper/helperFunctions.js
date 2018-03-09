@@ -1,4 +1,4 @@
-import {filter, find} from "lodash";
+import {filter, find, findIndex} from "lodash";
 import {MESSAGES} from "../../constants/messages";
 
 /**
@@ -322,65 +322,38 @@ export function isBusinessOptionLocked(businessOptionStatuses, businessOption) {
     return !statusObject;
 }
 
-export function findStatus(statusCollection, levelId) {
-    let statusObject = find(statusCollection, {id: levelId});
-
+export function getStatus(statusCollection, id) {
+    let statusObject = find(statusCollection, {id: id});
     return statusObject ? statusObject : {};
 }
 
-export function findLevelById(levels, id) {
-    let level = find(levels, {id: id});
-
-    return level ? level : {};
+export function getById(collection, id) {
+    let statusObject = find(collection, {id: id});
+    return statusObject ? statusObject : null;
 }
 
-export function findLevelBySlug(levels, slug) {
-    let level = find(levels, {slug: slug});
-
-    return level ? level : {};
+export function getBySlug(collection, slug) {
+    let statusObject = find(collection, {slug: slug});
+    return statusObject ? statusObject : {};
 }
 
-export function findSectionById(sections, id) {
-    let section = find(sections, {id: id});
-
-    return section ? section : {};
+export function getFirst(collection) {
+    let item = collection[0];
+    return item ? item : null;
 }
 
-export function findSectionBySlug(sections, slug) {
-    let section = find(sections, {slug: slug});
-
-    return section ? section : {};
+export function getLast(collection) {
+    let item = collection[collection.length - 1];
+    return item ? item : null;
 }
 
-export function findBusinessOptionById(businessOptions, id) {
-    let businessOption = find(businessOptions, {id: id});
 
-    return businessOption ? businessOption : {};
+export function getPrevious(collection, id) {
+    let index = findIndex(collection, function(item) { return item.id === id; });
+    return collection[index - 1] ? collection[index - 1] : null;
 }
 
-export function findBusinessOptionBySlug(businessOptions, slug) {
-    let businessOption = find(businessOptions, {slug: slug});
-
-    return businessOption ? businessOption : {};
-}
-
-export function getPreviousLevel(levels, level) {
-
-}
-
-export function getNextLevel() {
-
-}
-
-export function getPreviousSection() {
-}
-
-export function getNextSection() {
-
-}
-
-export function getPreviousBusinessOption() {
-}
-
-export function getNextBusinessOption() {
+export function getNext(collection, id) {
+    let index = findIndex(collection, function(item) { return item.id === id; });
+    return collection[index + 1] ? collection[index + 1] : null;
 }

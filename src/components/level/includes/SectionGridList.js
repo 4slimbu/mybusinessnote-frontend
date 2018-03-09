@@ -16,7 +16,7 @@ const sections = (appStatus, level, onClickSectionLink, onHandleToolTip) => map(
         <li key={section.id} className={classnames(active, lockedClass)}>
             <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, level, section, isLocked)}>
                 <div className="red-icon" href="#">
-                    <img src={getEnv('API_BASE_IMAGE_URL') + '/images/sections/' + section.icon}
+                    <img src={section.icon}
                          alt=""/>
                 </div>
                 <span> {section.name}</span>

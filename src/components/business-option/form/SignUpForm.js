@@ -12,20 +12,64 @@ class SignUpForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: "register_user",
-            business_option_id: null,
-            business_category_id: null,
-            sell_goods: null,
-            user_id: null,
-            first_name: "",
-            last_name: "",
-            email: "",
-            phone_number: "",
-            password: "",
-            confirm_password: "",
+            first_name: {
+                isChanged: false,
+                label: "First Name",
+                name: "first_name",
+                placeholder: "First Name",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
+            last_name: {
+                isChanged: false,
+                label: "Last Name",
+                name: "last_name",
+                placeholder: "Last Name",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
+            email: {
+                isChanged: false,
+                label: "Your Email",
+                name: "email",
+                placeholder: "eg. email@example.com",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
+            phone_number: {
+                isChanged: false,
+                label: "Phone Number",
+                name: "phone_number",
+                placeholder: "eg. 88 8888 8888",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
+            password: {
+                isChanged: false,
+                label: "Password",
+                name: "password",
+                placeholder: "Your secret password",
+                value: "",
+                oldValue: "",
+                type: "password"
+            },
+            confirm_password: {
+                isChanged: false,
+                label: "Confirm Password",
+                name: "confirm_password",
+                placeholder: "Re-type your secret password",
+                value: "",
+                oldValue: "",
+                type: "password"
+            },
             captcha_response: "",
+            errorCode: '',
             errors: {},
-            isLoading: false
+            isChanged: false,
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -35,6 +79,8 @@ class SignUpForm extends Component {
     }
 
     componentDidMount() {
+        const {auth, appStatus} = this.props;
+        const [user] = auth.user;
         this.setState({
             business_option_id: this.props.appStatus.currentBusinessOption.id,
             business_category_id: this.props.appStatus.business_category_id,
@@ -58,6 +104,58 @@ class SignUpForm extends Component {
             sell_goods: this.props.appStatus.sell_goods,
         });
     }
+
+    resetFields() {
+        this.setState({
+            password: {
+                ...this.state.password,
+                isChanged: false,
+                value: ''
+            },
+            confirm_password: {
+                ...this.state.confirm_password,
+                isChanged: false,
+                value: ''
+            }
+        })
+    }
+
+    onChange(e) {
+        this.setState({
+            [e.target.name]: {
+                ...this.state[e.target.name],
+                value: e.target.value,
+                isChanged: true
+            },
+            isChanged: true
+        }, function() {
+            const dataObject = {};
+            if (this.state.first_name.isChanged) {
+                dataObject.first_name = this.state.first_name.value
+            }
+            if (this.state.last_name.isChanged) {
+                dataObject.last_name = this.state.last_name.value
+            }
+            if (this.state.email.isChanged) {
+                dataObject.email = this.state.email.value
+            }
+            if (this.state.phone_number.isChanged) {
+                dataObject.phone_number = this.state.phone_number.value
+            }
+            if (this.state.password.isChanged) {
+                dataObject.password = this.state.password.value
+            }
+            if (this.state.confirm_password.isChanged) {
+                dataObject.confirm_password = this.state.confirm_password.value
+            }
+
+
+            this.isFormValid(dataObject);
+        });
+
+
+    }
+
 
     onChange(e) {
         this.setState({

@@ -84,9 +84,9 @@ const Level = {
  */
 const BusinessOption = {
     get: (id) =>
-        requests('GET', apiBaseUrl(`/business-options/${id}`)),
+        requests('GET', apiBaseUrl(`/business-option/${id}`)),
     save: (data) =>
-        requests('POST', apiBaseUrl(`/business-options/${data.id}`), data.input)
+        requests('POST', apiBaseUrl(`/business-option/${data.id}`), data.input)
 };
 
 /**

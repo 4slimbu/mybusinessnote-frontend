@@ -3,14 +3,12 @@ import FlashMessageList from "./layout/flash/FlashMessageList";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {
-    getAppStatus, getBusinessCategories,
     setCurrentBusinessOption, setCurrentLevel,
     setCurrentSection
 } from "../actions/appStatusAction";
 import {withRouter} from "react-router-dom";
 import {
-    getCurrentLevelByUrl,
-    getCurrentSectionByUrl, publicUrl
+    publicUrl
 } from "../utils/helper/helperFunctions";
 import ErrorBoundary from "./ErrorBoundary";
 import LayoutContainer from "./layout/LayoutContainer";
@@ -26,7 +24,10 @@ class App extends Component {
 
     componentDidMount() {
         this.props.makeRequest(request.Level.all);
-        this.props.makeRequest(request.Business.getStatus);
+        if (this.props.auth.isAuthenticated) {
+            this.props.makeRequest(request.Business.getStatus);
+            this.props.makeRequest(request.Business.get);
+        }
         this.props.makeRequest(request.News.byTag, {tag: 'general'});
     }
 
@@ -58,8 +59,6 @@ class App extends Component {
 App.propTypes = {
     auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
-    getBusinessCategories: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
@@ -74,8 +73,6 @@ function mapStateToProps(state) {
 
 export default withRouter(connect(mapStateToProps, {
     makeRequest,
-    getAppStatus,
-    getBusinessCategories,
     setCurrentLevel,
     setCurrentSection,
     setCurrentBusinessOption

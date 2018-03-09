@@ -1,6 +1,6 @@
 import setAuthorizationToken from "../utils/axios/setAuthorizationToken";
 import jwt_decode from "jwt-decode";
-import {getAppStatus, setBusinessStatus, setIsFetching, setLevels} from "./appStatusAction";
+import {getAppStatus, setBusinessOption, setBusinessStatus, setIsFetching, setLevels} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {logout, setAuth} from "./authActions";
 import {getCodeMessage} from "../utils/helper/helperFunctions";
@@ -14,13 +14,17 @@ export function makeRequest(apiCallFunction, data = {}) {
             apiCallFunction(data).then(
                 (response) => {
                     dispatch(setIsFetching(false));
-                    handleSuccessResponseData(dispatch, response.data);
-                    resolve(response.data);
+                    if (response && response.data) {
+                        handleSuccessResponseData(dispatch, response.data);
+                        resolve(response.data);
+                    }
                 },
                 (error) => {
                     dispatch(setIsFetching(false));
-                    handleErrorResponseData(dispatch, error.response.data);
-                    reject(error.response.data)
+                    if (error && error.response && error.response.data) {
+                        handleErrorResponseData(dispatch, error.response.data);
+                        reject(error.response.data)
+                    }
                 }
             );
 
@@ -42,6 +46,10 @@ export function handleSuccessResponseData(dispatch, responseData) {
 
     if (responseData.businessStatus) {
         dispatch(setBusinessStatus(responseData.businessStatus));
+    }
+
+    if (responseData.businessOption) {
+        dispatch(setBusinessOption(responseData.businessOption));
     }
 
     if (responseData.successCode && responseData.successCode !== 'RECEIVED') {

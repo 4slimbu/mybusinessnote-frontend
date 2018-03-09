@@ -14,7 +14,7 @@ export default (state = initialState, action = {}) => {
         case SET_AUTH:
             return {
                 isAuthenticated: !isEmpty(user),
-                isVerified: isVerified,
+                isVerified: !!isVerified,
                 user: user,
                 scope: scope
             };
