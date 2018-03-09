@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import request from "../../../../services/request";
-import {formatDate} from "../../../../utils/helper/helperFunctions";
+import {extractSectionFromLocation, formatDate} from "../../../../utils/helper/helperFunctions";
 import {map} from "lodash";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -10,44 +10,48 @@ class NewsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            posts: []
+            news: [],
+            tag: ''
         };
     }
 
     componentDidMount() {
-        this.fetchNews(this.props.newsTerm);
+        this.bootstrap();
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.fetchNews(this.props.newsTerm);
+            this.bootstrap();
         }
     }
 
-    fetchNews(newsTerm) {
-
-        const tag = ( newsTerm) ? newsTerm : 'general';
-        const news = this.props.news[tag];
-        if (!news) {
-            this.props.makeRequest(request.News.byTag, tag).then(responseData => {
-                this.props.setNews({
+    bootstrap() {
+        const {makeRequest, news, setNews} = this.props;
+        const {pathname} = this.props.location;
+        const sectionSlug = extractSectionFromLocation(pathname);
+        const tag = ( sectionSlug) ? sectionSlug : 'general';
+        if (!news[tag]) {
+            makeRequest(request.News.byTag, tag).then(responseData => {
+                setNews({
                     tag: tag,
                     news: responseData
                 });
             });
+        } else {
+            this.setState({
+                news: news[tag],
+                tag: tag
+            })
         }
     }
 
     render() {
-        const newsTerm = this.props.newsTerm;
-        const tag = ( newsTerm) ? newsTerm : 'general';
-        const news = this.props.news[tag] ? this.props.news[tag] : this.props.news['general'];
-        const NewsItem = map(news, (post, key) => {
+        const NewsItem = map(this.state.news, (item, key) => {
             return(
                 <div key={key} className="news-block clearfix">
-                    <a target="_blank" href={ post.link }><img src={ post.featured_image_url } alt={ post.title } /></a>
-                    <h6>{ formatDate(post.date) }</h6>
-                    <h5><a target="_blank" href={ post.link }>{ post.title }</a></h5>
+                    <a target="_blank" href={ item.link }><img src={ item.featured_image_url } alt={ item.title } /></a>
+                    <h6>{ formatDate(item.date) }</h6>
+                    <h5><a target="_blank" href={ item.link }>{ item.title }</a></h5>
                 </div>
             )
         });
@@ -64,9 +68,8 @@ class NewsList extends Component {
 
 NewsList.propTypes = {
     makeRequest: PropTypes.func.isRequired,
-    news: PropTypes.array.isRequired,
-    setNews: PropTypes.func.isRequired,
-    newsTerm: PropTypes.string
+    news: PropTypes.object.isRequired,
+    setNews: PropTypes.func.isRequired
 };
 
 export default withRouter(NewsList);

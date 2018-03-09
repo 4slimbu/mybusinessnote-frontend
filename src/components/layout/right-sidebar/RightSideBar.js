@@ -24,9 +24,7 @@ class RightSideBar extends Component {
 
         const {appStatus, makeRequest, setNews, news} = this.props;
         const toolTip = appStatus.toolTip;
-        const newsTerm = extractSectionFromLocation(this.props.location.pathname);
         const newsListProps = {
-            newsTerm: newsTerm,
             makeRequest: makeRequest,
             setNews: setNews,
             news: news
@@ -55,7 +53,7 @@ class RightSideBar extends Component {
 
 RightSideBar.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    news: PropTypes.array.isRequired,
+    news: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

@@ -19,6 +19,7 @@ import Loading from "./common/Loading";
 import RouteSwitch from "../RouteSwitch";
 import {makeRequest} from "../actions/requestAction";
 import request from "../services/request";
+import {setNews} from "../actions/newsAction";
 
 class App extends Component {
 
@@ -28,13 +29,19 @@ class App extends Component {
             this.props.makeRequest(request.Business.getStatus);
             this.props.makeRequest(request.Business.get);
         }
-        this.props.makeRequest(request.News.byTag, {tag: 'general'});
+        this.props.makeRequest(request.News.byTag, 'general');
+        this.props.makeRequest(request.News.byTag, 'general').then(responseData => {
+            this.props.setNews({
+                tag: 'general',
+                news: responseData
+            });
+        });
     }
 
     render() {
-        const {auth, appStatus} = this.props;
+        const {auth, appStatus, news} = this.props;
         return (
-            appStatus.levels.length > 0 && appStatus.businessStatus ?
+            appStatus.levels.length > 0 && Object.keys(news).length > 0?
                 <ErrorBoundary>
                     <LayoutContainer>
                         {(auth.isFetching || appStatus.isFetching) && <Loading/>}
@@ -59,6 +66,8 @@ class App extends Component {
 App.propTypes = {
     auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
+    news: PropTypes.object.isRequired,
+    setNews: PropTypes.func.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
@@ -67,12 +76,14 @@ App.propTypes = {
 function mapStateToProps(state) {
     return {
         auth: state.authReducer,
-        appStatus: state.appStatusReducer
+        appStatus: state.appStatusReducer,
+        news: state.newsReducer,
     }
 }
 
 export default withRouter(connect(mapStateToProps, {
     makeRequest,
+    setNews,
     setCurrentLevel,
     setCurrentSection,
     setCurrentBusinessOption

@@ -32,11 +32,11 @@ class LevelLinks extends Component {
                 <Panel key={level.slug} eventKey={level.id} className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
                     <Panel.Heading>
                         <Panel.Title toggle>
-                            <a onClick={(e) => onClickLevelLink(e, level )} href={levelUrl}
+                            <div onClick={(e) => onClickLevelLink(e, level )} href={levelUrl}
                             >
                                 <figure className={classnames({"goldbadge-img" : (levelStatus.completed_percent >= 100)})}><img src={levelImg} alt="" /></figure>
                                 <h6>{ level.name }</h6>
-                            </a>
+                            </div>
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>

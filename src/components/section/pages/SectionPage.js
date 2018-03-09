@@ -20,17 +20,10 @@ class SectionPage extends Component {
     }
 
     componentDidMount() {
-        this.props.getBusinessOption(this.props.history.location.pathname);
         this.$el = $(this.el);
         this.$el.mCustomScrollbar({
             mouseWheel:{ scrollAmount: 300 }
         });
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props.auth.isAuthenticated && !this.props.auth.isVerified) {
-            this.props.history.push('/');
-        }
     }
 
 
@@ -48,7 +41,6 @@ class SectionPage extends Component {
         } = this.props;
         return (
             <div>
-                {isFetching && <Loading/>}
                 {
                     currentBusinessOption && currentBusinessOption.id &&
                     <BusinessOptionPage
