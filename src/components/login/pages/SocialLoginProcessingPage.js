@@ -1,5 +1,5 @@
 import React from "react";
-import Loading from "../../common/Loading";
+import Loading from "../../layout/loading/LoadingMessage";
 
 const SocialLoginProcessingPage = (props) => {
     return(

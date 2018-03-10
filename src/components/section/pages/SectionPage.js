@@ -6,7 +6,7 @@ import {
     setCurrentBusinessOption, setCurrentLevel, setCurrentSection, setShowCompletedPage, setToolTipContent
 } from "../../../actions/appStatusAction";
 import BusinessOptionPage from "../../business-option/BusinessOptionPage";
-import Loading from "../../common/Loading";
+import Loading from "../../layout/loading/LoadingMessage";
 import {withRouter} from "react-router-dom";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import $ from "jquery";

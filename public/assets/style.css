@@ -1914,8 +1914,21 @@ ul.getting-start-list li.locked:visited span.circle-span{
     top: 60px;
     right: -500px;
     animation-name: alert-sticky-animation;
-    animation-duration: 4s;
+    animation-duration: 3s;
 
+}
+
+.custom-alert.alert-success {
+    padding: 4px 10px;
+    background: #2ebb66;
+    color: #ffffff;
+    border: none;
+}
+
+.custom-alert.alert-danger {
+    padding: 4px 10px;
+    background: #bb2b2c;
+    color: #ffffff;
 }
 
 @keyframes alert-sticky-animation {
@@ -1925,7 +1938,7 @@ ul.getting-start-list li.locked:visited span.circle-span{
     15% {
         right: 10px;
     }
-    86% {
+    85% {
         right: 10px;
     }
     100% {
@@ -1960,12 +1973,25 @@ ul.getting-start-list li.locked:visited span.circle-span{
     color: darkred;
 }
 
-.loading-spinner {
+.loading-spinner-wrapper {
     position: fixed;
     top: 50%;
     left: 50%;
     z-index: 9999;
     transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.loading-spinner-wrapper .loading-spinner {
+    display: inline-block;
+}
+
+.loading-spinner-wrapper .content {
+    background: rgba(187, 187, 187, 0.6);
+    padding: 1px 10px;
+    border-radius: 3px;
+    margin-top: 10px;
+    color: #222222;
 }
 
 ul.apps-icons li.active span {

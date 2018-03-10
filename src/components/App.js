@@ -15,11 +15,11 @@ import LayoutContainer from "./layout/LayoutContainer";
 import LeftSideBar from "./layout/left-sidebar/LeftSideBarContainer";
 import RightSideBar from "./layout/right-sidebar/RightSideBar";
 import MainContentContainer from "./layout/main-content/MainContentContainer";
-import Loading from "./common/Loading";
 import RouteSwitch from "../RouteSwitch";
 import {makeRequest} from "../actions/requestAction";
 import request from "../services/request";
 import {setNews} from "../actions/newsAction";
+import LoadingMessage from "./layout/loading/LoadingMessage";
 
 class App extends Component {
 
@@ -44,7 +44,7 @@ class App extends Component {
             appStatus.levels.length > 0 && Object.keys(news).length > 0?
                 <ErrorBoundary>
                     <LayoutContainer>
-                        {(auth.isFetching || appStatus.isFetching) && <Loading/>}
+                        <LoadingMessage/>
                         <FlashMessageList/>
                         <LeftSideBar/>
 

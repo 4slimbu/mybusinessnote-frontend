@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import LoginPage from "./pages/LoginPage";
 import {handleErrorResponseData, handleSuccessResponseData, callApi, makeRequest} from "../../actions/requestAction";
-import Loading from "../common/Loading";
+import LoadingMessage from "../layout/loading/LoadingMessage";
 
 class LoginContainer extends Component {
 
@@ -31,7 +31,7 @@ class LoginContainer extends Component {
         return (
             <div>
                 {
-                    this.state.isShowSocialLoginProcessingPage ? <Loading/> : <LoginPage {...loginPageProps}/>
+                    this.state.isShowSocialLoginProcessingPage ? <LoadingMessage/> : <LoginPage {...loginPageProps}/>
                 }
             </div>
         )
