@@ -1,6 +1,11 @@
 import setAuthorizationToken from "../utils/axios/setAuthorizationToken";
 import jwt_decode from "jwt-decode";
-import {getAppStatus, setBusinessOption, setBusinessStatus, setLevels} from "./appStatusAction";
+import {
+    getAppStatus, setBusiness, setBusinessCategories, setBusinessOption, setBusinessOptions, setBusinessStatus,
+    setLevel, setLevels,
+    setSection,
+    setSections
+} from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {logout, setAuth} from "./authActions";
 import {getCodeMessage} from "../utils/helper/helperFunctions";
@@ -41,22 +46,27 @@ export function handleSuccessResponseData(dispatch, responseData) {
         dispatch(setAuth(jwt_decode(token)));
     }
 
-    if (responseData.levels) {
-        dispatch(setLevels(responseData.levels));
-    }
+    if (responseData.levels) dispatch(setLevels(responseData.levels));
 
-    if (responseData.businessStatus) {
-        dispatch(setBusinessStatus(responseData.businessStatus));
-    }
+    if (responseData.sections) dispatch(setSections(responseData.sections));
 
-    if (responseData.businessOption) {
-        dispatch(setBusinessOption(responseData.businessOption));
-    }
+    if (responseData.businessOptions) dispatch(setBusinessOptions(responseData.businessOptions));
 
-    if (responseData.successCode && responseData.successCode !== 'RECEIVED') {
+    if (responseData.level) dispatch(setLevel(responseData.level));
+
+    if (responseData.section) dispatch(setSection(responseData.section));
+
+    if (responseData.businessOption) dispatch(setBusinessOption(responseData.businessOption));
+
+    if (responseData.businessStatus) dispatch(setBusinessStatus(responseData.businessStatus));
+
+    if (responseData.business) dispatch(setBusiness(responseData.business));
+
+    if (responseData.businessCategories) dispatch(setBusinessCategories(responseData.businessCategories));
+
+    if (responseData.successCode && responseData.successCode !== 'FETCHED') {
         dispatch(addFlashMessage({type: "success", text: getCodeMessage(responseData.successCode)}))
     }
-    dispatch(getAppStatus());
 }
 
 export function handleErrorResponseData(dispatch, errorData) {

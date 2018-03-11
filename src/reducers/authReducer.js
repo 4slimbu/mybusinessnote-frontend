@@ -1,4 +1,4 @@
-import {LOGIN, SET_AUTH, SET_CURRENT_USER} from "../constants/actionTypes";
+import {SET_AUTH} from "../constants/actionTypes";
 import {isEmpty} from "lodash";
 
 const initialState = {

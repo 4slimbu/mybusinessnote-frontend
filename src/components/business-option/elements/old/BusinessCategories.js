@@ -10,9 +10,15 @@ import {
 import {map} from "lodash";
 import {saveBusinessFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {getAppUrlFromApiUrl} from "../../../../utils/helper/helperFunctions";
+import {
+    generateAppRelativeUrl,
+    getAppUrlFromApiUrl, getCurrentLevelSections, getNext,
+    isItemLoaded
+} from "../../../../utils/helper/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
 import * as classnames from "classnames";
+import {makeRequest} from "../../../../actions/requestAction";
+import request from "../../../../services/request";
 
 class BusinessCategories extends Component {
     constructor(props) {
@@ -26,44 +32,32 @@ class BusinessCategories extends Component {
     }
 
     componentDidMount() {
-        this.props.getBusinessCategories();
+        this.bootstrap();
         this.displayToolTip();
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.appStatus.currentBusinessOption.id !== this.props.appStatus.currentBusinessOption.id) {
-            this.props.getBusinessCategories();
+            this.bootstrap();
             this.displayToolTip();
+        }
+    }
+
+    bootstrap() {
+        if (! isItemLoaded(this.props.appStatus.businessCategories)) {
+            this.props.makeRequest(request.BusinessCategory.all);
         }
     }
 
     handleSelect(e, id) {
         e.preventDefault();
-        this.props.setBusinessCategoryId(id);
-        const appStatus = this.props.appStatus;
-        if (this.props.auth.isAuthenticated){
-            this.props.saveBusinessFormRequest({
-                    business_option_id: appStatus.currentBusinessOption.id,
-                    business_category_id: id
-                },
-                '/level/1/section/1/business-option/1'
-            ).then(
-                (response) => {
-                    this.setState({isLoading: false});
-
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "Saved successfully!"
-                    });
-                    this.props.getAppStatus();
-                },
-                (error) => {
-                    this.props.addFlashMessage({
-                        type: "error",
-                        text: "Failed!"
-                    });
-                }
-            );
+        if (this.props.auth.isAuthenticated) {
+            this.props.makeRequest(request.Business.save, {
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                business_category_id: id
+            });
+        } else {
+            this.props.setBusinessCategoryId(id);
         }
     }
 
@@ -75,35 +69,36 @@ class BusinessCategories extends Component {
 
     displayToolTip(id) {
         const currentObject = this;
-        const { businessCategories } = this.props.appStatus;
+        const {businessCategories} = this.props.appStatus;
         const tipList = map(businessCategories.data, (item, key) => {
-            const title = (item.id === id) ? <strong>{ item.name }</strong> : item.name ;
-            return  (
+            const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
+            return (
                 <Panel key={item.id} eventKey={item.id}>
                     <Panel.Heading>
                         <Panel.Title toggle>
                             <h4>
-                                <span className="accordion-titles">{ title }</span>
+                                <span className="accordion-titles">{title}</span>
                                 <span className="acc-img"></span>
                             </h4>
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>
-                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}} />
+                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}}/>
                     </Panel.Body>
                 </Panel>
             )
         });
 
         let activeKey = id;
-        const handleSelect = function(newKey) {
+        const handleSelect = function (newKey) {
             currentObject.displayToolTip(newKey);
         };
         const toolTip = {};
         toolTip.rawHtmlContent = this.props.appStatus.currentBusinessOption.tooltip;
         toolTip.accordion = (
-            <PanelGroup accordion id={`accordion-uncontrolled-categories-tooltip`} activeKey={activeKey} onSelect={(newKey) => handleSelect(newKey)}>
-                { tipList }
+            <PanelGroup accordion id={`accordion-uncontrolled-categories-tooltip`} activeKey={activeKey}
+                        onSelect={(newKey) => handleSelect(newKey)}>
+                {tipList}
             </PanelGroup>
         );
         this.props.setToolTipContent(toolTip);
@@ -112,28 +107,34 @@ class BusinessCategories extends Component {
     onClickNext(e) {
         e.preventDefault();
         const {appStatus, history} = this.props;
-        this.props.getBusinessOption(
-            appStatus.currentBusinessOption.links.next + '&business_category_id=' + appStatus.business_category_id,
-            true);
-        history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
+        if (appStatus.business.business_category_id === 4) {
+            history.push('/level/getting-started/section/about-you/bo/3');
+        } else {
+            history.push('/level/getting-started/section/business-category/bo/2');
+        }
     }
 
     render() {
-        const { appStatus } = this.props;
-        const next = (appStatus.currentBusinessOption.links && appStatus.business_category_id !== null) ? appStatus.currentBusinessOption.links.next : null;
-        const businessCategories = map(appStatus.businessCategories.data, (item, key) => {
-            const active = appStatus.business_category_id == item.id;
+        const {appStatus} = this.props;
+        const {business} = appStatus;
+        const next = business.business_category_id !== null;
+        const businessCategories = map(appStatus.businessCategories, (item, key) => {
+            const active = business.business_category_id == item.id;
             return (
-                <li key={item.id} className={classnames("", {"active" : active})} onTouchEnd={(e) => this.handleSelect(e, item.id)}  onClick={(e) => this.handleSelect(e, item.id)}>
+                <li key={item.id} className={classnames("", {"active": active})}
+                    onTouchEnd={(e) => this.handleSelect(e, item.id)} onClick={(e) => this.handleSelect(e, item.id)}>
                     <div className="link-box">
-                        <a className={active ? "red-icon" : "white-icon"} href="#">
-                            <img src={active ? item.hover_icon : item.icon} alt=""/>
+                        <a className="white-icon" href="#">
+                            <img src={item.icon} alt=""/>
+                        </a>
+                        <a className="red-icon" href="#">
+                            <img src={item.hover_icon} alt=""/>
                         </a>
                         <span> <a href="#">{item.name}</a></span>
                     </div>
                     <a onTouchEnd={(e) => this.handleToolTip(e, item.id)}
                        onMouseEnter={(e) => this.handleToolTip(e, item.id)}
-                        className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, item.id)}>
+                       className="apps-question" href="#" onClick={(e) => this.handleToolTip(e, item.id)}>
                         <i className="fa fa-lightbulb-o" aria-hidden="true"></i>
                     </a>
                 </li>
@@ -143,10 +144,11 @@ class BusinessCategories extends Component {
         return (
             <div>
                 <ul className="apps-icons clearfix apps-h-effect">
-                    {businessCategories }
+                    {businessCategories}
                 </ul>
                 <div className="btn-wrap">
-                    {next && <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
+                    {next &&
+                    <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
                 </div>
             </div>
 
@@ -181,6 +183,7 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
+            makeRequest,
             getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,

@@ -12,7 +12,7 @@ import {
 } from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import PropTypes from "prop-types";
-import {generateAppRelativeUrl} from "../../../utils/helper/helperFunctions";
+import {generateAppRelativeUrl, getById, getFirst, isSectionLocked} from "../../../utils/helper/helperFunctions";
 
 class LeftSideBarContainer extends Component {
     constructor(props) {
@@ -36,11 +36,14 @@ class LeftSideBarContainer extends Component {
         this.props.history.push(levelUrl);
     }
 
-    onClickSectionLink(e, level, section) {
+    onClickSectionLink(e, level, section, isLocked) {
         e.preventDefault();
-
+        if (isLocked) {
+            return;
+        }
         const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-        this.props.setCurrent(level, section);
+        const businessOption = getById(this.props.appStatus.businessOptions, getFirst(section.businessOptions));
+        this.props.setCurrent(level, section, businessOption);
         this.props.history.push(sectionUrl);
     }
 

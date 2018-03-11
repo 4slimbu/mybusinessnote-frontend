@@ -1,7 +1,7 @@
 import * as axios from "axios";
 import setAuthorizationToken from "../utils/axios/setAuthorizationToken";
 import {SET_AUTH, SET_CURRENT_USER} from "../constants/actionTypes";
-import {getAppStatus, setAppStatus} from "./appStatusAction";
+import {getAppStatus, setAppStatus, setBusinessStatus} from "./appStatusAction";
 import {DEFAULT_APP_STATUS} from "../data/default";
 import {makeRequest} from "./requestAction";
 import request from "../services/request";
@@ -99,8 +99,7 @@ export function logout() {
         dispatch(makeRequest(request.Auth.logout));
         localStorage.removeItem("jwtToken");
         setAuthorizationToken(false);
-        dispatch(setCurrentUser({}));
-        dispatch(setAppStatus(DEFAULT_APP_STATUS));
-        dispatch(getAppStatus());
+        dispatch(setAuth({}));
+        dispatch(setBusinessStatus({}));
     }
 }

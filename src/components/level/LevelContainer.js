@@ -3,8 +3,8 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    extractLevelFromLocation, getBySlug,
-    getCurrentLevelByUrl, getFirst, getLast, getNext, getPrevious, isSectionLocked
+    extractLevelFromLocation, generateAppRelativeUrl, getBySlug,
+    getCurrentLevelByUrl, getCurrentLevelSections, getFirst, getNext, isItemLoaded, isLevelLocked,
 } from "../../utils/helper/helperFunctions";
 import {
     getBusinessOption, setCompletedStatus, setCurrent, setCurrentBusinessOption, setCurrentLevel,
@@ -14,13 +14,15 @@ import LevelCompletePage from "./pages/LevelCompletePage";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {map} from "lodash";
 import {Panel, PanelGroup} from "react-bootstrap";
+import {withRouter} from "react-router-dom";
+import {MESSAGES} from "../../constants/messages";
 
 class LevelContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isCurrentLevelSet: false,
-            isCurrentLevelComplete: false,
+            isCurrentLevelComplete: true,
         };
 
         this.onClickLevelLink = this.onClickLevelLink.bind(this);
@@ -31,82 +33,80 @@ class LevelContainer extends Component {
     }
 
     componentDidMount() {
-        this.bootstrap(this.props.appStatus.levels, this.props.location.pathname);
+        this.bootstrap(this.props, this.props.location.pathname);
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.bootstrap(this.props.appStatus.levels, nextProps.location.pathname)
+            this.bootstrap(nextProps, nextProps.location.pathname)
         }
     }
 
-    bootstrap(levels, location) {
-        let levelSlug = extractLevelFromLocation(location);
-        let currentLevel = getBySlug(levels, levelSlug);
-        this.props.setCurrent(currentLevel);
-        console.log(getPrevious(levels, currentLevel.id));
-        console.log(getFirst(levels));
-        console.log(getLast(levels));
+    bootstrap(props, location) {
+        const {levels} = props.appStatus;
+        const levelSlug = extractLevelFromLocation(location);
+        const currentLevel = getBySlug(levels, levelSlug);
+        props.setCurrent(currentLevel);
+        this.displayToolTip(props);
     }
 
 
     onClickLevelLink(e, levelUrl) {
         e.preventDefault();
         const {
-            setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
-            setShowCompletedPage, setCompletedStatus,
+            setShowCompletedPage,
             appStatus, history
         } = this.props;
         const {currentLevel} = this.props.appStatus;
         const nextLevel = (appStatus.levels && appStatus.levels[currentLevel.id]) ? appStatus.levels[currentLevel.id] : currentLevel;
 
-        setCurrentLevel(nextLevel);
-        setCurrentSection({});
-        setCurrentBusinessOption({});
+        setCurrent(nextLevel);
         setShowCompletedPage(false);
-        setCompletedStatus({});
         history.push(levelUrl);
     };
 
     onClickContinue(e) {
         e.preventDefault();
-        const {appStatus, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
-        const {level} = appStatus;
-        if (isSectionLocked(appStatus, level, 0)) {
+        const {appStatus, history} = this.props;
+        const {sections, businessStatus, currentLevel} = appStatus;
+
+        if (isLevelLocked(businessStatus.businessOptionStatuses, currentLevel)) {
+            this.props.addFlashMessage({
+                type: 'error',
+                text: MESSAGES.ERR_LOCKED
+            });
             return;
         }
-        setCurrentLevel(level);
-        setCurrentSection(level.sections[0]);
-        setCurrentBusinessOption({});
-        history.push('/level/' + level.slug + '/section/' + level.sections[0].slug);
+
+        const levelSections = getCurrentLevelSections(sections, currentLevel.id);
+        const firstSection = getFirst(levelSections);
+        setCurrent(currentLevel, firstSection);
+        history.push(generateAppRelativeUrl(currentLevel.slug, firstSection.slug));
     };
 
     onClickSectionLink(e, level, section, isLocked) {
         e.preventDefault();
-        const {setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
-        const sectionUrl = '/level/' + level.slug + '/section/' + section.slug;
         if (isLocked) {
             return;
         }
-        setCurrentLevel(level);
-        setCurrentSection(section);
-        setCurrentBusinessOption({});
-        history.push(sectionUrl);
+        const {history} = this.props;
+        setCurrent(level, section);
+        history.push(generateAppRelativeUrl(level.slug, section.slug));
     };
 
     onHandleToolTip(e, id) {
         e.preventDefault();
-        this.displayToolTip(id);
+        this.displayToolTip(this.props, id);
     }
 
     onHandleToolTipSelect(newKey) {
-        this.displayToolTip(newKey);
+        this.displayToolTip(this.props, newKey);
     }
 
-    displayToolTip(id = 0) {
-        const {setToolTipContent, appStatus} = this.props;
+    displayToolTip(props, id = 0) {
+        const {setToolTipContent, appStatus} = props;
         const {currentLevel} = appStatus;
-        const toolTipList = map(currentLevel.sections, (item, key) => {
+        const toolTipList = map(getCurrentLevelSections(appStatus.sections, currentLevel.id), (item, key) => {
             const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
             return (
                 <Panel key={key} eventKey={item.id}>
@@ -139,23 +139,23 @@ class LevelContainer extends Component {
     render() {
         const { appStatus } = this.props;
         const {currentLevel} = this.props.appStatus;
-        const nextLevel = (appStatus.levels && appStatus.levels[currentLevel.id]) ? appStatus.levels[currentLevel.id] : currentLevel;
+        const nextLevel = getNext(appStatus.levels, currentLevel.id);
         const levelIntroPageProps = {
             appStatus: this.props.appStatus,
-            level: currentLevel,
+            currentLevel: currentLevel,
             onClickLevelLink: this.onClickLevelLink,
             onClickSectionLink: this.onClickSectionLink,
             onClickContinue: this.onClickContinue,
             onHandleToolTip: this.onHandleToolTip
         };
         const levelCompletePageProps = {
-            level: currentLevel,
+            currentLevel: currentLevel,
             nextLevel: nextLevel,
             onClickLevelLink: this.onClickLevelLink
         };
 
         return (
-            this.props.appStatus.currentLevel ?
+            isItemLoaded(this.props.appStatus.currentLevel) ?
                 this.props.appStatus.isShowLevelCompletePage ?
                     <LevelCompletePage {...levelCompletePageProps}/>
                     :
@@ -185,7 +185,7 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
     getBusinessOption,
     setCurrent,
     setCurrentLevel,
@@ -196,4 +196,4 @@ export default connect(mapStateToProps, {
     addFlashMessage,
     setToolTipContent,
     setShowCompletedPage,
-})(LevelContainer);
+})(LevelContainer));

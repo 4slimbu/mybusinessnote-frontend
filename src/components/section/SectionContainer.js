@@ -6,7 +6,7 @@ import SectionPage from "./pages/SectionPage";
 import SectionCompletePage from "./pages/SectionCompletePage";
 import {
     extractBoIdFromLocation, extractLevelFromLocation, extractSectionFromLocation, getById,
-    getBySlug, getFirst
+    getBySlug, getFirst, isItemLoaded
 } from "../../utils/helper/helperFunctions";
 import request from "../../services/request";
 import {setCurrent} from "../../actions/appStatusAction";
@@ -33,20 +33,20 @@ class SectionContainer extends Component {
     }
 
     bootstrap(location) {
-        let {levels, businessOptions, sections} = this.props.appStatus;
+        //initialize
+        let {levels, sections, businessOptions} = this.props.appStatus;
         let levelSlug = extractLevelFromLocation(location);
         let sectionSlug = extractSectionFromLocation(location);
         let boId = extractBoIdFromLocation(location);
 
         let currentLevel = getBySlug(levels, levelSlug);
-        let currentSection = getBySlug(currentLevel.sections, sectionSlug);
+        let currentSection = getBySlug(sections, sectionSlug);
         if (!boId) {
             boId = getFirst(currentSection.businessOptions);
         }
         let currentBusinessOption = getById(businessOptions, boId);
         if (!currentBusinessOption) {
             this.props.makeRequest(request.BusinessOption.get, boId);
-            this.props.setCurrent(currentLevel, currentSection);
         }
         this.props.setCurrent(currentLevel, currentSection, currentBusinessOption);
     }
@@ -65,6 +65,9 @@ class SectionContainer extends Component {
         };
 
         return (
+            isItemLoaded(this.props.appStatus.sections) &&
+            isItemLoaded(this.props.appStatus.currentLevel) &&
+            isItemLoaded(this.props.appStatus.currentSection) &&
             <div>
                 {
                     this.state.isShowSectionCompletePage ? <SectionCompletePage/> : <SectionPage {...sectionPageProps}/>

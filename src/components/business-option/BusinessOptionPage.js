@@ -63,9 +63,13 @@ class BusinessOptionPage extends Component {
             isComplete = bool;
         };
         const isEnd = (currentLevel.id === 3 && (currentBusinessOption.id === currentLevel.level_last_bo.id));
+        const levelHeadProps = {
+            currentLevel: currentLevel,
+            appStatus: appStatus
+        };
         return (
             <div>
-                <LevelHead currentLevel={currentLevel}/>
+                <LevelHead {...levelHeadProps}/>
                 {
                     (currentLevel.id == 1) ?
                         <div>

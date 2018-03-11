@@ -1,17 +1,21 @@
-import React, {Component} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import ProgressBar from "../../common/ProgressBar";
+import {getStatus, isItemLoaded} from "../../../utils/helper/helperFunctions";
 
 const LevelHead = (props) => {
-    const {currentLevel} = props;
-    const {name, completed_percent, total_completed_sections, total_sections } = currentLevel;
+    const {currentLevel, appStatus} = props;
+    const levelStatus = getStatus(appStatus.businessStatus.levelStatuses, currentLevel.id);
+    const completedPercent = levelStatus.completed_percent ? levelStatus.completed_percent : 0;
+    const totalSections = currentLevel.sections.length;
+    const relativeSectionCount = isItemLoaded(appStatus.currentSection) ? appStatus.currentSection.id + '/' + totalSections : totalSections + ' sections';
+
     return (
         <div>
-            <h5 className="obvious-h5">{name}</h5>
+            <h5 className="obvious-h5">{currentLevel.name}</h5>
             <ProgressBar
-                completed_percent={completed_percent}
-                total_completed_sections={total_completed_sections}
-                total_sections={total_sections}
+                completedPercent={completedPercent}
+                relativeSectionCount = {relativeSectionCount}
             />
         </div>
     )

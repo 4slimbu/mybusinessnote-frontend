@@ -1,23 +1,22 @@
-import React, {Component} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
-import {dashboardUrl, publicUrl} from "../../../utils/helper/helperFunctions";
+import {dashboardUrl, isItemLoaded, publicUrl} from "../../../utils/helper/helperFunctions";
 
 const LevelCompletePage = (props) => {
     const {
-        level, nextLevel, onClickLevelLink
+        currentLevel, nextLevel, onClickLevelLink
     } = props;
-    const nextLevelUrl = '/level/' + nextLevel.slug;
-    const isLast = (level.id === nextLevel.id);
+    const nextLevelUrl = isItemLoaded(nextLevel) ? '/level/' + nextLevel.slug : dashboardUrl();
     return (
         <div className="level-complete">
-            <h5 className="obvious-h5 hidden-xs">{ level.name }</h5>
-            {level.badge_message && <div className="content-wrap" dangerouslySetInnerHTML={{__html: level.badge_message}} />}
+            <h5 className="obvious-h5 hidden-xs">{ currentLevel.name }</h5>
+            {currentLevel.badge_message && <div className="content-wrap" dangerouslySetInnerHTML={{__html: currentLevel.badge_message}} />}
             <img className="complete-block-img"
                  src={publicUrl('/assets/images/level-complete.png')} alt=""/>
             <div className="bottom-block-complete">
                 {
-                    isLast ?
+                    !isItemLoaded(nextLevel) ?
                         <div className="btn-wrap">
                             <a href={dashboardUrl()} className="btn btn-default btn-md">Go to Dashboard</a>
                             <br/><br/>
@@ -42,7 +41,7 @@ const LevelCompletePage = (props) => {
 };
 
 LevelCompletePage.propTypes = {
-    level: PropTypes.object.isRequired,
+    currentLevel: PropTypes.object.isRequired,
     nextLevel: PropTypes.object.isRequired,
 };
 

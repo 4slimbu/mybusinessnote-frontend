@@ -1,27 +1,31 @@
 import React, {Component} from "react";
 import {map} from "lodash";
 import * as classnames from "classnames";
-import {generateAppRelativeUrl, getStatus, isSectionLocked} from "../../../../utils/helper/helperFunctions";
+import {
+    generateAppRelativeUrl, getCurrentLevelSections, getStatus,
+    isSectionLocked
+} from "../../../../utils/helper/helperFunctions";
 import PropTypes from "prop-types";
-import {Link, withRouter} from "react-router-dom";
 
 class SectionLinks extends Component {
 
     render() {
-        const {appStatus, level} = this.props;
-        const {currentSection, businessStatus} = appStatus;
+        const {appStatus, level, onClickSectionLink} = this.props;
+        const {sections, currentSection, businessStatus} = appStatus;
         const {sectionStatuses, businessOptionStatuses} = businessStatus;
+        const currentLevelSections = getCurrentLevelSections(sections, level.id);
 
-        const sectionsList = map(level.sections, (section, key) => {
+        const sectionsList = map(currentLevelSections, (section, key) => {
             const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
             const sectionStatus = getStatus(sectionStatuses, section.id);
-            const lockedClass = isSectionLocked(businessOptionStatuses, section) ? 'locked' : '';
+            const isLocked = isSectionLocked(businessOptionStatuses, section);
+            const lockedClass = isLocked ? 'locked' : '';
             return (
                 <li key={section.id} className={classnames(lockedClass)}>
-                    <Link to={sectionUrl}>
+                    <a href={sectionUrl} onClick={(e) => onClickSectionLink(e, level, section, isLocked)}>
                         <span className={classnames("circle-span", {"complete": sectionStatus.completed_percent === 100}, {"active": currentSection.id === section.id})}></span>
                         {section.name}
-                    </Link>
+                    </a>
                 </li>
             )
         });
@@ -37,6 +41,7 @@ class SectionLinks extends Component {
 SectionLinks.propTypes = {
     appStatus:PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
+    onClickSectionLink: PropTypes.func.isRequired
 };
 
-export default withRouter(SectionLinks);
+export default SectionLinks;

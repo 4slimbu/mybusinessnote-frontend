@@ -289,9 +289,16 @@ export function formatDate(dateString) {
     return date.toLocaleString("en-US", options);
 }
 
-export function isLevelLocked(levelStatuses, level) {
-    // all levels are open
-    return false;
+export function isLevelLocked(businessOptionStatuses, level) {
+    if (level.id === 1) {
+        return false;
+    }
+
+    let statusObject = find(businessOptionStatuses, (item) => {
+        return item.level_id === level.id && item.status !== 'locked'
+    });
+
+    return !statusObject;
 }
 
 export function isSectionLocked(businessOptionStatuses, section) {
@@ -300,9 +307,6 @@ export function isSectionLocked(businessOptionStatuses, section) {
         return false;
     }
     let statusObject = find(businessOptionStatuses, (item) => {
-        if (! item) {
-            debugger;
-        }
         return item.section_id === section.id && item.status !== 'locked';
     });
 
@@ -338,12 +342,12 @@ export function getBySlug(collection, slug) {
 }
 
 export function getFirst(collection) {
-    let item = collection[0];
+    let item = isItemLoaded(collection) && collection[0];
     return item ? item : null;
 }
 
 export function getLast(collection) {
-    let item = collection[collection.length - 1];
+    let item = isItemLoaded(collection) && collection[collection.length - 1];
     return item ? item : null;
 }
 
@@ -356,4 +360,20 @@ export function getPrevious(collection, id) {
 export function getNext(collection, id) {
     let index = findIndex(collection, function(item) { return item.id === id; });
     return collection[index + 1] ? collection[index + 1] : null;
+}
+
+export function getCurrentLevelSections(sections, id) {
+    let currentLevelSections = filter(sections, function(item) { return item.level_id === id; });
+    return currentLevelSections;
+}
+
+export function getBusinessOptions() {
+}
+
+export function isItemLoaded(item) {
+    if (typeof item === 'undefined' || item === null) {
+        return false;
+    }
+
+    return !!(Object.keys(item).length > 0);
 }

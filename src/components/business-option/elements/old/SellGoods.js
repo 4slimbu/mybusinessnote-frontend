@@ -9,11 +9,24 @@ import {
 } from "../../../../actions/appStatusAction";
 import {saveBusinessFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {getAppUrlFromApiUrl} from "../../../../utils/helper/helperFunctions";
+import {getById, isItemLoaded} from "../../../../utils/helper/helperFunctions";
+import request from "../../../../services/request";
 
 class SellGoods extends Component {
     componentDidMount() {
-        this.props.getBusinessCategories();
+        this.bootstrap();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.appStatus.currentBusinessOption.id !== this.props.appStatus.currentBusinessOption.id) {
+            this.bootstrap();
+        }
+    }
+
+    bootstrap() {
+        if (! isItemLoaded(this.props.appStatus.businessCategories)) {
+            this.props.makeRequest(request.BusinessCategory.all);
+        }
     }
 
     handleToolTip(e, id) {
@@ -23,11 +36,8 @@ class SellGoods extends Component {
 
     onClickNext(e) {
         e.preventDefault();
-        const {appStatus, history} = this.props;
-        this.props.getBusinessOption(
-            appStatus.currentBusinessOption.links.next + '&business_category_id=' + appStatus.business_category_id,
-            true);
-        history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
+        const {history} = this.props;
+        history.push('/level/getting-started/section/about-you/bo/3');
     }
 
     handleSelectSellGoods(e, sellGoods) {
@@ -63,8 +73,9 @@ class SellGoods extends Component {
 
     render() {
         const { appStatus } = this.props;
-        const next = (appStatus.currentBusinessOption.links && appStatus.business_category_id !== null) ? appStatus.currentBusinessOption.links.next : null;
-        const selectedCategory = appStatus.businessCategories.data[appStatus.business_category_id -1];
+        const { business } = appStatus;
+        const next = business.business_category_id !== null;
+        const selectedCategory = getById(appStatus.businessCategories, business.business_category_id);
         const sellGoodsCategory = (
             selectedCategory &&
             <li key={selectedCategory.id} style={{ maxWidth: "150px" }} className="active">
@@ -110,6 +121,7 @@ class SellGoods extends Component {
 }
 
 SellGoods.propTypes = {
+    appStatus: PropTypes.object.isRequired,
     getBusinessCategories: PropTypes.func.isRequired,
     setBusinessCategoryId: PropTypes.func.isRequired,
     setSellGoods: PropTypes.func.isRequired,

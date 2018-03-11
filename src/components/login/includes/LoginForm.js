@@ -116,7 +116,9 @@ class LoginForm extends Component {
 
         this.props.makeRequest(request.Auth.login, data).then(
             (responseData) => {
-                this.props.redirectTo('/');
+                this.props.makeRequest(request.Business.getStatus);
+                this.props.makeRequest(request.Business.get);
+                this.props.redirectTo(ROUTES.HOME);
             },
             (errorData) => {
                 this.resetFields();

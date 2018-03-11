@@ -1,20 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {map} from "lodash";
-import {getEnv, isSectionLocked} from "../../../utils/helper/helperFunctions";
+import {
+    getCurrentLevelSections,
+    isSectionLocked
+} from "../../../utils/helper/helperFunctions";
 import * as classnames from "classnames";
 import {Link} from "react-router-dom";
 
-const sections = (appStatus, level, onClickSectionLink, onHandleToolTip) => map(level.sections, (section, key) => {
+const sections = (appStatus, currentLevel, onClickSectionLink, onHandleToolTip) => map(getCurrentLevelSections(appStatus.sections, currentLevel.id), (section, key) => {
     const active = 'active';
-    const sectionUrl = '/level/' + level.slug + '/section/' + section.slug;
+    const sectionUrl = '/level/' + currentLevel.slug + '/section/' + section.slug;
 
-    const isLocked = !!isSectionLocked(appStatus.businessStatus.businessOptionStatuses, section);
+    const isLocked = isSectionLocked(appStatus.businessStatus.businessOptionStatuses, section);
     const lockedClass = isLocked ? 'locked' : '';
 
     return (
         <li key={section.id} className={classnames(active, lockedClass)}>
-            <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, level, section, isLocked)}>
+            <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, currentLevel, section, isLocked)}>
                 <div className="red-icon" href="#">
                     <img src={section.icon}
                          alt=""/>
@@ -32,11 +35,11 @@ const sections = (appStatus, level, onClickSectionLink, onHandleToolTip) => map(
 });
 
 const SectionGridList = (props) => {
-    const {appStatus, level, onClickSectionLink, onHandleToolTip} = props;
+    const {appStatus, currentLevel, onClickSectionLink, onHandleToolTip} = props;
 
     return (
         <ul className="apps-icons clearfix level2-apps-icons">
-            {sections(appStatus, level, onClickSectionLink, onHandleToolTip)}
+            {sections(appStatus, currentLevel, onClickSectionLink, onHandleToolTip)}
         </ul>
     )
 };

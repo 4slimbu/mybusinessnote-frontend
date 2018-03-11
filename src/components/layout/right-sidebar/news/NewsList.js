@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import request from "../../../../services/request";
-import {extractSectionFromLocation, formatDate} from "../../../../utils/helper/helperFunctions";
+import {extractSectionFromLocation, formatDate, isItemLoaded} from "../../../../utils/helper/helperFunctions";
 import {map} from "lodash";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -9,10 +9,6 @@ class NewsList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            news: [],
-            tag: ''
-        };
     }
 
     componentDidMount() {
@@ -29,7 +25,7 @@ class NewsList extends Component {
         const {makeRequest, news, setNews} = this.props;
         const {pathname} = this.props.location;
         const sectionSlug = extractSectionFromLocation(pathname);
-        const tag = ( sectionSlug) ? sectionSlug : 'general';
+        const tag = (sectionSlug) ? sectionSlug : 'general';
         if (!news[tag]) {
             makeRequest(request.News.byTag, tag).then(responseData => {
                 setNews({
@@ -37,16 +33,14 @@ class NewsList extends Component {
                     news: responseData
                 });
             });
-        } else {
-            this.setState({
-                news: news[tag],
-                tag: tag
-            })
         }
     }
 
     render() {
-        const NewsItem = map(this.state.news, (item, key) => {
+        const {pathname} = this.props.location;
+        const sectionSlug = extractSectionFromLocation(pathname);
+        const tag = (sectionSlug) ? sectionSlug : 'general';
+        const NewsItem = map(this.props.news[tag], (item, key) => {
             return(
                 <div key={key} className="news-block clearfix">
                     <a target="_blank" href={ item.link }><img src={ item.featured_image_url } alt={ item.title } /></a>

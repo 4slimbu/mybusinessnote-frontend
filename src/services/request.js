@@ -76,7 +76,7 @@ const BusinessCategory = {
  */
 const Level = {
     all: () =>
-        requests('GET', apiBaseUrl("/levels")),
+        requests('GET', apiBaseUrl("/levels?with=sections")),
 };
 
 /**

@@ -1,119 +1,133 @@
 import {
-    GET_APP_STATUS, GET_BUSINESS_CATEGORIES, GET_BUSINESS_OPTION, SET_APP_STATUS, SET_BUSINESS,
+    SET_APP_STATUS_REDUCER,
+    SET_BUSINESS, SET_BUSINESS_CATEGORIES,
     SET_BUSINESS_CATEGORY_ID,
     SET_BUSINESS_OPTION,
     SET_BUSINESS_STATUS,
     SET_COMPLETED_STATUS, SET_CURRENT,
-    SET_CURRENT_BUSINESS_OPTION,
-    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_IS_FETCHING, SET_LEVELS, SET_SELL_GOODS,
+    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_LEVELS, SET_SECTIONS,
+    SET_SELL_GOODS,
     SET_SHOW_COMPLETED_PAGE,
     SET_TOOLTIP_CONTENT
 } from "../constants/actionTypes";
 import {DEFAULT_APP_STATUS} from "../data/default";
+import {findIndex, merge} from "lodash";
 
 export default (state = DEFAULT_APP_STATUS, action = {}) => {
     switch(action.type) {
-        case `${SET_LEVELS}`:
+        case SET_LEVELS:
             return {
                 ...state,
                 levels: action.levels
             };
-        case `${SET_BUSINESS_STATUS}`:
+        case SET_SECTIONS:
+            return {
+                ...state,
+                sections: action.sections
+            };
+        case SET_BUSINESS_STATUS:
             return {
                 ...state,
                 businessStatus: action.businessStatus
             };
-        case `${GET_APP_STATUS}_PENDING` :
+        case SET_CURRENT :
+            const currentLevel = (action.current.level && state.currentLevel.id === action.current.level.id) ?
+                merge(state.currentLevel, action.current.level.id)
+                : action.current.level;
+            const currentSection = (action.current.section && state.currentSection.id === action.current.section.id) ?
+                merge(state.currentSection, action.current.section)
+                : action.current.section;
+            const currentBusinessOption = (action.current.businessOption && state.currentBusinessOption.id === action.current.businessOption.id) ?
+                merge(state.currentBusinessOption, action.current.businessOption)
+                : action.current.businessOption;
+
             return {
                 ...state,
+                currentLevel: currentLevel,
+                currentSection: currentSection,
+                currentBusinessOption: currentBusinessOption
             };
-        case `${GET_APP_STATUS}_FULFILLED` :
+        case SET_CURRENT_LEVEL :
             return {
                 ...state,
-                ...action.payload,
-                currentLevel: action.payload.levels[0]
+                currentLevel: (state.currentLevel.id === action.currentLevel.id) ? merge(state.currentLevel, action.currentLevel)
+                    : action.currentLevel
             };
-        case `${SET_APP_STATUS}` :
+        case SET_CURRENT_SECTION :
             return {
                 ...state,
-                ...action.appStatus
+                currentSection: (state.currentSection.id === action.currentSection.id) ? merge(state.currentSection, action.currentSection)
+                    : action.currentSection
             };
-        case `${SET_CURRENT}` :
+        case SET_BUSINESS :
+            const business = (state.business.id === action.business.id) ?
+                merge(state.business, action.business)
+                : action.business;
             return {
                 ...state,
-                currentLevel: action.current.level,
-                currentSection: action.current.section,
-                currentBusinessOption: action.current.businessOption
+                business: business
             };
-        case `${SET_IS_FETCHING}` :
+        case SET_BUSINESS_CATEGORIES :
             return {
                 ...state,
-                isFetching: action.bool
+                businessCategories: action.businessCategories
             };
-        case `${SET_CURRENT_LEVEL}` :
-            return {
-                ...state,
-                currentLevel: action.currentLevel
-            };
-        case `${SET_CURRENT_SECTION}` :
-            return {
-                ...state,
-                currentSection: action.currentSection
-            };
-        case `${SET_BUSINESS}` :
-            return {
-                ...state,
-                business: action.business
-            };
-            break;
-        case `${GET_BUSINESS_OPTION}_PENDING` :
-            return {
-                ...state,
-            };
-        case `${SET_BUSINESS_OPTION}` :
-            if (action.businessOption) {
+        case SET_BUSINESS_OPTION :
+            const businessOption = (action.businessOption && state.currentBusinessOption && state.currentBusinessOption.id === action.businessOption.id) ?
+                merge(state.currentBusinessOption, action.businessOption)
+                : action.businessOption;
+            const index = findIndex(state.businessOptions, {id: action.businessOption.id});
+            if (index >= 0) {
                 return {
                     ...state,
-                    currentBusinessOption: action.businessOption,
+                    currentBusinessOption: businessOption,
+                    businessOptions: [
+                        ...state.businessOptions.slice(0, index),
+                        merge(state.businessOptions[index], action.businessOption),
+                        ...state.businessOptions.slice(index + 1)
+                    ]
+
                 };
             } else {
                 return {
                     ...state,
-                    currentBusinessOption: action.payload
+                    currentBusinessOption: action.businessOption,
+                    businessOptions: [
+                        ...state.businessOptions,
+                        action.businessOption
+                    ]
                 };
             }
 
-        case `${GET_BUSINESS_CATEGORIES}_FULFILLED` :
+        case SET_BUSINESS_CATEGORY_ID :
             return {
                 ...state,
-                businessCategories: action.payload
+                business: {
+                    ...state.business,
+                    business_category_id: action.business_category_id
+                }
             };
-        case `${SET_BUSINESS_CATEGORY_ID}` :
-            return {
-                ...state,
-                business_category_id: action.business_category_id
-            };
-        case `${SET_SELL_GOODS}` :
+        case SET_SELL_GOODS :
             return {
                 ...state,
                 sell_goods: action.sell_goods
             };
-        case `${SET_CURRENT_TIP_CATEGORY}` :
+        case SET_CURRENT_TIP_CATEGORY :
             return {
                 ...state,
                 currentTipCategoryId: action.currentTipCategoryId
             };
-        case `${SET_TOOLTIP_CONTENT}` :
+        case SET_TOOLTIP_CONTENT :
             return {
                 ...state,
                 toolTip: action.toolTip
             };
-        case `${SET_SHOW_COMPLETED_PAGE}` :
+        case SET_SHOW_COMPLETED_PAGE :
             return {
                 ...state,
                 showCompletedPage: action.showCompletedPage
             };
-        case `${SET_COMPLETED_STATUS}` :
+        case SET_COMPLETED_STATUS :
             return {
                 ...state,
                 completed_status: action.completedStatus

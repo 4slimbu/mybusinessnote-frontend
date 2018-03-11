@@ -2,22 +2,28 @@ import React from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../includes/LevelHead";
 import SectionGridList from "../includes/SectionGridList";
+import {isItemLoaded} from "../../../utils/helper/helperFunctions";
 
 const LevelIntroPage = (props) => {
-    const {appStatus, level, onClickContinue, onClickSectionLink, onHandleToolTip} = props;
-    const {content} = props.level;
+    const {appStatus, currentLevel, onClickContinue, onClickSectionLink, onHandleToolTip} = props;
+    const {content} = props.currentLevel;
+    const levelHeadProps = {
+      currentLevel: currentLevel,
+      appStatus: appStatus
+    };
     const sectionGridListProps = {
         appStatus: appStatus,
-        level: level,
+        currentLevel: currentLevel,
         onClickSectionLink: onClickSectionLink,
         onHandleToolTip: onHandleToolTip
 
     };
     return (
+        isItemLoaded(currentLevel) &&
         <div>
-            <LevelHead currentLevel={level}/>
+            <LevelHead {...levelHeadProps}/>
             <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}}/>
-            { level.id === 1 ? '' : <SectionGridList {...sectionGridListProps}/> }
+            { currentLevel.id === 1 ? '' : <SectionGridList {...sectionGridListProps}/> }
             <div className="btn-wrap">
                 <a href="#" onClick={(e) => onClickContinue(e)} className="btn btn-default btn-md">Continue</a>
             </div>
@@ -27,7 +33,7 @@ const LevelIntroPage = (props) => {
 
 LevelIntroPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    level: PropTypes.object.isRequired,
+    currentLevel: PropTypes.object.isRequired,
     onClickContinue: PropTypes.func.isRequired,
     onClickSectionLink: PropTypes.func.isRequired,
     onHandleToolTip: PropTypes.func.isRequired,

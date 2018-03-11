@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ProgressBar = ({ completed_percent, total_completed_sections, total_sections }) => {
+const ProgressBar = ({ completedPercent, relativeSectionCount }) => {
     return (
         <div className="hidden-xs">
-            <span className="progress-label">{ completed_percent }% complete</span> <span
-            className="pull-right progress-label">{ total_completed_sections }/{ total_sections }</span>
+            <span className="progress-label">{ completedPercent }% complete</span> <span
+            className="pull-right progress-label">{ relativeSectionCount }</span>
             <div className="progress">
                 <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                     aria-valuemax="100" style={{width: completed_percent + "%"}}>
+                     aria-valuemax="100" style={{width: completedPercent + "%"}}>
                 </div>
             </div>
         </div>
@@ -16,9 +16,8 @@ const ProgressBar = ({ completed_percent, total_completed_sections, total_sectio
 };
 
 ProgressBar.propTypes = {
-    completed_percent:  PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    total_completed_sections: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    total_sections: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    completedPercent:  PropTypes.number.isRequired,
+    relativeSectionCount: PropTypes.number.isRequired,
 };
 
 export default ProgressBar;
