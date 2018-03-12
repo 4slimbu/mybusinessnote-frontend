@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {publicUrl} from "../../../../utils/helper/helperFunctions";
 
-export const Brand = () => {
+const Brand = () => {
     return (
         <span>
             <Link to="/" className="site-branding">
@@ -12,3 +12,5 @@ export const Brand = () => {
         </span>
     )
 };
+
+export default Brand;

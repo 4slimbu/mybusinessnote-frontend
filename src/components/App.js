@@ -31,7 +31,7 @@ class App extends Component {
                 tag: 'general',
                 news: responseData
             });
-        });
+        })
     }
 
     render() {

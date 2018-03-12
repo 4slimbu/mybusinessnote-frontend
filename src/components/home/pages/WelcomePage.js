@@ -1,9 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {getAppUrlFromApiUrl} from "../../../utils/helper/helperFunctions";
+import {ROUTES} from "../../../constants/routes";
 
 const WelcomePage = (props) => {
-    const {onClickStart, lastVisitedPath} = props;
+    const {onClickStart} = props;
     return (
         <div className="row">
             <div className="col-md-12">
@@ -16,7 +16,7 @@ const WelcomePage = (props) => {
             <div className="col-md-12">
                 <div className="btn-wrap">
                     <p>Continue from where I left</p>
-                    <Link to={getAppUrlFromApiUrl(lastVisitedPath)} className="btn btn-default btn-md">Continue</Link>
+                    <Link to={ROUTES.LEVEL_ONE} className="btn btn-default btn-md">Continue</Link>
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@ import {
     isItemLoaded,
     isLevelLocked,
 } from "../../utils/helper/helperFunctions";
-import {setCompletedStatus, setCurrent, setShowCompletedPage, setToolTipContent} from "../../actions/appStatusAction";
+import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
 import LevelCompletePage from "./pages/LevelCompletePage";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {map} from "lodash";
@@ -191,9 +191,7 @@ function mapStateToProps(state) {
 
 export default withRouter(connect(mapStateToProps, {
     setCurrent,
-    setCompletedStatus,
     getCurrentLevelByUrl,
     addFlashMessage,
     setToolTipContent,
-    setShowCompletedPage,
 })(LevelContainer));

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {setCompletedStatus, setShowCompletedPage, setToolTipContent} from "../../../actions/appStatusAction";
+import {setToolTipContent} from "../../../actions/appStatusAction";
 import BusinessOptionPage from "../../business-option/BusinessOptionPage";
 import {withRouter} from "react-router-dom";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
@@ -86,7 +86,5 @@ function mapStateToProps(state) {
 
 export default withRouter(connect(mapStateToProps, {
     setToolTipContent,
-    setCompletedStatus,
-    setShowCompletedPage,
     addFlashMessage,
 })(SectionPage));

@@ -2,10 +2,8 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import jwt_decode from "jwt-decode";
 import TextFieldGroup from "../../common/TextFieldGroup";
-import {validateLogin} from "../../../utils/validation/LoginFormValidation";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../../utils/axios/setAuthorizationToken";
-import {validateEmail, validateUpdatePassword} from "../../../utils/validation/UserValidation";
 import {getAllUrlParams} from "../../../utils/helper/helperFunctions";
 
 class LoginForm extends Component {

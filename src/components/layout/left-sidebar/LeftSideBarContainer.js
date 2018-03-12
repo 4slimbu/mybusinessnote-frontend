@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {Brand} from "./brand/Brand";
+import Brand from "./brand/Brand";
 import LevelLinks from "./navigation/LevelLinks";
 import {logout} from "../../../actions/authActions";
-import {setCompletedStatus, setCurrent} from "../../../actions/appStatusAction";
+import {setCurrent} from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl, getById, getFirst} from "../../../utils/helper/helperFunctions";
@@ -108,6 +108,5 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps, {
     logout,
     setCurrent,
-    setCompletedStatus,
     addFlashMessage,
 })(LeftSideBarContainer));

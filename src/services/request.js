@@ -24,9 +24,6 @@ const requests = (type, url, userData = {}) => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            // validateStatus: (status) => {
-            //     return true;
-            // },
         });
     }
 };

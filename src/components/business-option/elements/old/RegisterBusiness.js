@@ -2,12 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {setCompletedStatus, setShowCompletedPage,} from "../../../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../../../utils/axios/setAuthorizationToken";
 import TextFieldGroup from "../../../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
-import {validateRegisterBusiness} from "../../../../utils/validation/BusinessValidation";
 
 class RegisterBusiness extends Component {
     constructor(props) {
@@ -47,7 +45,7 @@ class RegisterBusiness extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const {errors, isValid} = validateRegisterBusiness(input);
+        const {errors, isValid} = {errors: {}, isValid: true};
 
         if (!isValid) {
             this.setState({errors});
@@ -185,6 +183,4 @@ function mapStateToProps(state) {
 
 export default withRouter(connect(mapStateToProps, {
     addFlashMessage,
-    setShowCompletedPage,
-    setCompletedStatus,
 })(RegisterBusiness));

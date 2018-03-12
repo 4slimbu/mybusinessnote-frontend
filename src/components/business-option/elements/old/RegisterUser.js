@@ -3,7 +3,6 @@ import SignUpForm from "../../form/SignUpForm";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {setCurrentUser} from "../../../../actions/authActions";
 
 class RegisterUser extends Component {
     render() {
@@ -72,5 +71,4 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
     addFlashMessage,
-    setCurrentUser,
 })(RegisterUser);

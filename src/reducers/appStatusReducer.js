@@ -4,13 +4,11 @@ import {
     SET_BUSINESS_CATEGORY_ID,
     SET_BUSINESS_OPTION,
     SET_BUSINESS_STATUS,
-    SET_COMPLETED_STATUS,
     SET_CURRENT,
     SET_CURRENT_TIP_CATEGORY,
     SET_LEVELS,
     SET_SECTIONS,
     SET_SELL_GOODS,
-    SET_SHOW_COMPLETED_PAGE,
     SET_TOOLTIP_CONTENT
 } from "../constants/actionTypes";
 import {DEFAULT_APP_STATUS} from "../data/default";
@@ -112,16 +110,6 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
             return {
                 ...state,
                 toolTip: action.toolTip
-            };
-        case SET_SHOW_COMPLETED_PAGE :
-            return {
-                ...state,
-                showCompletedPage: action.showCompletedPage
-            };
-        case SET_COMPLETED_STATUS :
-            return {
-                ...state,
-                completed_status: action.completedStatus
             };
         default:
             return state;

@@ -1,11 +1,10 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import jwt_decode from "jwt-decode";
-import {validateCreateUser, validateEmail, validateUpdateUser} from "../../../utils/validation/UserValidation";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../../utils/axios/setAuthorizationToken";
-import {getAppUrlFromApiUrl, mbjLog} from "../../../utils/helper/helperFunctions";
+import {getAppUrlFromApiUrl} from "../../../utils/helper/helperFunctions";
 import ReCAPTCHA from "react-google-recaptcha";
 
 class SignUpForm extends Component {
@@ -170,7 +169,10 @@ class SignUpForm extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const {errors, isValid} = (!this.props.auth.isAuthenticated) ? validateCreateUser(input) : validateUpdateUser(input);
+        const {errors, isValid} = (!this.props.auth.isAuthenticated) ? {errors: {}, isValid: true} : {
+            errors: {},
+            isValid: true
+        };
 
         if (!isValid) {
             this.setState({errors});
@@ -182,7 +184,7 @@ class SignUpForm extends Component {
     }
 
     isEmailValid(email) {
-        const {errors, isValid} = validateEmail(email);
+        const {errors, isValid} = {errors: {}, isValid: true};
 
         if (!isValid) {
             this.setState({errors});
@@ -285,7 +287,6 @@ class SignUpForm extends Component {
                     }
                 },
                 (error) => {
-                    mbjLog('inside does user exist error', error);
                     this.setState({errors: error.response.data.errors});
                     this.props.addFlashMessage({
                         type: "error",

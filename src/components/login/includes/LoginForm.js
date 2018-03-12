@@ -94,9 +94,6 @@ class LoginForm extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        if (this.state.isSubmitting) {
-            return;
-        }
 
         const dataObject = {
             email: this.state.email.value,

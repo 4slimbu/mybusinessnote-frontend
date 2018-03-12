@@ -1,7 +1,7 @@
 import Validator from "validator";
 import isEmpty from "lodash/isEmpty";
 import {map} from "lodash";
-import {toCapitalizedWords} from "../helper/stringHelperFunctions";
+import {toCapitalizedWords} from "../helper/helperFunctions";
 
 export function validateFields(inputs, rules) {
     let errors = {};
@@ -43,6 +43,21 @@ export function validate(rule, fieldName, field, inputs) {
         case 'email':
             if (!Validator.isEmail(field)) {
                 return toCapitalizedWords(fieldName) + ' is invalid';
+            }
+            break;
+        case 'website':
+            if (!(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(field))) {
+                return toCapitalizedWords(fieldName) + ' is invalid';
+            }
+            break;
+        case 'phone_number':
+            if (!(/^\(?(\d{2})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(field))) {
+                return toCapitalizedWords(fieldName) + ' is invalid';
+            }
+            break;
+        case 'captcha':
+            if (!field) {
+                return 'Please verify that you are human';
             }
             break;
         case 'lowercase':

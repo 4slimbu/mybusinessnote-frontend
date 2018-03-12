@@ -6,7 +6,6 @@ import {
     SET_BUSINESS_OPTION,
     SET_BUSINESS_OPTIONS,
     SET_BUSINESS_STATUS,
-    SET_COMPLETED_STATUS,
     SET_CURRENT,
     SET_CURRENT_TIP_CATEGORY,
     SET_LEVEL,
@@ -14,7 +13,6 @@ import {
     SET_SECTION,
     SET_SECTIONS,
     SET_SELL_GOODS,
-    SET_SHOW_COMPLETED_PAGE,
     SET_TOOLTIP_CONTENT
 } from "../constants/actionTypes";
 
@@ -124,19 +122,5 @@ export function setToolTipContent(toolTip) {
     return {
         type: SET_TOOLTIP_CONTENT,
         toolTip
-    }
-}
-
-export function setShowCompletedPage(showCompletedPage) {
-    return {
-        type: SET_SHOW_COMPLETED_PAGE,
-        showCompletedPage
-    }
-}
-
-export function setCompletedStatus(completedStatus) {
-    return {
-        type: SET_COMPLETED_STATUS,
-        completedStatus
     }
 }

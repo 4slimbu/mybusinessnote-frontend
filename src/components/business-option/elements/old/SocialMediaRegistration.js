@@ -4,16 +4,13 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
     setBusinessCategoryId,
-    setCompletedStatus,
     setCurrentTipCategory,
     setSellGoods,
-    setShowCompletedPage,
     setToolTipContent
 } from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
-import {isSocialMediaLinksValid} from "../../../../utils/validation/BusinessValidation";
 import {map} from "lodash";
 import {Panel, PanelGroup} from "react-bootstrap";
 
@@ -209,7 +206,7 @@ class SocialMediaRegistration extends Component {
     }
 
     isFormValid(socialName, url) {
-        const {errors, isValid} = isSocialMediaLinksValid(socialName, url);
+        const {errors, isValid} = {errors: {}, isValid: true};
 
         if (!isValid) {
             this.setState({errors});
@@ -396,8 +393,6 @@ export default withRouter(
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCompletedStatus,
-            setShowCompletedPage,
             addFlashMessage,
             setToolTipContent
         }

@@ -2,12 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {
-    setBusinessCategoryId,
-    setCompletedStatus,
-    setCurrentTipCategory,
-    setSellGoods
-} from "../../../../actions/appStatusAction";
+import {setBusinessCategoryId, setCurrentTipCategory, setSellGoods} from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -87,7 +82,6 @@ export default withRouter(
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCompletedStatus,
             addFlashMessage,
         }
     )(BusinessEmailSetUp))

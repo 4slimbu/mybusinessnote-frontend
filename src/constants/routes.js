@@ -6,6 +6,7 @@ export const ROUTES = {
     BUSINESS_CATEGORIES: "/level/getting-started/section/business-category",
     SELL_GOODS: "/level/getting-started/section/business-category/bo/2",
     ABOUT_YOU: "/level/getting-started/section/about-you",
+    ADD_BUSINESS_DETAILS: "/level/getting-started/section/your-business-details",
     LOGIN: "/login",
     FORGOT_PASSWORD: "/login/forgot-password",
 };

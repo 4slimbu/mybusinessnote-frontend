@@ -2,20 +2,14 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {
-    setBusinessCategoryId,
-    setCompletedStatus,
-    setCurrentTipCategory,
-    setSellGoods
-} from "../../../../actions/appStatusAction";
+import {setBusinessCategoryId, setCurrentTipCategory, setSellGoods} from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import SelectBusinessOptionMeta from "../../../common/SelectBusinessOptionMeta";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
 
 class CashFlowForecasting extends Component {
     constructor(props) {
-        setCompletedStatus,
-            super(props);
+        super(props);
         this.state = {
             isShowCompleted: false,
             isLast: true
@@ -82,7 +76,6 @@ export default withRouter(
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCompletedStatus,
             addFlashMessage,
         }
     )(CashFlowForecasting))

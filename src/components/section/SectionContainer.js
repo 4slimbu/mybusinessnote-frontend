@@ -21,6 +21,9 @@ class SectionContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentLevel: {},
+            currentSection: {},
+            currentBusinessOption: {},
             isShowSectionCompletePage: false,
         };
 

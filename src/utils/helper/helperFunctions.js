@@ -1,50 +1,11 @@
 import {filter, find, findIndex} from "lodash";
 import {MESSAGES} from "../../constants/messages";
 
-/**
- * Return url relative to the PUBLIC_URL set in package.json "homepage" key
- *
- * @return {string}
+/*
+==========================================================================
+App Helper Functions
+==========================================================================
  */
-export function publicUrl(url = null) {
-    if (url) {
-        return process.env.PUBLIC_URL + url;
-    }
-    return process.env.PUBLIC_URL;
-}
-
-/**
- * Return url relative to the API_BASE_URL
- *
- * @return {string}
- */
-export function apiBaseUrl(url = null) {
-    if (url) {
-        return process.env.REACT_APP_API_BASE_URL + url;
-    }
-    return process.env.REACT_APP_API_BASE_URL;
-}
-
-/**
- * Return url relative to NEWS_FEED_API_BASE_URL
- */
-export function newsFeedApiBaseUrl(url = null) {
-    if (url) {
-        return process.env.REACT_APP_NEWS_FEED_API_BASE_URL + url;
-    }
-    return process.env.REACT_APP_NEWS_FEED_API_BASE_URL;
-}
-
-/**
- * Gets the dashboard Url of current logged in user
- */
-export function dashboardUrl() {
-    if (localStorage.getItem("jwtToken")) {
-        return getEnv('DASHBOARD_URL') + '/?token=' + localStorage.getItem("jwtToken");
-    }
-    return '#';
-}
-
 /**
  * This is a wrapper function to get the env variable without using the
  * prefix REACT_APP_
@@ -54,16 +15,6 @@ export function dashboardUrl() {
  */
 export function getEnv(key) {
     return process.env['REACT_APP_' + key];
-}
-
-/**
- * Use error code to get error message
- *
- * @param errorCode
- * @return {string}
- */
-export function getCodeMessage(errorCode) {
-    return MESSAGES[errorCode] ? MESSAGES[errorCode] : MESSAGES.ERR_UNKNOWN;
 }
 
 /**
@@ -93,82 +44,19 @@ export function mbjLog(name, data = null, level = 'info') {
     }
 }
 
-/**
- * Parse url string and return list of query string key-pair
- *
- * @param url
- * @return {{}}
+/*
+==========================================================================
+Data Handling Helper Functions
+==========================================================================
  */
-export function getAllUrlParams(url) {
-
-    // get query string from url (optional) or window
-    let queryString = url ? url.split('?')[1] : window.location.search.slice(1);
-
-    // we'll store the parameters here
-    let obj = {};
-
-    // if query string exists
-    if (queryString) {
-
-        // stuff after # is not part of query string, so get rid of it
-        queryString = queryString.split('#')[0];
-
-        // split our query string into its component parts
-        let arr = queryString.split('&');
-
-        for (let i = 0; i < arr.length; i++) {
-            // separate the keys and the values
-            let a = arr[i].split('=');
-
-            // in case params look like: list[]=thing1&list[]=thing2
-            let paramNum = undefined;
-            let paramName = a[0].replace(/\[\d*\]/, function (v) {
-                paramNum = v.slice(1, -1);
-                return '';
-            });
-
-            // set parameter value (use 'true' if empty)
-            let paramValue = typeof(a[1]) === 'undefined' ? true : a[1];
-
-            // if parameter name already exists
-            if (obj[paramName]) {
-                // convert value to array (if still string)
-                if (typeof obj[paramName] === 'string') {
-                    obj[paramName] = [obj[paramName]];
-                }
-                // if no array index number specified...
-                if (typeof paramNum === 'undefined') {
-                    // put the value on the end of the array
-                    obj[paramName].push(paramValue);
-                }
-                // if array index number specified...
-                else {
-                    // put the value at that index number
-                    obj[paramName][paramNum] = paramValue;
-                }
-            }
-            // if param name doesn't exist yet, set it
-            else {
-                obj[paramName] = paramValue;
-            }
-        }
-    }
-
-    return obj;
-}
-
-export function generateAppRelativeUrl(level, section = null, businessOption = null) {
-    if (level && !section && !businessOption) {
-        return '/level/' + level;
-    }
-
-    if (level && section && !businessOption) {
-        return '/level/' + level + '/section/' + section;
-    }
-
-    if (level && section && businessOption) {
-        return '/level/' + level + '/section/' + section + '/business-option/' + businessOption;
-    }
+/**
+ * Use error code to get error message
+ *
+ * @param errorCode
+ * @return {string}
+ */
+export function getCodeMessage(errorCode) {
+    return MESSAGES[errorCode] ? MESSAGES[errorCode] : MESSAGES.ERR_UNKNOWN;
 }
 
 export function filterLevelsBySlug(levels, levelSlug) {
@@ -177,20 +65,6 @@ export function filterLevelsBySlug(levels, levelSlug) {
     });
     //get only the first value
     return currentLevel[0];
-}
-
-export function getApiUrlFromAppUrl(location) {
-    const levelSlug = extractLevelFromLocation(location);
-    const sectionSlug = extractSectionFromLocation(location);
-    const boId = extractBoIdFromLocation(location);
-    return '/business-option?' + 'level=' + levelSlug + '&section=' + sectionSlug + '&bo=' + boId;
-}
-
-export function getAppUrlFromApiUrl(location) {
-    const levelSlug = extractLevelFromLocation(location);
-    const sectionSlug = extractSectionFromLocation(location);
-    const boId = extractBoIdFromLocation(location);
-    return '/level/' + levelSlug + '/section/' + sectionSlug + '/bo/' + boId;
 }
 
 export function extractLevelFromLocation(location) {
@@ -282,13 +156,6 @@ export function saveBusinessOption(currentObject, data) {
     );
 }
 
-export function formatDate(dateString) {
-    let options = {day: 'numeric', month: 'long', year: 'numeric'};
-    let date = new Date(dateString.replace(' ', 'T'));
-
-    return date.toLocaleString("en-US", options);
-}
-
 export function isLevelLocked(businessOptionStatuses, level) {
     if (level.id === 1) {
         return false;
@@ -351,7 +218,6 @@ export function getLast(collection) {
     return item ? item : null;
 }
 
-
 export function getPrevious(collection, id) {
     let index = findIndex(collection, function (item) {
         return item.id === id;
@@ -382,4 +248,187 @@ export function isItemLoaded(item) {
     }
 
     return !!(Object.keys(item).length > 0);
+}
+
+/*
+==========================================================================
+String Helper Functions
+==========================================================================
+ */
+/**
+ * Transform 'slug_string' or 'camelCaseString' or 'any type of string' to 'Capitalized Words'
+ *
+ * @param string
+ * @returns {string}
+ */
+export function toCapitalizedWords(string) {
+    const newString = string.replace(/([A-Z])/g, ' $1')
+        .replace(/([_])/g, ' ');
+
+    return firstOfEachWordToUppercase(newString);
+}
+
+/**
+ * Capitalize first letter of each words in a string
+ *
+ * @param str
+ * @returns {string}
+ */
+export function firstOfEachWordToUppercase(str) {
+    let array = str.split(' ');
+    let newArray = [];
+
+    for (let x = 0; x < array.length; x++) {
+        newArray.push(array[x].charAt(0).toUpperCase() + array[x].slice(1));
+    }
+
+    return newArray.join(' ');
+}
+
+export function formatDate(dateString) {
+    let options = {day: 'numeric', month: 'long', year: 'numeric'};
+    let date = new Date(dateString.replace(' ', 'T'));
+
+    return date.toLocaleString("en-US", options);
+}
+
+/*
+==========================================================================
+ROUTE Helper Functions
+==========================================================================
+ */
+/**
+ * Return url relative to the PUBLIC_URL set in package.json "homepage" key
+ *
+ * @return {string}
+ */
+export function publicUrl(url = null) {
+    if (url) {
+        return process.env.PUBLIC_URL + url;
+    }
+    return process.env.PUBLIC_URL;
+}
+
+/**
+ * Return url relative to the API_BASE_URL
+ *
+ * @return {string}
+ */
+export function apiBaseUrl(url = null) {
+    if (url) {
+        return process.env.REACT_APP_API_BASE_URL + url;
+    }
+    return process.env.REACT_APP_API_BASE_URL;
+}
+
+/**
+ * Return url relative to NEWS_FEED_API_BASE_URL
+ */
+export function newsFeedApiBaseUrl(url = null) {
+    if (url) {
+        return process.env.REACT_APP_NEWS_FEED_API_BASE_URL + url;
+    }
+    return process.env.REACT_APP_NEWS_FEED_API_BASE_URL;
+}
+
+/**
+ * Gets the dashboard Url of current logged in user
+ */
+export function dashboardUrl() {
+    if (localStorage.getItem("jwtToken")) {
+        return getEnv('DASHBOARD_URL') + '/?token=' + localStorage.getItem("jwtToken");
+    }
+    return '#';
+}
+
+/**
+ * Parse url string and return list of query string key-pair
+ *
+ * @param url
+ * @return {{}}
+ */
+export function getAllUrlParams(url) {
+
+    // get query string from url (optional) or window
+    let queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+
+    // we'll store the parameters here
+    let obj = {};
+
+    // if query string exists
+    if (queryString) {
+
+        // stuff after # is not part of query string, so get rid of it
+        queryString = queryString.split('#')[0];
+
+        // split our query string into its component parts
+        let arr = queryString.split('&');
+
+        for (let i = 0; i < arr.length; i++) {
+            // separate the keys and the values
+            let a = arr[i].split('=');
+
+            // in case params look like: list[]=thing1&list[]=thing2
+            let paramNum = undefined;
+            let paramName = a[0].replace(/\[\d*\]/, function (v) {
+                paramNum = v.slice(1, -1);
+                return '';
+            });
+
+            // set parameter value (use 'true' if empty)
+            let paramValue = typeof(a[1]) === 'undefined' ? true : a[1];
+
+            // if parameter name already exists
+            if (obj[paramName]) {
+                // convert value to array (if still string)
+                if (typeof obj[paramName] === 'string') {
+                    obj[paramName] = [obj[paramName]];
+                }
+                // if no array index number specified...
+                if (typeof paramNum === 'undefined') {
+                    // put the value on the end of the array
+                    obj[paramName].push(paramValue);
+                }
+                // if array index number specified...
+                else {
+                    // put the value at that index number
+                    obj[paramName][paramNum] = paramValue;
+                }
+            }
+            // if param name doesn't exist yet, set it
+            else {
+                obj[paramName] = paramValue;
+            }
+        }
+    }
+
+    return obj;
+}
+
+export function generateAppRelativeUrl(level, section = null, businessOption = null) {
+    if (level && !section && !businessOption) {
+        return '/level/' + level;
+    }
+
+    if (level && section && !businessOption) {
+        return '/level/' + level + '/section/' + section;
+    }
+
+    if (level && section && businessOption) {
+        return '/level/' + level + '/section/' + section + '/business-option/' + businessOption;
+    }
+}
+
+export function getApiUrlFromAppUrl(location) {
+    const levelSlug = extractLevelFromLocation(location);
+    const sectionSlug = extractSectionFromLocation(location);
+    const boId = extractBoIdFromLocation(location);
+    return '/business-option?' + 'level=' + levelSlug + '&section=' + sectionSlug + '&bo=' + boId;
+}
+
+export function getAppUrlFromApiUrl(location) {
+    const levelSlug = extractLevelFromLocation(location);
+    const sectionSlug = extractSectionFromLocation(location);
+    const boId = extractBoIdFromLocation(location);
+    return '/level/' + levelSlug + '/section/' + sectionSlug + '/bo/' + boId;
 }

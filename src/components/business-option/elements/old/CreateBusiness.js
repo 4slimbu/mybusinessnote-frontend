@@ -6,8 +6,7 @@ import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../../../utils/axios/setAuthorizationToken";
 import TextFieldGroup from "../../../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
-import {validateCreateBusiness} from "../../../../utils/validation/BusinessValidation";
-import {getAppUrlFromApiUrl, mbjLog} from "../../../../utils/helper/helperFunctions";
+import {getAppUrlFromApiUrl} from "../../../../utils/helper/helperFunctions";
 
 class CreateBusiness extends Component {
     constructor(props) {
@@ -50,9 +49,7 @@ class CreateBusiness extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const {errors, isValid} = validateCreateBusiness(input);
-
-        mbjLog('is form valid', errors);
+        const {errors, isValid} = {errors: {}, isValid: true};
 
         if (!isValid) {
             this.setState({errors});

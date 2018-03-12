@@ -1,15 +1,14 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import jwt_decode from "jwt-decode";
 import {getAllUrlParams} from "../../utils/helper/helperFunctions";
-import {setCurrentUser} from "../../actions/authActions";
-import {addFlashMessage} from "../../actions/flashMessageAction";
-import setAuthorizationToken from "../../utils/axios/setAuthorizationToken";
 import WelcomePage from "./pages/WelcomePage";
 import GuestPage from "./pages/GuestPage";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
 import {ROUTES} from "../../constants/routes";
+import {setCurrent} from "../../actions/appStatusAction";
+import request from "../../services/request";
+import {makeRequest} from "../../actions/requestAction";
 
 class HomeContainer extends Component {
     constructor(props) {
@@ -25,82 +24,49 @@ class HomeContainer extends Component {
     }
 
     componentDidMount() {
+        // get verification token from url if exist
         if (getAllUrlParams(this.props.location.search).email_verification_token) {
             this.setState({
                 showVerifyLink: true,
                 email_verification_token: getAllUrlParams(this.props.location.search).email_verification_token
             })
         }
+        // reset current level, section and business option
+        this.props.setCurrent();
     }
 
     onClickStart(e) {
         e.preventDefault();
         const {history} = this.props;
-        history.push('/level/getting-started');
+        history.push(ROUTES.LEVEL_ONE);
     };
 
     onVerifyAccount(e) {
         e.preventDefault();
 
-        this.props.verifyEmail({
+        this.props.makeRequest(request.Auth.verifyEmail, {
             email_verification_token: this.state.email_verification_token
         }).then(
             (response) => {
-                const token = response.data.token;
-                if (token) {
-                    localStorage.setItem("jwtToken", token);
-                    setAuthorizationToken(token);
-                    this.props.setCurrentUser(jwt_decode(token).user);
-
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "Successfully verified! Welcome!"
-                    });
-                }
-                this.props.getAppStatus();
-                this.props.history.push('/');
-            },
-            (error) => {
-                if (error.response.data.error) {
-                    this.props.addFlashMessage({
-                        type: "error",
-                        text: 'Unable to verify account'
-                    });
-                }
+                this.props.history.push(ROUTES.HOME);
             }
         );
     }
 
     onSendVerificationEmail(e) {
         e.preventDefault();
-        const {sendVerificationEmail, addFlashMessage} = this.props;
-        sendVerificationEmail().then(
-            (response) => {
-                addFlashMessage({
-                    type: "success",
-                    text: "Verification Email Sent"
-                });
-            },
-            (error) => {
-                if (error.response.data.error) {
-                    addFlashMessage({
-                        type: "error",
-                        text: 'Unable to send Verification Email'
-                    });
-                }
-            }
-        );
+        this.props.makeRequest(request.Auth.sendVerificationEmail);
     };
 
     render() {
         const {auth, appStatus} = this.props;
 
-        const lastVisitedPath = appStatus.history && appStatus.history.last_visited ?
+        const continueJourneyUrl = appStatus.history && appStatus.history.last_visited ?
             appStatus.history.last_visited : ROUTES.LEVEL_ONE;
 
         const welcomePageProps = {
             onClickStart: this.onClickStart,
-            lastVisitedPath: lastVisitedPath
+            continueJourneyUrl: continueJourneyUrl
         };
 
         const guestPageProps = {
@@ -134,6 +100,6 @@ function mapStateToProps(state) {
 
 
 export default withRouter(connect(mapStateToProps, {
-    setCurrentUser,
-    addFlashMessage,
+    setCurrent,
+    makeRequest,
 })(HomeContainer));

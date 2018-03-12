@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import {
     setBusinessCategoryId,
     setBusinessMeta,
-    setCompletedStatus,
     setCurrentTipCategory,
     setSellGoods
 } from "../../../../actions/appStatusAction";
@@ -171,7 +170,6 @@ export default withRouter(
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCompletedStatus,
             addFlashMessage,
             setBusinessMeta,
         }
