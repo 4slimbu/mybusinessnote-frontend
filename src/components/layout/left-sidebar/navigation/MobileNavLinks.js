@@ -83,7 +83,8 @@ class MobileLevelLinks extends Component {
                 };
                 const lockedClass = isSectionLocked(appStatus, level, key) ? 'locked' : '';
                 return (
-                    <li key={section.id} className={classnames(lockedClass)}><a href={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
+                    <li key={section.id} className={classnames(lockedClass)}><a href={sectionUrl}
+                                                                                onClick={(e) => onClickSectionLink(e, sectionUrl)}>
                         {section.name}</a>
                     </li>
                 )

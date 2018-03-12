@@ -10,7 +10,7 @@ import SectionLinks from "./SectionLinks";
 class LevelLinks extends Component {
 
     render() {
-        const { appStatus, onClickLevelLink, onClickSectionLink } = this.props;
+        const {appStatus, onClickLevelLink, onClickSectionLink} = this.props;
 
         const {levels, currentLevel, businessStatus} = appStatus;
 
@@ -30,19 +30,22 @@ class LevelLinks extends Component {
             };
 
             return (
-                <Panel key={level.slug} eventKey={level.id} className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
+                <Panel key={level.slug} eventKey={level.id}
+                       className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
                     <Panel.Heading>
                         <Panel.Title toggle>
-                            <div onClick={(e) => onClickLevelLink(e, level )}
+                            <div onClick={(e) => onClickLevelLink(e, level)}
                             >
-                                <figure className={classnames({"goldbadge-img" : (levelStatus.completed_percent >= 100)})}><img src={levelImg} alt="" /></figure>
-                                <h6>{ level.name }</h6>
+                                <figure
+                                    className={classnames({"goldbadge-img": (levelStatus.completed_percent >= 100)})}>
+                                    <img src={levelImg} alt=""/></figure>
+                                <h6>{level.name}</h6>
                             </div>
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>
                         <ul className="getting-start-list">
-                            { appStatus.sections.length > 0 && <SectionLinks {...sectionLinksProps}/>}
+                            {appStatus.sections.length > 0 && <SectionLinks {...sectionLinksProps}/>}
                         </ul>
                     </Panel.Body>
                 </Panel>
@@ -55,9 +58,10 @@ class LevelLinks extends Component {
 
         return (
             (levels.length > 0) ?
-            <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.id} onSelect={(newKey)=>handleSelect(newKey)}>
-                {levelsList}
-            </PanelGroup> :
+                <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.id}
+                            onSelect={(newKey) => handleSelect(newKey)}>
+                    {levelsList}
+                </PanelGroup> :
                 <div></div>
         );
     }

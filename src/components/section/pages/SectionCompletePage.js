@@ -15,7 +15,7 @@ class SectionCompletePage extends Component {
         const nextLevelUrl = '/level/' + nextLevel.slug;
         return (
             <div className="level-complete">
-                <h5 className="obvious-h5">{ level.name }</h5>
+                <h5 className="obvious-h5">{level.name}</h5>
                 <h1>Congratulations</h1>
                 <p>Level {level.id} complete!</p>
                 <img className="complete-block-img"
@@ -30,7 +30,7 @@ class SectionCompletePage extends Component {
                           to={nextLevelUrl} className="next-session-link"><i
                         className="fa fa-chevron-down" aria-hidden="true"></i>
                     </Link>
-                    <h6>{ nextLevel.name }</h6>
+                    <h6>{nextLevel.name}</h6>
                 </div>
             </div>
         );

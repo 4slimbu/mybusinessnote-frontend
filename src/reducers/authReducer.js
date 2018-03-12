@@ -10,7 +10,7 @@ export default (state = initialState, action = {}) => {
     const user = action.payload && action.payload.user ? action.payload.user : {};
     const scope = action.payload && action.payload.scope ? action.payload.scope : {};
     const isVerified = user.verified ? user.verified : 0;
-    switch(action.type) {
+    switch (action.type) {
         case SET_AUTH:
             return {
                 isAuthenticated: !isEmpty(user),
@@ -18,6 +18,7 @@ export default (state = initialState, action = {}) => {
                 user: user,
                 scope: scope
             };
-        default: return state;
+        default:
+            return state;
     }
 }

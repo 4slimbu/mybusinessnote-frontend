@@ -8,11 +8,11 @@ const SocialLoginButton = () => {
             <div className="row">
 
                 <div className="col-md-6 text-right col-sm-12">
-                    <a className="btn btn-primary" href={ getEnv('API_BASE_URL') + '/login/oauth/google'} >
+                    <a className="btn btn-primary" href={getEnv('API_BASE_URL') + '/login/oauth/google'}>
                         <i className="fa fa-google"></i> Google</a>
                 </div>
                 <div className="col-md-6 col-sm-12 text-left">
-                    <a className="btn btn-primary" href={ getEnv('API_BASE_URL') + '/login/oauth/facebook'} >
+                    <a className="btn btn-primary" href={getEnv('API_BASE_URL') + '/login/oauth/facebook'}>
                         <i className="fa fa-facebook-square"></i> Facebook</a>
                 </div>
             </div>

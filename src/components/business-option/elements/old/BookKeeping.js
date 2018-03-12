@@ -2,14 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
-    setCurrentBusinessOption,
-    setCurrentTipCategory,
-    setSellGoods, trackClick
-} from "../../../../actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
+import {setBusinessCategoryId, setCompletedStatus, setSellGoods,} from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import SelectBusinessOptionMeta from "../../../common/SelectBusinessOptionMeta";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -24,7 +17,7 @@ class BookKeeping extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
 
@@ -57,7 +50,6 @@ BookKeeping.propTypes = {
     setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     trackClick: PropTypes.func.isRequired
@@ -74,16 +66,9 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
-            setCurrentTipCategory,
-            setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
             addFlashMessage,
-            trackClick
         }
     )(BookKeeping))

@@ -36,14 +36,14 @@ class LoginForm extends Component {
     componentDidMount() {
         if (getAllUrlParams(this.props.location.search).forgot_password_token) {
             this.setState({
-                showUpdatePasswordForm : true,
-                forgot_password_token : getAllUrlParams(this.props.location.search).forgot_password_token
+                showUpdatePasswordForm: true,
+                forgot_password_token: getAllUrlParams(this.props.location.search).forgot_password_token
             })
         }
 
         if (this.props.match.params.driver) {
             this.setState({
-               isSocialLoginProcessing: true
+                isSocialLoginProcessing: true
             });
             this.props.loginSocialUser(
                 this.props.location.pathname + this.props.location.search
@@ -75,7 +75,7 @@ class LoginForm extends Component {
                     this.props.getAppStatus();
                     this.props.history.push('/');
                 },
-                ( error ) => {
+                (error) => {
                     this.setState({errors: error.response.data.error, isLoading: false});
                 }
             );
@@ -128,7 +128,7 @@ class LoginForm extends Component {
                 (response) => {
                     this.setState({showEmailSentResponse: true});
                 },
-                ( error ) => {
+                (error) => {
                 }
             );
         }
@@ -158,7 +158,7 @@ class LoginForm extends Component {
                     this.props.getAppStatus();
                     this.props.history.push('/');
                 },
-                ( error ) => {
+                (error) => {
                     if (error.response.data.error) {
                         this.props.addFlashMessage({
                             type: "error",
@@ -204,27 +204,28 @@ class LoginForm extends Component {
     render() {
         const {errors, email, password, confirm_password, forgot_password_token, showEmailSentResponse} = this.state;
 
-        const socialLoginProcessing= (
+        const socialLoginProcessing = (
             <div>
                 <p>logging in ...</p>
             </div>
         );
 
         const emailSentResponse = (
-              <div>
-                  <h1>Forgot Password</h1>
-                  <p>If your email exists on our records, you will receive a password reset email. Please contact hello@mybusinessjourney.com.au if you still have any problems.</p>
-                  <div className="btn-wrap">
-                      <a onClick={(e) => this.onClickBackToLogin(e)} className="btn btn-default btn-md">Back</a>
-                  </div>
-              </div>
+            <div>
+                <h1>Forgot Password</h1>
+                <p>If your email exists on our records, you will receive a password reset email. Please contact
+                    hello@mybusinessjourney.com.au if you still have any problems.</p>
+                <div className="btn-wrap">
+                    <a onClick={(e) => this.onClickBackToLogin(e)} className="btn btn-default btn-md">Back</a>
+                </div>
+            </div>
         );
 
         const updatePasswordForm = (
             <form className="apps-form" onSubmit={this.onUpdatePasswordFormSubmit}>
                 <h1>Reset Password</h1>
 
-                { errors.form && <div className="alert alert-danger">{errors.form}</div> }
+                {errors.form && <div className="alert alert-danger">{errors.form}</div>}
 
                 <TextFieldGroup
                     error={errors.password}
@@ -251,26 +252,26 @@ class LoginForm extends Component {
         );
 
         const forgotPasswordForm = (
-                this.state.showEmailSentResponse ?
-                    emailSentResponse :
-                    <form className="apps-form" onSubmit={this.onSendForgotPasswordEmailFormSubmit}>
-                        <h1>Forgot Password</h1>
-                        <p>Please enter your email address to reset your password.</p>
-                        { errors.form && <div className="alert alert-danger">{errors.form}</div> }
+            this.state.showEmailSentResponse ?
+                emailSentResponse :
+                <form className="apps-form" onSubmit={this.onSendForgotPasswordEmailFormSubmit}>
+                    <h1>Forgot Password</h1>
+                    <p>Please enter your email address to reset your password.</p>
+                    {errors.form && <div className="alert alert-danger">{errors.form}</div>}
 
-                        <TextFieldGroup
-                            error={errors.email}
-                            label="Email"
-                            onChange={this.onChange}
-                            value={email}
-                            type="text"
-                            field="email"
-                        />
-                        <div className="btn-wrap">
-                            <button className="btn btn-default btn-md">Send Reset Password Email</button>
-                            <a onClick={(e) => this.onClickBackToLogin(e)} className="btn btn-default btn-md">Back</a>
-                        </div>
-                    </form>
+                    <TextFieldGroup
+                        error={errors.email}
+                        label="Email"
+                        onChange={this.onChange}
+                        value={email}
+                        type="text"
+                        field="email"
+                    />
+                    <div className="btn-wrap">
+                        <button className="btn btn-default btn-md">Send Reset Password Email</button>
+                        <a onClick={(e) => this.onClickBackToLogin(e)} className="btn btn-default btn-md">Back</a>
+                    </div>
+                </form>
 
         );
 
@@ -279,7 +280,7 @@ class LoginForm extends Component {
                 <form className="apps-form" onSubmit={this.onLoginFormSubmit}>
                     <h1>Login</h1>
 
-                    { errors.form && <div className="alert alert-danger">{errors.form}</div> }
+                    {errors.form && <div className="alert alert-danger">{errors.form}</div>}
 
                     <TextFieldGroup
                         error={errors.email}
@@ -307,10 +308,14 @@ class LoginForm extends Component {
                 <div className="row">
 
                     <div className="col-md-6 text-right col-sm-12">
-                        <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
+                        <a className="btn btn-primary"
+                           href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'}><i
+                            className="fa fa-google"></i> Google</a>
                     </div>
                     <div className="col-md-6 col-sm-12 text-left">
-                        <a className="btn btn-primary" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i> Facebook</a>
+                        <a className="btn btn-primary"
+                           href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'}><i
+                            className="fa fa-facebook-square"></i> Facebook</a>
                     </div>
                 </div>
             </div>

@@ -57,7 +57,7 @@ class LoginForm extends Component {
                 isChanged: true
             },
             isChanged: true
-        }, function() {
+        }, function () {
             const dataObject = {};
             if (this.state.email.isChanged) {
                 dataObject.email = this.state.email.value

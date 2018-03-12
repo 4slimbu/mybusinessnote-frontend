@@ -116,19 +116,19 @@ export function getAllUrlParams(url) {
         // split our query string into its component parts
         let arr = queryString.split('&');
 
-        for (let i=0; i<arr.length; i++) {
+        for (let i = 0; i < arr.length; i++) {
             // separate the keys and the values
             let a = arr[i].split('=');
 
             // in case params look like: list[]=thing1&list[]=thing2
             let paramNum = undefined;
-            let paramName = a[0].replace(/\[\d*\]/, function(v) {
-                paramNum = v.slice(1,-1);
+            let paramName = a[0].replace(/\[\d*\]/, function (v) {
+                paramNum = v.slice(1, -1);
                 return '';
             });
 
             // set parameter value (use 'true' if empty)
-            let paramValue = typeof(a[1])==='undefined' ? true : a[1];
+            let paramValue = typeof(a[1]) === 'undefined' ? true : a[1];
 
             // if parameter name already exists
             if (obj[paramName]) {
@@ -172,7 +172,7 @@ export function generateAppRelativeUrl(level, section = null, businessOption = n
 }
 
 export function filterLevelsBySlug(levels, levelSlug) {
-    let currentLevel =  filter(levels, (level) => {
+    let currentLevel = filter(levels, (level) => {
         return level.slug == levelSlug;
     });
     //get only the first value
@@ -244,7 +244,7 @@ export function getCurrentSectionByUrl(sections, url) {
 }
 
 export function generateLevelCompletedPercent(levels, currentLevel) {
-    return (levels && currentLevel && levels[currentLevel.id -1]) ? levels[currentLevel.id -1].completed_percent : false;
+    return (levels && currentLevel && levels[currentLevel.id - 1]) ? levels[currentLevel.id - 1].completed_percent : false;
 }
 
 export function saveBusinessOption(currentObject, data) {
@@ -283,7 +283,7 @@ export function saveBusinessOption(currentObject, data) {
 }
 
 export function formatDate(dateString) {
-    let options = { day: 'numeric', month: 'long', year: 'numeric' };
+    let options = {day: 'numeric', month: 'long', year: 'numeric'};
     let date = new Date(dateString.replace(' ', 'T'));
 
     return date.toLocaleString("en-US", options);
@@ -353,17 +353,23 @@ export function getLast(collection) {
 
 
 export function getPrevious(collection, id) {
-    let index = findIndex(collection, function(item) { return item.id === id; });
+    let index = findIndex(collection, function (item) {
+        return item.id === id;
+    });
     return collection[index - 1] ? collection[index - 1] : null;
 }
 
 export function getNext(collection, id) {
-    let index = findIndex(collection, function(item) { return item.id === id; });
+    let index = findIndex(collection, function (item) {
+        return item.id === id;
+    });
     return collection[index + 1] ? collection[index + 1] : null;
 }
 
 export function getCurrentLevelSections(sections, id) {
-    let currentLevelSections = filter(sections, function(item) { return item.level_id === id; });
+    let currentLevelSections = filter(sections, function (item) {
+        return item.level_id === id;
+    });
     return currentLevelSections;
 }
 

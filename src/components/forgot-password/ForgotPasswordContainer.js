@@ -1,9 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {doesUserExists} from "../../actions/signUpActions";
-import {addFlashMessage} from "../../actions/flashMessageAction";
-import {handleErrorResponseData, handleSuccessResponseData, callApi, makeRequest} from "../../actions/requestAction";
+import {callApi, makeRequest} from "../../actions/requestAction";
 import EmailSentResponsePage from "./pages/EmailSentResponsePage";
 import UpdatePasswordPage from "./pages/UpdatePasswordPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -32,7 +30,7 @@ class ForgotPasswordContainer extends Component {
     componentDidMount() {
         if (getAllUrlParams(this.props.location.search).forgot_password_token) {
             this.setState({
-                forgot_password_token : getAllUrlParams(this.props.location.search).forgot_password_token
+                forgot_password_token: getAllUrlParams(this.props.location.search).forgot_password_token
             });
             this.showUpdatePasswordPage();
         }
@@ -98,7 +96,7 @@ class ForgotPasswordContainer extends Component {
                     this.state.isShowEmailSentResponsePage ? <EmailSentResponsePage/> :
                         this.state.isShowUpdatePasswordPage ? <UpdatePasswordPage {...updatePasswordPageProps}/> :
                             this.state.isShowPasswordUpdatedResponsePage ? <PasswordUpdatedResponsePage/> :
-                            <ForgotPasswordPage {...forgotPasswordPageProps}/>
+                                <ForgotPasswordPage {...forgotPasswordPageProps}/>
                 }
             </div>
         )

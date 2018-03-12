@@ -2,16 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {
-    getAppStatus, getBusinessOption, getBusinessOptionFromUrl, setCompletedStatus, setCurrentBusinessOption,
-    setCurrentLevel,
-    setCurrentSection,
-    setShowCompletedPage, trackClick
-} from "../../../../actions/appStatusAction";
+import {setCompletedStatus, setShowCompletedPage,} from "../../../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../../../utils/axios/setAuthorizationToken";
 import TextFieldGroup from "../../../common/TextFieldGroup";
-import {saveBusinessFormRequest} from "../../../../actions/businessActions";
 import {withRouter} from "react-router-dom";
 import {validateRegisterBusiness} from "../../../../utils/validation/BusinessValidation";
 
@@ -53,10 +47,10 @@ class RegisterBusiness extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const { errors, isValid } = validateRegisterBusiness(input);
+        const {errors, isValid} = validateRegisterBusiness(input);
 
-        if(! isValid) {
-            this.setState({ errors });
+        if (!isValid) {
+            this.setState({errors});
         }
 
         return isValid;
@@ -89,8 +83,10 @@ class RegisterBusiness extends Component {
                         this.props.setCurrentUser(jwt_decode(token).user);
                     }
 
-                    const {setCurrentLevel, setCurrentSection, setCurrentBusinessOption, setCompletedStatus,
-                        history, getBusinessOption} = this.props;
+                    const {
+                        setCurrentLevel, setCurrentSection, setCurrentBusinessOption, setCompletedStatus,
+                        history, getBusinessOption
+                    } = this.props;
                     this.props.setCompletedStatus(response.data.completed_status);
                     if (response.data.completed_status.level) {
                         this.props.getAppStatus();
@@ -110,7 +106,7 @@ class RegisterBusiness extends Component {
                         history.push('/level/setting-the-foundations');
                     }
                 },
-                ( error ) => {
+                (error) => {
                     this.setState({errors: error.response.data.error, isLoading: false});
                     this.props.addFlashMessage({
                         type: "error",
@@ -133,7 +129,7 @@ class RegisterBusiness extends Component {
 
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const errors = this.state.errors;
         const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
         const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].label : 'Register for an ABN';
@@ -152,10 +148,11 @@ class RegisterBusiness extends Component {
 
                 <span className="find-web-span">Don’t have a ABN?</span>
                 <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
-                    href={ affiliateLink } target="new" className="btn btn-lg btn-default clearfix btn-level-5">{ affiliateLinkLabel }</a>
+                   href={affiliateLink} target="new"
+                   className="btn btn-lg btn-default clearfix btn-level-5">{affiliateLinkLabel}</a>
 
                 <div className="btn-wrap">
-                    <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Done</button>
+                    <button disabled={this.state.isLoading} className="btn btn-default btn-md">Done</button>
                 </div>
             </form>
         );
@@ -187,15 +184,7 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-    getAppStatus,
-    saveBusinessFormRequest,
     addFlashMessage,
-    getBusinessOptionFromUrl,
-    getBusinessOption,
-    setCurrentLevel,
-    setCurrentSection,
-    setCurrentBusinessOption,
     setShowCompletedPage,
     setCompletedStatus,
-    trackClick
 })(RegisterBusiness));

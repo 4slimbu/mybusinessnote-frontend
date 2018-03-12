@@ -2,12 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOption, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
-    setSellGoods
-} from "../../../../actions/appStatusAction";
-import {saveBusinessFormRequest} from "../../../../actions/businessActions";
+import {setBusinessCategoryId, setCurrentTipCategory, setSellGoods} from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {getById, isItemLoaded} from "../../../../utils/helper/helperFunctions";
 import request from "../../../../services/request";
@@ -24,7 +19,7 @@ class SellGoods extends Component {
     }
 
     bootstrap() {
-        if (! isItemLoaded(this.props.appStatus.businessCategories)) {
+        if (!isItemLoaded(this.props.appStatus.businessCategories)) {
             this.props.makeRequest(request.BusinessCategory.all);
         }
     }
@@ -48,11 +43,11 @@ class SellGoods extends Component {
 
         if (this.props.auth.isAuthenticated) {
             this.props.saveBusinessFormRequest({
-                business_option_id: this.props.appStatus.currentBusinessOption.id,
-                sell_goods: sellGoods
-            },
+                    business_option_id: this.props.appStatus.currentBusinessOption.id,
+                    sell_goods: sellGoods
+                },
                 '/level/1/section/1/business-option/2'
-                ).then(
+            ).then(
                 (response) => {
                     this.setState({isLoading: false});
                     this.props.addFlashMessage({
@@ -72,13 +67,13 @@ class SellGoods extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
-        const { business } = appStatus;
+        const {appStatus} = this.props;
+        const {business} = appStatus;
         const next = business.business_category_id !== null;
         const selectedCategory = getById(appStatus.businessCategories, business.business_category_id);
         const sellGoodsCategory = (
             selectedCategory &&
-            <li key={selectedCategory.id} style={{ maxWidth: "150px" }} className="active">
+            <li key={selectedCategory.id} style={{maxWidth: "150px"}} className="active">
                 <div>
                     <a className="white-icon" href="#">
                         <img src={selectedCategory.icon} alt=""/>
@@ -109,9 +104,10 @@ class SellGoods extends Component {
 
         return (
             <div>
-                { sellGoodsQuestion }
+                {sellGoodsQuestion}
                 <div className="btn-wrap">
-                    {next && <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
+                    {next &&
+                    <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
                 </div>
             </div>
 
@@ -145,14 +141,9 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            getBusinessOption,
-            getBusinessOptionFromUrl,
-            saveBusinessFormRequest,
-            getAppStatus,
             addFlashMessage
         }
     )(SellGoods))

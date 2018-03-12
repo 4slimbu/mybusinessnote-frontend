@@ -11,10 +11,8 @@ import "jquery-mousewheel";
 
 import App from "./components/App";
 import rootReducer from "./rootReducer";
-import {DEFAULT_APP_STATUS} from "./data/default";
 import setAuthorizationToken from "./utils/axios/setAuthorizationToken";
-import {setAuth, setCurrentUser} from "./actions/authActions";
-import {getAppStatus, setAppStatus} from "./actions/appStatusAction";
+import {setAuth} from "./actions/authActions";
 import {getAllUrlParams} from "./utils/helper/helperFunctions";
 
 // monitor react component performance
@@ -46,15 +44,11 @@ if (localStorage.getItem("jwtToken")) {
             localStorage.removeItem("jwtToken");
             setAuthorizationToken(false);
             store.dispatch(setAuth({}));
-            store.dispatch(setAppStatus(DEFAULT_APP_STATUS));
-            store.dispatch(getAppStatus());
         }
     } catch (err) {
         localStorage.removeItem("jwtToken");
         setAuthorizationToken(false);
         store.dispatch(setAuth({}));
-        store.dispatch(setAppStatus(DEFAULT_APP_STATUS));
-        store.dispatch(getAppStatus());
     }
 }
 

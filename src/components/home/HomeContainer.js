@@ -3,10 +3,9 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import jwt_decode from "jwt-decode";
 import {getAllUrlParams} from "../../utils/helper/helperFunctions";
-import {sendVerificationEmail, setCurrentUser, verifyEmail} from "../../actions/authActions";
+import {setCurrentUser} from "../../actions/authActions";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import setAuthorizationToken from "../../utils/axios/setAuthorizationToken";
-import {setCurrentLevel} from "../../actions/appStatusAction";
 import WelcomePage from "./pages/WelcomePage";
 import GuestPage from "./pages/GuestPage";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
@@ -28,17 +27,15 @@ class HomeContainer extends Component {
     componentDidMount() {
         if (getAllUrlParams(this.props.location.search).email_verification_token) {
             this.setState({
-                showVerifyLink : true,
+                showVerifyLink: true,
                 email_verification_token: getAllUrlParams(this.props.location.search).email_verification_token
             })
         }
-        this.props.setCurrentLevel({});
     }
 
     onClickStart(e) {
         e.preventDefault();
-        const {appStatus, history, setCurrentLevel} = this.props;
-        setCurrentLevel(appStatus.levels[0]);
+        const {history} = this.props;
         history.push('/level/getting-started');
     };
 
@@ -63,7 +60,7 @@ class HomeContainer extends Component {
                 this.props.getAppStatus();
                 this.props.history.push('/');
             },
-            ( error ) => {
+            (error) => {
                 if (error.response.data.error) {
                     this.props.addFlashMessage({
                         type: "error",
@@ -84,7 +81,7 @@ class HomeContainer extends Component {
                     text: "Verification Email Sent"
                 });
             },
-            ( error ) => {
+            (error) => {
                 if (error.response.data.error) {
                     addFlashMessage({
                         type: "error",
@@ -96,7 +93,7 @@ class HomeContainer extends Component {
     };
 
     render() {
-        const { auth, appStatus } = this.props;
+        const {auth, appStatus} = this.props;
 
         const lastVisitedPath = appStatus.history && appStatus.history.last_visited ?
             appStatus.history.last_visited : ROUTES.LEVEL_ONE;
@@ -120,7 +117,7 @@ class HomeContainer extends Component {
             auth.isAuthenticated ?
                 (
                     (auth.isVerified) ?
-                        <WelcomePage {...welcomePageProps}/>:
+                        <WelcomePage {...welcomePageProps}/> :
                         <EmailVerificationPage {...emailVerificationPageProps}/>
                 )
                 : <GuestPage {...guestPageProps}/>
@@ -136,4 +133,7 @@ function mapStateToProps(state) {
 }
 
 
-export default withRouter(connect(mapStateToProps, {setCurrentLevel, setCurrentUser, sendVerificationEmail, addFlashMessage, verifyEmail})(HomeContainer));
+export default withRouter(connect(mapStateToProps, {
+    setCurrentUser,
+    addFlashMessage,
+})(HomeContainer));

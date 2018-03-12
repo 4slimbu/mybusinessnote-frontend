@@ -8,14 +8,16 @@ import {withRouter} from "react-router-dom";
 class SectionLinksOld extends Component {
 
     render() {
-        const {appStatus, level, setCurrentLevel, setCurrentSection,
+        const {
+            appStatus, level, setCurrentLevel, setCurrentSection,
             setCompletedStatus,
-            history, getBusinessOptionFromUrl, addFlashMessage} = this.props;
+            history, getBusinessOptionFromUrl, addFlashMessage
+        } = this.props;
 
         const sectionsList = map(level.sections, (section, key) => {
             const complete = section.completed_percent == 100 ? true : false;
             const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-            const onClickSectionLink= function(e, sectionUrl) {
+            const onClickSectionLink = function (e, sectionUrl) {
                 e.preventDefault();
                 if (isSectionLocked(appStatus, level, key)) {
                     return;
@@ -28,8 +30,10 @@ class SectionLinksOld extends Component {
             };
             const lockedClass = isSectionLocked(appStatus, level, key) ? 'locked' : '';
             return (
-                <li key={section.id} className={classnames(lockedClass)}><a href={sectionUrl} onClick={(e) => onClickSectionLink(e, sectionUrl)}>
-                    <span className={classnames("circle-span", {"complete": complete}, {"active": appStatus.currentSection.id === section.id})}></span>
+                <li key={section.id} className={classnames(lockedClass)}><a href={sectionUrl}
+                                                                            onClick={(e) => onClickSectionLink(e, sectionUrl)}>
+                    <span
+                        className={classnames("circle-span", {"complete": complete}, {"active": appStatus.currentSection.id === section.id})}></span>
                     {section.name}</a>
                 </li>
             )
@@ -44,7 +48,7 @@ class SectionLinksOld extends Component {
 }
 
 SectionLinksOld.propTypes = {
-    appStatus:PropTypes.object.isRequired,
+    appStatus: PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
     setCurrentLevel: PropTypes.func.isRequired,
     setCurrentSection: PropTypes.func.isRequired,

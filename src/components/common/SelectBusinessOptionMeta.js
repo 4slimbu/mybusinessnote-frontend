@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import {saveBusinessOption} from "../../utils/helper/helperFunctions";
 
-const SelectBusinessOptionMeta = ({ current, currentBusinessOption, metaKey, metaValue }) => {
+const SelectBusinessOptionMeta = ({current, currentBusinessOption, metaKey, metaValue}) => {
     const affiliateLinkId = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].id : '';
     const affiliateLinkLabel = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].label : 'Set Up Now';
     const affiliateLink = (currentBusinessOption.affiliate_links[0]) ? currentBusinessOption.affiliate_links[0].link : '#';
 
-    const onClickOption = function(e, option) {
+    const onClickOption = function (e, option) {
         e.preventDefault();
 
         saveBusinessOption(current, {
@@ -19,7 +19,7 @@ const SelectBusinessOptionMeta = ({ current, currentBusinessOption, metaKey, met
         );
     };
 
-    const onClickAffiliateLink = function(e, boId, affId, link) {
+    const onClickAffiliateLink = function (e, boId, affId, link) {
         e.preventDefault();
 
         current.props.trackClick(boId, affId);
@@ -32,11 +32,11 @@ const SelectBusinessOptionMeta = ({ current, currentBusinessOption, metaKey, met
     return (
         <ul className="alert-btns">
             <li><a
-                className={ metaValue  === 'yes' ? 'active' : '' }
+                className={metaValue === 'yes' ? 'active' : ''}
                 href="" onClick={(e) => onClickOption(e, 'yes')}>Yes</a></li>
             <li>
                 <a onClick={(e) => onClickAffiliateLink(e, currentBusinessOption.id, affiliateLinkId, affiliateLink)}
-                   href={ affiliateLink } target="new" className="upload-button">{ affiliateLinkLabel }</a>
+                   href={affiliateLink} target="new" className="upload-button">{affiliateLinkLabel}</a>
             </li>
         </ul>
     )

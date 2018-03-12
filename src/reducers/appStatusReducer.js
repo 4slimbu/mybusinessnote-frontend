@@ -1,11 +1,14 @@
 import {
-    SET_APP_STATUS_REDUCER,
-    SET_BUSINESS, SET_BUSINESS_CATEGORIES,
+    SET_BUSINESS,
+    SET_BUSINESS_CATEGORIES,
     SET_BUSINESS_CATEGORY_ID,
     SET_BUSINESS_OPTION,
     SET_BUSINESS_STATUS,
-    SET_COMPLETED_STATUS, SET_CURRENT,
-    SET_CURRENT_LEVEL, SET_CURRENT_SECTION, SET_CURRENT_TIP_CATEGORY, SET_LEVELS, SET_SECTIONS,
+    SET_COMPLETED_STATUS,
+    SET_CURRENT,
+    SET_CURRENT_TIP_CATEGORY,
+    SET_LEVELS,
+    SET_SECTIONS,
     SET_SELL_GOODS,
     SET_SHOW_COMPLETED_PAGE,
     SET_TOOLTIP_CONTENT
@@ -14,7 +17,7 @@ import {DEFAULT_APP_STATUS} from "../data/default";
 import {findIndex, merge} from "lodash";
 
 export default (state = DEFAULT_APP_STATUS, action = {}) => {
-    switch(action.type) {
+    switch (action.type) {
         case SET_LEVELS:
             return {
                 ...state,
@@ -46,18 +49,6 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 currentLevel: currentLevel,
                 currentSection: currentSection,
                 currentBusinessOption: currentBusinessOption
-            };
-        case SET_CURRENT_LEVEL :
-            return {
-                ...state,
-                currentLevel: (state.currentLevel.id === action.currentLevel.id) ? merge(state.currentLevel, action.currentLevel)
-                    : action.currentLevel
-            };
-        case SET_CURRENT_SECTION :
-            return {
-                ...state,
-                currentSection: (state.currentSection.id === action.currentSection.id) ? merge(state.currentSection, action.currentSection)
-                    : action.currentSection
             };
         case SET_BUSINESS :
             const business = (state.business.id === action.business.id) ?
@@ -132,6 +123,7 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 ...state,
                 completed_status: action.completedStatus
             };
-        default: return state;
+        default:
+            return state;
     }
 }

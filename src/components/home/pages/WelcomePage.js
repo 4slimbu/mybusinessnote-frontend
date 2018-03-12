@@ -3,13 +3,14 @@ import {Link} from "react-router-dom";
 import {getAppUrlFromApiUrl} from "../../../utils/helper/helperFunctions";
 
 const WelcomePage = (props) => {
-    const { onClickStart, lastVisitedPath} = props;
+    const {onClickStart, lastVisitedPath} = props;
     return (
         <div className="row">
             <div className="col-md-12">
                 <div className="btn-wrap">
                     <p>Take me to the start. </p>
-                    <Link to="/level/getting-started" onClick={(e) => onClickStart(e)} className="btn btn-default btn-md">Start</Link>
+                    <Link to="/level/getting-started" onClick={(e) => onClickStart(e)}
+                          className="btn btn-default btn-md">Start</Link>
                 </div>
             </div>
             <div className="col-md-12">

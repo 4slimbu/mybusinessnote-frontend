@@ -46,5 +46,6 @@ export const MESSAGES = {
 
     //Unknown Error Codes
     ERR_UNKNOWN: "Something went wrong",
+    ERR_LOGOUT: "Failed to logout",
     ERR_LOCKED: "Locked",
 };

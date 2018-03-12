@@ -21,7 +21,7 @@ export function validateCreateUser(data) {
         errors.email = "Email is invalid";
     }
 
-    if ((typeof data.phone_number === 'string') && ! (/^\(?(\d{2})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.phone_number)) ) {
+    if ((typeof data.phone_number === 'string') && !(/^\(?(\d{2})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.phone_number))) {
         errors.phone_number = "Phone Number field is invalid";
     }
 
@@ -29,7 +29,7 @@ export function validateCreateUser(data) {
         errors.phone_number = "Phone Number field is required";
     }
 
-    if ((typeof data.password === 'string') && ! (/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(data.password)) ) {
+    if ((typeof data.password === 'string') && !(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(data.password))) {
         errors.password = "Password is invalid";
     }
 
@@ -66,7 +66,7 @@ export function validateUpdateUser(data) {
         errors.last_name = "Last Name field is required";
     }
 
-    if ((typeof data.phone_number === 'string') && ! (/^\(?(\d{2})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.phone_number)) ) {
+    if ((typeof data.phone_number === 'string') && !(/^\(?(\d{2})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.phone_number))) {
         errors.phone_number = "Phone Number field is invalid";
     }
 
@@ -74,7 +74,7 @@ export function validateUpdateUser(data) {
         errors.phone_number = "Phone Number field is required";
     }
 
-    if ((typeof data.password === 'string') && data.password !== '' &&  ! (/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(data.password)) ) {
+    if ((typeof data.password === 'string') && data.password !== '' && !(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(data.password))) {
         errors.password = "Password is invalid";
     }
 
@@ -123,7 +123,7 @@ export function validateUpdatePassword(data) {
         errors.forgot_password_token = "Reset Code field is required";
     }
 
-    if ((typeof data.password === 'string') && ! (/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(data.password)) ) {
+    if ((typeof data.password === 'string') && !(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(data.password))) {
         errors.password = "Password must be more than 8 chars and include at least one number and one special character";
     }
 

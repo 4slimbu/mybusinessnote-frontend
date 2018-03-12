@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import {map} from "lodash";
 import * as classnames from "classnames";
 import {
-    generateAppRelativeUrl, getCurrentLevelSections, getStatus,
+    generateAppRelativeUrl,
+    getCurrentLevelSections,
+    getStatus,
     isSectionLocked
 } from "../../../../utils/helper/helperFunctions";
 import PropTypes from "prop-types";
@@ -23,7 +25,8 @@ class SectionLinks extends Component {
             return (
                 <li key={section.id} className={classnames(lockedClass)}>
                     <a href={sectionUrl} onClick={(e) => onClickSectionLink(e, level, section, isLocked)}>
-                        <span className={classnames("circle-span", {"complete": sectionStatus.completed_percent === 100}, {"active": currentSection.id === section.id})}></span>
+                        <span
+                            className={classnames("circle-span", {"complete": sectionStatus.completed_percent === 100}, {"active": currentSection.id === section.id})}></span>
                         {section.name}
                     </a>
                 </li>
@@ -39,7 +42,7 @@ class SectionLinks extends Component {
 }
 
 SectionLinks.propTypes = {
-    appStatus:PropTypes.object.isRequired,
+    appStatus: PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
     onClickSectionLink: PropTypes.func.isRequired
 };

@@ -5,11 +5,9 @@ import $ from "jquery";
 import UserInfoLinks from "./current-user-box/UserInfoLinks";
 import NewsList from "./news/NewsList";
 import {connect} from "react-redux";
-import {getAppStatus} from "../../../actions/appStatusAction";
 import ToolTip from "./tooltip/ToolTip";
 import {makeRequest} from "../../../actions/requestAction";
 import {setNews} from "../../../actions/newsAction";
-import {extractSectionFromLocation} from "../../../utils/helper/helperFunctions";
 
 class RightSideBar extends Component {
 
@@ -66,5 +64,4 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps, {
     makeRequest,
     setNews,
-    getAppStatus,
 })(RightSideBar));

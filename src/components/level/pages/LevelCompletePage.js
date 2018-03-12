@@ -10,8 +10,9 @@ const LevelCompletePage = (props) => {
     const nextLevelUrl = isItemLoaded(nextLevel) ? '/level/' + nextLevel.slug : dashboardUrl();
     return (
         <div className="level-complete">
-            <h5 className="obvious-h5 hidden-xs">{ currentLevel.name }</h5>
-            {currentLevel.badge_message && <div className="content-wrap" dangerouslySetInnerHTML={{__html: currentLevel.badge_message}} />}
+            <h5 className="obvious-h5 hidden-xs">{currentLevel.name}</h5>
+            {currentLevel.badge_message &&
+            <div className="content-wrap" dangerouslySetInnerHTML={{__html: currentLevel.badge_message}}/>}
             <img className="complete-block-img"
                  src={publicUrl('/assets/images/level-complete.png')} alt=""/>
             <div className="bottom-block-complete">
@@ -32,7 +33,7 @@ const LevelCompletePage = (props) => {
                                   to={nextLevelUrl} className="next-session-link">
                                 <i className="fa fa-chevron-down" aria-hidden="true"></i>
                             </Link>
-                            <h6>{ nextLevel.name }</h6>
+                            <h6>{nextLevel.name}</h6>
                         </div>
                 }
             </div>

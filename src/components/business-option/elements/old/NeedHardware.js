@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {Redirect, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
-    setCurrentBusinessOption,
+    setBusinessCategoryId,
+    setCompletedStatus,
     setCurrentTipCategory,
-    setSellGoods, trackClick
+    setSellGoods
 } from "../../../../actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import SelectBusinessOptionMeta from "../../../common/SelectBusinessOptionMeta";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -53,44 +51,38 @@ class NeedHardware extends Component {
         )
 
     }
-    }
+}
 
-    NeedHardware.propTypes = {
-        getBusinessCategories: PropTypes.func.isRequired,
-        setBusinessCategoryId: PropTypes.func.isRequired,
-        setSellGoods: PropTypes.func.isRequired,
-        setCurrentTipCategory: PropTypes.func.isRequired,
-        setCurrentBusinessOption: PropTypes.func.isRequired,
-        setCompletedStatus: PropTypes.func.isRequired,
-        onClickNext: PropTypes.func.isRequired,
-        getBusinessOptionFromUrl: PropTypes.func.isRequired,
-        saveBusinessOptionFormRequest: PropTypes.func.isRequired,
-        getAppStatus: PropTypes.func.isRequired,
-        addFlashMessage: PropTypes.func.isRequired,
-        trackClick: PropTypes.func.isRequired
-    };
+NeedHardware.propTypes = {
+    getBusinessCategories: PropTypes.func.isRequired,
+    setBusinessCategoryId: PropTypes.func.isRequired,
+    setSellGoods: PropTypes.func.isRequired,
+    setCurrentTipCategory: PropTypes.func.isRequired,
+    setCurrentBusinessOption: PropTypes.func.isRequired,
+    setCompletedStatus: PropTypes.func.isRequired,
+    onClickNext: PropTypes.func.isRequired,
+    getBusinessOptionFromUrl: PropTypes.func.isRequired,
+    saveBusinessOptionFormRequest: PropTypes.func.isRequired,
+    getAppStatus: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
+    trackClick: PropTypes.func.isRequired
+};
 
-    function mapStateToProps(state) {
-        return {
+function mapStateToProps(state) {
+    return {
         appStatus: state.appStatusReducer,
         auth: state.authReducer
     }
-    }
+}
 
-    export default withRouter(
+export default withRouter(
     connect(
-    mapStateToProps,
-    {
-        getBusinessCategories,
-        setBusinessCategoryId,
-        setSellGoods,
-        setCurrentTipCategory,
-        setCurrentBusinessOption,
-        setCompletedStatus,
-        getBusinessOptionFromUrl,
-        saveBusinessOptionFormRequest,
-        getAppStatus,
-        addFlashMessage,
-        trackClick
-    }
+        mapStateToProps,
+        {
+            setBusinessCategoryId,
+            setSellGoods,
+            setCurrentTipCategory,
+            setCompletedStatus,
+            addFlashMessage,
+        }
     )(NeedHardware))

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import jwt_decode from "jwt-decode";
-import {validateEmail, validateCreateUser, validateUpdateUser} from "../../../utils/validation/UserValidation";
+import {validateCreateUser, validateEmail, validateUpdateUser} from "../../../utils/validation/UserValidation";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import setAuthorizationToken from "../../../utils/axios/setAuthorizationToken";
@@ -128,7 +128,7 @@ class SignUpForm extends Component {
                 isChanged: true
             },
             isChanged: true
-        }, function() {
+        }, function () {
             const dataObject = {};
             if (this.state.first_name.isChanged) {
                 dataObject.first_name = this.state.first_name.value
@@ -170,22 +170,22 @@ class SignUpForm extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const { errors, isValid } = (! this.props.auth.isAuthenticated) ? validateCreateUser(input) : validateUpdateUser(input);
+        const {errors, isValid} = (!this.props.auth.isAuthenticated) ? validateCreateUser(input) : validateUpdateUser(input);
 
-        if(! isValid) {
-            this.setState({ errors });
+        if (!isValid) {
+            this.setState({errors});
         } else {
-            this.setState({ errors: {}})
+            this.setState({errors: {}})
         }
 
         return isValid;
     }
 
     isEmailValid(email) {
-        const { errors, isValid } = validateEmail(email);
+        const {errors, isValid} = validateEmail(email);
 
-        if(! isValid) {
-            this.setState({ errors });
+        if (!isValid) {
+            this.setState({errors});
         }
 
         return isValid;
@@ -223,7 +223,7 @@ class SignUpForm extends Component {
                             true);
                         history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
                     },
-                    ( error ) => {
+                    (error) => {
                         this.setState({errors: error.response.data.errors, isLoading: false});
                         this.props.addFlashMessage({
                             type: "error",
@@ -248,14 +248,14 @@ class SignUpForm extends Component {
                             });
                         }
 
-                        const {appStatus, getAppStatus,  history, getBusinessOption} = this.props;
+                        const {appStatus, getAppStatus, history, getBusinessOption} = this.props;
                         getAppStatus();
                         // getBusinessOption(
                         //     '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
                         //     true);
                         history.push('/');
                     },
-                    ( error ) => {
+                    (error) => {
                         this.setState({errors: error.response.data.errors, isLoading: false});
                         this.props.addFlashMessage({
                             type: "error",
@@ -271,7 +271,7 @@ class SignUpForm extends Component {
         const val = e.target.value;
 
         if (this.isEmailValid(this.state.email)) {
-            this.setState({ errors: {}});
+            this.setState({errors: {}});
 
             this.props.doesUserExists(val).then(
                 (response) => {
@@ -279,12 +279,12 @@ class SignUpForm extends Component {
                         this.setState({
                             errors: {
                                 ...this.state.errors,
-                                "email" : "Email already exist in the database"
+                                "email": "Email already exist in the database"
                             }
                         });
                     }
                 },
-                ( error ) => {
+                (error) => {
                     mbjLog('inside does user exist error', error);
                     this.setState({errors: error.response.data.errors});
                     this.props.addFlashMessage({
@@ -298,12 +298,12 @@ class SignUpForm extends Component {
 
     onReceiveCaptchaResponse(captchaResponse) {
         this.setState({
-           captcha_response: captchaResponse
+            captcha_response: captchaResponse
         });
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const errors = this.state.errors;
 
         return (
@@ -382,10 +382,10 @@ class SignUpForm extends Component {
                         sitekey="6LfTLEUUAAAAAH0_f9L8VcdN2c_oJHqEFyAncjMX"
                         onChange={this.onReceiveCaptchaResponse}
                     />
-                    { errors.captcha_response && <span className="form-error-message">{errors.captcha_response}</span> }
+                    {errors.captcha_response && <span className="form-error-message">{errors.captcha_response}</span>}
                 </div>
                 <div className="btn-wrap">
-                    <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Continue</button>
+                    <button disabled={this.state.isLoading} className="btn btn-default btn-md">Continue</button>
                 </div>
             </form>
         );

@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import {saveBusinessOption} from "../../utils/helper/helperFunctions";
 
-const OptionStatusButtonGroup = ({ status, current }) => {
-    const onClickUpdateStatus = function(e, status) {
+const OptionStatusButtonGroup = ({status, current}) => {
+    const onClickUpdateStatus = function (e, status) {
         e.preventDefault();
 
         saveBusinessOption(current, {

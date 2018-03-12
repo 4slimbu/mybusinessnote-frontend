@@ -47,8 +47,14 @@ const Auth = {
         requests('POST', apiBaseUrl("/user/send-forgot-password-email"), data),
     updatePassword: (data) =>
         requests('POST', apiBaseUrl("/user/update-password"), data),
+    sendVerificationEmail: () =>
+        requests('GET', apiBaseUrl("/user/send-verification-email")),
+    verifyEmail: (data) =>
+        requests('POST', apiBaseUrl("/user/verify-email"), data),
     checkIfExists: (data) =>
         requests('POST', apiBaseUrl("/user/check-if-exists"), data),
+    loginSocialUser: (url) =>
+        requests('GET', apiBaseUrl(url)),
 };
 
 /**
@@ -97,6 +103,14 @@ const News = {
         requests('GET', newsFeedApiBaseUrl("/wp-json/mbj-feed/v1/posts")),
     byTag: (tag) =>
         requests('GET', newsFeedApiBaseUrl(`/wp-json/mbj-feed/v1/posts?tag=${tag}`))
+};
+
+/**
+ * Handle all News related requests
+ */
+const Track = {
+    click: (data) =>
+        requests('GET', apiBaseUrl('/click?bo_id=' + data.boId + '&aff_id=' + data.affId)),
 };
 
 export default {

@@ -3,18 +3,14 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOption, getBusinessOptionFromUrl, setBusinessCategoryId, setCurrentTipCategory,
-    setSellGoods, setToolTipContent
+    setBusinessCategoryId,
+    setCurrentTipCategory,
+    setSellGoods,
+    setToolTipContent
 } from "../../../../actions/appStatusAction";
 import {map} from "lodash";
-import {saveBusinessFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {
-    generateAppRelativeUrl,
-    getAppUrlFromApiUrl, getCurrentLevelSections, getNext,
-    isItemLoaded
-} from "../../../../utils/helper/helperFunctions";
+import {isItemLoaded} from "../../../../utils/helper/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
 import * as classnames from "classnames";
 import {makeRequest} from "../../../../actions/requestAction";
@@ -44,7 +40,7 @@ class BusinessCategories extends Component {
     }
 
     bootstrap() {
-        if (! isItemLoaded(this.props.appStatus.businessCategories)) {
+        if (!isItemLoaded(this.props.appStatus.businessCategories)) {
             this.props.makeRequest(request.BusinessCategory.all);
         }
     }
@@ -165,7 +161,6 @@ BusinessCategories.propTypes = {
     onClickNext: PropTypes.func.isRequired,
     getBusinessOption: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     setToolTipContent: PropTypes.func.isRequired
@@ -184,14 +179,9 @@ export default withRouter(
         mapStateToProps,
         {
             makeRequest,
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            getBusinessOption,
-            getBusinessOptionFromUrl,
-            saveBusinessFormRequest,
-            getAppStatus,
             addFlashMessage,
             setToolTipContent
         }

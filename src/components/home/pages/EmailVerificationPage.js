@@ -10,7 +10,8 @@ const EmailVerificationPage = (props) => {
                         showVerifyLink ?
                             <div className="btn-wrap">
                                 <p>Click on verify to verify your account.</p>
-                                <button onClick={(e) => onVerifyAccount(e)} className="btn btn-default btn-md">Verify</button>
+                                <button onClick={(e) => onVerifyAccount(e)} className="btn btn-default btn-md">Verify
+                                </button>
                             </div>
                             :
                             <div>
@@ -24,7 +25,9 @@ const EmailVerificationPage = (props) => {
             <div className="col-md-12">
                 <div className="btn-wrap">
                     <p>Send me the verification email again!</p>
-                    <button onClick={(e) => onSendVerificationEmail(e)} className="btn btn-default btn-md">Send Verification Email Again!</button>
+                    <button onClick={(e) => onSendVerificationEmail(e)} className="btn btn-default btn-md">Send
+                        Verification Email Again!
+                    </button>
                 </div>
             </div>
         </div>

@@ -5,8 +5,13 @@ import {callApi, makeRequest} from "../../actions/requestAction";
 import SectionPage from "./pages/SectionPage";
 import SectionCompletePage from "./pages/SectionCompletePage";
 import {
-    extractBoIdFromLocation, extractLevelFromLocation, extractSectionFromLocation, getById,
-    getBySlug, getFirst, isItemLoaded
+    extractBoIdFromLocation,
+    extractLevelFromLocation,
+    extractSectionFromLocation,
+    getById,
+    getBySlug,
+    getFirst,
+    isItemLoaded
 } from "../../utils/helper/helperFunctions";
 import request from "../../services/request";
 import {setCurrent} from "../../actions/appStatusAction";

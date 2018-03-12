@@ -8,8 +8,8 @@ const LevelIntroPage = (props) => {
     const {appStatus, currentLevel, onClickContinue, onClickSectionLink, onHandleToolTip} = props;
     const {content} = props.currentLevel;
     const levelHeadProps = {
-      currentLevel: currentLevel,
-      appStatus: appStatus
+        currentLevel: currentLevel,
+        appStatus: appStatus
     };
     const sectionGridListProps = {
         appStatus: appStatus,
@@ -23,7 +23,7 @@ const LevelIntroPage = (props) => {
         <div>
             <LevelHead {...levelHeadProps}/>
             <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}}/>
-            { currentLevel.id === 1 ? '' : <SectionGridList {...sectionGridListProps}/> }
+            {currentLevel.id === 1 ? '' : <SectionGridList {...sectionGridListProps}/>}
             <div className="btn-wrap">
                 <a href="#" onClick={(e) => onClickContinue(e)} className="btn btn-default btn-md">Continue</a>
             </div>

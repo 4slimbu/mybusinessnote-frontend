@@ -24,20 +24,20 @@ const Business = {
 const BusinessStatus = {
     business_status: {
         level: [
-                {
-                    id: 1,
-                    completed_percent: 100,
-                    completed_on: '2018-01-01T00:00:00'
-                }
-            ],
+            {
+                id: 1,
+                completed_percent: 100,
+                completed_on: '2018-01-01T00:00:00'
+            }
+        ],
         section: [
-                {
-                    id: 1,
-                    completed_percent: 25,
-                    completed_on: '2018-01-01T00:00:00'
-                }
-            ],
-        businessOption:  [
+            {
+                id: 1,
+                completed_percent: 25,
+                completed_on: '2018-01-01T00:00:00'
+            }
+        ],
+        businessOption: [
             {
                 id: 1,
                 status: 'not_touched'

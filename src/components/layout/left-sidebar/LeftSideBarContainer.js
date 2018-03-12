@@ -3,16 +3,11 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {Brand} from "./brand/Brand";
 import LevelLinks from "./navigation/LevelLinks";
-import MobileNavLinks from "./navigation/MobileNavLinks";
 import {logout} from "../../../actions/authActions";
-import {
-    getBusinessOptionFromUrl,
-    setCompletedStatus, setCurrent, setCurrentBusinessOption, setCurrentLevel,
-    setCurrentSection
-} from "../../../actions/appStatusAction";
+import {setCompletedStatus, setCurrent} from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import PropTypes from "prop-types";
-import {generateAppRelativeUrl, getById, getFirst, isSectionLocked} from "../../../utils/helper/helperFunctions";
+import {generateAppRelativeUrl, getById, getFirst} from "../../../utils/helper/helperFunctions";
 
 class LeftSideBarContainer extends Component {
     constructor(props) {
@@ -115,5 +110,4 @@ export default withRouter(connect(mapStateToProps, {
     setCurrent,
     setCompletedStatus,
     addFlashMessage,
-    getBusinessOptionFromUrl
 })(LeftSideBarContainer));

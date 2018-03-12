@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {map, uniqueId} from "lodash";
+import {map} from "lodash";
 import * as classnames from "classnames";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import SectionLinks from "./SectionLinks";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl} from "../../../../utils/helper/helperFunctions";
@@ -11,9 +11,11 @@ class LevelLinksOld extends Component {
 
     render() {
         //get the app status object
-        const { appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
+        const {
+            appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl} = this.props;
+            getBusinessOptionFromUrl
+        } = this.props;
         //init levels
         const levels = appStatus.levels;
         //init current levels
@@ -25,7 +27,7 @@ class LevelLinksOld extends Component {
             const levelUrl = generateAppRelativeUrl(level.slug);
             const levelImg = (level.completed_percent >= 100) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
                 process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
-            const onClickLevelLink = function(e, levelUrl) {
+            const onClickLevelLink = function (e, levelUrl) {
                 e.preventDefault();
                 setCurrentLevel(level);
                 setCurrentSection({});
@@ -34,13 +36,15 @@ class LevelLinksOld extends Component {
                 history.push(levelUrl);
             };
             return (
-                <Panel key={level.slug} eventKey={level.slug} className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
+                <Panel key={level.slug} eventKey={level.slug}
+                       className={classnames("panel-faq", {"active": currentLevel.id === level.id})}>
                     <Panel.Heading>
                         <Panel.Title toggle>
-                            <div onClick={(e) => onClickLevelLink(e, levelUrl )}
+                            <div onClick={(e) => onClickLevelLink(e, levelUrl)}
                             >
-                                <figure className={classnames({"goldbadge-img" : (level.completed_percent >= 100)})}><img src={levelImg} alt="" /></figure>
-                                <h6>{ level.name }</h6>
+                                <figure className={classnames({"goldbadge-img": (level.completed_percent >= 100)})}><img
+                                    src={levelImg} alt=""/></figure>
+                                <h6>{level.name}</h6>
                             </div>
                         </Panel.Title>
                     </Panel.Heading>
@@ -68,9 +72,10 @@ class LevelLinksOld extends Component {
 
         return (
             (levels.length > 1) ?
-            <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.slug} onSelect={(newKey)=>handleSelect(newKey)}>
-                {levelsList}
-            </PanelGroup> :
+                <PanelGroup accordion id={`accordion-uncontrolled-level-links`} activeKey={currentLevel.slug}
+                            onSelect={(newKey) => handleSelect(newKey)}>
+                    {levelsList}
+                </PanelGroup> :
                 <div></div>
         );
     }

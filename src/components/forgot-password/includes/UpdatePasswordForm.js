@@ -134,8 +134,9 @@ class UpdatePasswordForm extends Component {
             <form className="apps-form" onSubmit={this.onSubmit}>
                 <h1>Reset Password</h1>
 
-                <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password} />
-                <TextFieldGroup fieldObject={this.state.confirm_password} onChange={this.onChange} error={errors.confirm_password} />
+                <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password}/>
+                <TextFieldGroup fieldObject={this.state.confirm_password} onChange={this.onChange}
+                                error={errors.confirm_password}/>
 
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Reset Password</button>

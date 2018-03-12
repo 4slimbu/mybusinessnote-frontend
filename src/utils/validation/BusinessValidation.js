@@ -8,7 +8,7 @@ export function validateCreateBusiness(data) {
         errors.business_name = ["Business Name field is required"];
     }
 
-    if ((data.business_name !== '' || data.business_name !== null) && ! (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(data.website)) ) {
+    if ((data.business_name !== '' || data.business_name !== null) && !(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(data.website))) {
         errors.website = ["Website field is invalid"];
     }
 
@@ -25,7 +25,7 @@ export function validateCreateBusiness(data) {
 export function isSocialMediaLinksValid(socialName, url) {
     let errors = {};
 
-    if ((url !== '' && url !== null) && ! (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)) ) {
+    if ((url !== '' && url !== null) && !(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url))) {
         errors[socialName] = [socialName + " field is invalid"];
     }
 
@@ -38,7 +38,7 @@ export function isSocialMediaLinksValid(socialName, url) {
 export function validateRegisterBusiness(data) {
     let errors = {};
 
-    if (! (/^\(?(\d{4})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.abn)) ) {
+    if (!(/^\(?(\d{4})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(data.abn))) {
         errors.abn = ["ABN field is invalid"];
     }
 

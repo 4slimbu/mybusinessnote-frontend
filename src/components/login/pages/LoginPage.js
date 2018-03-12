@@ -2,7 +2,7 @@ import React from "react";
 import LoginForm from "../includes/LoginForm";
 
 const LoginPage = (props) => {
-    return(
+    return (
         <LoginForm {...props}/>
     )
 };

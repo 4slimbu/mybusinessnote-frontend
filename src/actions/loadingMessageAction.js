@@ -1,7 +1,4 @@
-import {
-    ADD_LOADING_MESSAGE,
-    DELETE_LOADING_MESSAGE
-} from "../constants/actionTypes";
+import {ADD_LOADING_MESSAGE, DELETE_LOADING_MESSAGE} from "../constants/actionTypes";
 
 export function addLoadingMessage(loadingMessage = null) {
     return {

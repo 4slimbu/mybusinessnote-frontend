@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {getAppStatus, getBusinessOption, getBusinessOptionFromUrl, trackClick} from "../../../../actions/appStatusAction";
 import jwt_decode from "jwt-decode";
 import setAuthorizationToken from "../../../../utils/axios/setAuthorizationToken";
 import TextFieldGroup from "../../../common/TextFieldGroup";
-import {saveBusinessFormRequest} from "../../../../actions/businessActions";
 import {withRouter} from "react-router-dom";
 import {validateCreateBusiness} from "../../../../utils/validation/BusinessValidation";
 import {getAppUrlFromApiUrl, mbjLog} from "../../../../utils/helper/helperFunctions";
@@ -52,12 +50,12 @@ class CreateBusiness extends Component {
 
     isFormValid(data = null) {
         let input = (data) ? data : this.state;
-        const { errors, isValid } = validateCreateBusiness(input);
+        const {errors, isValid} = validateCreateBusiness(input);
 
         mbjLog('is form valid', errors);
 
-        if(! isValid) {
-            this.setState({ errors });
+        if (!isValid) {
+            this.setState({errors});
         }
 
         return isValid;
@@ -101,7 +99,7 @@ class CreateBusiness extends Component {
                         true);
                     history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
                 },
-                ( error ) => {
+                (error) => {
                     this.setState({errors: error.response.data.error, isLoading: false});
                     this.props.addFlashMessage({
                         type: "error",
@@ -124,7 +122,7 @@ class CreateBusiness extends Component {
 
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const errors = this.state.errors;
         const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
         const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].label : 'Find me a web address';
@@ -154,10 +152,11 @@ class CreateBusiness extends Component {
 
                 <span className="find-web-span">Don’t have a web address?</span>
                 <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
-                    href={ affiliateLink } target="new" className="btn btn-lg btn-default clearfix btn-level-5">{ affiliateLinkLabel }</a>
+                   href={affiliateLink} target="new"
+                   className="btn btn-lg btn-default clearfix btn-level-5">{affiliateLinkLabel}</a>
 
                 <div className="btn-wrap">
-                    <button disabled={ this.state.isLoading } className="btn btn-default btn-md">Continue</button>
+                    <button disabled={this.state.isLoading} className="btn btn-default btn-md">Continue</button>
                 </div>
             </form>
         );
@@ -184,10 +183,5 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-    saveBusinessFormRequest,
     addFlashMessage,
-    getBusinessOption,
-    getBusinessOptionFromUrl,
-    getAppStatus,
-    trackClick
 })(CreateBusiness));

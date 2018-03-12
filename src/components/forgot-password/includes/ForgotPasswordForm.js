@@ -85,7 +85,7 @@ class ForgotPasswordForm extends Component {
                 <h1>Forgot Password</h1>
                 <p>Please enter your email address to reset your password.</p>
 
-                <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email} />
+                <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} error={errors.email}/>
 
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Send Reset Password Email</button>

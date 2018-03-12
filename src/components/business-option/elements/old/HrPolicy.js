@@ -3,13 +3,11 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
-    setCurrentBusinessOption,
+    setBusinessCategoryId,
+    setCompletedStatus,
     setCurrentTipCategory,
-    setSellGoods, trackClick
+    setSellGoods
 } from "../../../../actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import SelectBusinessOptionMeta from "../../../common/SelectBusinessOptionMeta";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -31,14 +29,15 @@ class HrPolicy extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
 
         return (
             this.state.isShowCompleted ?
                 <div className="completed-section">
-                    <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`} alt=""/>
+                    <img className="complete-tick" src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`}
+                         alt=""/>
                     <p>Well done for completing this section!</p>
                 </div>
                 :
@@ -87,16 +86,10 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
             addFlashMessage,
-            trackClick
         }
     )(HrPolicy))

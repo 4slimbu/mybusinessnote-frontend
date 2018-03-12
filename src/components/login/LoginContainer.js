@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import LoginPage from "./pages/LoginPage";
-import {handleErrorResponseData, handleSuccessResponseData, callApi, makeRequest} from "../../actions/requestAction";
+import {callApi, makeRequest} from "../../actions/requestAction";
 import LoadingMessage from "../layout/loading/LoadingMessage";
 
 class LoginContainer extends Component {

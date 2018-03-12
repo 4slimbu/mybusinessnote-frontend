@@ -32,13 +32,8 @@ import CashFlowForecasting from "./CashFlowForecasting";
 import OfficeSpace from "./OfficeSpace";
 import StoreLease from "./StoreLease";
 import NeedHardware from "./NeedHardware";
-import {mbjLog} from "../../../../utils/helper/helperFunctions";
 
 class Element extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     //these are pre-defined levels intro components
     components = {
         BusinessCategories: BusinessCategories,
@@ -60,25 +55,28 @@ class Element extends Component {
         SetUpInternet: SetUpInternet,
         OfficeAccessories: OfficeAccessories,
         SWOT: SWOT,
-        CustomerAnalysis : CustomerAnalysis,
-        DemographicArea : DemographicArea,
-        SocialMediaExecution : SocialMediaExecution,
-        Budget : Budget,
-        LegalAdviser : LegalAdviser,
-        EmploymentContracts : EmploymentContracts,
-        AwardWages : AwardWages,
-        HrPolicy : HrPolicy,
-        BookKeeping : BookKeeping,
-        CashFlowForecasting : CashFlowForecasting,
-        OfficeSpace : OfficeSpace,
-        StoreLease : StoreLease,
-        NeedHardware : NeedHardware
+        CustomerAnalysis: CustomerAnalysis,
+        DemographicArea: DemographicArea,
+        SocialMediaExecution: SocialMediaExecution,
+        Budget: Budget,
+        LegalAdviser: LegalAdviser,
+        EmploymentContracts: EmploymentContracts,
+        AwardWages: AwardWages,
+        HrPolicy: HrPolicy,
+        BookKeeping: BookKeeping,
+        CashFlowForecasting: CashFlowForecasting,
+        OfficeSpace: OfficeSpace,
+        StoreLease: StoreLease,
+        NeedHardware: NeedHardware
     };
 
+    constructor(props) {
+        super(props);
+    }
+
     render() {
-        const {element, onClickNext, setShowCompletedPage} = this.props;
+        const {element, onClickNext} = this.props;
         const DynamicElement = this.components[element];
-        mbjLog('Element: business Categories', DynamicElement);
 
         return (
             <div>

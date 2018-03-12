@@ -1,8 +1,6 @@
-import {
-    ADD_LOADING_MESSAGE, DELETE_LOADING_MESSAGE
-} from "../constants/actionTypes";
+import {ADD_LOADING_MESSAGE, DELETE_LOADING_MESSAGE} from "../constants/actionTypes";
 
-export default (state=[], action = {}) => {
+export default (state = [], action = {}) => {
     switch (action.type) {
 
         case ADD_LOADING_MESSAGE:
@@ -17,6 +15,7 @@ export default (state=[], action = {}) => {
                 loadingMessage: null
             };
 
-        default: return state;
+        default:
+            return state;
     }
 }

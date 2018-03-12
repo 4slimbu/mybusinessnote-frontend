@@ -15,7 +15,7 @@ const LevelHead = (props) => {
             <h5 className="obvious-h5">{currentLevel.name}</h5>
             <ProgressBar
                 completedPercent={completedPercent}
-                relativeSectionCount = {relativeSectionCount}
+                relativeSectionCount={relativeSectionCount}
             />
         </div>
     )

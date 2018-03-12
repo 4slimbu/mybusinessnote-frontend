@@ -46,22 +46,22 @@ export function validate(rule, fieldName, field, inputs) {
             }
             break;
         case 'lowercase':
-            if (! /[a-z]/.test(field)) {
+            if (!/[a-z]/.test(field)) {
                 return toCapitalizedWords(fieldName) + ' should have at least one Lowercase';
             }
             break;
         case 'uppercase':
-            if (! /[A-Z]/.test(field)) {
+            if (!/[A-Z]/.test(field)) {
                 return toCapitalizedWords(fieldName) + ' should have at least one Uppercase';
             }
             break;
         case 'num':
-            if (! /[0-9]/.test(field)) {
+            if (!/[0-9]/.test(field)) {
                 return toCapitalizedWords(fieldName) + ' should have at least one Number';
             }
             break;
         case 'specialChar':
-            if (! /[!@#\$%\^\&*\)\(+=._-]/.test(field)) {
+            if (!/[!@#\$%\^\&*\)\(+=._-]/.test(field)) {
                 return toCapitalizedWords(fieldName) + ' should have at least one Special char';
             }
             break;

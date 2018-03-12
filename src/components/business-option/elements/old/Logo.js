@@ -3,13 +3,12 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setBusinessMeta, setCompletedStatus,
-    setCurrentBusinessOption,
+    setBusinessCategoryId,
+    setBusinessMeta,
+    setCompletedStatus,
     setCurrentTipCategory,
-    setSellGoods, trackClick
+    setSellGoods
 } from "../../../../actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {mbjLog, saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -80,7 +79,7 @@ class Logo extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
@@ -92,24 +91,26 @@ class Logo extends Component {
         const logo = (this.state.imagePreviewUrl) ? this.state.imagePreviewUrl :
             ((currentBusinessMeta.logo) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/business-options/' + currentBusinessMeta.logo : null);
         if (logo) {
-            imagePreview = (<img className="alert-frm-img" src={logo} />);
+            imagePreview = (<img className="alert-frm-img" src={logo}/>);
         }
 
         return (
             <div>
-                <form onSubmit={(e)=>this._handleSubmit(e)}>
+                <form onSubmit={(e) => this._handleSubmit(e)}>
                     {
                         (this.state.isPreview && imagePreview) ?
                             <div>
                                 <span className="remove-wrapper">
-                                    <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}><i className="fa fa-remove" aria-hidden="true"></i></a>
-                                    { imagePreview }
+                                    <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}><i
+                                        className="fa fa-remove" aria-hidden="true"></i></a>
+                                    {imagePreview}
                                 </span>
                                 {
                                     this.state.imagePreviewUrl ?
-                                    <button className="btn btn-default btn-lg btn-done">Done</button>
+                                        <button className="btn btn-default btn-lg btn-done">Done</button>
                                         :
-                                        <button onClick={(e) => this.onClickRemove(e)} className="btn btn-default btn-lg btn-done">Change</button>
+                                        <button onClick={(e) => this.onClickRemove(e)}
+                                                className="btn btn-default btn-lg btn-done">Change</button>
                                 }
                             </div>
                             :
@@ -117,12 +118,13 @@ class Logo extends Component {
                                 <li>
                                     <div className="upload-btn-wrapper">
                                         <button className="upload-button">Upload</button>
-                                        <input type="file" name="logo" onChange={(e)=>this._handleImageChange(e)}/>
+                                        <input type="file" name="logo" onChange={(e) => this._handleImageChange(e)}/>
                                     </div>
                                 </li>
                                 <li>
                                     <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
-                                       href={ affiliateLink } target="new" className="upload-button">{ affiliateLinkLabel }</a>
+                                       href={affiliateLink} target="new"
+                                       className="upload-button">{affiliateLinkLabel}</a>
                                 </li>
                             </ul>
                     }
@@ -166,17 +168,11 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
             addFlashMessage,
             setBusinessMeta,
-            trackClick
         }
     )(Logo))

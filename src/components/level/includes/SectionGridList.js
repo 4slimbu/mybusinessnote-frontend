@@ -1,10 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {map} from "lodash";
-import {
-    getCurrentLevelSections,
-    isSectionLocked
-} from "../../../utils/helper/helperFunctions";
+import {getCurrentLevelSections, isSectionLocked} from "../../../utils/helper/helperFunctions";
 import * as classnames from "classnames";
 import {Link} from "react-router-dom";
 
@@ -17,7 +14,8 @@ const sections = (appStatus, currentLevel, onClickSectionLink, onHandleToolTip) 
 
     return (
         <li key={section.id} className={classnames(active, lockedClass)}>
-            <Link className="link-box" to={sectionUrl} onClick={(e) => onClickSectionLink(e, currentLevel, section, isLocked)}>
+            <Link className="link-box" to={sectionUrl}
+                  onClick={(e) => onClickSectionLink(e, currentLevel, section, isLocked)}>
                 <div className="red-icon" href="#">
                     <img src={section.icon}
                          alt=""/>

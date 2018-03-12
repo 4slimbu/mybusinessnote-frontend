@@ -17,12 +17,11 @@ export function toCapitalizedWords(string) {
  * @param str
  * @returns {string}
  */
-export function firstOfEachWordToUppercase(str)
-{
+export function firstOfEachWordToUppercase(str) {
     let array = str.split(' ');
     let newArray = [];
 
-    for(let x = 0; x < array.length; x++){
+    for (let x = 0; x < array.length; x++) {
         newArray.push(array[x].charAt(0).toUpperCase() + array[x].slice(1));
     }
 

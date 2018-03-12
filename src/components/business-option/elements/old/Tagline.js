@@ -3,13 +3,11 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
-    setCurrentBusinessOption,
+    setBusinessCategoryId,
+    setCompletedStatus,
     setCurrentTipCategory,
     setSellGoods
 } from "../../../../actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -50,7 +48,7 @@ class Tagline extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const tagline = (this.state.isChanged) ? this.state.tagline : ((currentBusinessMeta.tagline) ? currentBusinessMeta.tagline : '');
@@ -62,13 +60,14 @@ class Tagline extends Component {
                         <input type="text"
                                onChange={(e) => this.onChangeTagline(e)}
                                className="form-control" name="alert-name" placeholder="eg. We deliver you safely home"
-                                value={tagline}
+                               value={tagline}
                         />
                     </div>
                 </form>
                 {
                     tagline &&
-                    <a onClick={(e) => this.onClickOption(e)} href="#" className="btn btn-default btn-lg btn-alert">Done</a>
+                    <a onClick={(e) => this.onClickOption(e)} href="#"
+                       className="btn btn-default btn-lg btn-alert">Done</a>
                 }
 
                 <OptionStatusButtonGroup
@@ -107,15 +106,10 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
             addFlashMessage
         }
     )(Tagline))

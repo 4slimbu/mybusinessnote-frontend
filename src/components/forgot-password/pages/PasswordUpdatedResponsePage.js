@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {ROUTES} from "../../../constants/routes";
 
 const PasswordUpdatedResponsePage = () => {
-    return(
+    return (
         <div>
             <h1>Password Updated</h1>
             <p>Your password is updated successfully. Login with your new password.</p>

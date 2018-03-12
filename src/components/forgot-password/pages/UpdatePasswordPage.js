@@ -2,7 +2,7 @@ import React from "react";
 import UpdatePasswordForm from "../includes/UpdatePasswordForm";
 
 const UpdatePasswordPage = (props) => {
-    return(
+    return (
         <UpdatePasswordForm {...props}/>
     )
 };

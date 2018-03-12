@@ -3,13 +3,11 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
-    setCurrentBusinessOption,
+    setBusinessCategoryId,
+    setCompletedStatus,
     setCurrentTipCategory,
-    setSellGoods, trackClick
+    setSellGoods
 } from "../../../../actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
 import SelectBusinessOptionMeta from "../../../common/SelectBusinessOptionMeta";
@@ -24,7 +22,7 @@ class SWOT extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
 
@@ -57,7 +55,6 @@ SWOT.propTypes = {
     setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     trackClick: PropTypes.func.isRequired
@@ -74,16 +71,10 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
             addFlashMessage,
-            trackClick
         }
     )(SWOT))

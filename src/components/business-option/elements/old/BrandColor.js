@@ -3,13 +3,11 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
-    setCurrentBusinessOption,
+    setBusinessCategoryId,
+    setCompletedStatus,
     setCurrentTipCategory,
     setSellGoods
 } from "../../../../actions/appStatusAction";
-import { saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -54,7 +52,7 @@ class BrandColor extends Component {
     onClickOwnColor(e) {
         e.preventDefault();
         this.setState({
-            isOwnColor: ! this.state.isOwnColor
+            isOwnColor: !this.state.isOwnColor
         })
     }
 
@@ -90,7 +88,7 @@ class BrandColor extends Component {
 
     onClickDone(e) {
         e.preventDefault();
-        const { appStatus, addFlashMessage } = this.props;
+        const {appStatus, addFlashMessage} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const brandColor = (this.state.isChanged) ? this.state.brand_color : currentBusinessMeta.brand_color;
@@ -113,7 +111,7 @@ class BrandColor extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
         const currentBusinessMeta = currentBusinessOption.business_meta;
         const brandColor = (this.state.isChanged) ? this.state.brand_color : currentBusinessMeta.brand_color;
@@ -135,7 +133,7 @@ class BrandColor extends Component {
                 <a href="#" onClick={(e) => this.onClickOwnColor(e)} className="add-colrs">Add your own colour</a>
                 {
                     this.state.isOwnColor &&
-                    <form className="alert-form" style={{ margin: '18px auto 0'}}>
+                    <form className="alert-form" style={{margin: '18px auto 0'}}>
                         <div className="form-group">
                             <input type="text"
                                    onChange={(e) => this.onChangeBrandColor(e)}
@@ -151,8 +149,14 @@ class BrandColor extends Component {
                     </form>
                 }
                 <ul className="colors-sample">
-                    <li className={classnames("", {"active" : this.state.isBrandColorActive })}><a href="" onClick={(e) => this.onClickBrandColor(e)} style={{ backgroundColor: brandColor }}></a></li>
-                    <li className={classnames("", {"active" : !this.state.isBrandColorActive })}><a href="" onClick={(e) => this.onClickSecBrandColor(e)} style={{ backgroundColor: secBrandColor }}></a></li>
+                    <li className={classnames("", {"active": this.state.isBrandColorActive})}><a href=""
+                                                                                                 onClick={(e) => this.onClickBrandColor(e)}
+                                                                                                 style={{backgroundColor: brandColor}}></a>
+                    </li>
+                    <li className={classnames("", {"active": !this.state.isBrandColorActive})}><a href=""
+                                                                                                  onClick={(e) => this.onClickSecBrandColor(e)}
+                                                                                                  style={{backgroundColor: secBrandColor}}></a>
+                    </li>
                 </ul>
                 <a href="#" onClick={(e) => this.onClickDone(e)} className="btn btn-default btn-lg btn-alert">Done</a>
 
@@ -192,15 +196,10 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
             addFlashMessage
         }
     )(BrandColor))

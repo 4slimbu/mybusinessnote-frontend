@@ -2,7 +2,7 @@ import {ADD_FLASH_MESSAGE, DELETE_FLASH_MESSAGE} from "../constants/actionTypes"
 import shortid from "shortid";
 import {findIndex} from "lodash";
 
-export default (state=[], action = {}) => {
+export default (state = [], action = {}) => {
     switch (action.type) {
 
         case ADD_FLASH_MESSAGE:
@@ -26,6 +26,7 @@ export default (state=[], action = {}) => {
             }
             return state;
 
-        default: return state;
+        default:
+            return state;
     }
 }

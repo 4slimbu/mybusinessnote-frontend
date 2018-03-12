@@ -6,7 +6,7 @@ export const Brand = () => {
     return (
         <span>
             <Link to="/" className="site-branding">
-                <img src={`${publicUrl()}/assets/images/app_logo_256.png`} alt="" />
+                <img src={`${publicUrl()}/assets/images/app_logo_256.png`} alt=""/>
             </Link>
             <h3 className="tagline-head">Let your <br/>journey begins</h3>
         </span>

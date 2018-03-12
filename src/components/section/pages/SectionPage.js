@@ -1,12 +1,8 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {
-    getAppStatus, getBusinessOption, getBusinessOptionFromAppUrl, getBusinessOptionFromUrl, setCompletedStatus,
-    setCurrentBusinessOption, setCurrentLevel, setCurrentSection, setShowCompletedPage, setToolTipContent
-} from "../../../actions/appStatusAction";
+import {setCompletedStatus, setShowCompletedPage, setToolTipContent} from "../../../actions/appStatusAction";
 import BusinessOptionPage from "../../business-option/BusinessOptionPage";
-import Loading from "../../layout/loading/LoadingMessage";
 import {withRouter} from "react-router-dom";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import $ from "jquery";
@@ -22,7 +18,7 @@ class SectionPage extends Component {
     componentDidMount() {
         this.$el = $(this.el);
         this.$el.mCustomScrollbar({
-            mouseWheel:{ scrollAmount: 300 }
+            mouseWheel: {scrollAmount: 300}
         });
     }
 
@@ -89,14 +85,7 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-    getBusinessOption,
-    getBusinessOptionFromUrl,
-    getBusinessOptionFromAppUrl,
-    getAppStatus,
-    setCurrentLevel,
-    setCurrentSection,
     setToolTipContent,
-    setCurrentBusinessOption,
     setCompletedStatus,
     setShowCompletedPage,
     addFlashMessage,

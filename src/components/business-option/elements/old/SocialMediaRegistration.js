@@ -3,13 +3,13 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    getAppStatus,
-    getBusinessCategories, getBusinessOptionFromUrl, setBusinessCategoryId, setCompletedStatus,
-    setCurrentBusinessOption,
+    setBusinessCategoryId,
+    setCompletedStatus,
     setCurrentTipCategory,
-    setSellGoods, setShowCompletedPage, setToolTipContent, trackClick
+    setSellGoods,
+    setShowCompletedPage,
+    setToolTipContent
 } from "../../../../actions/appStatusAction";
-import {saveBusinessOptionFormRequest} from "../../../../actions/businessActions";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
@@ -375,7 +375,6 @@ SocialMediaRegistration.propTypes = {
     setCurrentBusinessOption: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     setCompletedStatus: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
@@ -394,18 +393,12 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            getBusinessCategories,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,
-            setCurrentBusinessOption,
             setCompletedStatus,
-            getBusinessOptionFromUrl,
-            saveBusinessOptionFormRequest,
-            getAppStatus,
             setShowCompletedPage,
             addFlashMessage,
-            trackClick,
             setToolTipContent
         }
     )(SocialMediaRegistration))

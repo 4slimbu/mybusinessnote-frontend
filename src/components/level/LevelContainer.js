@@ -3,13 +3,17 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    extractLevelFromLocation, generateAppRelativeUrl, getBySlug,
-    getCurrentLevelByUrl, getCurrentLevelSections, getFirst, getNext, isItemLoaded, isLevelLocked,
+    extractLevelFromLocation,
+    generateAppRelativeUrl,
+    getBySlug,
+    getCurrentLevelByUrl,
+    getCurrentLevelSections,
+    getFirst,
+    getNext,
+    isItemLoaded,
+    isLevelLocked,
 } from "../../utils/helper/helperFunctions";
-import {
-    getBusinessOption, setCompletedStatus, setCurrent, setCurrentBusinessOption, setCurrentLevel,
-    setCurrentSection, setShowCompletedPage, setToolTipContent
-} from "../../actions/appStatusAction";
+import {setCompletedStatus, setCurrent, setShowCompletedPage, setToolTipContent} from "../../actions/appStatusAction";
 import LevelCompletePage from "./pages/LevelCompletePage";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {map} from "lodash";
@@ -137,7 +141,7 @@ class LevelContainer extends Component {
     }
 
     render() {
-        const { appStatus } = this.props;
+        const {appStatus} = this.props;
         const {currentLevel} = this.props.appStatus;
         const nextLevel = getNext(appStatus.levels, currentLevel.id);
         const levelIntroPageProps = {
@@ -186,12 +190,8 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-    getBusinessOption,
     setCurrent,
-    setCurrentLevel,
-    setCurrentSection,
     setCompletedStatus,
-    setCurrentBusinessOption,
     getCurrentLevelByUrl,
     addFlashMessage,
     setToolTipContent,

@@ -13,7 +13,6 @@ import {makeRequest} from "../actions/requestAction";
 import request from "../services/request";
 import {setNews} from "../actions/newsAction";
 import LoadingMessage from "./layout/loading/LoadingMessage";
-import {setAppStatusReducer} from "../actions/appStatusAction";
 
 class App extends Component {
 
@@ -59,7 +58,6 @@ App.propTypes = {
     appStatus: PropTypes.object.isRequired,
     news: PropTypes.object.isRequired,
     setNews: PropTypes.func.isRequired,
-    setAppStatusReducer: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -73,5 +71,4 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps, {
     makeRequest,
     setNews,
-    setAppStatusReducer
 })(App));
