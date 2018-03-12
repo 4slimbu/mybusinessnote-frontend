@@ -2,7 +2,7 @@ import {
     SET_BUSINESS,
     SET_BUSINESS_CATEGORIES,
     SET_BUSINESS_CATEGORY_ID,
-    SET_BUSINESS_OPTION,
+    SET_BUSINESS_OPTION, SET_BUSINESS_OPTIONS,
     SET_BUSINESS_STATUS,
     SET_CURRENT,
     SET_CURRENT_TIP_CATEGORY,
@@ -25,6 +25,11 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
             return {
                 ...state,
                 sections: action.sections
+            };
+        case SET_BUSINESS_OPTIONS:
+            return {
+                ...state,
+                businessOptions: action.businessOptions
             };
         case SET_BUSINESS_STATUS:
             return {

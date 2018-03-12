@@ -3,12 +3,10 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    setBusinessCategoryId,
-    setCurrentTipCategory,
-    setSellGoods,
+    setBusinessCategoryId, setCurrentTipCategory, setSellGoods,
     setToolTipContent
 } from "../../../../actions/appStatusAction";
-import {map} from "lodash";
+import {debounce, map} from "lodash";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {isItemLoaded} from "../../../../utils/helper/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
@@ -25,6 +23,8 @@ class BusinessCategories extends Component {
             businessCategories: null,
             active: null,
         };
+
+        this.handleSelect = debounce(this.handleSelect.bind(this), 300);
     }
 
     componentDidMount() {

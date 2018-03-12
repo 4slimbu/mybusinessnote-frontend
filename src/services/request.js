@@ -86,6 +86,8 @@ const Level = {
  * Handle all Business Option related requests
  */
 const BusinessOption = {
+    all: () =>
+        requests('GET', apiBaseUrl(`/business-options`)),
     get: (id) =>
         requests('GET', apiBaseUrl(`/business-option/${id}`)),
     save: (data) =>

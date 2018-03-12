@@ -239,7 +239,20 @@ export function getCurrentLevelSections(sections, id) {
     return currentLevelSections;
 }
 
-export function getBusinessOptions() {
+export function getFirstDoableBusinessOption(collection) {
+    let firstUnlocked = find(collection, {status: 'unlocked'});
+    // return first unlocked business option
+    if (isItemLoaded(firstUnlocked)) {
+        return firstUnlocked;
+    }
+
+    let firstSkipped = find(collection, {status: 'skipped'});
+    // return first skipped business option
+    if (isItemLoaded(firstSkipped)) {
+        return firstSkipped;
+    }
+
+    return {};
 }
 
 export function isItemLoaded(item) {
@@ -415,7 +428,7 @@ export function generateAppRelativeUrl(level, section = null, businessOption = n
     }
 
     if (level && section && businessOption) {
-        return '/level/' + level + '/section/' + section + '/business-option/' + businessOption;
+        return '/level/' + level + '/section/' + section + '/bo/' + businessOption;
     }
 }
 

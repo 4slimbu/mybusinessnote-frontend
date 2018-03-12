@@ -1,7 +1,10 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {getAllUrlParams} from "../../utils/helper/helperFunctions";
+import {
+    generateAppRelativeUrl, getAllUrlParams, getById, getFirstDoableBusinessOption,
+    getLast, isItemLoaded
+} from "../../utils/helper/helperFunctions";
 import WelcomePage from "./pages/WelcomePage";
 import GuestPage from "./pages/GuestPage";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
@@ -19,6 +22,7 @@ class HomeContainer extends Component {
         };
 
         this.onClickStart = this.onClickStart.bind(this);
+        this.onClickContinueJourney = this.onClickContinueJourney.bind(this);
         this.onVerifyAccount = this.onVerifyAccount.bind(this);
         this.onSendVerificationEmail = this.onSendVerificationEmail.bind(this);
     }
@@ -41,6 +45,22 @@ class HomeContainer extends Component {
         history.push(ROUTES.LEVEL_ONE);
     };
 
+    onClickContinueJourney(e) {
+        e.preventDefault();
+        const {levels, sections, businessOptions} = this.props.appStatus;
+        const firstDoableBusinessOption = getFirstDoableBusinessOption(businessOptions);
+
+        if (isItemLoaded(firstDoableBusinessOption)) {
+            const currentLevel = getById(levels, firstDoableBusinessOption.level_id);
+            const currentSection = getById(sections, firstDoableBusinessOption.section_id);
+
+            this.props.history.push(generateAppRelativeUrl(currentLevel.slug, currentSection.slug, firstDoableBusinessOption.id));
+        } else {
+            this.props.history.push(ROUTES.LEVEL_ONE);
+        }
+
+    }
+
     onVerifyAccount(e) {
         e.preventDefault();
 
@@ -61,12 +81,9 @@ class HomeContainer extends Component {
     render() {
         const {auth, appStatus} = this.props;
 
-        const continueJourneyUrl = appStatus.history && appStatus.history.last_visited ?
-            appStatus.history.last_visited : ROUTES.LEVEL_ONE;
-
         const welcomePageProps = {
             onClickStart: this.onClickStart,
-            continueJourneyUrl: continueJourneyUrl
+            onClickContinueJourney: this.onClickContinueJourney
         };
 
         const guestPageProps = {
