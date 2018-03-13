@@ -13,16 +13,11 @@ import {Panel, PanelGroup} from "react-bootstrap";
 import * as classnames from "classnames";
 import {makeRequest} from "../../../../actions/requestAction";
 import request from "../../../../services/request";
+import {ROUTES} from "../../../../constants/routes";
 
 class BusinessCategories extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            selectedBusinessCategory: null,
-            businessCategories: null,
-            active: null,
-        };
 
         this.handleSelect = debounce(this.handleSelect.bind(this), 300);
     }
@@ -104,9 +99,9 @@ class BusinessCategories extends Component {
         e.preventDefault();
         const {appStatus, history} = this.props;
         if (appStatus.business.business_category_id === 4) {
-            history.push('/level/getting-started/section/about-you/bo/3');
+            history.push(ROUTES.ABOUT_YOU);
         } else {
-            history.push('/level/getting-started/section/business-category/bo/2');
+            history.push(ROUTES.SELL_GOODS);
         }
     }
 

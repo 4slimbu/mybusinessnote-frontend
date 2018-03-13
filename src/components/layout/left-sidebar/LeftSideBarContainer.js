@@ -92,8 +92,6 @@ LeftSideBarContainer.propTypes = {
     logout: PropTypes.func.isRequired,
     appStatus: PropTypes.object.isRequired,
     setCurrent: PropTypes.func.isRequired,
-    setCompletedStatus: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };
 

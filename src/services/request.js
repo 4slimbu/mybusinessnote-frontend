@@ -39,7 +39,7 @@ const Auth = {
     logout: (data) =>
         requests('POST', apiBaseUrl("/user/logout"), data),
     register: (data) =>
-        requests('POST', apiBaseUrl("/user"), data),
+        requests('POST', apiBaseUrl("/user/register"), data),
     save: (data) =>
         requests('PUT', apiBaseUrl("/user"), data),
     forgotPassword: (data) =>

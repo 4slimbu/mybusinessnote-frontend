@@ -150,13 +150,6 @@ BusinessOptionPage.propTypes = {
     currentLevel: PropTypes.object.isRequired,
     currentSection: PropTypes.object.isRequired,
     currentBusinessOption: PropTypes.object.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired,
-    setCompletedStatus: PropTypes.func.isRequired,
-    getBusinessOption: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired,
 };
 
 

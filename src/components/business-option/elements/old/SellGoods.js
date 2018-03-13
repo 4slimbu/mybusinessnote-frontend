@@ -2,26 +2,18 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {setBusinessCategoryId, setCurrentTipCategory, setSellGoods} from "../../../../actions/appStatusAction";
-import {addFlashMessage} from "../../../../actions/flashMessageAction";
+import {setCurrentTipCategory, setSellGoods} from "../../../../actions/appStatusAction";
 import {getById, isItemLoaded} from "../../../../utils/helper/helperFunctions";
 import request from "../../../../services/request";
+import {makeRequest} from "../../../../actions/requestAction";
+import {debounce} from "lodash";
+import {ROUTES} from "../../../../constants/routes";
 
 class SellGoods extends Component {
-    componentDidMount() {
-        this.bootstrap();
-    }
+    constructor(props) {
+        super(props);
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.appStatus.currentBusinessOption.id !== this.props.appStatus.currentBusinessOption.id) {
-            this.bootstrap();
-        }
-    }
-
-    bootstrap() {
-        if (!isItemLoaded(this.props.appStatus.businessCategories)) {
-            this.props.makeRequest(request.BusinessCategory.all);
-        }
+        this.handleSelectSellGoods = debounce(this.handleSelectSellGoods.bind(this), 300);
     }
 
     handleToolTip(e, id) {
@@ -32,37 +24,19 @@ class SellGoods extends Component {
     onClickNext(e) {
         e.preventDefault();
         const {history} = this.props;
-        history.push('/level/getting-started/section/about-you/bo/3');
+        history.push(ROUTES.ABOUT_YOU);
     }
 
     handleSelectSellGoods(e, sellGoods) {
-        e.preventDefault();
-
-        this.props.setSellGoods(sellGoods);
-        const appStatus = this.props.appStatus;
+        e.persist();
 
         if (this.props.auth.isAuthenticated) {
-            this.props.saveBusinessFormRequest({
-                    business_option_id: this.props.appStatus.currentBusinessOption.id,
-                    sell_goods: sellGoods
-                },
-                '/level/1/section/1/business-option/2'
-            ).then(
-                (response) => {
-                    this.setState({isLoading: false});
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "Saved successfully!"
-                    });
-                    this.props.getAppStatus();
-                },
-                (error) => {
-                    this.props.addFlashMessage({
-                        type: "error",
-                        text: "Failed!"
-                    });
-                }
-            );
+            this.props.makeRequest(request.Business.save, {
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                sell_goods: sellGoods
+            });
+        } else {
+            this.props.setSellGoods(sellGoods);
         }
     }
 
@@ -94,10 +68,10 @@ class SellGoods extends Component {
                     {sellGoodsCategory}
                 </ul>
                 <div className="selling-goods-btns">
-                    <a href="" className={`btn btn-default btn-sm ${appStatus.sell_goods ? 'active' : ''}`}
-                       onClick={(e) => this.handleSelectSellGoods(e, true)}>Yes</a>
-                    <a href="" className={`btn btn-default btn-sm ${appStatus.sell_goods ? '' : 'active'}`}
-                       onClick={(e) => this.handleSelectSellGoods(e, false)}>No</a>
+                    <a href="#" className={`btn btn-default btn-md ${appStatus.business.sell_goods ? 'active' : ''}`}
+                       onClick={(e) => this.handleSelectSellGoods(e, 1)}>Yes</a>
+                    <a href="#" className={`btn btn-default btn-md ${appStatus.business.sell_goods ? '' : 'active'}`}
+                       onClick={(e) => this.handleSelectSellGoods(e, 0)}>No</a>
                 </div>
             </div>
         );
@@ -118,16 +92,9 @@ class SellGoods extends Component {
 
 SellGoods.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    getBusinessCategories: PropTypes.func.isRequired,
-    setBusinessCategoryId: PropTypes.func.isRequired,
     setSellGoods: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
-    getBusinessOption: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessFormRequest: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -141,9 +108,8 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            setBusinessCategoryId,
+            makeRequest,
             setSellGoods,
             setCurrentTipCategory,
-            addFlashMessage
         }
     )(SellGoods))

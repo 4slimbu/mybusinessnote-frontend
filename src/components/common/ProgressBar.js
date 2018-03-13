@@ -17,7 +17,7 @@ const ProgressBar = ({completedPercent, relativeSectionCount}) => {
 
 ProgressBar.propTypes = {
     completedPercent: PropTypes.number.isRequired,
-    relativeSectionCount: PropTypes.number.isRequired,
+    relativeSectionCount: PropTypes.string.isRequired,
 };
 
 export default ProgressBar;

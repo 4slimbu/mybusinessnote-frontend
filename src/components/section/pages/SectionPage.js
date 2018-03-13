@@ -29,32 +29,25 @@ class SectionPage extends Component {
     }
 
     render() {
-        const {isFetching, currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
+        const {currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
         const {
-            appStatus, getBusinessOption, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
-            setToolTipContent, setShowCompletedPage, setCompletedStatus,
-            getBusinessOptionFromUrl, addFlashMessage
+            appStatus,
+            setToolTipContent,
         } = this.props;
+
+        const businessOptionPageProps = {
+            appStatus: appStatus,
+            currentLevel: currentLevel,
+            currentSection: currentSection,
+            currentBusinessOption: currentBusinessOption,
+            setToolTipContent: setToolTipContent,
+        };
+
         return (
             <div>
                 {
                     currentBusinessOption && currentBusinessOption.id &&
-                    <BusinessOptionPage
-                        appStatus={appStatus}
-                        currentLevel={currentLevel}
-                        currentSection={currentSection}
-                        currentBusinessOption={currentBusinessOption}
-                        setCurrentLevel={setCurrentLevel}
-                        setCurrentSection={setCurrentSection}
-                        setCurrentBusinessOption={setCurrentBusinessOption}
-                        setCompletedStatus={setCompletedStatus}
-                        setShowCompletedPage={setShowCompletedPage}
-                        setToolTipContent={setToolTipContent}
-                        getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                        getBusinessOption={getBusinessOption}
-                        isFetching={isFetching}
-                        addFlashMessage={addFlashMessage}
-                    />
+                    <BusinessOptionPage {...businessOptionPageProps}/>
                 }
             </div>
         );
@@ -64,16 +57,7 @@ class SectionPage extends Component {
 SectionPage.propTypes = {
     auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
-    getBusinessOption: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getBusinessOptionFromAppUrl: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
-    setShowCompletedPage: PropTypes.func.isRequired,
-    setCompletedStatus: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };
 

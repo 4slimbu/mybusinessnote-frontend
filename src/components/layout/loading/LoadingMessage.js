@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import ReactLoading from "react-loading";
 
 const LoadingMessage = (props) => {
-    const {isLoading = false, loadingMessage} = props;
+    const {isLoading = false, loadingMessage = null} = props;
     const content = loadingMessage ? loadingMessage : 'Loading...';
     return (
         isLoading &&
@@ -17,8 +17,8 @@ const LoadingMessage = (props) => {
 };
 
 LoadingMessage.propTypes = {
-    isLoading: PropTypes.bool.isRequired,
-    loadingMessage: PropTypes.string.isRequired,
+    isLoading: PropTypes.bool,
+    loadingMessage: PropTypes.string,
 };
 
 function mapStateToProps(state) {

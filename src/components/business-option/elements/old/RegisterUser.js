@@ -1,29 +1,27 @@
 import React, {Component} from 'react';
 import SignUpForm from "../../form/SignUpForm";
-import {addFlashMessage} from "../../../../actions/flashMessageAction";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import {makeRequest} from "../../../../actions/requestAction";
 
 class RegisterUser extends Component {
     render() {
         const {
-            appStatus, auth, userSignUpFormRequest, userUpdateRequest, getAppStatus, addFlashMessage,
-            doesUserExists, setCurrentUser, getBusinessOptionFromUrl, getBusinessOption
+            appStatus, auth,
+            doesUserExists,
+            makeRequest
         } = this.props;
+
+        const signUpFormProps = {
+            appStatus: appStatus,
+            auth: auth,
+            doesUserExists: doesUserExists,
+            makeRequest: makeRequest,
+        };
+
         return (
             <div>
-                <SignUpForm
-                    appStatus={appStatus}
-                    getAppStatus={getAppStatus}
-                    auth={auth}
-                    userSignUpFormRequest={userSignUpFormRequest}
-                    userUpdateRequest={userUpdateRequest}
-                    addFlashMessage={addFlashMessage}
-                    doesUserExists={doesUserExists}
-                    setCurrentUser={setCurrentUser}
-                    getBusinessOption={getBusinessOption}
-                    getBusinessOptionFromUrl={getBusinessOptionFromUrl}
-                />
+                <SignUpForm {...signUpFormProps}/>
 
                 {
                     !auth.isAuthenticated &&
@@ -34,13 +32,13 @@ class RegisterUser extends Component {
 
                             <div className="col-md-6 text-right col-sm-12">
                                 <a className="btn btn-primary"
-                                   href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'}><i
-                                    className="fa fa-google"></i> Google</a>
+                                   href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'}>
+                                    <i className="fa fa-google"></i> Google</a>
                             </div>
                             <div className="col-md-6 col-sm-12 text-left">
                                 <a className="btn btn-primary"
-                                   href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'}><i
-                                    className="fa fa-facebook-square"></i> Facebook</a>
+                                   href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'}>
+                                    <i className="fa fa-facebook-square"></i> Facebook</a>
                             </div>
                         </div>
                     </div>
@@ -53,13 +51,7 @@ class RegisterUser extends Component {
 RegisterUser.propTypes = {
     appStatus: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    userSignUpFormRequest: PropTypes.func.isRequired,
-    userUpdateRequest: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired,
-    doesUserExists: PropTypes.func.isRequired,
-    setCurrentUser: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired
+    makeRequest: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -70,5 +62,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-    addFlashMessage,
+    makeRequest,
 })(RegisterUser);

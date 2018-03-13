@@ -70,8 +70,6 @@ class LevelLinks extends Component {
 LevelLinks.propTypes = {
     appStatus: PropTypes.object.isRequired,
     setCurrent: PropTypes.func.isRequired,
-    setCompletedStatus: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     onClickLevelLink: PropTypes.func.isRequired,
     onClickSectionLink: PropTypes.func.isRequired,

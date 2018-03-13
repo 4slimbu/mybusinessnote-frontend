@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import jwt_decode from "jwt-decode";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
-import setAuthorizationToken from "../../../utils/axios/setAuthorizationToken";
-import {getAppUrlFromApiUrl} from "../../../utils/helper/helperFunctions";
 import ReCAPTCHA from "react-google-recaptcha";
+import {validateFields} from "../../../utils/validation/FieldValidator";
+import request from "../../../services/request";
+import {ROUTES} from "../../../constants/routes";
+import {MESSAGES} from "../../../constants/messages";
 
 class SignUpForm extends Component {
     constructor(props) {
@@ -78,34 +79,54 @@ class SignUpForm extends Component {
     }
 
     componentDidMount() {
-        const {auth, appStatus} = this.props;
-        const [user] = auth.user;
-        this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_category_id: this.props.appStatus.business_category_id,
-            first_name: this.props.appStatus.first_name,
-            last_name: this.props.appStatus.last_name,
-            email: this.props.appStatus.email,
-            phone_number: this.props.appStatus.phone_number,
-            sell_goods: this.props.appStatus.sell_goods,
-            user_id: this.props.appStatus.user_id ? this.props.appStatus.user_id : null,
-        });
-    }
-
-    componentWillReceiveProps() {
-        this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_category_id: this.props.appStatus.business_category_id,
-            first_name: this.props.appStatus.first_name,
-            last_name: this.props.appStatus.last_name,
-            email: this.props.appStatus.email,
-            phone_number: this.props.appStatus.phone_number,
-            sell_goods: this.props.appStatus.sell_goods,
-        });
+        const {auth} = this.props;
+        if (auth.isAuthenticated) {
+            const {user} = auth;
+            const newState = {
+                ...this.state,
+                first_name: {
+                    ...this.state.first_name,
+                    oldValue: user.first_name,
+                },
+                last_name: {
+                    ...this.state.last_name,
+                    oldValue: user.last_name,
+                },
+                email: {
+                    ...this.state.email,
+                    oldValue: user.email,
+                },
+                phone_number: {
+                    ...this.state.phone_number,
+                    oldValue: user.phone_number,
+                },
+            };
+            this.setState(newState);
+        }
     }
 
     resetFields() {
         this.setState({
+            first_name: {
+                ...this.state.first_name,
+                isChanged: false,
+                value: ''
+            },
+            last_name: {
+                ...this.state.last_name,
+                isChanged: false,
+                value: ''
+            },
+            email: {
+                ...this.state.email,
+                isChanged: false,
+                value: ''
+            },
+            phone_number: {
+                ...this.state.phone_number,
+                isChanged: false,
+                value: ''
+            },
             password: {
                 ...this.state.password,
                 isChanged: false,
@@ -115,11 +136,25 @@ class SignUpForm extends Component {
                 ...this.state.confirm_password,
                 isChanged: false,
                 value: ''
-            }
+            },
+            captcha_response: "",
+            errorCode: '',
+            errors: {},
+            isChanged: false,
         })
     }
 
     onChange(e) {
+
+        if (e.target.name === 'password' && e.target.value === '') {
+            this.setState({
+                confirm_password: {
+                    ...this.state.confirm_password,
+                    value: ''
+                }
+            })
+        }
+
         this.setState({
             [e.target.name]: {
                 ...this.state[e.target.name],
@@ -148,120 +183,93 @@ class SignUpForm extends Component {
                 dataObject.confirm_password = this.state.confirm_password.value
             }
 
-
             this.isFormValid(dataObject);
         });
 
 
     }
 
-
-    onChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-        if (e.target.name === 'password' && e.target.value === '') {
-            this.setState({
-                confirm_password: ""
-            })
-        }
-    }
-
-    isFormValid(data = null) {
-        let input = (data) ? data : this.state;
-        const {errors, isValid} = (!this.props.auth.isAuthenticated) ? {errors: {}, isValid: true} : {
-            errors: {},
-            isValid: true
+    /**
+     * Validates Form fields
+     *
+     * @param dataObject - is an object containing field key:value pair
+     * @returns bool
+     */
+    isFormValid(dataObject) {
+        const rules = {
+            first_name: 'required',
+            last_name: 'required',
+            email: 'required|email',
+            phone_number: 'required|phone_number',
+            password: 'required|min:8|lowercase|uppercase|num|specialChar|max:20',
+            confirm_password: 'match:password'
         };
+        const {errors, isValid} = validateFields(dataObject, rules);
 
-        if (!isValid) {
-            this.setState({errors});
-        } else {
-            this.setState({errors: {}})
-        }
-
-        return isValid;
-    }
-
-    isEmailValid(email) {
-        const {errors, isValid} = {errors: {}, isValid: true};
-
-        if (!isValid) {
-            this.setState({errors});
-        }
+        this.setState({
+            errors: isValid ? {} : errors
+        });
 
         return isValid;
     }
 
     onSubmit(e) {
         e.preventDefault();
-        const appStatus = this.props.appStatus;
-        if (this.isFormValid()) {
-            this.setState({
-                errors: {},
-                isLoading: true,
-                business_option_id: appStatus.currentBusinessOption.id,
-            });
-            if (this.props.auth.isAuthenticated) {
-                this.props.userUpdateRequest(this.state, '/level/1/section/2/business-option/3').then(
-                    (response) => {
-                        this.setState({isLoading: false});
+        const {appStatus, auth, makeRequest, history} = this.props;
 
-                        const token = response.data.token;
-                        if (token) {
-                            localStorage.setItem("jwtToken", token);
-                            setAuthorizationToken(token);
-                            this.props.setCurrentUser(jwt_decode(token).user);
+        if (auth.isAuthenticated && !this.state.isChanged) {
+            history.push(ROUTES.ADD_BUSINESS_DETAILS);
+        }
 
-                            this.props.addFlashMessage({
-                                type: "success",
-                                text: "Saved Successfully!"
-                            });
-                        }
-                        const {appStatus, getAppStatus, history, getBusinessOption} = this.props;
-                        getAppStatus();
-                        getBusinessOption(
-                            '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
-                            true);
-                        history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
+        const dataObject = {
+            first_name: this.state.first_name.value,
+            last_name: this.state.last_name.value,
+            email: this.state.email.value,
+            phone_number: this.state.phone_number.value,
+            password: this.state.password.value,
+            confirm_password: this.state.confirm_password.value
+        };
+
+        if (this.isFormValid(dataObject)) {
+            if (auth.isAuthenticated) {
+                makeRequest(request.Auth.save, {
+                    first_name: this.state.first_name.value,
+                    last_name: this.state.last_name.value,
+                    email: this.state.email.value,
+                    phone_number: this.state.phone_number.value,
+                    password: this.state.password.value,
+                    confirm_password: this.state.confirm_password.value,
+                }).then(
+                    (responseData) => {
+                        history.push(ROUTES.ADD_BUSINESS_DETAILS);
                     },
-                    (error) => {
-                        this.setState({errors: error.response.data.errors, isLoading: false});
-                        this.props.addFlashMessage({
-                            type: "error",
-                            text: "Failed!"
+                    (errorData) => {
+                        this.resetFields();
+                        this.setState({
+                            errorCode: errorData.errorCode ? errorData.errorCode : '',
+                            errors: errorData.errors ? errorData.errors : {}
                         });
                     }
                 );
             } else {
-                this.props.userSignUpFormRequest(this.state).then(
-                    (response) => {
-                        this.setState({isLoading: false});
-
-                        const token = response.data.token;
-                        if (token) {
-                            localStorage.setItem("jwtToken", token);
-                            setAuthorizationToken(token);
-                            this.props.setCurrentUser(jwt_decode(token).user);
-
-                            this.props.addFlashMessage({
-                                type: "success",
-                                text: "You have signed up successfully! Welcome!"
-                            });
-                        }
-
-                        const {appStatus, getAppStatus, history, getBusinessOption} = this.props;
-                        getAppStatus();
-                        // getBusinessOption(
-                        //     '/level/1/section/2/business-option/3/next?business_category_id=' + appStatus.business_category_id,
-                        //     true);
-                        history.push('/');
+                makeRequest(request.Auth.register, {
+                    first_name: this.state.first_name.value,
+                    last_name: this.state.last_name.value,
+                    email: this.state.email.value,
+                    phone_number: this.state.phone_number.value,
+                    password: this.state.password.value,
+                    confirm_password: this.state.confirm_password.value,
+                    business_category_id: appStatus.business.business_category_id,
+                    sell_goods: appStatus.business.sell_goods
+                }).then(
+                    (responseData) => {
+                        history.push(ROUTES.ADD_BUSINESS_DETAILS);
                     },
-                    (error) => {
-                        this.setState({errors: error.response.data.errors, isLoading: false});
-                        this.props.addFlashMessage({
-                            type: "error",
-                            text: "Failed!"
+                    (errorData) => {
+                        this.resetFields();
+                        this.setState({
+                            errorCode: errorData.errorCode ? errorData.errorCode : '',
+                            errors: errorData.errors ? errorData.errors : {}
                         });
                     }
                 );
@@ -270,28 +278,24 @@ class SignUpForm extends Component {
     }
 
     checkIfUserExists(e) {
-        const val = e.target.value;
+        const data = {
+            email: this.state.email.value,
+        };
 
-        if (this.isEmailValid(this.state.email)) {
-            this.setState({errors: {}});
+        if (this.isFormValid(data)) {
 
-            this.props.doesUserExists(val).then(
-                (response) => {
-                    if (response.data.user) {
+            this.props.makeRequest(request.Auth.checkIfExists, data).then(
+                (responseData) => {
+                    if (responseData.isPresent) {
                         this.setState({
                             errors: {
                                 ...this.state.errors,
-                                "email": "Email already exist in the database"
+                                "email": MESSAGES.ERR_EMAIL_ALREADY_EXIST
                             }
                         });
                     }
                 },
                 (error) => {
-                    this.setState({errors: error.response.data.errors});
-                    this.props.addFlashMessage({
-                        type: "error",
-                        text: "Failed!"
-                    });
                 }
             );
         }
@@ -309,74 +313,12 @@ class SignUpForm extends Component {
 
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
-                <TextFieldGroup
-                    error={errors.first_name}
-                    label="First Name *"
-                    placeholder="eg. John"
-                    onChange={this.onChange}
-                    value={this.state.first_name}
-                    type="text"
-                    field="first_name"
-                />
-
-                <TextFieldGroup
-                    error={errors.last_name}
-                    label="Last Name *"
-                    placeholder="eg. Smith"
-                    onChange={this.onChange}
-                    value={this.state.last_name}
-                    type="text"
-                    field="last_name"
-                />
-
-                <TextFieldGroup
-                    error={errors.email}
-                    label="Email *"
-                    placeholder="eg. john.smith@gmail.com"
-                    onChange={this.onChange}
-                    onBlur={this.checkIfUserExists}
-                    value={this.state.email}
-                    type="text"
-                    field="email"
-                />
-
-                <TextFieldGroup
-                    error={errors.phone_number}
-                    label="Phone Number *"
-                    placeholder="eg. (02) 9855 0000"
-                    onChange={this.onChange}
-                    value={this.state.phone_number}
-                    type="text"
-                    field="phone_number"
-                />
-
-                {
-                    <div>
-                        <TextFieldGroup
-                            error={errors.password}
-                            label="Password *"
-                            placeholder="xxxxxxxxxxxx"
-                            onChange={this.onChange}
-                            onBlur={() => this.isFormValid({password: this.state.password})}
-                            value={this.state.password}
-                            type="password"
-                            field="password"
-                        />
-
-                        <small className="note">Must include lower, upper, number and symbol min 8 characters up to 20.
-                        </small>
-
-                        <TextFieldGroup
-                            error={errors.confirm_password}
-                            label="Confirm Password"
-                            placeholder="xxxxxxxxxxxx"
-                            onChange={this.onChange}
-                            value={this.state.confirm_password}
-                            type="password"
-                            field="confirm_password"
-                        />
-                    </div>
-                }
+                <TextFieldGroup fieldObject={this.state.first_name} onChange={this.onChange} error={errors.first_name}/>
+                <TextFieldGroup fieldObject={this.state.last_name} onChange={this.onChange} error={errors.last_name}/>
+                <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} onBlur={this.checkIfUserExists} error={errors.email}/>
+                <TextFieldGroup fieldObject={this.state.phone_number} onChange={this.onChange} error={errors.phone_number}/>
+                <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password}/>
+                <TextFieldGroup fieldObject={this.state.confirm_password} onChange={this.onChange} error={errors.confirm_password}/>
 
                 <div className="form-group re-captcha">
                     <ReCAPTCHA
@@ -386,7 +328,7 @@ class SignUpForm extends Component {
                     {errors.captcha_response && <span className="form-error-message">{errors.captcha_response}</span>}
                 </div>
                 <div className="btn-wrap">
-                    <button disabled={this.state.isLoading} className="btn btn-default btn-md">Continue</button>
+                    <button className="btn btn-default btn-md">Continue</button>
                 </div>
             </form>
         );
@@ -396,14 +338,7 @@ class SignUpForm extends Component {
 SignUpForm.propTypes = {
     appStatus: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    userSignUpFormRequest: PropTypes.func.isRequired,
-    userUpdateRequest: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired,
-    doesUserExists: PropTypes.func.isRequired,
-    setCurrentUser: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getBusinessOption: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired
+    makeRequest: PropTypes.func.isRequired,
 };
 
 export default withRouter(SignUpForm);
