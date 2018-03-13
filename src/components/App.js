@@ -24,6 +24,7 @@ class App extends Component {
     bootstrap() {
         this.props.makeRequest(request.Level.all);
         this.props.makeRequest(request.BusinessOption.all);
+        this.props.makeRequest(request.BusinessCategory.all);
         if (this.props.auth.isAuthenticated) {
             this.props.makeRequest(request.Business.getStatus);
             this.props.makeRequest(request.Business.get);

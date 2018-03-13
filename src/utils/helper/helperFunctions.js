@@ -82,7 +82,7 @@ export function extractSectionFromLocation(location) {
 export function extractBoIdFromLocation(location) {
     let params = location.split(/\/|\?|&|=|\./g);
 
-    return params && (params.indexOf('bo') >= 0) && params[params.indexOf('bo') + 1];
+    return params && (params.indexOf('bo') >= 0) && (params[params.indexOf('bo') + 1] * 1);
 }
 
 export function getCurrentLevelByUrl(levels, url) {

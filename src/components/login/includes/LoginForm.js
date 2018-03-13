@@ -6,7 +6,6 @@ import {Link} from "react-router-dom";
 import {ROUTES} from "../../../constants/routes";
 import request from "../../../services/request";
 import {validateFields} from "../../../utils/validation/FieldValidator";
-import {debounce} from "lodash";
 
 class LoginForm extends Component {
     constructor(props) {
