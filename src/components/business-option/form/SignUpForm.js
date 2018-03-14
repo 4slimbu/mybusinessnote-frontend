@@ -202,7 +202,8 @@ class SignUpForm extends Component {
             email: 'required|email',
             phone_number: 'required|phone_number',
             password: 'required|min:8|lowercase|uppercase|num|specialChar|max:20',
-            confirm_password: 'match:password'
+            confirm_password: 'match:password',
+            captcha_response: 'captcha'
         };
         const {errors, isValid} = validateFields(dataObject, rules);
 
@@ -227,7 +228,8 @@ class SignUpForm extends Component {
             email: this.state.email.value,
             phone_number: this.state.phone_number.value,
             password: this.state.password.value,
-            confirm_password: this.state.confirm_password.value
+            confirm_password: this.state.confirm_password.value,
+            captcha_response: this.state.captcha_response
         };
 
         if (this.isFormValid(dataObject)) {
@@ -239,6 +241,7 @@ class SignUpForm extends Component {
                     phone_number: this.state.phone_number.value,
                     password: this.state.password.value,
                     confirm_password: this.state.confirm_password.value,
+                    captcha_response: this.state.captcha_response
                 }).then(
                     (responseData) => {
                         history.push(ROUTES.ADD_BUSINESS_DETAILS);
@@ -260,7 +263,8 @@ class SignUpForm extends Component {
                     password: this.state.password.value,
                     confirm_password: this.state.confirm_password.value,
                     business_category_id: appStatus.business.business_category_id,
-                    sell_goods: appStatus.business.sell_goods
+                    sell_goods: appStatus.business.sell_goods,
+                    captcha_response: this.state.captcha_response
                 }).then(
                     (responseData) => {
                         history.push(ROUTES.ADD_BUSINESS_DETAILS);
@@ -284,7 +288,7 @@ class SignUpForm extends Component {
 
         if (this.isFormValid(data)) {
 
-            this.props.makeRequest(request.Auth.checkIfExists, data).then(
+            this.props.makeRequest(request.Auth.checkIfExists, data, {message: MESSAGES.LOADING_USER_CHECK}).then(
                 (responseData) => {
                     if (responseData.isPresent) {
                         this.setState({

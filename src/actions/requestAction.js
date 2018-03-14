@@ -18,21 +18,21 @@ import {MESSAGES} from "../constants/messages";
 import {addLoadingMessage, deleteLoadingMessage} from "./loadingMessageAction";
 
 
-export function makeRequest(apiCallFunction, data = {}) {
+export function makeRequest(apiCallFunction, data = {}, options={isSilent: false, message: 'Loading...'}) {
     return dispatch => {
-        dispatch(addLoadingMessage());
+        if (! options.isSilent) dispatch(addLoadingMessage(options.message));
         return new Promise((resolve, reject) => {
 
             apiCallFunction(data).then(
                 (response) => {
-                    dispatch(deleteLoadingMessage());
+                    if (! options.isSilent) dispatch(deleteLoadingMessage());
                     if (response && response.data) {
                         handleSuccessResponseData(dispatch, response.data);
                         resolve(response.data);
                     }
                 },
                 (error) => {
-                    dispatch(deleteLoadingMessage());
+                    if (! options.isSilent) dispatch(deleteLoadingMessage());
                     if (error && error.response && error.response.data) {
                         handleErrorResponseData(dispatch, error.response.data);
                         reject(error.response.data)

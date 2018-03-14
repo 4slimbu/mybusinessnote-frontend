@@ -12,12 +12,26 @@ class CreateBusiness extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: "update_business",
-            business_id: null,
-            business_name: "",
-            website: "",
+            business_name: {
+                isChanged: false,
+                label: "Business Name",
+                name: "business_name",
+                placeholder: "Your Business Name",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
+            website: {
+                isChanged: false,
+                label: "Website",
+                name: "website",
+                placeholder: "Your Website Address",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
             errors: {},
-            isLoading: false
+            isChanged: false,
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -121,31 +135,14 @@ class CreateBusiness extends Component {
     render() {
         const {appStatus} = this.props;
         const errors = this.state.errors;
-        const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
-        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].label : 'Find me a web address';
-        const affiliateLink = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].link : '#';
+        const affiliateLinkId = (appStatus.currentBusinessOption.affiliateLinks[0]) ? appStatus.currentBusinessOption.affiliateLinks[0].id : '';
+        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliateLinks[0]) ? appStatus.currentBusinessOption.affiliateLinks[0].label : 'Find me a web address';
+        const affiliateLink = (appStatus.currentBusinessOption.affiliateLinks[0]) ? appStatus.currentBusinessOption.affiliateLinks[0].link : '#';
 
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
-                <TextFieldGroup
-                    error={errors.business_name}
-                    label="Your Business Name *"
-                    placeholder="eg. John's Bakery LTD PTD"
-                    onChange={this.onChange}
-                    value={(this.state.business_name) ? this.state.business_name : appStatus.business_name}
-                    type="text"
-                    field="business_name"
-                />
-
-                <TextFieldGroup
-                    error={errors.website}
-                    label="Your Business Website *"
-                    placeholder="eg. http://johnsbakery.com.au"
-                    onChange={this.onChange}
-                    value={(this.state.website) ? this.state.website : appStatus.website}
-                    type="text"
-                    field="website"
-                />
+                <TextFieldGroup fieldObject={this.state.business_name} onChange={this.onChange} error={errors.business_name}/>
+                <TextFieldGroup fieldObject={this.state.website} onChange={this.onChange} error={errors.website}/>
 
                 <span className="find-web-span">Don’t have a web address?</span>
                 <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
