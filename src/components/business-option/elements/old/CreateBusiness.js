@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import jwt_decode from "jwt-decode";
-import setAuthorizationToken from "../../../../utils/axios/setAuthorizationToken";
 import TextFieldGroup from "../../../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
-import {getAppUrlFromApiUrl} from "../../../../utils/helper/helperFunctions";
+import request from "../../../../services/request";
+import {makeRequest} from "../../../../actions/requestAction";
+import {validateFields} from "../../../../utils/validation/FieldValidator";
+import {ROUTES} from "../../../../constants/routes";
 
 class CreateBusiness extends Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class CreateBusiness extends Component {
                 isChanged: false,
                 label: "Website",
                 name: "website",
-                placeholder: "Your Website Address",
+                placeholder: "https://yourwebsite.com",
                 value: "",
                 oldValue: "",
                 type: "text"
@@ -38,97 +39,144 @@ class CreateBusiness extends Component {
     }
 
     componentDidMount() {
+        const {appStatus} = this.props;
+        const {business} = appStatus;
+
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_id: this.props.appStatus.business_id,
-            business_name: this.props.appStatus.business_name,
-            website: this.props.appStatus.website,
+            ...this.state,
+            business_name: {
+                ...this.state.business_name,
+                oldValue: business.business_name,
+            },
+            website: {
+                ...this.state.website,
+                oldValue: business.website,
+            },
         });
     }
 
-    componentWillReceiveProps() {
+    resetFields() {
         this.setState({
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_id: this.props.appStatus.business_id,
-            business_name: this.props.appStatus.business_name,
-            website: this.props.appStatus.website,
-        });
+            business_name: {
+                ...this.state.business_name,
+                isChanged: false,
+                value: ''
+            },
+            website: {
+                ...this.state.website,
+                isChanged: false,
+                value: ''
+            },
+            errors: {},
+            isChanged: false,
+        })
     }
 
     onChange(e) {
+
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: {
+                ...this.state[e.target.name],
+                value: e.target.value,
+                isChanged: true
+            },
+            isChanged: true
+        }, function () {
+            const dataObject = {};
+            if (this.state.business_name.isChanged) {
+                dataObject.business_name = this.state.business_name.value
+            }
+            if (this.state.website.isChanged) {
+                dataObject.website = this.state.website.value
+            }
+
+            this.isFormValid(dataObject);
         });
+
+
     }
 
-    isFormValid(data = null) {
-        let input = (data) ? data : this.state;
-        const {errors, isValid} = {errors: {}, isValid: true};
+    isFormValid(dataObject) {
+        const rules = {
+            business_name: 'required',
+            website: 'required|website',
+        };
+        const {errors, isValid} = validateFields(dataObject, rules);
 
-        if (!isValid) {
-            this.setState({errors});
-        }
+        this.setState({
+            errors: isValid ? {} : errors
+        });
 
         return isValid;
     }
 
     onSubmit(e) {
         e.preventDefault();
-        const appStatus = this.props.appStatus;
-        if (this.isFormValid()) {
-            this.setState({
-                errors: {},
-                isLoading: true,
-            });
+        const {appStatus, makeRequest, history} = this.props;
 
-            if (!appStatus.user_id || !appStatus.business_id) {
-                this.props.addFlashMessage({
-                    type: "error",
-                    text: "You need to create an account before creating business"
-                });
-                return;
-            }
+        if (appStatus.business.id && !this.state.isChanged) {
+            history.push(ROUTES.REGISTER_ABN);
+        }
 
-            this.props.saveBusinessFormRequest(this.state, '/level/1/section/3/business-option/4').then(
-                (response) => {
-                    this.setState({isLoading: false});
-                    const token = response.data.token;
-
-                    if (token) {
-                        localStorage.setItem("jwtToken", token);
-                        setAuthorizationToken(token);
-                        this.props.setCurrentUser(jwt_decode(token).user);
+        // new data
+        if (! appStatus.business.id) {
+            const newData = {
+                business_name: this.state.business_name.value,
+                website: this.state.website.value,
+                business_option_id: appStatus.currentBusinessOption.id,
+            };
+            if (this.isFormValid(newData)) {
+                makeRequest(request.business.save, newData).then(
+                    (responseData) => {
+                        history.push(ROUTES.REGISTER_ABN);
+                    },
+                    (errorData) => {
+                        this.resetFields();
+                        this.setState({
+                            errors: errorData.errors ? errorData.errors : {}
+                        });
                     }
-                    this.props.getAppStatus();
-                    this.props.addFlashMessage({
-                        type: "success",
-                        text: "Saved successfully!"
-                    });
-                    const {appStatus, history, getBusinessOption} = this.props;
-                    getBusinessOption(
-                        '/level/1/section/3/business-option/4/next?business_category_id=' + appStatus.business_category_id,
-                        true);
-                    history.push(getAppUrlFromApiUrl(appStatus.currentBusinessOption.links.next));
-                },
-                (error) => {
-                    this.setState({errors: error.response.data.error, isLoading: false});
-                    this.props.addFlashMessage({
-                        type: "error",
-                        text: "Failed!"
-                    });
+                );
+            }
+        }
+
+        //changed data
+        if (appStatus.business.id && this.state.isChanged) {
+            const changedData = {
+                business_option_id: appStatus.currentBusinessOption.id,
+            };
+            if (this.state.business_name.isChanged) {
+                changedData.business_name = this.state.business_name.value
+            }
+            if (this.state.website.isChanged) {
+                changedData.website = this.state.website.value
+            }
+            if (this.isFormValid(changedData)) {
+                if (this.isFormValid(changedData)) {
+                    makeRequest(request.Business.save, changedData).then(
+                        (responseData) => {
+                            history.push(ROUTES.REGISTER_ABN);
+                        },
+                        (errorData) => {
+                            this.resetFields();
+                            this.setState({
+                                errors: errorData.errors ? errorData.errors : {}
+                            });
+                        }
+                    );
                 }
-            );
+            }
         }
     }
 
     onClickAffiliateLink(e, boId, affId, link) {
         e.preventDefault();
 
-        this.props.trackClick(boId, affId);
+        this.props.makeRequest(request.Track.click, {boId: boId, affId: affId});
 
         setTimeout(function () {
             window.open(link, '_blank');
-        }, 1000);
+        }, 500);
     }
 
 
@@ -141,7 +189,8 @@ class CreateBusiness extends Component {
 
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
-                <TextFieldGroup fieldObject={this.state.business_name} onChange={this.onChange} error={errors.business_name}/>
+                <TextFieldGroup fieldObject={this.state.business_name} onChange={this.onChange}
+                                error={errors.business_name}/>
                 <TextFieldGroup fieldObject={this.state.website} onChange={this.onChange} error={errors.website}/>
 
                 <span className="find-web-span">Don’t have a web address?</span>
@@ -150,7 +199,7 @@ class CreateBusiness extends Component {
                    className="btn btn-lg btn-default clearfix btn-level-5">{affiliateLinkLabel}</a>
 
                 <div className="btn-wrap">
-                    <button disabled={this.state.isLoading} className="btn btn-default btn-md">Continue</button>
+                    <button className="btn btn-default btn-md">Continue</button>
                 </div>
             </form>
         );
@@ -177,5 +226,6 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
+    makeRequest,
     addFlashMessage,
 })(CreateBusiness));

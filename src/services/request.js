@@ -120,5 +120,6 @@ export default {
     BusinessCategory,
     Level,
     BusinessOption,
-    News
+    News,
+    Track
 };

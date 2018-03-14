@@ -1,6 +1,6 @@
 export const DEFAULT_APP_STATUS = {
     news: [],
-    business: {business_category_id: 1, sell_goods: 0},
+    business: {business_name: "", website: "", business_category_id: 1, sell_goods: 0},
     levels: [],
     sections: [],
     businessOptions: [],
