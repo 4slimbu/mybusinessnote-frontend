@@ -4,9 +4,12 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setBusinessCategoryId, setCurrentTipCategory, setSellGoods} from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
+import {getByKey, isItemLoaded, saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
 import * as classnames from "classnames";
+import {makeRequest} from "../../../../actions/requestAction";
+import request from "../../../../services/request";
+import {MESSAGES} from "../../../../constants/messages";
 
 class BrandColor extends Component {
     constructor(props) {
@@ -17,7 +20,38 @@ class BrandColor extends Component {
             isBrandColorActive: true,
             brand_color: '',
             sec_brand_color: '',
+            affiliateLink: {}
         }
+    }
+
+    componentDidMount() {
+        const {appStatus} = this.props;
+        const {currentBusinessOption} = appStatus;
+        const {businessMetas, affiliateLinks} = currentBusinessOption;
+
+        const brandColorObject = getByKey(businessMetas, 'key', 'brand_color');
+        const secBrandColorObject = getByKey(businessMetas, 'key', 'sec_brand_color');
+        this.setState({
+            ...this.state,
+            brand_color: isItemLoaded(brandColorObject) ? brandColorObject.value : '',
+            sec_brand_color: isItemLoaded(secBrandColorObject) ? secBrandColorObject.value : '',
+            affiliateLink: isItemLoaded(affiliateLinks) ? affiliateLinks[0] : {}
+        });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.BusinessOption.save, {
+            id: this.props.appStatus.currentBusinessOption.id,
+            input:{
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                business_meta: {
+                    brand_color: this.state.brand_color,
+                    sec_brand_color: this.state.sec_brand_color
+                }
+            }
+        }, {message: MESSAGES.SAVING});
     }
 
     onClickNext(e) {
@@ -27,16 +61,42 @@ class BrandColor extends Component {
         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
     }
 
+    onClickAffiliateLink(e, boId, affId, link) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.Track.click, {
+            boId: boId,
+            affId: affId
+        });
+
+        setTimeout(function () {
+            window.open(link, '_blank');
+        }, 1000);
+    }
+
+    onClickUpdateStatus(e, status) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.BusinessOption.save, {
+            id: this.props.appStatus.currentBusinessOption.id,
+            input:{
+                business_option_status: status
+            }
+        }, {message: MESSAGES.SAVING});
+    };
+
     onClickOption(e, option) {
         e.preventDefault();
 
         if (this.state.isBrandColorActive) {
             this.setState({
+                ...this.state,
                 isChanged: true,
                 brand_color: option
             })
         } else {
             this.setState({
+                ...this.state,
                 isChanged: true,
                 sec_brand_color: option
             })
@@ -47,6 +107,7 @@ class BrandColor extends Component {
     onClickOwnColor(e) {
         e.preventDefault();
         this.setState({
+            ...this.state,
             isOwnColor: !this.state.isOwnColor
         })
     }
@@ -55,6 +116,7 @@ class BrandColor extends Component {
         e.preventDefault();
 
         this.setState({
+            ...this.state,
             isBrandColorActive: true
         })
     }
@@ -63,6 +125,7 @@ class BrandColor extends Component {
         e.preventDefault();
 
         this.setState({
+            ...this.state,
             isBrandColorActive: false
         })
     }
@@ -70,6 +133,7 @@ class BrandColor extends Component {
     onChangeBrandColor(e) {
         e.preventDefault();
         this.setState({
+            ...this.state,
             brand_color: e.target.value
         })
     }
@@ -77,40 +141,20 @@ class BrandColor extends Component {
     onChangeSecBrandColor(e) {
         e.preventDefault();
         this.setState({
+            ...this.state,
             sec_brand_color: e.target.value
         })
-    }
-
-    onClickDone(e) {
-        e.preventDefault();
-        const {appStatus, addFlashMessage} = this.props;
-        const currentBusinessOption = appStatus.currentBusinessOption;
-        const currentBusinessMeta = currentBusinessOption.business_meta;
-        const brandColor = (this.state.isChanged) ? this.state.brand_color : currentBusinessMeta.brand_color;
-        const secBrandColor = (this.state.isChanged) ? this.state.sec_brand_color : currentBusinessMeta.sec_brand_color;
-        if (typeof brandColor === 'undefined' || brandColor === '' || typeof secBrandColor === 'undefined' || secBrandColor === '') {
-            addFlashMessage({
-                type: "error",
-                text: "Please select both colours"
-            });
-            return;
-        }
-
-        saveBusinessOption(this, {
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_meta: {
-                brand_color: brandColor,
-                sec_brand_color: secBrandColor
-            }
-        });
     }
 
     render() {
         const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
-        const currentBusinessMeta = currentBusinessOption.business_meta;
-        const brandColor = (this.state.isChanged) ? this.state.brand_color : currentBusinessMeta.brand_color;
-        const secBrandColor = (this.state.isChanged) ? this.state.sec_brand_color : currentBusinessMeta.sec_brand_color;
+        const {brand_color, sec_brand_color} = this.state;
+
+        const optionStatusButtonGroupProps = {
+            status: currentBusinessOption.status,
+            onClickUpdateStatus: this.onClickUpdateStatus,
+        };
         return (
             <div>
                 <ul className="alert-brands-colors">
@@ -133,32 +177,31 @@ class BrandColor extends Component {
                             <input type="text"
                                    onChange={(e) => this.onChangeBrandColor(e)}
                                    className="form-control" name="brand-color" placeholder="eg. #3c5693"
-                                   value={brandColor}
+                                   value={brand_color}
                             />
                             <input type="text"
                                    onChange={(e) => this.onChangeSecBrandColor(e)}
                                    className="form-control" name="sec-brand-color" placeholder="eg. #3c5693"
-                                   value={secBrandColor}
+                                   value={sec_brand_color}
                             />
                         </div>
                     </form>
                 }
                 <ul className="colors-sample">
-                    <li className={classnames("", {"active": this.state.isBrandColorActive})}><a href=""
-                                                                                                 onClick={(e) => this.onClickBrandColor(e)}
-                                                                                                 style={{backgroundColor: brandColor}}></a>
+                    <li className={classnames("", {"active": this.state.isBrandColorActive})}>
+                        <a href=""
+                           onClick={(e) => this.onClickBrandColor(e)}
+                           style={{backgroundColor: brand_color}}></a>
                     </li>
-                    <li className={classnames("", {"active": !this.state.isBrandColorActive})}><a href=""
-                                                                                                  onClick={(e) => this.onClickSecBrandColor(e)}
-                                                                                                  style={{backgroundColor: secBrandColor}}></a>
+                    <li className={classnames("", {"active": !this.state.isBrandColorActive})}>
+                        <a href=""
+                           onClick={(e) => this.onClickSecBrandColor(e)}
+                           style={{backgroundColor: sec_brand_color}}></a>
                     </li>
                 </ul>
-                <a href="#" onClick={(e) => this.onClickDone(e)} className="btn btn-default btn-lg btn-alert">Done</a>
+                <a href="#" onClick={(e) => this.handleSubmit(e)} className="btn btn-default btn-lg btn-alert">Done</a>
 
-                <OptionStatusButtonGroup
-                    current={this}
-                    status={currentBusinessOption.business_business_option_status}
-                />
+                <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>
             </div>
 
         )
@@ -191,6 +234,7 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
+            makeRequest,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,

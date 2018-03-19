@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {setBusinessCategoryId, setCurrentTipCategory, setSellGoods} from "../../../../actions/appStatusAction";
-import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {saveBusinessOption} from "../../../../utils/helper/helperFunctions";
+import {getByKey, isItemLoaded} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
+import {makeRequest} from "../../../../actions/requestAction";
+import request from "../../../../services/request";
+import {MESSAGES} from "../../../../constants/messages";
 
 class Tagline extends Component {
 
@@ -13,8 +14,36 @@ class Tagline extends Component {
         super(props);
         this.state = {
             tagline: '',
+            affiliateLink: {},
             isChanged: false
         };
+    }
+
+    componentDidMount() {
+        const {appStatus} = this.props;
+        const {currentBusinessOption} = appStatus;
+        const {businessMetas, affiliateLinks} = currentBusinessOption;
+
+        const taglineObject = getByKey(businessMetas, 'key', 'tagline');
+        this.setState({
+            ...this.state,
+            tagline: isItemLoaded(taglineObject) ? taglineObject.value : '',
+            affiliateLink: isItemLoaded(affiliateLinks) ? affiliateLinks[0] : {}
+        });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.BusinessOption.save, {
+            id: this.props.appStatus.currentBusinessOption.id,
+            input:{
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                business_meta: {
+                    tagline: this.state.tagline
+                }
+            }
+        }, {message: MESSAGES.SAVING});
     }
 
     onClickNext(e) {
@@ -24,19 +53,34 @@ class Tagline extends Component {
         this.props.getBusinessOptionFromUrl(appStatus.currentBusinessOption.links.next);
     }
 
-    onClickOption(e) {
+    onClickAffiliateLink(e, boId, affId, link) {
         e.preventDefault();
-        saveBusinessOption(this, {
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_meta: {
-                tagline: this.state.tagline
-            }
+
+        this.props.makeRequest(request.Track.click, {
+            boId: boId,
+            affId: affId
         });
+
+        setTimeout(function () {
+            window.open(link, '_blank');
+        }, 1000);
     }
 
-    onChangeTagline(e) {
+    onClickUpdateStatus(e, status) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.BusinessOption.save, {
+            id: this.props.appStatus.currentBusinessOption.id,
+            input:{
+                business_option_status: status
+            }
+        }, {message: MESSAGES.SAVING});
+    };
+
+    onChange(e) {
         e.preventDefault();
         this.setState({
+            ...this.state,
             tagline: e.target.value,
             isChanged: true
         })
@@ -45,30 +89,31 @@ class Tagline extends Component {
     render() {
         const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
-        const currentBusinessMeta = currentBusinessOption.business_meta;
-        const tagline = (this.state.isChanged) ? this.state.tagline : ((currentBusinessMeta.tagline) ? currentBusinessMeta.tagline : '');
+        const {isChanged, tagline} = this.state;
+
+        const optionStatusButtonGroupProps = {
+            status: currentBusinessOption.status,
+            onClickUpdateStatus: this.onClickUpdateStatus,
+        };
 
         return (
             <div>
                 <form className="alert-form">
                     <div className="form-group">
                         <input type="text"
-                               onChange={(e) => this.onChangeTagline(e)}
+                               onChange={(e) => this.onChange(e)}
                                className="form-control" name="alert-name" placeholder="eg. We deliver you safely home"
                                value={tagline}
                         />
                     </div>
                 </form>
                 {
-                    tagline &&
-                    <a onClick={(e) => this.onClickOption(e)} href="#"
+                    isChanged && tagline &&
+                    <a onClick={(e) => this.handleSubmit(e)} href="#"
                        className="btn btn-default btn-lg btn-alert">Done</a>
                 }
 
-                <OptionStatusButtonGroup
-                    current={this}
-                    status={currentBusinessOption.business_business_option_status}
-                />
+                <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>
             </div>
 
         )
@@ -77,17 +122,9 @@ class Tagline extends Component {
 }
 
 Tagline.propTypes = {
-    getBusinessCategories: PropTypes.func.isRequired,
-    setBusinessCategoryId: PropTypes.func.isRequired,
-    setSellGoods: PropTypes.func.isRequired,
-    setCurrentTipCategory: PropTypes.func.isRequired,
     setCurrentBusinessOption: PropTypes.func.isRequired,
-    setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -101,9 +138,6 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
-            setBusinessCategoryId,
-            setSellGoods,
-            setCurrentTipCategory,
-            addFlashMessage
+            makeRequest,
         }
     )(Tagline))

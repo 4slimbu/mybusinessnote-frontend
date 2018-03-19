@@ -36,17 +36,12 @@ class Logo extends Component {
         const {currentBusinessOption} = appStatus;
         const {businessMetas, affiliateLinks} = currentBusinessOption;
 
-        if (isItemLoaded(businessMetas)) {
-            const logoObject = getByKey(businessMetas, 'key', 'logo');
-            if (isItemLoaded(logoObject)) {
-                this.setState({
-                    ...this.state,
-                    logo: logoObject.value,
-                    affiliateLink: isItemLoaded(affiliateLinks) ? affiliateLinks[0] : {}
-                });
-            }
-
-        }
+        const logoObject = getByKey(businessMetas, 'key', 'logo');
+        this.setState({
+            ...this.state,
+            logo: isItemLoaded(logoObject) ? logoObject.value : '',
+            affiliateLink: isItemLoaded(affiliateLinks) ? affiliateLinks[0] : {}
+        });
     }
 
     handleSubmit(e) {
