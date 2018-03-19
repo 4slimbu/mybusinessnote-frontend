@@ -1,4 +1,4 @@
-import {filter, find, findIndex} from "lodash";
+import {filter, find, findIndex, indexOf} from "lodash";
 import {MESSAGES} from "../../constants/messages";
 
 /*
@@ -195,6 +195,15 @@ export function isBusinessOptionLocked(businessOptionStatuses, businessOption) {
 
 export function getStatus(statusCollection, id) {
     let statusObject = find(statusCollection, {id: id});
+    return statusObject ? statusObject : {};
+}
+
+export function getIndexOf(array, value) {
+    return indexOf(array, value);
+}
+
+export function getByKey(collection, key, value) {
+    let statusObject = find(collection, {[key]: value});
     return statusObject ? statusObject : {};
 }
 

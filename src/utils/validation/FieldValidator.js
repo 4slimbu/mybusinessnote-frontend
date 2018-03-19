@@ -55,6 +55,11 @@ export function validate(rule, fieldName, field, inputs) {
                 return toCapitalizedWords(fieldName) + ' is invalid';
             }
             break;
+        case 'abn':
+            if (! (/^\(?(\d{4})\)?[- ]?(\d{4})[- ]?(\d{4})$/.test(field)) ) {
+                return toCapitalizedWords(fieldName) + ' is invalid';
+            }
+            break;
         case 'captcha':
             if (!field) {
                 return 'Please verify that you are human';

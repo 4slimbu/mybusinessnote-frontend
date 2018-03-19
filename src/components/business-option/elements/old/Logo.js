@@ -3,14 +3,15 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    setBusinessCategoryId,
-    setBusinessMeta,
-    setCurrentTipCategory,
+    setBusinessCategoryId, setBusinessMeta, setCurrentTipCategory,
     setSellGoods
 } from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";
-import {mbjLog, saveBusinessOption} from "../../../../utils/helper/helperFunctions";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
+import {makeRequest} from "../../../../actions/requestAction";
+import request from "../../../../services/request";
+import {getByKey, isItemLoaded} from "../../../../utils/helper/helperFunctions";
+import {MESSAGES} from "../../../../constants/messages";
 
 class Logo extends Component {
 
@@ -18,24 +19,51 @@ class Logo extends Component {
         super(props);
         this.state = {
             file: '',
-            imagePreviewUrl: '',
-            isPreview: true
+            logo: '',
+            affiliateLink: {},
+            isPreview: false
         };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.onClickRemove = this.onClickRemove.bind(this);
+        this.onClickNext = this.onClickNext.bind(this);
+        this.onClickAffiliateLink = this.onClickAffiliateLink.bind(this);
+        this.onClickUpdateStatus = this.onClickUpdateStatus.bind(this);
     }
 
-    _handleSubmit(e) {
-        e.preventDefault();
-        mbjLog('handle uploading-', this.state.file);
+    componentDidMount() {
+        const {appStatus} = this.props;
+        const {currentBusinessOption} = appStatus;
+        const {businessMetas, affiliateLinks} = currentBusinessOption;
 
-        saveBusinessOption(this, {
-            business_option_id: this.props.appStatus.currentBusinessOption.id,
-            business_meta: {
-                logo: this.state.imagePreviewUrl
+        if (isItemLoaded(businessMetas)) {
+            const logoObject = getByKey(businessMetas, 'key', 'logo');
+            if (isItemLoaded(logoObject)) {
+                this.setState({
+                    ...this.state,
+                    logo: logoObject.value,
+                    affiliateLink: isItemLoaded(affiliateLinks) ? affiliateLinks[0] : {}
+                });
             }
-        });
+
+        }
     }
 
-    _handleImageChange(e) {
+    handleSubmit(e) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.BusinessOption.save, {
+            id: this.props.appStatus.currentBusinessOption.id,
+            input:{
+                business_option_id: this.props.appStatus.currentBusinessOption.id,
+                business_meta: {
+                    logo: this.state.logo
+                }
+            }
+        }, {message: MESSAGES.SAVING});
+    }
+
+    handleImageChange(e) {
         e.preventDefault();
 
         let reader = new FileReader();
@@ -44,7 +72,7 @@ class Logo extends Component {
         reader.onloadend = () => {
             this.setState({
                 file: file,
-                imagePreviewUrl: reader.result,
+                logo: reader.result,
                 isPreview: true
             });
         };
@@ -55,7 +83,8 @@ class Logo extends Component {
     onClickRemove(e) {
         e.preventDefault();
         this.setState({
-            imagePreviewUrl: '',
+            ...this.state,
+            logo: '',
             isPreview: false
         });
     }
@@ -70,42 +99,51 @@ class Logo extends Component {
     onClickAffiliateLink(e, boId, affId, link) {
         e.preventDefault();
 
-        this.props.trackClick(boId, affId);
+        this.props.makeRequest(request.Track.click, {
+            boId: boId,
+            affId: affId
+        });
 
         setTimeout(function () {
             window.open(link, '_blank');
         }, 1000);
     }
 
+    onClickUpdateStatus(e, status) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.BusinessOption.save, {
+            id: this.props.appStatus.currentBusinessOption.id,
+            input:{
+                business_option_status: status
+            }
+        }, {message: MESSAGES.SAVING});
+    };
+
     render() {
         const {appStatus} = this.props;
         const currentBusinessOption = appStatus.currentBusinessOption;
-        const currentBusinessMeta = currentBusinessOption.business_meta;
-        const affiliateLinkId = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].id : '';
-        const affiliateLinkLabel = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].label : 'Set Up Now';
-        const affiliateLink = (appStatus.currentBusinessOption.affiliate_links[0]) ? appStatus.currentBusinessOption.affiliate_links[0].link : '#';
+        const {logo, affiliateLink} = this.state;
 
-        let imagePreview = null;
-
-        const logo = (this.state.imagePreviewUrl) ? this.state.imagePreviewUrl :
-            ((currentBusinessMeta.logo) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/business-options/' + currentBusinessMeta.logo : null);
-        if (logo) {
-            imagePreview = (<img className="alert-frm-img" src={logo}/>);
-        }
+        const optionStatusButtonGroupProps = {
+            status: currentBusinessOption.status,
+            onClickUpdateStatus: this.onClickUpdateStatus,
+        };
 
         return (
             <div>
-                <form onSubmit={(e) => this._handleSubmit(e)}>
+                <form onSubmit={(e) => this.handleSubmit(e)}>
                     {
-                        (this.state.isPreview && imagePreview) ?
+                        (isItemLoaded(logo)) ?
                             <div>
                                 <span className="remove-wrapper">
-                                    <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}><i
-                                        className="fa fa-remove" aria-hidden="true"></i></a>
-                                    {imagePreview}
+                                    <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}>
+                                        <i className="fa fa-remove" aria-hidden="true"></i>
+                                    </a>
+                                    <img className="alert-frm-img" src={logo}/>
                                 </span>
                                 {
-                                    this.state.imagePreviewUrl ?
+                                    this.state.isPreview ?
                                         <button className="btn btn-default btn-lg btn-done">Done</button>
                                         :
                                         <button onClick={(e) => this.onClickRemove(e)}
@@ -117,21 +155,18 @@ class Logo extends Component {
                                 <li>
                                     <div className="upload-btn-wrapper">
                                         <button className="upload-button">Upload</button>
-                                        <input type="file" name="logo" onChange={(e) => this._handleImageChange(e)}/>
+                                        <input type="file" name="logo" onChange={(e) => this.handleImageChange(e)}/>
                                     </div>
                                 </li>
                                 <li>
-                                    <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
-                                       href={affiliateLink} target="new"
-                                       className="upload-button">{affiliateLinkLabel}</a>
+                                    <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLink.id, affiliateLink.link)}
+                                       href={affiliateLink.link} target="new"
+                                       className="upload-button">{affiliateLink.label}</a>
                                 </li>
                             </ul>
                     }
 
-                    <OptionStatusButtonGroup
-                        current={this}
-                        status={currentBusinessOption.business_business_option_status}
-                    />
+                    <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>
                 </form>
             </div>
 
@@ -149,7 +184,6 @@ Logo.propTypes = {
     setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    saveBusinessOptionFormRequest: PropTypes.func.isRequired,
     getAppStatus: PropTypes.func.isRequired,
     setBusinessMeta: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
@@ -167,6 +201,7 @@ export default withRouter(
     connect(
         mapStateToProps,
         {
+            makeRequest,
             setBusinessCategoryId,
             setSellGoods,
             setCurrentTipCategory,

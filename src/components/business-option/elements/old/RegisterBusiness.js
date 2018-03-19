@@ -92,7 +92,7 @@ class RegisterBusiness extends Component {
         const {appStatus, makeRequest, history} = this.props;
 
         if (appStatus.business.id && !this.state.isChanged) {
-            history.push(ROUTES.REGISTER_ABN);
+            history.push(ROUTES.LEVEL_TWO);
         }
 
         // new data
@@ -104,7 +104,7 @@ class RegisterBusiness extends Component {
             if (this.isFormValid(newData)) {
                 makeRequest(request.business.save, newData).then(
                     (responseData) => {
-                        history.push(ROUTES.REGISTER_ABN);
+                        history.push(ROUTES.LEVEL_TWO);
                     },
                     (errorData) => {
                         this.resetFields();
@@ -128,7 +128,7 @@ class RegisterBusiness extends Component {
                 if (this.isFormValid(changedData)) {
                     makeRequest(request.Business.save, changedData).then(
                         (responseData) => {
-                            history.push(ROUTES.REGISTER_ABN);
+                            history.push(ROUTES.LEVEL_TWO);
                         },
                         (errorData) => {
                             this.resetFields();
