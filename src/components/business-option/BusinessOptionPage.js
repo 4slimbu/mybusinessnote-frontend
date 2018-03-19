@@ -115,7 +115,7 @@ class BusinessOptionPage extends Component {
                                     </div>
                                 </div>
                                 {
-                                    !appStatus.completed_status.level && appStatus.completed_status.section ?
+                                    appStatus.completed_status ?
                                         <div className="completed-section">
                                             <img className="complete-tick"
                                                  src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`}

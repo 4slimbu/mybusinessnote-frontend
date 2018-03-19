@@ -107,26 +107,6 @@ class SignUpForm extends Component {
 
     resetFields() {
         this.setState({
-            first_name: {
-                ...this.state.first_name,
-                isChanged: false,
-                value: ''
-            },
-            last_name: {
-                ...this.state.last_name,
-                isChanged: false,
-                value: ''
-            },
-            email: {
-                ...this.state.email,
-                isChanged: false,
-                value: ''
-            },
-            phone_number: {
-                ...this.state.phone_number,
-                isChanged: false,
-                value: ''
-            },
             password: {
                 ...this.state.password,
                 isChanged: false,

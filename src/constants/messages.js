@@ -2,6 +2,7 @@
 export const MESSAGES = {
     // Loading Message
     LOADING_USER_CHECK: "Checking if user already exist...",
+    SAVING: "Saving...",
     // Success Message
     LOGIN_SUCCESS: "Logged in successfully",
     LOGOUT_SUCCESS: "Logged out successfully",
