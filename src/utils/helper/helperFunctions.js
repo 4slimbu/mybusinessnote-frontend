@@ -311,6 +311,7 @@ export function formatDate(dateString) {
     let options = {day: 'numeric', month: 'long', year: 'numeric'};
     let date = new Date(dateString.replace(' ', 'T'));
 
+    // return dateString;
     return date.toLocaleString("en-US", options);
 }
 

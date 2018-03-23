@@ -3,9 +3,7 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    setBusinessCategoryId,
-    setCurrentTipCategory,
-    setSellGoods,
+    setBusinessCategoryId, setCurrentTipCategory, setSellGoods,
     setToolTipContent
 } from "../../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../../actions/flashMessageAction";

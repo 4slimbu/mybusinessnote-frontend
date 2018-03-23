@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../level/includes/LevelHead";
-import {getAppUrlFromApiUrl} from "../../utils/helper/helperFunctions";
+import {getAppUrlFromApiUrl, getById, getNext} from "../../utils/helper/helperFunctions";
 import {withRouter} from "react-router-dom";
 import Element from "./elements/old/Element";
 
@@ -25,9 +25,11 @@ class BusinessOptionPage extends Component {
     onClickNext(e) {
         e.preventDefault();
         const {
-            currentLevel, currentBusinessOption, getBusinessOption, history,
+            businessOptions, currentLevel, currentSection, currentBusinessOption, getBusinessOption, history,
             setCompletedStatus, addFlashMessage
         } = this.props;
+        const nextId = getNext(currentSection.businessOptions, currentBusinessOption.id);
+        const nextBusinessOption = getById(businessOptions, nextId);
         if (currentLevel.id === 3 && (currentBusinessOption.id === currentLevel.level_last_bo.id)) {
             addFlashMessage({
                 type: "success",
@@ -90,9 +92,9 @@ class BusinessOptionPage extends Component {
                                     back</a>
                                 {
                                     (
-                                        currentBusinessOption.business_business_option_status === 'done' ||
-                                        currentBusinessOption.business_business_option_status === 'skipped' ||
-                                        currentBusinessOption.business_business_option_status === 'irrelevant'
+                                        currentBusinessOption.status === 'done' ||
+                                        currentBusinessOption.status === 'skipped' ||
+                                        currentBusinessOption.status === 'irrelevant'
 
                                     ) && !isEnd &&
                                     <a className="pull-right front-link" href="#" onClick={(e) => this.onClickNext(e)}>
