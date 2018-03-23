@@ -3,52 +3,34 @@ import {map} from "lodash";
 import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {generateAppRelativeUrl, isSectionLocked} from "../../../../utils/helper/helperFunctions";
+import {
+    generateAppRelativeUrl, getCurrentLevelSections, getStatus, isItemLoaded,
+    isSectionLocked
+} from "../../../../utils/helper/helperFunctions";
 import UserInfoLinks from "../../right-sidebar/current-user-box/UserInfoLinks";
 
 class MobileLevelLinks extends Component {
     render() {
-        //get the app status object
-        const {
-            appStatus, addFlashMessage, history, setCurrentLevel, setCurrentSection, setCurrentBusinessOption,
-            setCompletedStatus,
-            getBusinessOptionFromUrl
-        } = this.props;
-        //init levels
-        const levels = appStatus.levels;
-        //init current levels
-        const currentLevel = appStatus.currentLevel;
+        const {appStatus, onClickLevelLink, onClickSectionLink} = this.props;
 
-        //navigate
-        const onClickLevelLink = function (e, url) {
-            e.preventDefault();
-            setCurrentLevel(appStatus.levels[0]);
-            setCurrentSection({});
-            setCurrentBusinessOption({});
-            history.push(url);
-        };
+        const {levels, sections, currentLevel, currentSection, businessStatus} = appStatus;
+
+        const {levelStatuses, sectionStatuses, businessOptionStatuses} = businessStatus;
 
         //generate level list from levels
         const levelsList = map(levels, (level, key) => {
             //generate level Image from level id
+            const levelStatus = getStatus(levelStatuses, level.id);
+            const levelImg = (levelStatus.completed_percent >= 100) ? level.badge_icon : level.icon;
             const levelUrl = generateAppRelativeUrl(level.slug);
-            const levelImg = (level.completed_percent >= 100) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
-                process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
-            const onClickLevelLink = function (e, levelUrl) {
-                e.preventDefault();
-                setCurrentLevel(level);
-                setCurrentSection({});
-                setCurrentBusinessOption({});
-                setCompletedStatus({});
-                history.push(levelUrl);
-            };
+
             return (
                 <li key={level.slug} className={classnames("", {"active": currentLevel.id === level.id})}>
-                    <Link data-toggle="tab" onClick={(e) => onClickLevelLink(e, levelUrl)}
-                          to={`/level/${level.slug}`}
+                    <Link data-toggle="tab" onClick={(e) => onClickLevelLink(e, level)}
+                          to={levelUrl}
                     >
                         {
-                            level.completed_percent >= 100 ?
+                            levelStatus.completed_percent >= 100 ?
                                 <img src={levelImg} alt=""/>
                                 :
                                 <div>
@@ -66,49 +48,31 @@ class MobileLevelLinks extends Component {
         });
 
         const sectionsList = function (level) {
-            return map(level.sections, (section, key) => {
-                const complete = section.completed_percent == 100 ? true : false;
-                const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-                const onClickSectionLink = function (e, sectionUrl) {
-                    e.preventDefault();
-                    if (isSectionLocked(appStatus, level, key)) {
-                        return;
-                    }
+            const currentLevelSections = getCurrentLevelSections(sections, level.id);
 
-                    setCurrentLevel(level);
-                    setCurrentSection(section);
-                    setCompletedStatus({});
-                    getBusinessOptionFromUrl(generateAppRelativeUrl(level.id, section.id));
-                    history.push(sectionUrl);
-                };
-                const lockedClass = isSectionLocked(appStatus, level, key) ? 'locked' : '';
+            return map(currentLevelSections, (section, key) => {
+                const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
+                const isLocked = isSectionLocked(businessOptionStatuses, section);
+                const lockedClass = isLocked ? 'locked' : '';
                 return (
-                    <li key={section.id} className={classnames(lockedClass)}><a href={sectionUrl}
-                                                                                onClick={(e) => onClickSectionLink(e, sectionUrl)}>
-                        {section.name}</a>
+                    <li key={section.id} className={classnames(lockedClass)}>
+                        <a href={sectionUrl} onClick={(e) => onClickSectionLink(e, level, section, isLocked)}>
+                            {section.name}
+                        </a>
                     </li>
                 )
             });
-        }
+        };
 
         //generate level list from levels
         const hamLevelList = map(levels, (level, key) => {
             //generate level Image from level id
             const levelUrl = generateAppRelativeUrl(level.slug);
-            const levelImg = (level.completed_percent >= 100) ? process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.badge_icon :
-                process.env.REACT_APP_API_BASE_IMAGE_URL + '/images/levels/' + level.icon;
-            const onClickLevelLink = function (e, levelUrl) {
-                e.preventDefault();
-                setCurrentLevel(level);
-                setCurrentSection({});
-                setCurrentBusinessOption({});
-                setCompletedStatus({});
-                history.push(levelUrl);
-            };
+
             return (
                 <li key={level.slug} className={classnames("dropdown", {"active open": currentLevel.id === level.id})}>
-                    <Link onClick={(e) => onClickLevelLink(e, levelUrl)}
-                          to={`/level/${level.slug}`}
+                    <Link onClick={(e) => onClickLevelLink(e, level)}
+                          to={levelUrl}
                           className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                           aria-expanded="false"
                     >
@@ -136,7 +100,6 @@ class MobileLevelLinks extends Component {
                                 <span className="icon-bar"></span>
                             </button>
                             <Link to="/"
-                                  onClick={(e) => onClickLevelLink(e, '/')}
                                   className="navbar-brand">
                                 <img src={`${process.env.PUBLIC_URL}/assets/images/mobile-icons/mob-logo.png`} alt=""/>
                             </Link>
@@ -144,14 +107,17 @@ class MobileLevelLinks extends Component {
                         <div id="navbar" className="navbar-collapse collapse" aria-expanded="false"
                              style={{height: '1px'}}>
                             <UserInfoLinks/>
-                            <ul className="nav navbar-nav">
-                                {hamLevelList}
-                            </ul>
+                            {
+                                isItemLoaded(hamLevelList) &&
+                                <ul className="nav navbar-nav">
+                                    {hamLevelList}
+                                </ul>
+                            }
                         </div>
                     </div>
                 </nav>
                 {
-                    (levels.length > 1) &&
+                    isItemLoaded(levels) &&
                     <ul className="nav nav-tabs">
                         {levelsList}
                     </ul>
@@ -163,12 +129,10 @@ class MobileLevelLinks extends Component {
 
 MobileLevelLinks.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired,
-    setCompletedStatus: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    setCurrent: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
+    onClickLevelLink: PropTypes.func.isRequired,
+    onClickSectionLink: PropTypes.func.isRequired,
 };
 
 export default withRouter(MobileLevelLinks);

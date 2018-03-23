@@ -8,6 +8,7 @@ import {setCurrent} from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl, getById, getFirst} from "../../../utils/helper/helperFunctions";
+import MobileNavLinks from "./navigation/MobileNavLinks";
 
 class LeftSideBarContainer extends Component {
     constructor(props) {
@@ -58,7 +59,15 @@ class LeftSideBarContainer extends Component {
             onClickSectionLink: this.onClickSectionLink
         };
 
-        const mobileNavLinksProps = {};
+        const mobileNavLinksProps = {
+            appStatus: appStatus,
+            setCurrent: setCurrent,
+            setCompletedStatus: setCompletedStatus,
+            getBusinessOptionFromUrl: getBusinessOptionFromUrl,
+            addFlashMessage: addFlashMessage,
+            onClickLevelLink: this.onClickLevelLink,
+            onClickSectionLink: this.onClickSectionLink
+        };
 
         const completed_percent = appStatus.currentLevel.completed_percent ? appStatus.currentLevel.completed_percent : 0;
 
@@ -74,7 +83,7 @@ class LeftSideBarContainer extends Component {
                     </div>
                 </section>
                 <section className="hidden-sm hidden-md hidden-lg content-block">
-                    {/*<MobileNavLinks {...mobileNavLinksProps}/>*/}
+                    <MobileNavLinks {...mobileNavLinksProps}/>
 
                     <div className="progress">
                         <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
