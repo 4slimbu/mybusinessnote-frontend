@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import * as classnames from "classnames";
 
-const TextFieldGroup = ({fieldObject, error, onChange, onBlur}) => {
+const TextFieldGroup = ({fieldObject, error, onChange, onBlur, disabled}) => {
     return (
         <div className="form-group">
             <label>{fieldObject.label}</label>
@@ -14,6 +14,7 @@ const TextFieldGroup = ({fieldObject, error, onChange, onBlur}) => {
                 name={fieldObject.name}
                 placeholder={fieldObject.placeholder}
                 className={classnames("form-control", {"form-error": error})}
+                disabled={disabled}
             />
             {error && <span className="form-error-message">{error}</span>}
         </div>
@@ -24,7 +25,8 @@ TextFieldGroup.propTypes = {
     fieldObject: PropTypes.object.isRequired,
     error: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    onBlur: PropTypes.func
+    onBlur: PropTypes.func,
+    disabled: PropTypes.bool
 };
 
 export default TextFieldGroup;

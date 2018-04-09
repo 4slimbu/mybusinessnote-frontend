@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import ToolTip from "./tooltip/ToolTip";
 import {makeRequest} from "../../../actions/requestAction";
 import {setNews} from "../../../actions/newsAction";
+import {isItemLoaded} from "../../../utils/helper/helperFunctions";
 
 class RightSideBar extends Component {
 
@@ -36,7 +37,7 @@ class RightSideBar extends Component {
                         <UserInfoLinks/>
                     </div>
                     {
-                        toolTip &&
+                        isItemLoaded(toolTip) &&
                         <ToolTip {...toolTip}/>
                     }
                     <div className="news-events-wrap">

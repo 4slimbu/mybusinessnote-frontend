@@ -1,4 +1,4 @@
-import {filter, find, findIndex, indexOf} from "lodash";
+import {filter, find, findIndex, has, indexOf, intersectionBy, intersectionWith, map} from "lodash";
 import {MESSAGES} from "../../constants/messages";
 
 /*
@@ -43,6 +43,92 @@ export function mbjLog(name, data = null, level = 'info') {
         }
     }
 }
+
+/**
+ * Transform 'slug_string' or 'camelCaseString' or 'any type of string' to 'Capitalized Words'
+ *
+ * @param string
+ * @returns {string}
+ */
+export function toCapitalizedWords(string) {
+    const newString = string.replace(/([A-Z])/g, ' $1')
+        .replace(/([_])/g, ' ');
+
+    return firstOfEachWordToUppercase(newString);
+}
+
+/**
+ * Capitalize first letter of each words in a string
+ *
+ * @param str
+ * @returns {string}
+ */
+export function firstOfEachWordToUppercase(str) {
+    let array = str.split(' ');
+    let newArray = [];
+
+    for (let x = 0; x < array.length; x++) {
+        newArray.push(array[x].charAt(0).toUpperCase() + array[x].slice(1));
+    }
+
+    return newArray.join(' ');
+}
+
+/**
+ * Format Date to user friendly string
+ *
+ * @param dateString
+ * @returns {string}
+ */
+export function formatDate(dateString) {
+    let options = {day: 'numeric', month: 'long', year: 'numeric'};
+    let date = new Date(dateString.replace(' ', 'T'));
+
+    // return dateString;
+    return date.toLocaleString("en-US", options);
+}
+
+/*
+==========================================================================
+Form Handling Helper Functions
+==========================================================================
+ */
+export function getAllFields(stateObject) {
+    const fields = {};
+
+    map(stateObject, (item, key) => {
+        if (item.value) {
+            fields[key] = item.value;
+        }
+    });
+
+    return fields;
+}
+
+export function getChangedFields(stateObject) {
+    const fields = {};
+
+    map(stateObject, (item, key) => {
+        if (item.isChanged) {
+            fields[key] = item.value;
+        }
+    });
+
+    return fields;
+}
+
+export function getRulesForChangedFields(rules, fields) {
+    const filteredRules = {};
+
+    map(rules, (rule, key) => {
+        if (has(fields, key)) {
+            filteredRules[key] = rule;
+        }
+    });
+
+    return filteredRules;
+}
+
 
 /*
 ==========================================================================
@@ -270,49 +356,6 @@ export function isItemLoaded(item) {
     }
 
     return !!(Object.keys(item).length > 0);
-}
-
-/*
-==========================================================================
-String Helper Functions
-==========================================================================
- */
-/**
- * Transform 'slug_string' or 'camelCaseString' or 'any type of string' to 'Capitalized Words'
- *
- * @param string
- * @returns {string}
- */
-export function toCapitalizedWords(string) {
-    const newString = string.replace(/([A-Z])/g, ' $1')
-        .replace(/([_])/g, ' ');
-
-    return firstOfEachWordToUppercase(newString);
-}
-
-/**
- * Capitalize first letter of each words in a string
- *
- * @param str
- * @returns {string}
- */
-export function firstOfEachWordToUppercase(str) {
-    let array = str.split(' ');
-    let newArray = [];
-
-    for (let x = 0; x < array.length; x++) {
-        newArray.push(array[x].charAt(0).toUpperCase() + array[x].slice(1));
-    }
-
-    return newArray.join(' ');
-}
-
-export function formatDate(dateString) {
-    let options = {day: 'numeric', month: 'long', year: 'numeric'};
-    let date = new Date(dateString.replace(' ', 'T'));
-
-    // return dateString;
-    return date.toLocaleString("en-US", options);
 }
 
 /*

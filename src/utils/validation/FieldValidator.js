@@ -3,16 +3,30 @@ import isEmpty from "lodash/isEmpty";
 import {map} from "lodash";
 import {toCapitalizedWords} from "../helper/helperFunctions";
 
+/*
+inputs = {
+    first_name: 'first name',
+    email: 'email@exampl.com',
+    password: 'password',
+    confirm_password: 'confirm_password'
+}
+rules = {
+    first_name: 'required',
+    confirm_password: 'match:password'
+ */
 export function validateFields(inputs, rules) {
     let errors = {};
-    map(inputs, (input, inputKey) => {
-        if (rules[inputKey]) {
-            let ruleTypes = rules[inputKey].split('|');
+    // loop through each rules
+    map(rules, (rule, ruleKey) => {
+        if (inputs[ruleKey]) {
+            let ruleTypes = rule.split('|');
             map(ruleTypes, (ruleType, key) => {
-                if (!errors[inputKey] && validate(ruleType, inputKey, input, inputs)) {
-                    errors[inputKey] = validate(ruleType, inputKey, input, inputs);
+                if (!errors[ruleKey] && validate(ruleType, ruleKey, inputs[ruleKey], inputs)) {
+                    errors[ruleKey] = validate(ruleType, ruleKey, inputs[ruleKey], inputs);
                 }
             })
+        } else {
+            errors[ruleKey] = toCapitalizedWords(ruleKey) + ' is required';
         }
 
     });

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import Brand from "./brand/Brand";
 import LevelLinks from "./navigation/LevelLinks";
@@ -7,7 +7,7 @@ import {logout} from "../../../actions/authActions";
 import {setCurrent} from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import PropTypes from "prop-types";
-import {generateAppRelativeUrl, getById, getFirst} from "../../../utils/helper/helperFunctions";
+import {generateAppRelativeUrl, getById, getFirst, publicUrl} from "../../../utils/helper/helperFunctions";
 import MobileNavLinks from "./navigation/MobileNavLinks";
 
 class LeftSideBarContainer extends Component {
@@ -75,7 +75,11 @@ class LeftSideBarContainer extends Component {
             appStatus.levels &&
             <div>
                 <section className="hidden-xs left-sec bg-navy">
-                    <Brand/>
+                    <Link to="/" className="site-branding">
+                        <img src={`${publicUrl()}/assets/images/app_logo_256.png`} alt=""/>
+                    </Link>
+                    <h3 className="tagline-head">Let your <br/>journey begins</h3>
+
                     <div className="menu-accordion">
                         <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
                             <LevelLinks {...levelLinksProps}/>

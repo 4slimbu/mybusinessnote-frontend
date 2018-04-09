@@ -43,7 +43,10 @@ const SectionGridList = (props) => {
 };
 
 SectionGridList.propTypes = {
-    level: PropTypes.object.isRequired
+    appStatus: PropTypes.object.isRequired,
+    currentLevel: PropTypes.object.isRequired,
+    onClickSectionLink: PropTypes.func.isRequired,
+    onHandleToolTip: PropTypes.func.isRequired,
 };
 
 export default SectionGridList;

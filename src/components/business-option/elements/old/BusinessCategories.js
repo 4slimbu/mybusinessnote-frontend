@@ -41,7 +41,7 @@ class BusinessCategories extends Component {
     }
 
     handleSelect(e, id) {
-        e.preventDefault();
+        e.persist();
         if (this.props.auth.isAuthenticated) {
             this.props.makeRequest(request.Business.save, {
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
@@ -149,14 +149,10 @@ class BusinessCategories extends Component {
 }
 
 BusinessCategories.propTypes = {
-    getBusinessCategories: PropTypes.func.isRequired,
     setBusinessCategoryId: PropTypes.func.isRequired,
     setSellGoods: PropTypes.func.isRequired,
     setCurrentTipCategory: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
-    getBusinessOption: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     setToolTipContent: PropTypes.func.isRequired
 };

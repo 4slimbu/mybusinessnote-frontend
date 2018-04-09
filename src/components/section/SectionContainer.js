@@ -11,10 +11,11 @@ import {
     getById,
     getBySlug,
     getFirst,
-    isItemLoaded
+    isItemLoaded, isSectionLocked
 } from "../../utils/helper/helperFunctions";
 import request from "../../services/request";
 import {setCurrent} from "../../actions/appStatusAction";
+import {ROUTES} from "../../constants/routes";
 
 class SectionContainer extends Component {
 
@@ -31,24 +32,34 @@ class SectionContainer extends Component {
     }
 
     componentDidMount() {
-        this.bootstrap(this.props.location.pathname);
+        this.bootstrap(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.bootstrap(nextProps.location.pathname)
+            this.bootstrap(nextProps)
         }
     }
 
-    bootstrap(location) {
+    bootstrap(props) {
         //initialize
-        let {levels, sections, businessOptions} = this.props.appStatus;
-        let levelSlug = extractLevelFromLocation(location);
-        let sectionSlug = extractSectionFromLocation(location);
-        let boId = extractBoIdFromLocation(location);
+        let {auth, appStatus, history} = props;
+        let {levels, sections, businessOptions, businessOptionStatuses} = appStatus;
+        let pathname = props.location.pathname;
+        let levelSlug = extractLevelFromLocation(pathname);
+        let sectionSlug = extractSectionFromLocation(pathname);
+        let boId = extractBoIdFromLocation(pathname);
 
         let currentLevel = getBySlug(levels, levelSlug);
         let currentSection = getBySlug(sections, sectionSlug);
+
+        // redirect to home if not verified and section is locked
+        if (!auth.isVerified && isSectionLocked(businessOptionStatuses, currentSection)) {
+            props.setCurrent();
+            history.push(ROUTES.HOME);
+        }
+
+        // check if url has business option id
         if (!boId) {
             boId = getFirst(currentSection.businessOptions);
         }

@@ -12,18 +12,18 @@ class NewsList extends Component {
     }
 
     componentDidMount() {
-        this.bootstrap();
+        this.bootstrap(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.bootstrap();
+            this.bootstrap(nextProps);
         }
     }
 
-    bootstrap() {
-        const {makeRequest, news, setNews} = this.props;
-        const {pathname} = this.props.location;
+    bootstrap(props) {
+        const {makeRequest, news, setNews} = props;
+        const {pathname} = props.location;
         const sectionSlug = extractSectionFromLocation(pathname);
         const tag = (sectionSlug) ? sectionSlug : 'general';
         if (!news[tag]) {

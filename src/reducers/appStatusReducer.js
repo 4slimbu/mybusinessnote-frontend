@@ -37,13 +37,13 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 businessStatus: action.businessStatus
             };
         case SET_CURRENT :
-            const currentLevel = (action.current.level && state.currentLevel.id === action.current.level.id) ?
+            const currentLevel = (action.current.level && state.currentLevel && state.currentLevel.id === action.current.level.id) ?
                 merge(state.currentLevel, action.current.level.id)
                 : action.current.level;
-            const currentSection = (action.current.section && state.currentSection.id === action.current.section.id) ?
+            const currentSection = (action.current.section && state.currentSection && state.currentSection.id === action.current.section.id) ?
                 merge(state.currentSection, action.current.section)
                 : action.current.section;
-            const currentBusinessOption = (action.current.businessOption && state.currentBusinessOption.id === action.current.businessOption.id) ?
+            const currentBusinessOption = (action.current.businessOption && state.currentBusinessOption && state.currentBusinessOption.id === action.current.businessOption.id) ?
                 merge(state.currentBusinessOption, action.current.businessOption)
                 : action.current.businessOption;
 

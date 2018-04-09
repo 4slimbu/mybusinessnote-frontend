@@ -3,15 +3,8 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    extractLevelFromLocation,
-    generateAppRelativeUrl,
-    getBySlug,
-    getCurrentLevelByUrl,
-    getCurrentLevelSections,
-    getFirst,
-    getNext,
-    isItemLoaded,
-    isLevelLocked,
+    extractLevelFromLocation, generateAppRelativeUrl, getBySlug, getCurrentLevelByUrl, getCurrentLevelSections,
+    getFirst, getNext, isItemLoaded, isLevelLocked,
 } from "../../utils/helper/helperFunctions";
 import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
 import LevelCompletePage from "./pages/LevelCompletePage";
@@ -37,17 +30,18 @@ class LevelContainer extends Component {
     }
 
     componentDidMount() {
-        this.bootstrap(this.props, this.props.location.pathname);
+        this.bootstrap(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.bootstrap(nextProps, nextProps.location.pathname)
+            this.bootstrap(nextProps);
         }
     }
 
-    bootstrap(props, location) {
+    bootstrap(props) {
         const {levels} = props.appStatus;
+        const location = props.location.pathname;
         const levelSlug = extractLevelFromLocation(location);
         const currentLevel = getBySlug(levels, levelSlug);
         props.setCurrent(currentLevel);
@@ -109,34 +103,45 @@ class LevelContainer extends Component {
 
     displayToolTip(props, id = 0) {
         const {setToolTipContent, appStatus} = props;
-        const {currentLevel} = appStatus;
-        const toolTipList = map(getCurrentLevelSections(appStatus.sections, currentLevel.id), (item, key) => {
-            const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
-            return (
-                <Panel key={key} eventKey={item.id}>
-                    <Panel.Heading>
-                        <Panel.Title toggle>
-                            <h4>
-                                <span className="accordion-titles">{title}</span>
-                                <span className="acc-img"></span>
-                            </h4>
-                        </Panel.Title>
-                    </Panel.Heading>
-                    <Panel.Body collapsible>
-                        <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}}/>
-                    </Panel.Body>
-                </Panel>
-            )
-        });
-
+        const {levels} = appStatus;
+        const pathname = props.location.pathname;
+        const levelSlug = extractLevelFromLocation(pathname);
+        const currentLevel = getBySlug(levels, levelSlug);
         const toolTip = {};
+
+        // Set tooltip content for level
         toolTip.rawHtmlContent = currentLevel.tooltip;
-        toolTip.accordion = (
-            <PanelGroup accordion id={`accordion-uncontrolled-level-three-sections`} activeKey={id}
-                        onSelect={(newKey) => this.onHandleToolTipSelect(newKey)}>
-                {toolTipList}
-            </PanelGroup>
-        );
+
+        // Set tooltip accordion for levels other than level 1
+        if (currentLevel.id !== 1) {
+            const toolTipList = map(getCurrentLevelSections(appStatus.sections, currentLevel.id), (item, key) => {
+                const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
+                return (
+                    <Panel key={key} eventKey={item.id}>
+                        <Panel.Heading>
+                            <Panel.Title toggle>
+                                <h4>
+                                    <span className="accordion-titles">{title}</span>
+                                    <span className="acc-img"></span>
+                                </h4>
+                            </Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Body collapsible>
+                            <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}}/>
+                        </Panel.Body>
+                    </Panel>
+                )
+            });
+
+            toolTip.accordion = (
+                <PanelGroup accordion id={`accordion-uncontrolled-level-three-sections`} activeKey={id}
+                            onSelect={(newKey) => this.onHandleToolTipSelect(newKey)}>
+                    {toolTipList}
+                </PanelGroup>
+            );
+        }
+
+        // Dispatch action to set tooltip content
         setToolTipContent(toolTip);
     }
 
@@ -172,14 +177,7 @@ class LevelContainer extends Component {
 
 LevelContainer.propTypes = {
     appStatus: PropTypes.object.isRequired,
-    getBusinessOption: PropTypes.func.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired,
-    setCompletedStatus: PropTypes.func.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
-    getCurrentLevelByUrl: PropTypes.func.isRequired,
-    setShowCompletedPage: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired
 };
 
@@ -191,7 +189,6 @@ function mapStateToProps(state) {
 
 export default withRouter(connect(mapStateToProps, {
     setCurrent,
-    getCurrentLevelByUrl,
     addFlashMessage,
     setToolTipContent,
 })(LevelContainer));

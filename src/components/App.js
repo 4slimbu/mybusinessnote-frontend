@@ -14,27 +14,36 @@ import request from "../services/request";
 import {setNews} from "../actions/newsAction";
 import LoadingMessage from "./layout/loading/LoadingMessage";
 import {isItemLoaded, publicUrl} from "../utils/helper/helperFunctions";
+import {setToolTipContent} from "../actions/appStatusAction";
+import {ROUTES} from "../constants/routes";
 
 class App extends Component {
 
     componentDidMount() {
-        this.bootstrap();
+        this.bootstrap(this.props);
     }
 
-    bootstrap() {
-        this.props.makeRequest(request.Level.all);
-        this.props.makeRequest(request.BusinessOption.all);
-        this.props.makeRequest(request.BusinessCategory.all);
-        if (this.props.auth.isAuthenticated) {
-            this.props.makeRequest(request.Business.getStatus);
-            this.props.makeRequest(request.Business.get);
+    componentWillReceiveProps(nextProps) {
+        if (this.props.location.pathname !== nextProps.location.pathname) {
+            nextProps.setToolTipContent({});
         }
-        this.props.makeRequest(request.News.byTag, 'general').then(responseData => {
-            this.props.setNews({
+    }
+
+    bootstrap(props) {
+        props.makeRequest(request.Level.all);
+        props.makeRequest(request.BusinessOption.all);
+        props.makeRequest(request.BusinessCategory.all);
+        if (props.auth.isAuthenticated) {
+            props.makeRequest(request.Business.getStatus);
+            props.makeRequest(request.Business.get);
+        }
+        props.makeRequest(request.News.byTag, 'general').then(responseData => {
+            props.setNews({
                 tag: 'general',
                 news: responseData
             });
-        })
+        });
+
     }
 
     isAppReady() {
@@ -83,5 +92,6 @@ function mapStateToProps(state) {
 
 export default withRouter(connect(mapStateToProps, {
     makeRequest,
+    setToolTipContent,
     setNews,
 })(App));

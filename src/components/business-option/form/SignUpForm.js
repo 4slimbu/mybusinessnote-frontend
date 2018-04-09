@@ -7,10 +7,24 @@ import {validateFields} from "../../../utils/validation/FieldValidator";
 import request from "../../../services/request";
 import {ROUTES} from "../../../constants/routes";
 import {MESSAGES} from "../../../constants/messages";
+import {getAllFields, getChangedFields, getRulesForChangedFields} from "../../../utils/helper/helperFunctions";
 
 class SignUpForm extends Component {
     constructor(props) {
         super(props);
+
+        // All required rules
+        this.rules = {
+            first_name: 'required',
+            last_name: 'required',
+            email: 'required|email',
+            phone_number: 'required|phone_number',
+            password: 'required|min:8|lowercase|uppercase|num|specialChar|max:20',
+            confirm_password: 'match:password',
+            captcha_response: 'captcha'
+        };
+
+        // Initial State
         this.state = {
             first_name: {
                 isChanged: false,
@@ -66,11 +80,18 @@ class SignUpForm extends Component {
                 oldValue: "",
                 type: "password"
             },
-            captcha_response: "",
+            captcha_response: {
+                isChanged: false,
+                label: "Captcha",
+                name: "captcha_response",
+                value: "",
+            },
             errorCode: '',
             errors: {},
             isChanged: false,
         };
+
+        // Binding Methods
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onReceiveCaptchaResponse = this.onReceiveCaptchaResponse.bind(this);
@@ -82,6 +103,8 @@ class SignUpForm extends Component {
         const {auth} = this.props;
         if (auth.isAuthenticated) {
             const {user} = auth;
+
+            // Set data from store
             const newState = {
                 ...this.state,
                 first_name: {
@@ -125,8 +148,19 @@ class SignUpForm extends Component {
     }
 
     onChange(e) {
+        let currentFieldName, currentFieldValue;
 
-        if (e.target.name === 'password' && e.target.value === '') {
+        // Check for captcha response
+        if (typeof  e === 'string') {
+            currentFieldName = 'captcha_response';
+            currentFieldValue = e;
+        } else {
+            currentFieldName = e.target.name;
+            currentFieldValue = e.target.value;
+        }
+
+        // If no password then no need for confirm password
+        if (currentFieldName === 'password' && currentFieldValue === '') {
             this.setState({
                 confirm_password: {
                     ...this.state.confirm_password,
@@ -135,35 +169,37 @@ class SignUpForm extends Component {
             })
         }
 
+        // Update the states with new field value
         this.setState({
-            [e.target.name]: {
-                ...this.state[e.target.name],
-                value: e.target.value,
+            [currentFieldName]: {
+                ...this.state[currentFieldName],
+                value: currentFieldValue,
                 isChanged: true
             },
             isChanged: true
         }, function () {
-            const dataObject = {};
-            if (this.state.first_name.isChanged) {
-                dataObject.first_name = this.state.first_name.value
-            }
-            if (this.state.last_name.isChanged) {
-                dataObject.last_name = this.state.last_name.value
-            }
-            if (this.state.email.isChanged) {
-                dataObject.email = this.state.email.value
-            }
-            if (this.state.phone_number.isChanged) {
-                dataObject.phone_number = this.state.phone_number.value
-            }
-            if (this.state.password.isChanged) {
-                dataObject.password = this.state.password.value
-            }
-            if (this.state.confirm_password.isChanged) {
-                dataObject.confirm_password = this.state.confirm_password.value
+            const changedField = {[currentFieldName]: currentFieldValue};
+            const allFields = getAllFields(this.state);
+            const rules = getRulesForChangedFields(this.rules, changedField);
+            const {errors, isValid} = validateFields(allFields, rules);
+
+            if (! isValid) {
+                this.setState({
+                    errors: {
+                        ...this.state.errors,
+                        ...errors
+                    }
+                });
+            } else {
+                const errors = {...this.state.errors};
+                if (errors[currentFieldName]) {
+                    delete errors[currentFieldName];
+                }
+                this.setState({
+                    errors: errors
+                });
             }
 
-            this.isFormValid(dataObject);
         });
 
 
@@ -173,18 +209,10 @@ class SignUpForm extends Component {
      * Validates Form fields
      *
      * @param dataObject - is an object containing field key:value pair
+     * @param rules
      * @returns bool
      */
-    isFormValid(dataObject) {
-        const rules = {
-            first_name: 'required',
-            last_name: 'required',
-            email: 'required|email',
-            phone_number: 'required|phone_number',
-            password: 'required|min:8|lowercase|uppercase|num|specialChar|max:20',
-            confirm_password: 'match:password',
-            captcha_response: 'captcha'
-        };
+    isFormValid(dataObject, rules) {
         const {errors, isValid} = validateFields(dataObject, rules);
 
         this.setState({
@@ -200,64 +228,39 @@ class SignUpForm extends Component {
 
         if (auth.isAuthenticated && !this.state.isChanged) {
             history.push(ROUTES.ADD_BUSINESS_DETAILS);
+            return;
         }
 
-        const dataObject = {
-            first_name: this.state.first_name.value,
-            last_name: this.state.last_name.value,
-            email: this.state.email.value,
-            phone_number: this.state.phone_number.value,
-            password: this.state.password.value,
-            confirm_password: this.state.confirm_password.value,
-            captcha_response: this.state.captcha_response
-        };
+        const allFields = getAllFields(this.state);
+        const changedFields = getChangedFields(this.state);
+        const rulesForChangedFields = getRulesForChangedFields(this.rules, changedFields);
 
-        if (this.isFormValid(dataObject)) {
-            if (auth.isAuthenticated) {
-                makeRequest(request.Auth.save, {
-                    first_name: this.state.first_name.value,
-                    last_name: this.state.last_name.value,
-                    email: this.state.email.value,
-                    phone_number: this.state.phone_number.value,
-                    password: this.state.password.value,
-                    confirm_password: this.state.confirm_password.value,
-                    captcha_response: this.state.captcha_response
-                }).then(
-                    (responseData) => {
-                        history.push(ROUTES.ADD_BUSINESS_DETAILS);
-                    },
-                    (errorData) => {
-                        this.resetFields();
-                        this.setState({
-                            errorCode: errorData.errorCode ? errorData.errorCode : '',
-                            errors: errorData.errors ? errorData.errors : {}
-                        });
-                    }
-                );
-            } else {
-                makeRequest(request.Auth.register, {
-                    first_name: this.state.first_name.value,
-                    last_name: this.state.last_name.value,
-                    email: this.state.email.value,
-                    phone_number: this.state.phone_number.value,
-                    password: this.state.password.value,
-                    confirm_password: this.state.confirm_password.value,
-                    business_category_id: appStatus.business.business_category_id,
-                    sell_goods: appStatus.business.sell_goods,
-                    captcha_response: this.state.captcha_response
-                }).then(
-                    (responseData) => {
-                        history.push(ROUTES.ADD_BUSINESS_DETAILS);
-                    },
-                    (errorData) => {
-                        this.resetFields();
-                        this.setState({
-                            errorCode: errorData.errorCode ? errorData.errorCode : '',
-                            errors: errorData.errors ? errorData.errors : {}
-                        });
-                    }
-                );
-            }
+        if (auth.isAuthenticated && this.isFormValid(allFields, rulesForChangedFields)) {
+            makeRequest(request.Auth.save, changedFields, {message: MESSAGES.SAVING}).then(
+                (responseData) => {
+                    history.push(ROUTES.ADD_BUSINESS_DETAILS);
+                },
+                (errorData) => {
+                    this.resetFields();
+                    this.setState({
+                        errorCode: errorData.errorCode ? errorData.errorCode : '',
+                        errors: errorData.errors ? errorData.errors : {}
+                    });
+                }
+            );
+        } else if (!auth.isAuthenticated && this.isFormValid(allFields, this.rules)) {
+            makeRequest(request.Auth.register, changedFields, {message: MESSAGES.SAVING}).then(
+                (responseData) => {
+                    history.push(ROUTES.ADD_BUSINESS_DETAILS);
+                },
+                (errorData) => {
+                    this.resetFields();
+                    this.setState({
+                        errorCode: errorData.errorCode ? errorData.errorCode : '',
+                        errors: errorData.errors ? errorData.errors : {}
+                    });
+                }
+            );
         }
     }
 
@@ -266,7 +269,9 @@ class SignUpForm extends Component {
             email: this.state.email.value,
         };
 
-        if (this.isFormValid(data)) {
+        const rules = getRulesForChangedFields(this.rules, data);
+        const {errors, isValid} = validateFields(data, rules);
+        if (isValid) {
 
             this.props.makeRequest(request.Auth.checkIfExists, data, {message: MESSAGES.LOADING_USER_CHECK}).then(
                 (responseData) => {
@@ -292,25 +297,33 @@ class SignUpForm extends Component {
     }
 
     render() {
-        const {appStatus} = this.props;
+        const {appStatus, auth} = this.props;
         const errors = this.state.errors;
 
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
                 <TextFieldGroup fieldObject={this.state.first_name} onChange={this.onChange} error={errors.first_name}/>
                 <TextFieldGroup fieldObject={this.state.last_name} onChange={this.onChange} error={errors.last_name}/>
-                <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} onBlur={this.checkIfUserExists} error={errors.email}/>
-                <TextFieldGroup fieldObject={this.state.phone_number} onChange={this.onChange} error={errors.phone_number}/>
-                <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password}/>
-                <TextFieldGroup fieldObject={this.state.confirm_password} onChange={this.onChange} error={errors.confirm_password}/>
+                <TextFieldGroup fieldObject={this.state.email} onChange={this.onChange} onBlur={this.checkIfUserExists}
+                                error={errors.email} disabled={auth.isAuthenticated}/>
+                <TextFieldGroup fieldObject={this.state.phone_number} onChange={this.onChange}
+                                error={errors.phone_number}/>
+                {
+                    !auth.isAuthenticated &&
+                    <div>
+                        <TextFieldGroup fieldObject={this.state.password} onChange={this.onChange} error={errors.password}/>
+                        <TextFieldGroup fieldObject={this.state.confirm_password} onChange={this.onChange}
+                                        error={errors.confirm_password}/>
+                        <div className="form-group re-captcha">
+                            <ReCAPTCHA
+                                sitekey="6LfTLEUUAAAAAH0_f9L8VcdN2c_oJHqEFyAncjMX"
+                                onChange={this.onChange}
+                            />
+                            {errors.captcha_response && <span className="form-error-message">{errors.captcha_response}</span>}
+                        </div>
+                    </div>
+                }
 
-                <div className="form-group re-captcha">
-                    <ReCAPTCHA
-                        sitekey="6LfTLEUUAAAAAH0_f9L8VcdN2c_oJHqEFyAncjMX"
-                        onChange={this.onReceiveCaptchaResponse}
-                    />
-                    {errors.captcha_response && <span className="form-error-message">{errors.captcha_response}</span>}
-                </div>
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Continue</button>
                 </div>
