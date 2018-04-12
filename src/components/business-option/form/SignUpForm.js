@@ -251,6 +251,7 @@ class SignUpForm extends Component {
         } else if (!auth.isAuthenticated && this.isFormValid(allFields, this.rules)) {
             makeRequest(request.Auth.register, changedFields, {message: MESSAGES.SAVING}).then(
                 (responseData) => {
+                    makeRequest(request.Business.getStatus, {}, {message: MESSAGES.REFRESHING});
                     history.push(ROUTES.ADD_BUSINESS_DETAILS);
                 },
                 (errorData) => {
