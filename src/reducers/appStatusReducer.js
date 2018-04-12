@@ -32,9 +32,10 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 businessOptions: action.businessOptions
             };
         case SET_BUSINESS_STATUS:
+            const businessStatus = merge(state.businessStatus, action.businessStatus);
             return {
                 ...state,
-                businessStatus: action.businessStatus
+                businessStatus: businessStatus
             };
         case SET_CURRENT :
             const currentLevel = (action.current.level && state.currentLevel && state.currentLevel.id === action.current.level.id) ?

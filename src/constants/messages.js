@@ -9,6 +9,7 @@ export const MESSAGES = {
     LOGOUT_SUCCESS: "Logged out successfully",
     SAVED: "Saved",
     UPDATED: "Updated",
+    VERIFIED: "User verified successfully",
     FORGOT_EMAIL_SENT: "Forgot password email sent",
     PASSWORD_UPDATED: "Password updated successfully",
     USER_REGISTERED: "Registered successfully",

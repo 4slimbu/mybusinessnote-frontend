@@ -4,7 +4,7 @@ export const DEFAULT_APP_STATUS = {
     levels: [],
     sections: [],
     businessOptions: [],
-    businessStatus: [{levelStatuses: {}, sectionStatuses: {}, businessOptionStatuses: {}}],
+    businessStatus: {levelStatuses: [], sectionStatuses: [], businessOptionStatuses: []},
     currentLevel: {},
     currentSection: {},
     currentBusinessOption: {},
