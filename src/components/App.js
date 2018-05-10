@@ -36,12 +36,12 @@ class App extends Component {
             props.makeRequest(request.Business.getStatus);
             props.makeRequest(request.Business.get);
         }
-        props.makeRequest(request.News.byTag, 'general').then(responseData => {
-            props.setNews({
-                tag: 'general',
-                news: responseData
-            });
-        });
+        // props.makeRequest(request.News.byTag, 'general').then(responseData => {
+        //     props.setNews({
+        //         tag: 'general',
+        //         news: responseData
+        //     });
+        // });
 
     }
 

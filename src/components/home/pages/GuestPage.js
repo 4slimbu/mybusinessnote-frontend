@@ -7,7 +7,7 @@ const GuestPage = (props) => {
         <div className="row">
             <div className="col-md-12">
                 <div className="btn-wrap">
-                    <p>Want to start a fresh new business journey?</p>
+                    <p>Want to start a new business journey?</p>
                     <Link className="btn btn-default btn-md" to="/level/getting-started"
                           onClick={(e) => onClickStart(e)}>Click Here.</Link>
                 </div>

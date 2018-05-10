@@ -16,10 +16,10 @@ class SectionPage extends Component {
     }
 
     componentDidMount() {
-        this.$el = $(this.el);
-        this.$el.mCustomScrollbar({
-            mouseWheel: {scrollAmount: 300}
-        });
+        // this.$el = $(this.el);
+        // this.$el.mCustomScrollbar({
+        //     mouseWheel: {scrollAmount: 300}
+        // });
     }
 
 

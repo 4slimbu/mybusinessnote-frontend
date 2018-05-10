@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const ToolTip = (toolTip) => {
     return (
         <div>
-            <h5>Hints and tips</h5>
+            <h5>Information</h5>
             {toolTip.rawHtmlContent &&
             <div className="content-wrap" dangerouslySetInnerHTML={{__html: toolTip.rawHtmlContent}}/>}
             <div className="acc-wrapper">

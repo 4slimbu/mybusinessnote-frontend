@@ -40,10 +40,10 @@ class RightSideBar extends Component {
                         isItemLoaded(toolTip) &&
                         <ToolTip {...toolTip}/>
                     }
-                    <div className="news-events-wrap">
-                        <h5 className="news-title">News & Informations</h5>
-                        <NewsList {...newsListProps}/>
-                    </div>
+                    {/*<div className="news-events-wrap">*/}
+                        {/*<h5 className="news-title">News & Informations</h5>*/}
+                        {/*<NewsList {...newsListProps}/>*/}
+                    {/*</div>*/}
                 </div>
             </section>
         );
