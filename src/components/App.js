@@ -15,7 +15,6 @@ import {setNews} from "../actions/newsAction";
 import LoadingMessage from "./layout/loading/LoadingMessage";
 import {isItemLoaded, publicUrl} from "../utils/helper/helperFunctions";
 import {setToolTipContent} from "../actions/appStatusAction";
-import {ROUTES} from "../constants/routes";
 
 class App extends Component {
 
@@ -25,7 +24,7 @@ class App extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            nextProps.setToolTipContent({});
+            this.reset(nextProps);
         }
     }
 
@@ -44,6 +43,10 @@ class App extends Component {
             });
         });
 
+    }
+
+    reset(props) {
+        props.setToolTipContent({});
     }
 
     isAppReady() {
