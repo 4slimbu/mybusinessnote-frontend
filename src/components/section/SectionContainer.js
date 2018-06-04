@@ -61,13 +61,13 @@ class SectionContainer extends Component {
 
         // check if url has business option id
         if (!boId) {
-            boId = getFirst(currentSection.businessOptions);
+            let firstBusinessOption = getFirst(currentSection.businessOptions);
+            boId = firstBusinessOption.id;
         }
         let currentBusinessOption = getById(businessOptions, boId);
-        if (!currentBusinessOption) {
-            this.props.makeRequest(request.BusinessOption.get, boId);
+        if (currentBusinessOption) {
+            this.props.setCurrent(currentLevel, currentSection, currentBusinessOption);
         }
-        this.props.setCurrent(currentLevel, currentSection, currentBusinessOption);
     }
 
 

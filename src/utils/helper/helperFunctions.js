@@ -279,6 +279,16 @@ export function isBusinessOptionLocked(businessOptionStatuses, businessOption) {
     return !statusObject;
 }
 
+export function getSectionPosition(sectionIdentifierObjectCollection, sectionId) {
+    for (let i = 0; i < sectionIdentifierObjectCollection.length; i++) {
+        if (sectionIdentifierObjectCollection[i].id === sectionId) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 export function getStatus(statusCollection, id) {
     let statusObject = find(statusCollection, {id: id});
     return statusObject ? statusObject : {};

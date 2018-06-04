@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import Brand from "./brand/Brand";
 import LevelLinks from "./navigation/LevelLinks";
 import {logout} from "../../../actions/authActions";
 import {setCurrent} from "../../../actions/appStatusAction";
@@ -38,8 +37,6 @@ class LeftSideBarContainer extends Component {
             return;
         }
         const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-        const businessOption = getById(this.props.appStatus.businessOptions, getFirst(section.businessOptions));
-        this.props.setCurrent(level, section, businessOption);
         this.props.history.push(sectionUrl);
     }
 

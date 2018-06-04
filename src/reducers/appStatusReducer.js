@@ -106,7 +106,10 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
         case SET_SELL_GOODS :
             return {
                 ...state,
-                sell_goods: action.sell_goods
+                business: {
+                    ...state.business,
+                    sell_goods: action.sell_goods
+                }
             };
         case SET_CURRENT_TIP_CATEGORY :
             return {

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import LevelHead from "../level/includes/LevelHead";
 import {getAppUrlFromApiUrl, getById, getNext} from "../../utils/helper/helperFunctions";
 import {withRouter} from "react-router-dom";
-import Element from "./elements/old/Element";
+import Element from "./elements/Element";
 
 class BusinessOptionPage extends Component {
     componentDidMount() {
