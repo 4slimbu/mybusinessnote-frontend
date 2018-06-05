@@ -5,7 +5,7 @@ import {
     setBusinessCategories,
     setBusinessOption,
     setBusinessOptions,
-    setBusinessStatus,
+    syncBusinessStatus,
     setLevel,
     setLevels,
     setSection,
@@ -64,7 +64,7 @@ export function handleSuccessResponseData(dispatch, responseData) {
 
     if (responseData.businessOption) dispatch(setBusinessOption(responseData.businessOption));
 
-    if (responseData.businessStatus) dispatch(setBusinessStatus(responseData.businessStatus));
+    if (responseData.businessStatus) dispatch(syncBusinessStatus(responseData.businessStatus));
 
     if (responseData.business) dispatch(setBusiness(responseData.business));
 

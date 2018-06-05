@@ -6,6 +6,7 @@ import SectionContainer from "./components/section/SectionContainer";
 import HomeContainer from "./components/home/HomeContainer";
 import LoginContainer from "./components/login/LoginContainer";
 import ForgotPasswordContainer from "./components/forgot-password/ForgotPasswordContainer";
+import BusinessOptionContainer from "./components/business-option/BusinessOptionContainer";
 
 const RouteSwitch = () => {
     return (
@@ -16,7 +17,7 @@ const RouteSwitch = () => {
             <Route path="/login" component={LoginContainer}/>
             <Route path='/level/:level' exact component={LevelContainer}/>
             <Route path='/level/:level/section/:section' exact component={SectionContainer}/>
-            <Route path='/level/:level/section/:section/bo/:businessOption' exact component={SectionContainer}/>
+            <Route path='/level/:level/section/:section/bo/:businessOption' exact component={BusinessOptionContainer}/>
             <Route component={PageNotFound}/>
         </Switch>
     )

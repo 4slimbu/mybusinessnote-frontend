@@ -7,17 +7,18 @@ import Element from "./elements/Element";
 
 class BusinessOptionPage extends Component {
     componentDidMount() {
-        this.displayToolTip(this.props.currentBusinessOption.tooltip);
+        this.displayToolTip(this.props.currentBusinessOption.tooltip_title, this.props.currentBusinessOption.tooltip);
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentBusinessOption.id !== this.props.currentBusinessOption.id) {
-            this.displayToolTip(nextProps.currentBusinessOption.tooltip);
+            this.displayToolTip(nextProps.currentBusinessOption.tooltip_title, nextProps.currentBusinessOption.tooltip);
         }
     }
 
-    displayToolTip(content) {
+    displayToolTip(title, content) {
         const toolTip = {};
+        toolTip.title = title;
         toolTip.rawHtmlContent = content;
         this.props.setToolTipContent(toolTip);
     }

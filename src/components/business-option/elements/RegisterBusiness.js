@@ -8,10 +8,20 @@ import request from "../../../services/request";
 import {makeRequest} from "../../../actions/requestAction";
 import {validateFields} from "../../../utils/validation/FieldValidator";
 import {ROUTES} from "../../../constants/routes";
+import {getAllFields, getChangedFields, getRulesForChangedFields} from "../../../utils/helper/helperFunctions";
+import {MESSAGES} from "../../../constants/messages";
+import {isEmpty} from "lodash";
 
 class RegisterBusiness extends Component {
     constructor(props) {
         super(props);
+
+        // All required rules
+        this.rules = {
+            abn: 'required|numeric',
+        };
+
+        // Initial State
         this.state = {
             abn: {
                 isChanged: false,
@@ -22,11 +32,15 @@ class RegisterBusiness extends Component {
                 oldValue: "",
                 type: "text"
             },
+            errorCode: '',
             errors: {},
             isChanged: false,
         };
+
+        // Binding Methods
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.isFormValid = this.isFormValid.bind(this);
     }
 
     componentDidMount() {
@@ -55,29 +69,54 @@ class RegisterBusiness extends Component {
     }
 
     onChange(e) {
+        let currentFieldName, currentFieldValue;
+        currentFieldName = e.target.name;
+        currentFieldValue = e.target.value;
 
+        // Update the states with new field value
         this.setState({
-            [e.target.name]: {
-                ...this.state[e.target.name],
-                value: e.target.value,
+            [currentFieldName]: {
+                ...this.state[currentFieldName],
+                value: currentFieldValue,
                 isChanged: true
             },
             isChanged: true
         }, function () {
-            const dataObject = {};
-            if (this.state.abn.isChanged) {
-                dataObject.abn = this.state.abn.value
+            const changedField = {[currentFieldName]: currentFieldValue};
+            const allFields = getAllFields(this.state);
+            const rules = getRulesForChangedFields(this.rules, changedField);
+            const {errors, isValid} = validateFields(allFields, rules);
+
+            if (!isValid) {
+                this.setState({
+                    errors: {
+                        ...this.state.errors,
+                        ...errors
+                    }
+                });
+            } else {
+                const errors = {...this.state.errors};
+                if (errors[currentFieldName]) {
+                    delete errors[currentFieldName];
+                }
+                this.setState({
+                    errors: errors
+                });
             }
-            this.isFormValid(dataObject);
+
         });
 
 
     }
 
-    isFormValid(dataObject) {
-        const rules = {
-            abn: 'required|abn',
-        };
+    /**
+     * Validates Form fields
+     *
+     * @param dataObject - is an object containing field key:value pair
+     * @param rules
+     * @returns bool
+     */
+    isFormValid(dataObject, rules) {
         const {errors, isValid} = validateFields(dataObject, rules);
 
         this.setState({
@@ -91,55 +130,46 @@ class RegisterBusiness extends Component {
         e.preventDefault();
         const {appStatus, makeRequest, history} = this.props;
 
-        if (appStatus.business.id && !this.state.isChanged) {
+        if (
+            !isEmpty(this.state.abn.oldValue) &&
+            !this.state.isChanged
+        ) {
             history.push(ROUTES.LEVEL_TWO);
+            return;
         }
 
-        // new data
-        if (! appStatus.business.id) {
-            const newData = {
-                abn: this.state.abn.value,
-                business_option_id: appStatus.currentBusinessOption.id,
-            };
-            if (this.isFormValid(newData)) {
-                makeRequest(request.business.save, newData).then(
-                    (responseData) => {
-                        history.push(ROUTES.LEVEL_TWO);
-                    },
-                    (errorData) => {
-                        this.resetFields();
-                        this.setState({
-                            errors: errorData.errors ? errorData.errors : {}
-                        });
-                    }
-                );
-            }
+        const allFields = getAllFields(this.state);
+        const changedFields = getChangedFields(this.state);
+        const rulesForChangedFields = getRulesForChangedFields(this.rules, changedFields);
+        let isValid = false;
+
+        if (
+            isEmpty(this.state.abn.oldValue) &&
+            !this.state.isChanged
+        ) {
+            isValid = this.isFormValid(allFields, this.rules);
+        } else {
+            isValid = this.isFormValid(changedFields, rulesForChangedFields);
         }
 
-        //changed data
-        if (appStatus.business.id && this.state.isChanged) {
-            const changedData = {
+        if (isValid) {
+            makeRequest(request.Business.save, {
                 business_option_id: appStatus.currentBusinessOption.id,
-            };
-            if (this.state.abn.isChanged) {
-                changedData.abn = this.state.abn.value
-            }
-            if (this.isFormValid(changedData)) {
-                if (this.isFormValid(changedData)) {
-                    makeRequest(request.Business.save, changedData).then(
-                        (responseData) => {
-                            history.push(ROUTES.LEVEL_TWO);
-                        },
-                        (errorData) => {
-                            this.resetFields();
-                            this.setState({
-                                errors: errorData.errors ? errorData.errors : {}
-                            });
-                        }
-                    );
+                ...changedFields
+            }, {message: MESSAGES.SAVING}).then(
+                (responseData) => {
+                    history.push(ROUTES.LEVEL_TWO);
+                },
+                (errorData) => {
+                    this.resetFields();
+                    this.setState({
+                        errorCode: errorData.errorCode ? errorData.errorCode : '',
+                        errors: errorData.errors ? errorData.errors : {}
+                    });
                 }
-            }
+            );
         }
+
     }
 
     onClickAffiliateLink(e, boId, affId, link) {

@@ -26,7 +26,7 @@
  a {
      background-color: transparent;
 }
- a:active, a:hover {
+ a:active {
      outline: 0;
 }
  abbr[title] {
@@ -269,9 +269,7 @@
      line-height: 1;
      padding: .6em 1em .4em;
 }
- button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
-     border-color: #ccc #bbb #aaa;
-}
+
  button:active, button:focus, input[type="button"]:active, input[type="button"]:focus, input[type="reset"]:active, input[type="reset"]:focus, input[type="submit"]:active, input[type="submit"]:focus {
      border-color: #aaa #bbb #bbb;
 }
@@ -308,7 +306,7 @@ a {
 a:focus {
      outline: thin dotted;
 }
-a:hover, a:active {
+a:active {
      outline: 0;
 }
 /*-------------------------------------------------------------- ## Menus --------------------------------------------------------------*/
@@ -336,13 +334,13 @@ a:hover, a:active {
      left: -999em;
      top: 0;
 }
- .main-navigation ul ul li:hover > ul, .main-navigation ul ul li.focus > ul {
+ .main-navigation ul ul li.focus > ul {
      left: 100%;
 }
  .main-navigation ul ul a {
      width: 200px;
 }
- .main-navigation ul li:hover > ul, .main-navigation ul li.focus > ul {
+ .main-navigation ul li.focus > ul {
      left: auto;
 }
  .main-navigation li {
@@ -495,20 +493,20 @@ a:hover, a:active {
      float: left;
 }
  .left-sec {
-     width: 23vw;
+     width: 20vw;
     /*overflow-y: auto;
      overflow-x: hidden;
      */
      color: #ffffff;
 }
  .mid-sec {
-     width: 50vw;
+     width: 40vw;
      overflow-y: auto;
      overflow-x: hidden;
      color: #ffffff;
 }
  .right-sec {
-     width: 26.99vw;
+     width: 40vw;
      overflow-y: auto;
      overflow-x: hidden;
 }
@@ -618,10 +616,7 @@ a:hover, a:active {
 ul.getting-start-list a {
      color: #ffffff;
 }
- ul.getting-start-list li:hover span.circle-span {
-     background: #ffffff;
-     border-color: #ffffff;
-}
+
  span.circle-span {
      height: 10px;
      width: 10px;
@@ -684,7 +679,7 @@ ul.getting-start-list a {
  a.front-link i {
      padding-left: 10px;
 }
- a.front-link:hover, a.front-link:active, a.front-link:focus, a.front-link.focus, a.front-link.hover, a.front-link.active{
+ a.front-link:active, a.front-link:focus, a.front-link.focus, a.front-link.hover, a.front-link.active{
      color: #ffffff;
 }
 /*Step one*/
@@ -716,33 +711,30 @@ ul.getting-start-list a {
      transition-duration: 0.5s;
      font-weight: 300;
 }
- .step-one a.btn:hover {
-     background: none;
-     border-color: #ffffff;
-}
+
 /*Step 2*/
  ul.apps-icons {
      margin: 28px 0 0 0;
      padding: 0;
 }
- ul.apps-icons li {
-     border: 1px solid #ffffff;
-     text-align: center;
-     border-radius: 10px;
-     min-height: 161px;
-     padding: 0 5px;
-     float: left;
-     margin: 0 12px 12px 0;
-     /*min-width: 168px;*/
-     width: 31%;
-     position: relative;
-     cursor: pointer;
-     transition-property: background;
-     transition-duration: 0.5s;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     align-items: center;
+ul.apps-icons li {
+    border: 1px solid #ffffff;
+    text-align: center;
+    border-radius: 10px;
+    min-height: 130px;
+    padding: 0 5px;
+    float: left;
+    margin: 0 3% 3% 0;
+    /*min-width: 168px;*/
+    width: 30%;
+    position: relative;
+    cursor: pointer;
+    transition-property: background;
+    transition-duration: 0.5s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
  ul.apps-icons li .link-box{
@@ -784,21 +776,7 @@ ul.getting-start-list a {
  ul.apps-h-effect li a.red-icon {
      display: none;
 }
- ul.apps-h-effect li:hover a.white-icon {
-     display: none;
-}
- ul.apps-h-effect li:hover {
-     background: #ffffff;
-}
- ul.apps-h-effect li:hover a.red-icon {
-     display: block;
-}
- ul.apps-h-effect li:hover span a {
-     color: #bf696e;
-}
- ul.apps-icons li:hover .apps-question {
-     background: #d9a5a8;
-}
+
  ul.apps-icons li.active a.red-icon {
      display: block;
 }
@@ -835,7 +813,7 @@ ul.getting-start-list a {
      line-height: 21px;
      margin-right: 8px;
 }
- .selling-goods-btns a.btn:hover, .selling-goods-btns a.btn.active, .selling-goods-btns a.btn:active, .selling-goods-btns a.btn:focus, .selling-goods-btns a.btn.focus {
+ .selling-goods-btns a.btn.active, .selling-goods-btns a.btn:active, .selling-goods-btns a.btn:focus, .selling-goods-btns a.btn.focus {
      background: #ffffff;
      color: #bf696e;
 }
@@ -936,7 +914,7 @@ form.apps-form a{
      line-height: 30px;
      padding: 4px 21px;
 }
- .step-one a.btn-level-5:hover, .step-one a.btn-level-5:active, .step-one a.btn-level-5.active, .step-one a.btn-level-5.focus, .step-one a.btn-level-5:focus {
+ .step-one a.btn-level-5:active, .step-one a.btn-level-5.active, .step-one a.btn-level-5.focus, .step-one a.btn-level-5:focus {
      background: #4b384b;
      border-color: #4b384b;
 }
@@ -1222,9 +1200,7 @@ form.apps-form a{
      color: #c8c8c8;
      font-size: 14px;
 }
- .news-block i:hover, .news-block h6 a:hover, .news-block h5 a:hover {
-     color: #bf696e;
-}
+
 /*-------------------------------------------------------------- # Infinite scroll --------------------------------------------------------------*/
 /* Globally hidden elements when Infinite Scroll is supported and in use. */
  .infinite-scroll .posts-navigation, .infinite-scroll.neverending .site-footer {
@@ -1437,17 +1413,14 @@ ul.alert-btns li a, .alert-btns select {
 .alert-btns select option{
     padding: 15px;
 }
-ul.alert-btns li a:hover, 
 ul.alert-btns li a:active,
 ul.alert-btns li a.active,
 ul.alert-btns li a:focus,
 ul.alert-btns li a.focus,
-.btn-done:hover,
 .btn-done:active,
 .btn-done.active,
 .btn-done:focus,
 .btn-done.focus,
-.btn-alert:hover,
 .btn-alert:active,
 .btn-alert.active,
 .btn-alert:focus,
@@ -1477,7 +1450,7 @@ ul.alert-btns li a.focus,
  ul.alert-f-links li:first-child {
      border-right: 1px solid #d7d7d7;
 }
- ul.alert-f-links li a:hover, ul.alert-f-links li a:focus, ul.alert-f-links li a.focus, ul.alert-f-links li a:active, ul.alert-f-links li a.active {
+ ul.alert-f-links li a:focus, ul.alert-f-links li a.focus, ul.alert-f-links li a:active, ul.alert-f-links li a.active {
      color: #bf696e;
 }
  .alert-head div {
@@ -1517,12 +1490,12 @@ ul.alert-btns li a.focus,
  .marketing-8 .step-one a.btn-alert {
      margin-bottom: 54px;
 }
- .step-one a.btn-alert:hover, .step-one a.btn-alert:active, .step-one a.btn-alert.active, .step-one a.btn-alert:focus, .step-one a.btn-alert.focus {
+ .step-one a.btn-alert:active, .step-one a.btn-alert.active, .step-one a.btn-alert:focus, .step-one a.btn-alert.focus {
      border: 1px solid #000;
      background: #000;
      color: #ffffff;
 }
- .step-one a.btn-alert:hover, .step-one a.btn-alert:active, .step-one a.btn-alert.active, .step-one a.btn-alert.focus, .step-one a.btn-alert:focus {
+ .step-one a.btn-alert:active, .step-one a.btn-alert.active, .step-one a.btn-alert.focus, .step-one a.btn-alert:focus {
 }
  .alert-form img.alert-frm-img {
      margin: 14px auto 17px;
@@ -1742,7 +1715,7 @@ a.add-colrs {
     transition-property: content;
     transition-duration: 0.5s;
 }
-.marketing-6 .alert-brands-colors li:hover a::before, .marketing-6 .alert-brands-colors li.active a::before {
+.marketing-6 .alert-brands-colors li.active a::before {
     content: '\f00c';
     color: #ffffff;
     position: absolute;
@@ -1812,10 +1785,7 @@ a.add-colrs {
 span.circle-span.active {
     border-color: #fff;
 }
-ul.getting-start-list li:hover span.circle-span.complete {
-     background: #e8b800;
-     border-color: #e8b800;
-}
+
  .selling-goods-btns{
     margin-top: 22px;
 }
@@ -1868,7 +1838,7 @@ ul.alert-btns li .upload-button{
      color: #bf696e;
 }
 
-a:hover, a.active, a.active, a.focus, a:focus,a:visited{
+a.active, a.active, a.focus, a:focus,a:visited{
     color: #4b384a;
     text-decoration: underline;
 }
@@ -1882,7 +1852,6 @@ a.back-link, a.back-link i, a.front-link, a.front-link i{
 }
 
 .locked a,
-.locked a:hover,
 .locked a.active,
 .locked a:active,
 .locked a.focus,
@@ -1898,7 +1867,6 @@ ul.getting-start-list li.locked a{
 }
 
 ul.getting-start-list li.locked span.circle-span,
-ul.getting-start-list li.locked:hover span.circle-span,
 ul.getting-start-list li.locked:active span.circle-span,
 ul.getting-start-list li.locked.active span.circle-span,
 ul.getting-start-list li.locked:focus span.circle-span,
@@ -1959,18 +1927,13 @@ ul.getting-start-list li.locked:visited span.circle-span{
     font-weight: 300;
 }
 
-.btn-wrap button.btn:hover {
-    background: none;
-    border-color: #ffffff;
-}
-
 .form-error {
     border-bottom: 1px solid darkred !important;
 }
 
 .form-error-message {
     font-size: 12px;
-    color: darkred;
+    color: yellow;
 }
 
 .loading-spinner-wrapper {
@@ -2027,7 +1990,6 @@ ul.alert-btns li .upload-button {
     transition-property: background, color, border;
 }
 
-ul.alert-btns li .upload-button:hover,
 ul.alert-btns li .upload-button:active,
 ul.alert-btns li .upload-button.active,
 ul.alert-btns li .upload-button:focus,
@@ -2075,4 +2037,186 @@ span.circle-span.complete {
 
 span.circle-span.active {
     background: #ffffff;
+}
+
+span.accordion-titles strong {
+    color: #b75e63;
+}
+
+.step-one a.btn.social-btn {
+    background: #4b384b;
+    border-color: #4b384b;
+    color: #ffffff;
+    font-size: 1.5rem;
+    width: 100%;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.fa-google:before, .fa-facebook-square:before {
+    margin-right: 5px;
+}
+
+.hr-with-text-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 40px;
+}
+
+.hr-with-text-wrapper .hr {
+    width: 100%;
+    height: 1px;
+    background: #ffffff;
+    position: absolute;
+    top: 40px;
+}
+
+.hr-with-text-wrapper .text {
+    position: absolute;
+    top: 27px;
+    left: calc(50% - 25px);
+    width: 50px;
+    text-align: center;
+    background: #bf696e;
+}
+
+@media only screen and (max-width: 767px) {
+    .hr-with-text-wrapper {
+        height: 70px;
+    }
+}
+
+.content-wrap li {
+    list-style: inherit;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+@media (hover: hover) {
+    button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
+        border-color: #ccc #bbb #aaa;
+    }
+
+    a:hover {
+        outline: 0;
+    }
+
+    .main-navigation ul ul li:hover > ul {
+        left: 100%;
+    }
+
+    ul.apps-h-effect li:hover {
+        background: #ffffff;
+    }
+
+    ul.getting-start-list li:hover span.circle-span.complete {
+        background: #e8b800;
+        border-color: #e8b800;
+    }
+
+    ul.getting-start-list li:hover span.circle-span {
+        background: #ffffff;
+        border-color: #ffffff;
+    }
+
+    .main-navigation ul li:hover > ul {
+        left: auto;
+    }
+
+    a.front-link:hover, a.front-link.hover {
+        color: #ffffff;
+    }
+
+    .step-one a.btn:hover {
+        background: none;
+        border-color: #ffffff;
+    }
+    ul.apps-h-effect li:hover a.white-icon {
+        display: none;
+    }
+    ul.apps-h-effect li:hover {
+        background: #ffffff;
+    }
+    ul.apps-h-effect li:hover a.red-icon {
+        display: block;
+    }
+    ul.apps-h-effect li:hover span a {
+        color: #bf696e;
+    }
+    ul.apps-icons li:hover .apps-question {
+        background: #d9a5a8;
+    }
+
+    .selling-goods-btns a.btn:hover {
+        background: #ffffff;
+        color: #bf696e;
+    }
+
+    .step-one a.btn-level-5:hover {
+        background: #4b384b;
+        border-color: #4b384b;
+    }
+
+    .news-block i:hover, .news-block h6 a:hover, .news-block h5 a:hover {
+        color: #bf696e;
+    }
+
+    ul.alert-btns li a:hover,
+    .btn-done:hover,
+    .btn-alert:hover {
+        border: 1px solid #000;
+        background: #000;
+        color: #ffffff;
+    }
+
+    ul.alert-f-links li a:hover {
+        color: #bf696e;
+    }
+
+    .step-one a.btn-alert:hover {
+        border: 1px solid #000;
+        background: #000;
+        color: #ffffff;
+    }
+
+    .marketing-6 .alert-brands-colors li:hover a::before {
+        content: '\f00c';
+        color: #ffffff;
+        position: absolute;
+        font-family: FontAwesome;
+        z-index: 2;
+        font-size: 14px;
+        padding-left: -5px;
+        left: 20%;
+        transition: all 0.5s ease-in-out;
+    }
+
+    a:hover {
+        color: #4b384a;
+        text-decoration: underline;
+    }
+
+    .locked a:hover {
+        text-decoration: none;
+        cursor: default;
+    }
+
+    ul.getting-start-list li.locked:hover span.circle-span {
+        background: #4b384b;
+        border-color: #4b384b;
+    }
+
+    .btn-wrap button.btn:hover {
+        background: none;
+        border-color: #ffffff;
+    }
+
+    ul.alert-btns li .upload-button:hover {
+        border: 1px solid #000;
+        background: #000;
+        color: #ffffff;
+    }
 }

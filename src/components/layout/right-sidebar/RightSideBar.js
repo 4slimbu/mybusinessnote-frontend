@@ -33,7 +33,7 @@ class RightSideBar extends Component {
             <section ref={el => this.el = el} className="right-sec bg-white mCustomScrollbar f-right bg-white"
                      data-mcs-theme="dark">
                 <div className="content-wrapper">
-                    <div className="hidden-xs">
+                    <div className="hidden-xs mb-20">
                         <UserInfoLinks/>
                     </div>
                     {

@@ -171,15 +171,9 @@ class Logo extends Component {
 }
 
 Logo.propTypes = {
-    getBusinessCategories: PropTypes.func.isRequired,
-    setBusinessCategoryId: PropTypes.func.isRequired,
-    setSellGoods: PropTypes.func.isRequired,
-    setCurrentTipCategory: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired,
     setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
     setBusinessMeta: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     trackClick: PropTypes.func.isRequired

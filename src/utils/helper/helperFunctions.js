@@ -255,6 +255,7 @@ export function isLevelLocked(businessOptionStatuses, level) {
 }
 
 export function isSectionLocked(businessOptionStatuses, section) {
+    return false;
     // some sections are open by default
     if (section.id === 1 || section.id === 2) {
         return false;
@@ -266,17 +267,12 @@ export function isSectionLocked(businessOptionStatuses, section) {
     return !statusObject;
 }
 
-export function isBusinessOptionLocked(businessOptionStatuses, businessOption) {
-    //some business options are open by default
-    if (businessOption.id === 1 || businessOption.id === 2 || businessOption.id === 3) {
-        return false;
-    }
-
-    let statusObject = find(businessOptionStatuses, (item) => {
-        return item.id === businessOption.id && item.status !== 'locked';
+export function filterBusinessOptionsBySection(businessOptions, sectionId) {
+    let relevantBusinessOptions = filter(businessOptions, function (item) {
+        return item.section_id === sectionId;
     });
 
-    return !statusObject;
+    return relevantBusinessOptions ? relevantBusinessOptions : [];
 }
 
 export function getSectionPosition(sectionIdentifierObjectCollection, sectionId) {

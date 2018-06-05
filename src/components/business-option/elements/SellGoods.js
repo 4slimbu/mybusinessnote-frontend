@@ -64,9 +64,9 @@ class SellGoods extends Component {
 
         const sellGoodsQuestion = (
             <div>
-                <ul className="apps-icons clearfix">
-                    {sellGoodsCategory}
-                </ul>
+                {/*<ul className="apps-icons clearfix">*/}
+                    {/*{sellGoodsCategory}*/}
+                {/*</ul>*/}
                 <div className="selling-goods-btns">
                     <a href="#" className={`btn btn-default btn-md ${appStatus.business.sell_goods ? 'active' : ''}`}
                        onClick={(e) => this.handleSelectSellGoods(e, 1)}>Yes</a>

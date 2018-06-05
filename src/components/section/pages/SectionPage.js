@@ -2,10 +2,16 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setToolTipContent} from "../../../actions/appStatusAction";
-import BusinessOptionPage from "../../business-option/BusinessOptionPage";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
-import $ from "jquery";
+import {map} from "lodash";
+import * as classnames from "classnames";
+import {
+    filterBusinessOptionsBySection,
+    generateAppRelativeUrl,
+    getStatus, isItemLoaded,
+    isSectionLocked
+} from "../../../utils/helper/helperFunctions";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -29,26 +35,28 @@ class SectionPage extends Component {
     }
 
     render() {
-        const {currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
-        const {
-            appStatus,
-            setToolTipContent,
-        } = this.props;
+        const {currentLevel, currentSection, businessOptions = [{}], businessOptionStatuses = [{}] } = this.props.appStatus;
+        const relevantBusinessOptions = filterBusinessOptionsBySection(businessOptions, currentSection.id);
 
-        const businessOptionPageProps = {
-            appStatus: appStatus,
-            currentLevel: currentLevel,
-            currentSection: currentSection,
-            currentBusinessOption: currentBusinessOption,
-            setToolTipContent: setToolTipContent,
-        };
+        const businessOptionList = map(relevantBusinessOptions, (businessOption, key) => {
+            const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
+            const businessOptionStatus = getStatus(businessOptionStatuses, businessOption.id);
+            const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
+            const lockedClass = isLocked ? 'locked' : '';
+            return (
+                <li key={businessOption.id} className={classnames(lockedClass)}>
+                    <Link to={businessOptionUrl}>
+                        <span
+                            className={classnames("circle-span", {"complete": businessOptionStatus.status === 'done'})}></span>
+                        {businessOption.name}
+                    </Link>
+                </li>
+            )
+        });
 
         return (
             <div>
-                {
-                    currentBusinessOption && currentBusinessOption.id &&
-                    <BusinessOptionPage {...businessOptionPageProps}/>
-                }
+                {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
             </div>
         );
     }

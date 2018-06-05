@@ -302,10 +302,14 @@
          height: 30px;
          width: 30px;
     }
-     .marketing-6 .alert-brands-colors li:hover a::before,
      .marketing-6 .alert-brands-colors li.active a::before{
          font-size: 11px;
     }
+     @media (hover: hover) {
+         .marketing-6 .alert-brands-colors li:hover a::before {
+             font-size: 11px;
+         }
+     }
      .colors-sample li:first-child a::after {
          height: 25px;
          width: 25px;

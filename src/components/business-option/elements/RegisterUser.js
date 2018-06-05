@@ -21,28 +21,27 @@ class RegisterUser extends Component {
 
         return (
             <div>
-                <SignUpForm {...signUpFormProps}/>
 
                 {
                     !auth.isAuthenticated &&
                     <div>
-                        <p>&nbsp;</p>
-                        <p className="text-center">OR Login with</p>
                         <div className="row">
-
                             <div className="col-md-6 text-right col-sm-12">
-                                <a className="btn btn-primary"
-                                   href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'}>
-                                    <i className="fa fa-google"></i> Google</a>
+                                <a className="btn btn-primary social-btn" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/google'} ><i className="fa fa-google"></i> Google</a>
                             </div>
                             <div className="col-md-6 col-sm-12 text-left">
-                                <a className="btn btn-primary"
-                                   href={process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'}>
-                                    <i className="fa fa-facebook-square"></i> Facebook</a>
+                                <a className="btn btn-primary social-btn" href={ process.env.REACT_APP_API_BASE_URL + '/login/oauth/facebook'} ><i className="fa fa-facebook-square"></i>Facebook</a>
                             </div>
                         </div>
+                        <div className="hr-with-text-wrapper">
+                            <div className="hr"></div>
+                            <div className="text">or</div>
+                        </div>
                     </div>
+
                 }
+                <SignUpForm {...signUpFormProps}/>
+
             </div>
         );
     }

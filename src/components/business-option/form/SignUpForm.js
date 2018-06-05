@@ -18,8 +18,8 @@ class SignUpForm extends Component {
             first_name: 'required',
             last_name: 'required',
             email: 'required|email',
-            phone_number: 'required|phone_number',
-            password: 'required|min:8|lowercase|uppercase|num|specialChar|max:20',
+            phone_number: 'required',
+            password: 'required|min:8',
             confirm_password: 'match:password',
             captcha_response: 'captcha'
         };
@@ -249,7 +249,7 @@ class SignUpForm extends Component {
                 }
             );
         } else if (!auth.isAuthenticated && this.isFormValid(allFields, this.rules)) {
-            makeRequest(request.Auth.register, changedFields, {message: MESSAGES.SAVING}).then(
+            makeRequest(request.Auth.register, changedFields, {message: MESSAGES.REGISTERING}).then(
                 (responseData) => {
                     makeRequest(request.Business.getStatus, {}, {message: MESSAGES.REFRESHING});
                     history.push(ROUTES.ADD_BUSINESS_DETAILS);

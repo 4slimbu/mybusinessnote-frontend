@@ -60,7 +60,7 @@ export function validate(rule, fieldName, field, inputs) {
             }
             break;
         case 'website':
-            if (!(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(field))) {
+            if (!(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(field))) {
                 return toCapitalizedWords(fieldName) + ' is invalid';
             }
             break;
@@ -87,6 +87,11 @@ export function validate(rule, fieldName, field, inputs) {
         case 'uppercase':
             if (!/[A-Z]/.test(field)) {
                 return toCapitalizedWords(fieldName) + ' should have at least one Uppercase';
+            }
+            break;
+        case 'numeric':
+            if (! /^\d+$/.test(field)) {
+                return toCapitalizedWords(fieldName) + ' should be Numeric';
             }
             break;
         case 'num':

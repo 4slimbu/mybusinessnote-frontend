@@ -131,6 +131,7 @@ class SocialMediaRegistration extends Component {
             currentObject.displayToolTip(newKey);
         };
         const toolTip = {};
+        toolTip.title = this.props.appStatus.currentBusinessOption.tooltip_title;
         toolTip.rawHtmlContent = this.props.appStatus.currentBusinessOption.tooltip;
         toolTip.accordion = (
             <PanelGroup accordion id={`accordion-uncontrolled-social-links`} activeKey={activeKey}

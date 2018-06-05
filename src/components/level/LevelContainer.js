@@ -3,7 +3,7 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    extractLevelFromLocation, generateAppRelativeUrl, getBySlug, getCurrentLevelByUrl, getCurrentLevelSections,
+    extractLevelFromLocation, generateAppRelativeUrl, getBySlug, getCurrentLevelSections,
     getFirst, getNext, isItemLoaded, isLevelLocked,
 } from "../../utils/helper/helperFunctions";
 import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
@@ -110,6 +110,7 @@ class LevelContainer extends Component {
         const toolTip = {};
 
         // Set tooltip content for level
+        toolTip.title = currentLevel.tooltip_title;
         toolTip.rawHtmlContent = currentLevel.tooltip;
 
         // Set tooltip accordion for levels other than level 1

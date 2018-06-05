@@ -4,6 +4,8 @@ export const MESSAGES = {
     LOADING_USER_CHECK: "Checking if user already exist...",
     SAVING: "Saving...",
     REFRESHING: "Refreshing...",
+    REGISTERING: "Creating your account...",
+    VERIFYING: "Verifying...",
     // Success Message
     LOGIN_SUCCESS: "Logged in successfully",
     LOGOUT_SUCCESS: "Logged out successfully",

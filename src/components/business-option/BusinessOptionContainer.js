@@ -2,21 +2,18 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {callApi, makeRequest} from "../../actions/requestAction";
-import SectionPage from "./pages/SectionPage";
-import SectionCompletePage from "./pages/SectionCompletePage";
 import {
     extractBoIdFromLocation,
     extractLevelFromLocation,
-    extractSectionFromLocation, generateAppRelativeUrl,
+    extractSectionFromLocation,
     getById,
     getBySlug,
-    getFirst,
-    isItemLoaded, isSectionLocked
+    isItemLoaded
 } from "../../utils/helper/helperFunctions";
-import {setCurrent} from "../../actions/appStatusAction";
-import {ROUTES} from "../../constants/routes";
+import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
+import BusinessOptionPage from "./BusinessOptionPage";
 
-class SectionContainer extends Component {
+class BusinessOptionContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -24,7 +21,6 @@ class SectionContainer extends Component {
             currentLevel: {},
             currentSection: {},
             currentBusinessOption: {},
-            isShowSectionCompletePage: false,
         };
 
         this.redirectTo = this.redirectTo.bind(this);
@@ -42,29 +38,18 @@ class SectionContainer extends Component {
 
     bootstrap(props) {
         // Initialize
-        let {auth, appStatus} = props;
-        let {levels, sections, businessOptionStatuses} = appStatus;
+        let {appStatus} = props;
+        let {levels, sections, businessOptions} = appStatus;
         let pathname = props.location.pathname;
         let levelSlug = extractLevelFromLocation(pathname);
         let sectionSlug = extractSectionFromLocation(pathname);
+        let boId = extractBoIdFromLocation(pathname);
         let currentLevel = getBySlug(levels, levelSlug);
         let currentSection = getBySlug(sections, sectionSlug);
-
-        // Redirect to home if not verified and section is locked
-        if (!auth.isVerified && isSectionLocked(businessOptionStatuses, currentSection)) {
-            props.setCurrent();
-            this.redirectTo(ROUTES.HOME);
-        }
-
-        // Redirect to business option page if, section landing page is disabled
-        if (! currentSection.show_landing_page) {
-            const firstBusinessOption = getFirst(currentSection.businessOptions);
-            const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, firstBusinessOption.id);
-            this.redirectTo(businessOptionUrl);
-        }
+        let currentBusinessOption = getById(businessOptions, boId);
 
         // Set current level and section and continue
-        this.props.setCurrent(currentLevel, currentSection);
+        this.props.setCurrent(currentLevel, currentSection, currentBusinessOption);
     }
 
 
@@ -73,27 +58,33 @@ class SectionContainer extends Component {
     }
 
     render() {
-        const {makeRequest} = this.props;
+        const {currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
+        const {
+            appStatus,
+            setToolTipContent,
+        } = this.props;
 
-        const sectionPageProps = {
-            makeRequest: makeRequest,
-            redirectTo: this.redirectTo,
+        const businessOptionPageProps = {
+            appStatus: appStatus,
+            currentLevel: currentLevel,
+            currentSection: currentSection,
+            currentBusinessOption: currentBusinessOption,
+            setToolTipContent: setToolTipContent,
         };
 
         return (
             isItemLoaded(this.props.appStatus.sections) &&
             isItemLoaded(this.props.appStatus.currentLevel) &&
             isItemLoaded(this.props.appStatus.currentSection) &&
+            isItemLoaded(this.props.appStatus.currentBusinessOption) &&
             <div>
-                {
-                    this.state.isShowSectionCompletePage ? <SectionCompletePage/> : <SectionPage {...sectionPageProps}/>
-                }
+                <BusinessOptionPage {...businessOptionPageProps}/>
             </div>
         )
     }
 }
 
-SectionContainer.propTypes = {
+BusinessOptionContainer.propTypes = {
     makeRequest: PropTypes.func.isRequired,
     setCurrent: PropTypes.func.isRequired,
 };
@@ -107,5 +98,5 @@ function mapStateToProps(state) {
 
 
 export default connect(mapStateToProps, {
-    makeRequest, setCurrent
-})(SectionContainer);
+    makeRequest, setCurrent, setToolTipContent
+})(BusinessOptionContainer);

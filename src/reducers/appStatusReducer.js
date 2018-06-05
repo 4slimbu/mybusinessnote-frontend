@@ -10,10 +10,12 @@ import {
     SET_LEVELS,
     SET_SECTIONS,
     SET_SELL_GOODS,
-    SET_TOOLTIP_CONTENT
+    SET_TOOLTIP_CONTENT,
+    SYNC_BUSINESS_STATUS
 } from "../constants/actionTypes";
 import {DEFAULT_APP_STATUS} from "../data/default";
 import {findIndex, merge} from "lodash";
+import {isItemLoaded} from "../utils/helper/helperFunctions";
 
 export default (state = DEFAULT_APP_STATUS, action = {}) => {
     switch (action.type) {
@@ -33,11 +35,124 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 businessOptions: action.businessOptions
             };
         case SET_BUSINESS_STATUS:
-            const businessStatus = merge(state.businessStatus, action.businessStatus);
             return {
                 ...state,
-                businessStatus: businessStatus
+                businessStatus: {
+                    levelStatuses: [],
+                    sectionStatuses: [],
+                    businessOptionStatuses: []
+                }
             };
+        case SYNC_BUSINESS_STATUS:
+            const levelStatuses = action.businessStatus.levelStatuses;
+            const sectionStatuses = action.businessStatus.sectionStatuses;
+            const businessOptionStatuses = action.businessStatus.businessOptionStatuses;
+
+            // Merge Level Statuses
+            if (isItemLoaded(levelStatuses) && levelStatuses.length > 0) {
+                for (let i = 0; i < levelStatuses.length; i++) {
+                    const levelIndex = findIndex(state.businessStatus.levelStatuses, {id: levelStatuses[i].id});
+
+                    if (levelIndex >= 0) {
+                        state = {
+                            ...state,
+                            businessStatus: {
+                                ...state.businessStatus,
+                                levelStatuses: [
+                                    ...state.businessStatus.levelStatuses.slice(0, levelIndex),
+                                    merge(state.businessStatus.levelStatuses[levelIndex], levelStatuses[i]),
+                                    ...state.businessStatus.levelStatuses.slice(levelIndex + 1)
+                                ],
+
+                            }
+                        };
+                    } else {
+                        state = {
+                            ...state,
+                            businessStatus: {
+                                ...state.businessStatus,
+                                levelStatuses: [
+                                    ...state.businessStatus.levelStatuses,
+                                    levelStatuses[i]
+                                ],
+
+                            }
+                        };
+                    }
+                }
+            }
+
+            // Merge Section statuses
+            if (isItemLoaded(sectionStatuses) && sectionStatuses.length > 0) {
+                for (let i = 0; i < sectionStatuses.length; i++) {
+                    const sectionIndex = findIndex(state.businessStatus.sectionStatuses, {id: sectionStatuses[i].id});
+
+                    if (sectionIndex >= 0) {
+                        state = {
+                            ...state,
+                            businessStatus: {
+                                ...state.businessStatus,
+                                sectionStatuses: [
+                                    ...state.businessStatus.sectionStatuses.slice(0, sectionIndex),
+                                    merge(state.businessStatus.sectionStatuses[sectionIndex], sectionStatuses[i]),
+                                    ...state.businessStatus.sectionStatuses.slice(sectionIndex + 1)
+                                ],
+
+                            }
+                        };
+                    } else {
+                        state = {
+                            ...state,
+                            businessStatus: {
+                                ...state.businessStatus,
+                                sectionStatuses: [
+                                    ...state.businessStatus.sectionStatuses,
+                                    sectionStatuses[i]
+                                ],
+
+                            }
+                        };
+                    }
+                }
+            }
+
+            // Merge Business Option statuses
+            if (isItemLoaded(businessOptionStatuses) && businessOptionStatuses.length > 0) {
+                for (let i = 0; i < businessOptionStatuses.length; i++) {
+                    const businessOptionIndex = findIndex(state.businessStatus.businessOptionStatuses, {id: businessOptionStatuses[i].id});
+
+                    if (businessOptionIndex >= 0) {
+                        state = {
+                            ...state,
+                            businessStatus: {
+                                ...state.businessStatus,
+                                businessOptionStatuses: [
+                                    ...state.businessStatus.businessOptionStatuses.slice(0, businessOptionIndex),
+                                    merge(state.businessStatus.businessOptionStatuses[businessOptionIndex], businessOptionStatuses[i]),
+                                    ...state.businessStatus.businessOptionStatuses.slice(businessOptionIndex + 1)
+                                ],
+
+                            }
+                        };
+                    } else {
+                        state = {
+                            ...state,
+                            businessStatus: {
+                                ...state.businessStatus,
+                                businessOptionStatuses: [
+                                    ...state.businessStatus.businessOptionStatuses,
+                                    businessOptionStatuses[i]
+                                ],
+
+                            }
+                        };
+                    }
+                }
+            }
+
+            return state;
+
+
         case SET_CURRENT :
             const currentLevel = (action.current.level && state.currentLevel && state.currentLevel.id === action.current.level.id) ?
                 merge(state.currentLevel, action.current.level.id)

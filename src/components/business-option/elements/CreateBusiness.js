@@ -1,17 +1,27 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {addFlashMessage} from "../../../actions/flashMessageAction";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import {withRouter} from "react-router-dom";
 import request from "../../../services/request";
 import {makeRequest} from "../../../actions/requestAction";
 import {validateFields} from "../../../utils/validation/FieldValidator";
 import {ROUTES} from "../../../constants/routes";
+import {MESSAGES} from "../../../constants/messages";
+import {getAllFields, getChangedFields, getRulesForChangedFields} from "../../../utils/helper/helperFunctions";
+import {isEmpty} from "lodash";
 
 class CreateBusiness extends Component {
     constructor(props) {
         super(props);
+
+        // All required rules
+        this.rules = {
+            business_name: 'required',
+            website: 'required|website',
+        };
+
+        // Initial State
         this.state = {
             business_name: {
                 isChanged: false,
@@ -31,11 +41,15 @@ class CreateBusiness extends Component {
                 oldValue: "",
                 type: "text"
             },
+            errorCode: '',
             errors: {},
             isChanged: false,
         };
+
+        // Binding Methods
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.isFormValid = this.isFormValid.bind(this);
     }
 
     componentDidMount() {
@@ -73,34 +87,52 @@ class CreateBusiness extends Component {
     }
 
     onChange(e) {
+        let currentFieldName, currentFieldValue;
+        currentFieldName = e.target.name;
+        currentFieldValue = e.target.value;
 
+        // Update the states with new field value
         this.setState({
-            [e.target.name]: {
-                ...this.state[e.target.name],
-                value: e.target.value,
+            [currentFieldName]: {
+                ...this.state[currentFieldName],
+                value: currentFieldValue,
                 isChanged: true
             },
             isChanged: true
         }, function () {
-            const dataObject = {};
-            if (this.state.business_name.isChanged) {
-                dataObject.business_name = this.state.business_name.value
-            }
-            if (this.state.website.isChanged) {
-                dataObject.website = this.state.website.value
+            const changedField = {[currentFieldName]: currentFieldValue};
+            const allFields = getAllFields(this.state);
+            const rules = getRulesForChangedFields(this.rules, changedField);
+            const {errors, isValid} = validateFields(allFields, rules);
+
+            if (!isValid) {
+                this.setState({
+                    errors: {
+                        ...this.state.errors,
+                        ...errors
+                    }
+                });
+            } else {
+                const errors = {...this.state.errors};
+                if (errors[currentFieldName]) {
+                    delete errors[currentFieldName];
+                }
+                this.setState({
+                    errors: errors
+                });
             }
 
-            this.isFormValid(dataObject);
         });
-
-
     }
 
-    isFormValid(dataObject) {
-        const rules = {
-            business_name: 'required',
-            website: 'required|website',
-        };
+    /**
+     * Validates Form fields
+     *
+     * @param dataObject - is an object containing field key:value pair
+     * @param rules
+     * @returns bool
+     */
+    isFormValid(dataObject, rules) {
         const {errors, isValid} = validateFields(dataObject, rules);
 
         this.setState({
@@ -114,59 +146,48 @@ class CreateBusiness extends Component {
         e.preventDefault();
         const {appStatus, makeRequest, history} = this.props;
 
-        if (appStatus.business.id && !this.state.isChanged) {
+        if (
+            !isEmpty(this.state.website.oldValue) &&
+            !isEmpty(this.state.business_name.oldValue) &&
+            !this.state.isChanged
+        ) {
             history.push(ROUTES.REGISTER_ABN);
+            return;
         }
 
-        // new data
-        if (! appStatus.business.id) {
-            const newData = {
-                business_name: this.state.business_name.value,
-                website: this.state.website.value,
-                business_option_id: appStatus.currentBusinessOption.id,
-            };
-            if (this.isFormValid(newData)) {
-                makeRequest(request.business.save, newData).then(
-                    (responseData) => {
-                        history.push(ROUTES.REGISTER_ABN);
-                    },
-                    (errorData) => {
-                        this.resetFields();
-                        this.setState({
-                            errors: errorData.errors ? errorData.errors : {}
-                        });
-                    }
-                );
-            }
+        const allFields = getAllFields(this.state);
+        const changedFields = getChangedFields(this.state);
+        const rulesForChangedFields = getRulesForChangedFields(this.rules, changedFields);
+        let isValid = false;
+
+        if (
+            isEmpty(this.state.website.oldValue) &&
+            isEmpty(this.state.business_name.oldValue) &&
+            !this.state.isChanged
+        ) {
+            isValid = this.isFormValid(allFields, this.rules);
+        } else {
+            isValid = this.isFormValid(changedFields, rulesForChangedFields);
         }
 
-        //changed data
-        if (appStatus.business.id && this.state.isChanged) {
-            const changedData = {
+        if (isValid) {
+            makeRequest(request.Business.save, {
                 business_option_id: appStatus.currentBusinessOption.id,
-            };
-            if (this.state.business_name.isChanged) {
-                changedData.business_name = this.state.business_name.value
-            }
-            if (this.state.website.isChanged) {
-                changedData.website = this.state.website.value
-            }
-            if (this.isFormValid(changedData)) {
-                if (this.isFormValid(changedData)) {
-                    makeRequest(request.Business.save, changedData).then(
-                        (responseData) => {
-                            history.push(ROUTES.REGISTER_ABN);
-                        },
-                        (errorData) => {
-                            this.resetFields();
-                            this.setState({
-                                errors: errorData.errors ? errorData.errors : {}
-                            });
-                        }
-                    );
+                ...changedFields
+            }, {message: MESSAGES.SAVING}).then(
+                (responseData) => {
+                    history.push(ROUTES.REGISTER_ABN);
+                },
+                (errorData) => {
+                    this.resetFields();
+                    this.setState({
+                        errorCode: errorData.errorCode ? errorData.errorCode : '',
+                        errors: errorData.errors ? errorData.errors : {}
+                    });
                 }
-            }
+            );
         }
+
     }
 
     onClickAffiliateLink(e, boId, affId, link) {
@@ -189,14 +210,18 @@ class CreateBusiness extends Component {
 
         return (
             <form className="apps-form" onSubmit={this.onSubmit}>
-                <TextFieldGroup fieldObject={this.state.business_name} onChange={this.onChange}
-                                error={errors.business_name}/>
+
                 <TextFieldGroup fieldObject={this.state.website} onChange={this.onChange} error={errors.website}/>
 
                 <span className="find-web-span">Don’t have a web address?</span>
                 <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
                    href={affiliateLink} target="new"
                    className="btn btn-lg btn-default clearfix btn-level-5">{affiliateLinkLabel}</a>
+                <br/>
+                <br/>
+
+                <TextFieldGroup fieldObject={this.state.business_name} onChange={this.onChange}
+                                error={errors.business_name}/>
 
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Continue</button>
@@ -209,12 +234,7 @@ class CreateBusiness extends Component {
 CreateBusiness.propTypes = {
     appStatus: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    saveBusinessFormRequest: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired,
-    getBusinessOptionFromUrl: PropTypes.func.isRequired,
-    getBusinessOption: PropTypes.func.isRequired,
-    getAppStatus: PropTypes.func.isRequired,
-    trackClick: PropTypes.func.isRequired
+    makeRequest: PropTypes.func.isRequired,
 };
 
 
@@ -226,6 +246,5 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-    makeRequest,
-    addFlashMessage,
+    makeRequest
 })(CreateBusiness));

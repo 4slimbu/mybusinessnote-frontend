@@ -12,6 +12,7 @@ import {ROUTES} from "../../constants/routes";
 import {setCurrent} from "../../actions/appStatusAction";
 import request from "../../services/request";
 import {makeRequest} from "../../actions/requestAction";
+import {MESSAGES} from "../../constants/messages";
 
 class HomeContainer extends Component {
     constructor(props) {
@@ -66,9 +67,9 @@ class HomeContainer extends Component {
 
         this.props.makeRequest(request.Auth.verifyEmail, {
             email_verification_token: this.state.email_verification_token
-        }).then(
+        }, {message: MESSAGES.VERIFYING}).then(
             (response) => {
-                this.props.history.push(ROUTES.HOME);
+                this.props.history.push(ROUTES.ADD_BUSINESS_DETAILS);
             }
         );
     }

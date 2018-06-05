@@ -14,6 +14,7 @@ import * as classnames from "classnames";
 import {makeRequest} from "../../../actions/requestAction";
 import request from "../../../services/request";
 import {ROUTES} from "../../../constants/routes";
+import {MESSAGES} from "../../../constants/messages";
 
 class BusinessCategories extends Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class BusinessCategories extends Component {
             this.props.makeRequest(request.Business.save, {
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_category_id: id
-            });
+            }, {message: MESSAGES.SAVING});
         } else {
             this.props.setBusinessCategoryId(id);
         }
@@ -61,7 +62,7 @@ class BusinessCategories extends Component {
     displayToolTip(id) {
         const currentObject = this;
         const {businessCategories} = this.props.appStatus;
-        const tipList = map(businessCategories.data, (item, key) => {
+        const tipList = map(businessCategories, (item, key) => {
             const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
             return (
                 <Panel key={item.id} eventKey={item.id}>
@@ -85,6 +86,7 @@ class BusinessCategories extends Component {
             currentObject.displayToolTip(newKey);
         };
         const toolTip = {};
+        toolTip.title = this.props.appStatus.currentBusinessOption.tooltip_title;
         toolTip.rawHtmlContent = this.props.appStatus.currentBusinessOption.tooltip;
         toolTip.accordion = (
             <PanelGroup accordion id={`accordion-uncontrolled-categories-tooltip`} activeKey={activeKey}
@@ -112,8 +114,11 @@ class BusinessCategories extends Component {
         const businessCategories = map(appStatus.businessCategories, (item, key) => {
             const active = business.business_category_id == item.id;
             return (
-                <li key={item.id} className={classnames("", {"active": active})}
-                    onTouchEnd={(e) => this.handleSelect(e, item.id)} onClick={(e) => this.handleSelect(e, item.id)}>
+                <li key={item.id} className={classnames("", {"active" : active})}
+                    onTouchEnd={(e) => this.handleSelect(e, item.id)}
+                    onClick={(e) => this.handleSelect(e, item.id)}
+                    onMouseOver={(e) => this.displayToolTip(item.id)}
+                >
                     <div className="link-box">
                         <a className="white-icon" href="#">
                             <img src={item.icon} alt=""/>

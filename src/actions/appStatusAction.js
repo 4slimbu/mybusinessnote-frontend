@@ -13,7 +13,7 @@ import {
     SET_SECTION,
     SET_SECTIONS,
     SET_SELL_GOODS,
-    SET_TOOLTIP_CONTENT
+    SET_TOOLTIP_CONTENT, SYNC_BUSINESS_STATUS
 } from "../constants/actionTypes";
 
 export function setLevels(levels) {
@@ -68,6 +68,13 @@ export function setBusiness(business) {
 export function setBusinessStatus(businessStatus) {
     return {
         type: SET_BUSINESS_STATUS,
+        businessStatus
+    }
+}
+
+export function syncBusinessStatus(businessStatus) {
+    return {
+        type: SYNC_BUSINESS_STATUS,
         businessStatus
     }
 }

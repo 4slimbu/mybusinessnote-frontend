@@ -40,10 +40,15 @@
          padding-left: 129px;
     }
     .navbar-inverse .navbar-nav > .active > a,
-    .navbar-inverse .navbar-nav > .active > a:focus,
-    .navbar-inverse .navbar-nav > .active > a:hover {
+    .navbar-inverse .navbar-nav > .active > a:focus {
          background: none;
          color: #9d9d9d;
+    }
+    @media (hover: hover) {
+        .navbar-inverse .navbar-nav > .active > a:hover {
+            background: none;
+            color: #9d9d9d;
+        }
     }
     .navbar-inverse .navbar-collapse{
          border: 0;
@@ -83,11 +88,15 @@
          height: 4px;
     }
      .navbar-inverse .navbar-toggle:focus,
-     .navbar-inverse .navbar-toggle:hover,
      .navbar-inverse .navbar-toggle.active,
      .navbar-inverse .navbar-toggle:active,
      .navbar-inverse .navbar-toggle.focus{
          background: none;
+    }
+    @media (hover: hover) {
+        .navbar-inverse .navbar-toggle:hover {
+            background: none;
+        }
     }
      .news-block img {
          margin-bottom: 0;
@@ -155,13 +164,24 @@
     .content-block .nav-tabs > li.active a .progress-bar div span{
          background: #3b2b3b;
     }
-    .content-block .nav-tabs > li > a:hover, .content-block .nav-tabs > li > a:active, .content-block .nav-tabs > li > a.active, .content-block .nav-tabs > li > a.focus, .content-block .nav-tabs > li > a:focus{
+    .content-block .nav-tabs > li > a:active, .content-block .nav-tabs > li > a.active, .content-block .nav-tabs > li > a.focus, .content-block .nav-tabs > li > a:focus{
          background: #3c2b3b;
          border: #3c2b3b;
          color: #c4c2c7;
     }
-    .content-block .nav-tabs > li > a:hover .progress-bar div span, .content-block .nav-tabs > li > a:active .progress-bar div span, .content-block .nav-tabs > li > a.active .progress-bar div span, .content-block .nav-tabs > li > a.focus .progress-bar div span, .content-block .nav-tabs > li > a:focus .progress-bar div span{
+    .content-block .nav-tabs > li > a:active .progress-bar div span, .content-block .nav-tabs > li > a.active .progress-bar div span, .content-block .nav-tabs > li > a.focus .progress-bar div span, .content-block .nav-tabs > li > a:focus .progress-bar div span{
          background: #3b2b3b;
+    }
+
+    @media (hover: hover) {
+        .content-block .nav-tabs > li > a:hover {
+            background: #3c2b3b;
+            border: #3c2b3b;
+            color: #c4c2c7;
+        }
+        .content-block .nav-tabs > li > a:hover .progress-bar div span {
+            background: #3b2b3b;
+        }
     }
     .mid-sec{
          width: auto;
@@ -239,13 +259,20 @@
          transition-property: -webkit-text-stroke;
          transition-duration: 0.5s;
     }
-    .f-btn:hover, .f-btn:active, .f-btn:focus, .f-btn.active, .f-btn.focus{
+    .f-btn:active, .f-btn:focus, .f-btn.active, .f-btn.focus{
          background: none;
          color: #ffffff;
          border-color: #ffffff;
     }
-     .f-btn:hover i{
-         -webkit-text-stroke: 2px #bf696e;
+    @media (hover: hover) {
+        .f-btn:hover{
+            background: none;
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+        .f-btn:hover i{
+            -webkit-text-stroke: 2px #bf696e;
+        }
     }
      .f-adj-pad{
          padding: 42% 0 65%;
@@ -294,10 +321,12 @@
          color: #ffffff;
          padding-right: 5px;
     }
-     .f-body a.btn:hover{
-         background: #4b384b;
-         border-color: #4b384b;
-         color: #ffffff !important;
+    @media (hover: hover) {
+        .f-body a.btn:hover{
+            background: #4b384b;
+            border-color: #4b384b;
+            color: #ffffff !important;
+        }
     }
      ul.apps-icons {
          /*margin-bottom: 40px;*/
@@ -316,8 +345,10 @@
          margin-bottom: 0;
          margin-top: 5px;
     }
-     .selling-goods-btns a.btn:hover{
-         color: #bf696e !important;
+    @media (hover: hover) {
+        .selling-goods-btns a.btn:hover{
+            color: #bf696e !important;
+        }
     }
      form.apps-form {
          margin: 0 auto 0;
