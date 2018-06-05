@@ -12,6 +12,7 @@ import {
     getStatus, isItemLoaded,
     isSectionLocked
 } from "../../../utils/helper/helperFunctions";
+import LevelHead from "../../level/includes/LevelHead";
 
 class SectionPage extends Component {
     constructor(props) {
@@ -40,23 +41,33 @@ class SectionPage extends Component {
 
         const businessOptionList = map(relevantBusinessOptions, (businessOption, key) => {
             const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
-            const businessOptionStatus = getStatus(businessOptionStatuses, businessOption.id);
             const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
             const lockedClass = isLocked ? 'locked' : '';
             return (
-                <li key={businessOption.id} className={classnames(lockedClass)}>
-                    <Link to={businessOptionUrl}>
-                        <span
-                            className={classnames("circle-span", {"complete": businessOptionStatus.status === 'done'})}></span>
-                        {businessOption.name}
+                <li key={businessOption.id} className={classnames(lockedClass, 'active')}>
+                    <Link className="link-box" to={businessOptionUrl}>
+                        <div className="red-icon circular-white-bg" href="#">
+                            <img src={businessOption.icon}
+                                 alt=""/>
+                        </div>
                     </Link>
                 </li>
             )
         });
 
+        const levelHeadProps = {
+            currentLevel: currentLevel,
+            appStatus: this.props.appStatus
+        };
+
         return (
             <div>
-                {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
+                <LevelHead {...levelHeadProps}/>
+                <h2>{ currentSection.name }</h2>
+                <div className="content-wrap" dangerouslySetInnerHTML={{__html: currentSection.content}}/>
+                <ul className="apps-icons clearfix level2-apps-icons">
+                    {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
+                </ul>
             </div>
         );
     }

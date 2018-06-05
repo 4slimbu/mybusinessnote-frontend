@@ -13,7 +13,7 @@ import {
     getFirst,
     isItemLoaded, isSectionLocked
 } from "../../utils/helper/helperFunctions";
-import {setCurrent} from "../../actions/appStatusAction";
+import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
 import {ROUTES} from "../../constants/routes";
 
 class SectionContainer extends Component {
@@ -65,11 +65,24 @@ class SectionContainer extends Component {
 
         // Set current level and section and continue
         this.props.setCurrent(currentLevel, currentSection);
-    }
 
+        // Set tooltip
+        this.displayToolTip(props);
+    }
 
     redirectTo(url) {
         this.props.history.push(url);
+    }
+
+    displayToolTip(props) {
+        let pathname = props.location.pathname;
+        let sectionSlug = extractSectionFromLocation(pathname);
+        let currentSection = getBySlug(props.appStatus.sections, sectionSlug);
+
+        const toolTip = {};
+        toolTip.title = currentSection.tooltip_title;
+        toolTip.rawHtmlContent = currentSection.tooltip;
+        this.props.setToolTipContent(toolTip);
     }
 
     render() {
@@ -96,6 +109,7 @@ class SectionContainer extends Component {
 SectionContainer.propTypes = {
     makeRequest: PropTypes.func.isRequired,
     setCurrent: PropTypes.func.isRequired,
+    setToolTipContent: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -107,5 +121,5 @@ function mapStateToProps(state) {
 
 
 export default connect(mapStateToProps, {
-    makeRequest, setCurrent
+    makeRequest, setCurrent, setToolTipContent
 })(SectionContainer);
