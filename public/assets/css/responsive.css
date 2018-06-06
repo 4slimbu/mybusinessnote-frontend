@@ -170,7 +170,7 @@
          font-size: 14px;
     }
      ul.getting-start-list {
-         min-height: 138px;
+         /*min-height: 138px;*/
     }
      .menu-accordion .panel-title h6 {
          font-size: 14px;
@@ -200,7 +200,7 @@
          font-size: 16px;
     }
      .menu-accordion .panel-group .panel-faq.active::after {
-         height: 238px;
+         height: 100%;
     }
      .news-block img {
          width: 110px;
@@ -230,7 +230,7 @@
 
  @media only screen and (min-width: 864px) and (max-width: 991px) {
      .menu-accordion .panel-group .panel-faq.active::after {
-         height: 192px;
+         height: 100%;
     }
      ul.getting-start-list {
          min-height: 92px;
@@ -238,7 +238,7 @@
 }
  @media only screen and (min-width: 768px) and (max-width: 863px) {
      .menu-accordion .panel-group .panel-faq.active::after {
-         height: 205px;
+         height: 100%;
     }
      ul.getting-start-list {
          min-height: 105px;
@@ -372,7 +372,7 @@
     }
     
      .menu-accordion .panel-group .panel.active:last-child::after {
-         height: 215px;
+         /*height: 215px;*/
     }
      .step-one .level-complete a.btn {
          padding: 6px 26px;

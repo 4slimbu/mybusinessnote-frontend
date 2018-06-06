@@ -79,9 +79,12 @@ class MobileLevelLinks extends Component {
                         {level.name}
                         <span className="caret"></span>
                     </Link>
-                    <ul className="dropdown-menu">
-                        {sectionsList(level)}
-                    </ul>
+                    {
+                        !currentLevel.is_down &&
+                        <ul className="dropdown-menu">
+                            {sectionsList(level)}
+                        </ul>
+                    }
                 </li>
             )
         });

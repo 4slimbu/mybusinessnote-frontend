@@ -11,7 +11,7 @@ import {
     isItemLoaded
 } from "../../utils/helper/helperFunctions";
 import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
-import BusinessOptionPage from "./BusinessOptionPage";
+import BusinessOptionPage from "./pages/BusinessOptionPage";
 
 class BusinessOptionContainer extends Component {
 

@@ -3,7 +3,7 @@ import {map} from "lodash";
 import * as classnames from "classnames";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {findStatus, generateAppRelativeUrl, getStatus} from "../../../../utils/helper/helperFunctions";
+import {findStatus, generateAppRelativeUrl, getStatus, isItemLoaded} from "../../../../utils/helper/helperFunctions";
 import {Panel, PanelGroup} from "react-bootstrap";
 import SectionLinks from "./SectionLinks";
 
@@ -44,9 +44,14 @@ class LevelLinks extends Component {
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Body collapsible>
-                        <ul className="getting-start-list">
-                            {appStatus.sections.length > 0 && <SectionLinks {...sectionLinksProps}/>}
-                        </ul>
+                        {
+                            isItemLoaded(appStatus.sections) && !currentLevel.is_down ?
+                            <ul className="getting-start-list">
+                                <SectionLinks {...sectionLinksProps}/>
+                            </ul>
+                                :
+                                <div className="margin-top-15-px"></div>
+                        }
                     </Panel.Body>
                 </Panel>
             )

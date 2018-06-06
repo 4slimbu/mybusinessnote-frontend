@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {ROUTES} from "../../../constants/routes";
 import request from "../../../services/request";
 import {validateFields} from "../../../utils/validation/FieldValidator";
+import {MESSAGES} from "../../../constants/messages";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -111,7 +112,7 @@ class LoginForm extends Component {
             password: this.state.password.value
         };
 
-        this.props.makeRequest(request.Auth.login, data).then(
+        this.props.makeRequest(request.Auth.login, data, {message: MESSAGES.VERIFYING}).then(
             (responseData) => {
                 this.props.makeRequest(request.Business.getStatus);
                 this.props.makeRequest(request.BusinessOption.all);

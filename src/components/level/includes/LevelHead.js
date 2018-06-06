@@ -4,7 +4,8 @@ import ProgressBar from "../../common/ProgressBar";
 import {getIndexOf, getSectionPosition, getStatus, isItemLoaded} from "../../../utils/helper/helperFunctions";
 
 const LevelHead = (props) => {
-    const {currentLevel, appStatus} = props;
+    const {appStatus} = props;
+    const {currentLevel} = appStatus;
     const levelStatus = getStatus(appStatus.businessStatus.levelStatuses, currentLevel.id);
     const completedPercent = levelStatus.completed_percent ? levelStatus.completed_percent : 0;
     const totalSections = currentLevel.sections.length;

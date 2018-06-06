@@ -600,7 +600,7 @@ a:active {
      padding-left: 0;
      margin-top: 10px;
      margin-bottom: 18px;
-     min-height: 118px;
+     /*min-height: 118px;*/
 }
  ul.getting-start-list li {
      font-weight: 300;
@@ -638,7 +638,7 @@ ul.getting-start-list a {
      margin-top: 25px;
 }
  .menu-accordion .panel-group .panel.active:last-child::after {
-     height: 247px;
+     height: 100%;
 }
  .menu-accordion .panel-group .panel:first-child {
      margin-top: 0;
@@ -653,7 +653,7 @@ ul.getting-start-list a {
      right: -25px;
      top: 0;
      width: 25px;
-     height: 218px;
+     height: 100%;
      z-index: 10;
 }
 /*Mid Section*/
@@ -2233,4 +2233,8 @@ span.accordion-titles strong {
     /*border-radius: 100%;*/
     /*filter: grayscale(100%);*/
     /*margin: 10px;*/
+}
+
+.margin-top-15-px {
+    margin-top: 15px;
 }

@@ -32,12 +32,14 @@ import CashFlowForecasting from "./CashFlowForecasting";
 import OfficeSpace from "./OfficeSpace";
 import StoreLease from "./StoreLease";
 import NeedHardware from "./NeedHardware";
+import BusinessCategoryList from "./BusinessCategoryList";
 
 class Element extends Component {
     //these are pre-defined levels intro components
     components = {
+        BusinessCategoryList: BusinessCategoryList,
         BusinessCategories: BusinessCategories,
-        SellGoods: SellGoods,
+        QuestionAnswer: SellGoods,
         RegisterUser: RegisterUser,
         CreateBusiness: CreateBusiness,
         RegisterBusiness: RegisterBusiness,

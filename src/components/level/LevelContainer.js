@@ -13,14 +13,11 @@ import {map} from "lodash";
 import {Panel, PanelGroup} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 import {MESSAGES} from "../../constants/messages";
+import LevelDownPage from "./pages/LevelDownPage";
 
 class LevelContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isCurrentLevelSet: false,
-            isCurrentLevelComplete: true,
-        };
 
         this.onClickLevelLink = this.onClickLevelLink.bind(this);
         this.onClickContinue = this.onClickContinue.bind(this);
@@ -44,10 +41,10 @@ class LevelContainer extends Component {
         const location = props.location.pathname;
         const levelSlug = extractLevelFromLocation(location);
         const currentLevel = getBySlug(levels, levelSlug);
+
         props.setCurrent(currentLevel);
         this.displayToolTip(props);
     }
-
 
     onClickLevelLink(e, levelUrl) {
         e.preventDefault();
@@ -164,12 +161,19 @@ class LevelContainer extends Component {
             onClickLevelLink: this.onClickLevelLink
         };
 
+        const levelDownPageProps = {
+            currentLevel: currentLevel
+        };
+
         return (
-            isItemLoaded(this.props.appStatus.currentLevel) ?
-                this.props.appStatus.isShowLevelCompletePage ?
-                    <LevelCompletePage {...levelCompletePageProps}/>
+            isItemLoaded(currentLevel) ?
+                currentLevel.is_down ?
+                    <LevelDownPage {...levelDownPageProps}/>
                     :
-                    <LevelIntroPage {...levelIntroPageProps}/>
+                    appStatus.isShowLevelCompletePage ?
+                        <LevelCompletePage {...levelCompletePageProps}/>
+                        :
+                        <LevelIntroPage {...levelIntroPageProps}/>
                 :
                 <div></div>
         );
