@@ -3,11 +3,15 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    extractLevelFromLocation, generateAppRelativeUrl, getBySlug, getCurrentLevelSections,
-    getFirst, getNext, isItemLoaded, isLevelLocked,
+    extractLevelFromLocation,
+    generateAppRelativeUrl,
+    getBySlug,
+    getCurrentLevelSections,
+    getFirst,
+    isItemLoaded,
+    isLevelLocked,
 } from "../../utils/helper/helperFunctions";
-import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
-import LevelCompletePage from "./pages/LevelCompletePage";
+import {setCurrent, setEvents, setToolTipContent} from "../../actions/appStatusAction";
 import {addFlashMessage} from "../../actions/flashMessageAction";
 import {map} from "lodash";
 import {Panel, PanelGroup} from "react-bootstrap";
@@ -43,20 +47,21 @@ class LevelContainer extends Component {
         const currentLevel = getBySlug(levels, levelSlug);
 
         props.setCurrent(currentLevel);
-        this.displayToolTip(props);
+
+        if (isItemLoaded(currentLevel) && ! currentLevel.is_down) {
+            this.displayToolTip(props);
+        }
     }
 
     onClickLevelLink(e, levelUrl) {
         e.preventDefault();
         const {
-            setShowCompletedPage,
             appStatus, history
         } = this.props;
         const {currentLevel} = this.props.appStatus;
         const nextLevel = (appStatus.levels && appStatus.levels[currentLevel.id]) ? appStatus.levels[currentLevel.id] : currentLevel;
 
         setCurrent(nextLevel);
-        setShowCompletedPage(false);
         history.push(levelUrl);
     };
 
@@ -145,8 +150,7 @@ class LevelContainer extends Component {
 
     render() {
         const {appStatus} = this.props;
-        const {currentLevel} = this.props.appStatus;
-        const nextLevel = getNext(appStatus.levels, currentLevel.id);
+        const {currentLevel} = appStatus;
         const levelIntroPageProps = {
             appStatus: this.props.appStatus,
             currentLevel: currentLevel,
@@ -154,11 +158,6 @@ class LevelContainer extends Component {
             onClickSectionLink: this.onClickSectionLink,
             onClickContinue: this.onClickContinue,
             onHandleToolTip: this.onHandleToolTip
-        };
-        const levelCompletePageProps = {
-            currentLevel: currentLevel,
-            nextLevel: nextLevel,
-            onClickLevelLink: this.onClickLevelLink
         };
 
         const levelDownPageProps = {
@@ -170,10 +169,7 @@ class LevelContainer extends Component {
                 currentLevel.is_down ?
                     <LevelDownPage {...levelDownPageProps}/>
                     :
-                    appStatus.isShowLevelCompletePage ?
-                        <LevelCompletePage {...levelCompletePageProps}/>
-                        :
-                        <LevelIntroPage {...levelIntroPageProps}/>
+                    <LevelIntroPage {...levelIntroPageProps}/>
                 :
                 <div></div>
         );
@@ -183,7 +179,8 @@ class LevelContainer extends Component {
 LevelContainer.propTypes = {
     appStatus: PropTypes.object.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    setEvents: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -196,4 +193,5 @@ export default withRouter(connect(mapStateToProps, {
     setCurrent,
     addFlashMessage,
     setToolTipContent,
+    setEvents
 })(LevelContainer));

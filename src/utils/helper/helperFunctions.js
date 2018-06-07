@@ -166,9 +166,22 @@ export function extractSectionFromLocation(location) {
 }
 
 export function extractBoIdFromLocation(location) {
-    let params = location.split(/\/|\?|&|=|\./g);
+    let splittedArray = location.split(/\/|\?|&|=|\./g);
 
-    return params && (params.indexOf('bo') >= 0) && (params[params.indexOf('bo') + 1] * 1);
+    let filteredIndexes = splittedArray.map(function (c, i) {
+        if (c === 'bo') {
+            return i + 1;
+        }
+    }).filter(function (v) {
+        return v >= 0;
+    });
+
+    if (isItemLoaded(filteredIndexes)) {
+        // return the last found
+        return splittedArray[filteredIndexes[filteredIndexes.length - 1]] * 1;
+    }
+
+    return null;
 }
 
 export function getCurrentLevelByUrl(levels, url) {
@@ -267,9 +280,28 @@ export function isSectionLocked(businessOptionStatuses, section) {
     return !statusObject;
 }
 
-export function filterBusinessOptionsBySection(businessOptions, sectionId) {
-    let relevantBusinessOptions = filter(businessOptions, function (item) {
-        return item.section_id === sectionId;
+export function filterBusinessOptionsBySection(appStatus, sectionId) {
+    let relevantBusinessOptions = filter(appStatus.businessOptions, function (item) {
+        let statusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, item.id);
+        return item.section_id === sectionId && statusObject.status != 'irrelevant' && !item.parent_id;
+    });
+
+    return relevantBusinessOptions ? relevantBusinessOptions : [];
+}
+
+export function hasChildBusinessOptions(appStatus, currentBusinessOption) {
+    let relevantBusinessOptions = filter(appStatus. businessOptions, function (item) {
+        let statusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, item.id);
+        return item.parent_id === currentBusinessOption.id  && statusObject.status != 'irrelevant';
+    });
+
+    return isItemLoaded(relevantBusinessOptions);
+}
+
+export function getChildBusinessOptions(appStatus, currentBusinessOption) {
+    let relevantBusinessOptions = filter(appStatus. businessOptions, function (item) {
+        let statusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, item.id);
+        return item.parent_id === currentBusinessOption.id  && statusObject.status != 'irrelevant';
     });
 
     return relevantBusinessOptions ? relevantBusinessOptions : [];
@@ -307,6 +339,11 @@ export function getById(collection, id) {
 export function getBySlug(collection, slug) {
     let statusObject = find(collection, {slug: slug});
     return statusObject ? statusObject : {};
+}
+
+export function getByEventType(collection, type) {
+    let eventObject = find(collection, {type: type});
+    return eventObject ? eventObject : {};
 }
 
 export function getFirst(collection) {

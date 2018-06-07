@@ -6,7 +6,7 @@ import {
     SET_BUSINESS_OPTIONS,
     SET_BUSINESS_STATUS,
     SET_CURRENT,
-    SET_CURRENT_TIP_CATEGORY,
+    SET_CURRENT_TIP_CATEGORY, SET_EVENTS,
     SET_LEVELS,
     SET_SECTIONS,
     SET_SELL_GOODS,
@@ -235,6 +235,11 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
             return {
                 ...state,
                 toolTip: action.toolTip
+            };
+        case SET_EVENTS :
+            return {
+                ...state,
+                events: action.events
             };
         default:
             return state;

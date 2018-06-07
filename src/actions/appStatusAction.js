@@ -7,7 +7,7 @@ import {
     SET_BUSINESS_OPTIONS,
     SET_BUSINESS_STATUS,
     SET_CURRENT,
-    SET_CURRENT_TIP_CATEGORY,
+    SET_CURRENT_TIP_CATEGORY, SET_EVENTS,
     SET_LEVEL,
     SET_LEVELS,
     SET_SECTION,
@@ -129,5 +129,12 @@ export function setToolTipContent(toolTip) {
     return {
         type: SET_TOOLTIP_CONTENT,
         toolTip
+    }
+}
+
+export function setEvents(events) {
+    return {
+        type: SET_EVENTS,
+        events
     }
 }

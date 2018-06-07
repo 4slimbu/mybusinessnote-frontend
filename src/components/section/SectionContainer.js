@@ -4,14 +4,16 @@ import PropTypes from "prop-types";
 import {callApi, makeRequest} from "../../actions/requestAction";
 import SectionPage from "./pages/SectionPage";
 import SectionCompletePage from "./pages/SectionCompletePage";
+import {map} from "lodash";
+import {Panel, PanelGroup} from "react-bootstrap";
 import {
-    extractBoIdFromLocation,
     extractLevelFromLocation,
-    extractSectionFromLocation, generateAppRelativeUrl,
-    getById,
-    getBySlug,
+    extractSectionFromLocation, filterBusinessOptionsBySection,
+    generateAppRelativeUrl,
+    getBySlug, getCurrentLevelSections,
     getFirst,
-    isItemLoaded, isSectionLocked
+    isItemLoaded,
+    isSectionLocked
 } from "../../utils/helper/helperFunctions";
 import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
 import {ROUTES} from "../../constants/routes";
@@ -28,6 +30,7 @@ class SectionContainer extends Component {
         };
 
         this.redirectTo = this.redirectTo.bind(this);
+        this.onHandleToolTip = this.onHandleToolTip.bind(this);
     }
 
     componentDidMount() {
@@ -57,7 +60,7 @@ class SectionContainer extends Component {
         }
 
         // Redirect to business option page if, section landing page is disabled
-        if (! currentSection.show_landing_page) {
+        if (!currentSection.show_landing_page) {
             const firstBusinessOption = getFirst(currentSection.businessOptions);
             const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, firstBusinessOption.id);
             this.redirectTo(businessOptionUrl);
@@ -65,8 +68,6 @@ class SectionContainer extends Component {
 
         // Set current level and section and continue
         this.props.setCurrent(currentLevel, currentSection);
-
-        // Set tooltip
         this.displayToolTip(props);
     }
 
@@ -74,15 +75,60 @@ class SectionContainer extends Component {
         this.props.history.push(url);
     }
 
-    displayToolTip(props) {
-        let pathname = props.location.pathname;
-        let sectionSlug = extractSectionFromLocation(pathname);
-        let currentSection = getBySlug(props.appStatus.sections, sectionSlug);
+    onHandleToolTip(e, id) {
+        e.preventDefault();
+        this.displayToolTip(this.props, id);
+    }
 
+    onHandleToolTipSelect(newKey) {
+        this.displayToolTip(this.props, newKey);
+    }
+
+    displayToolTip(props, id = 0) {
+        const {setToolTipContent, appStatus} = props;
+        const {levels, sections} = appStatus;
+        const pathname = props.location.pathname;
+        let levelSlug = extractLevelFromLocation(pathname);
+        let sectionSlug = extractSectionFromLocation(pathname);
+        let currentLevel = getBySlug(levels, levelSlug);
+        let currentSection = getBySlug(sections, sectionSlug);
         const toolTip = {};
+
+        // Set tooltip content for level
         toolTip.title = currentSection.tooltip_title;
         toolTip.rawHtmlContent = currentSection.tooltip;
-        this.props.setToolTipContent(toolTip);
+
+        // Set tooltip accordion for levels other than level 1
+        if (currentLevel.id !== 1) {
+            const toolTipList = map(filterBusinessOptionsBySection(appStatus, currentSection.id), (item, key) => {
+                const title = (item.id === id) ? <strong>{item.short_name}</strong> : item.short_name;
+                return (
+                    <Panel key={key} eventKey={item.id}>
+                        <Panel.Heading>
+                            <Panel.Title toggle>
+                                <h4>
+                                    <span className="accordion-titles">{title}</span>
+                                    <span className="acc-img"></span>
+                                </h4>
+                            </Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Body collapsible>
+                            <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}}/>
+                        </Panel.Body>
+                    </Panel>
+                )
+            });
+
+            toolTip.accordion = (
+                <PanelGroup accordion id={`accordion-uncontrolled-level-three-sections`} activeKey={id}
+                            onSelect={(newKey) => this.onHandleToolTipSelect(newKey)}>
+                    {toolTipList}
+                </PanelGroup>
+            );
+        }
+
+        // Dispatch action to set tooltip content
+        setToolTipContent(toolTip);
     }
 
     render() {
@@ -91,6 +137,7 @@ class SectionContainer extends Component {
         const sectionPageProps = {
             makeRequest: makeRequest,
             redirectTo: this.redirectTo,
+            onHandleToolTip: this.onHandleToolTip
         };
 
         return (

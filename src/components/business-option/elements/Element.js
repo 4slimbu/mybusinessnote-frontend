@@ -32,6 +32,7 @@ import CashFlowForecasting from "./CashFlowForecasting";
 import OfficeSpace from "./OfficeSpace";
 import StoreLease from "./StoreLease";
 import NeedHardware from "./NeedHardware";
+import SingleFormField from "./SingleFormField";
 
 class Element extends Component {
     //these are pre-defined levels intro components

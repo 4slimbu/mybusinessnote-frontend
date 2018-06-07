@@ -2,42 +2,61 @@ import React from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../../../level/includes/LevelHead";
 import Element from "../../elements/Element";
+import {Link} from "react-router-dom";
+import {
+    generateAppRelativeUrl, getChildBusinessOptions, hasChildBusinessOptions, isItemLoaded,
+    isSectionLocked
+} from "../../../../utils/helper/helperFunctions";
+import {map} from "lodash";
+import * as classnames from "classnames";
 
 const ModalBoxTemplate = ({appStatus}) => {
-    const {currentSection, currentBusinessOption} = appStatus;
+    const {currentLevel, currentSection, currentBusinessOption, businessOptionStatuses} = appStatus;
+
+    let backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug);
+    if (currentBusinessOption.parent_id) {
+        backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, currentBusinessOption.parent_id);
+    }
+
+    let childBusinessOptions = getChildBusinessOptions(appStatus, currentBusinessOption);
+    let businessOptionList;
+    if (childBusinessOptions) {
+        businessOptionList = map(childBusinessOptions, (businessOption, key) => {
+            const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
+            const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
+            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'paper' : '';
+            const lockedClass = isLocked ? 'locked' : '';
+            return (
+                <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}>
+                    <Link className="link-box" to={businessOptionUrl}>
+                        <div className="red-icon circular-white-bg" href="#">
+                            <img src={businessOption.icon}
+                                 alt=""/>
+                        </div>
+                    </Link>
+                </li>
+            )
+        });
+    }
     return (
         <div>
-            <LevelHead appStatus={appStatus}/>modal box template
+            <LevelHead appStatus={appStatus}/>
 
-            <div className='clearfix'>
-                <a className="back-link pull-left" href="#" onClick={(e) => this.onClickBack(e)}>
-                    <i className="fa fa-chevron-left" aria-hidden="true"></i>
-                    back</a>
-                {
-                    (
-                        currentBusinessOption.status === 'done' ||
-                        currentBusinessOption.status === 'skipped' ||
-                        currentBusinessOption.status === 'irrelevant'
-
-                    ) &&
-                    <a className="pull-right front-link" href="#" onClick={(e) => this.onClickNext(e)}>
-                        next
-                        <i className="fa fa-chevron-right" aria-hidden="true"></i>
-                    </a>
-                }
-            </div>
             <div className="alert-form">
-                <div className="alert-head">
+                <div className="alert-head pos-relative">
                     <div>
-                        <img className="red-icon mCS_img_loaded" src={currentSection.red_icon} alt=""/>
-                        <h6>{currentSection.name}</h6>
+                        <Link className="pull-left abs-back" to={backUrl}>
+                            <i className="fa fa-chevron-left" aria-hidden="true"></i>
+                        </Link>
+                        <img className="red-icon mCS_img_loaded" src={currentBusinessOption.icon} alt=""/>
+                        <h6>{currentBusinessOption.short_name}</h6>
                     </div>
                 </div>
                 <div className="progress c-progress">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="60"
-                         aria-valuemin="0" aria-valuemax="100"
-                         style={{width: currentSection.completed_percent + '%'}}>
-                    </div>
+                    {/*<div className="progress-bar" role="progressbar" aria-valuenow="60"*/}
+                         {/*aria-valuemin="0" aria-valuemax="100"*/}
+                         {/*style={{width: currentSection.completed_percent + '%'}}>*/}
+                    {/*</div>*/}
                 </div>
                 {
                     appStatus.completed_status ?
@@ -50,18 +69,25 @@ const ModalBoxTemplate = ({appStatus}) => {
                                className="btn btn-default btn-lg btn-alert">Continue</a>
                         </div>
                         :
-                        <div>
-                            <p>{currentBusinessOption.name}</p>
-                            <div className="content-wrap"
-                                 dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
+                        (
+                            isItemLoaded(businessOptionList) ?
+                                <ul className="disc-style clearfix">
+                                    { businessOptionList }
+                                </ul>
+                                    :
                             <div>
-                                {
-                                    currentBusinessOption.element &&
-                                    <Element element={currentBusinessOption.element}
-                                             onClick={(e) => this.onClickNext(e)}/>
-                                }
+                                <p>{currentBusinessOption.name}</p>
+                                <div className="content-wrap"
+                                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
+                                <div>
+                                    {
+                                        currentBusinessOption.element &&
+                                        <Element element={currentBusinessOption.element}
+                                                 onClick={(e) => this.onClickNext(e)}/>
+                                    }
+                                </div>
                             </div>
-                        </div>
+                        )
                 }
             </div>
         </div>

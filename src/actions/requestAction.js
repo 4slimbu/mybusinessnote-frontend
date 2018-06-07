@@ -9,7 +9,7 @@ import {
     setLevel,
     setLevels,
     setSection,
-    setSections
+    setSections, setEvents
 } from "./appStatusAction";
 import {addFlashMessage} from "./flashMessageAction";
 import {logout, setAuth} from "./authActions";
@@ -69,6 +69,8 @@ export function handleSuccessResponseData(dispatch, responseData) {
     if (responseData.business) dispatch(setBusiness(responseData.business));
 
     if (responseData.businessCategories) dispatch(setBusinessCategories(responseData.businessCategories));
+
+    if (responseData.events) dispatch(setEvents(responseData.events));
 
     if (responseData.successCode && responseData.successCode !== 'FETCHED') {
         dispatch(addFlashMessage({type: "success", text: getCodeMessage(responseData.successCode)}))

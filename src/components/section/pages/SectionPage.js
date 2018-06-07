@@ -9,7 +9,8 @@ import * as classnames from "classnames";
 import {
     filterBusinessOptionsBySection,
     generateAppRelativeUrl,
-    getStatus, isItemLoaded,
+    hasChildBusinessOptions,
+    isItemLoaded,
     isSectionLocked
 } from "../../../utils/helper/helperFunctions";
 import LevelHead from "../../level/includes/LevelHead";
@@ -36,17 +37,24 @@ class SectionPage extends Component {
     }
 
     render() {
-        const {currentLevel, currentSection, businessOptions = [{}], businessOptionStatuses = [{}] } = this.props.appStatus;
-        const relevantBusinessOptions = filterBusinessOptionsBySection(businessOptions, currentSection.id);
+        const {appStatus, onHandleToolTip} = this.props;
+        const {currentLevel, currentSection, businessOptionStatuses = [{}]} = this.props.appStatus;
+        const relevantBusinessOptions = filterBusinessOptionsBySection(appStatus, currentSection.id);
 
         const businessOptionList = map(relevantBusinessOptions, (businessOption, key) => {
             const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
             const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
+            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'paper' : '';
             const lockedClass = isLocked ? 'locked' : '';
             return (
-                <li key={businessOption.id} className={classnames(lockedClass, 'active')}>
+                <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}
+                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id)}
+                    onMouseEnter={(e) => onHandleToolTip(e, businessOption.id)}
+                    onClick={(e) => onHandleToolTip(e, businessOption.id)}
+                >
                     <Link className="link-box" to={businessOptionUrl}>
                         <div className="red-icon circular-white-bg" href="#">
+                            {/*{businessOption.short_name}*/}
                             <img src={businessOption.icon}
                                  alt=""/>
                         </div>
@@ -56,18 +64,33 @@ class SectionPage extends Component {
         });
 
         const levelHeadProps = {
-            currentLevel: currentLevel,
             appStatus: this.props.appStatus
         };
 
         return (
             <div>
                 <LevelHead {...levelHeadProps}/>
-                <h2>{ currentSection.name }</h2>
-                <div className="content-wrap" dangerouslySetInnerHTML={{__html: currentSection.content}}/>
-                <ul className="apps-icons clearfix level2-apps-icons">
-                    {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
-                </ul>
+
+                <div className="alert-form">
+                    <div className="alert-head pos-relative">
+                        <div>
+                            <Link className="pull-left abs-back" to={generateAppRelativeUrl(currentLevel.slug)}>
+                                <i className="fa fa-chevron-left" aria-hidden="true"></i>
+                            </Link>
+                            <img className="red-icon mCS_img_loaded" src={currentSection.icon} alt=""/>
+                            <h6>{currentSection.name}</h6>
+                        </div>
+                    </div>
+                    <div className="progress c-progress">
+                        {/*<div className="progress-bar" role="progressbar" aria-valuenow="60"*/}
+                             {/*aria-valuemin="0" aria-valuemax="100"*/}
+                             {/*style={{width: currentSection.completed_percent + '%'}}>*/}
+                        {/*</div>*/}
+                    </div>
+                    <ul className="disc-style clearfix">
+                        {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
+                    </ul>
+                </div>
             </div>
         );
     }
@@ -77,7 +100,8 @@ SectionPage.propTypes = {
     auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    onHandleToolTip: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

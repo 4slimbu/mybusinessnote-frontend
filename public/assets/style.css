@@ -1342,7 +1342,7 @@ form.apps-form a{
  .alert-head h6 {
      color: #bf696e;
      font-size: 13px;
-     line-height: 13.58px;
+     line-height: 2.5;
 }
  .c-progress {
      background: #d7d7d7;
@@ -2237,4 +2237,52 @@ span.accordion-titles strong {
 
 .margin-top-15-px {
     margin-top: 15px;
+}
+
+.disc-style {
+    margin: 0;
+    padding: 5%;
+}
+
+.disc-style li {
+    float: left;
+    padding: 10px;
+    border-radius: 5%;
+    margin: 8px;
+    background: #eeeeee;
+    line-height: inherit;
+}
+
+.disc-style li img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%
+}
+
+.pos-relative {
+    position: relative;
+}
+
+a.abs-back {
+    position: absolute;
+    left: 0;
+    padding: 0 5px 0 15px;
+    color: #bf696e;
+    font-size: 15px;
+}
+
+.pos-relative .red-icon {
+    max-width: 26px;
+}
+
+/*stacked paper effect */
+
+.paper {
+    background: #fff;
+    box-shadow:
+        /* The top layer shadow */
+            0 1px 1px rgba(0,0,0,0.15),
+                /* The second layer */
+            0 10px 0 -5px #eee;
+    /* Padding for demo purposes */
 }

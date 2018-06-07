@@ -1,48 +1,95 @@
 import React, {Component} from "react";
 import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
+import {
+    dashboardUrl, getByEventType, getCurrentLevelByUrl, getNext, isItemLoaded,
+    publicUrl
+} from "../../../utils/helper/helperFunctions";
+import {setEvents} from "../../../actions/appStatusAction";
+import {connect} from "react-redux";
+import {ROUTES} from "../../../constants/routes";
 
 class SectionCompletePage extends Component {
-    render() {
-        const {level, nextLevel, setCurrentLevel, setCurrentSection, setCurrentBusinessOption, history} = this.props;
-        const onClickLevelLink = function (e, levelUrl) {
-            e.preventDefault();
-            setCurrentLevel(nextLevel);
-            setCurrentSection({});
-            setCurrentBusinessOption({});
-            history.push(levelUrl);
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentLevel: {},
+            nextLevel: {},
+            nextLevelUrl: '/'
         };
-        const nextLevelUrl = '/level/' + nextLevel.slug;
+    }
+
+    componentDidMount() {
+        const {appStatus, history, location} = this.props;
+        const currentLevel = getCurrentLevelByUrl(appStatus.levels, location.pathname);
+        const nextLevel = getNext(appStatus.levels, currentLevel.id);
+        const nextLevelUrl = isItemLoaded(nextLevel) ? '/level/' + nextLevel.slug : dashboardUrl();
+
+        if (!isItemLoaded(appStatus.events) || !getByEventType('levelCompleted')) {
+            history.push(ROUTES.HOME);
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            currentLevel: currentLevel,
+            nextLevel: nextLevel,
+            nextLevelUrl: nextLevelUrl
+        })
+    }
+
+    componentWillUnmount() {
+        this.props.setEvents([]);
+    }
+
+    render() {
+
         return (
             <div className="level-complete">
-                <h5 className="obvious-h5">{level.name}</h5>
-                <h1>Congratulations</h1>
-                <p>Level {level.id} complete!</p>
+                <h5 className="obvious-h5 hidden-xs">{this.state.currentLevel.name}</h5>
+                {this.state.currentLevel.badge_message &&
+                <div className="content-wrap" dangerouslySetInnerHTML={{__html: this.state.currentLevel.badge_message}}/>}
                 <img className="complete-block-img"
-                     src={`${process.env.PUBLIC_URL}/assets/images/level-complete.png`} alt=""/>
+                     src={publicUrl('/assets/images/level-complete.png')} alt=""/>
                 <div className="bottom-block-complete">
-                    <div className="btn-wrap">
-                        <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
-                              to={nextLevelUrl} className="btn btn-default btn-md">Continue to
-                            level {nextLevel.id}</Link>
-                    </div>
-                    <Link onClick={(e) => onClickLevelLink(e, nextLevelUrl)}
-                          to={nextLevelUrl} className="next-session-link"><i
-                        className="fa fa-chevron-down" aria-hidden="true"></i>
-                    </Link>
-                    <h6>{nextLevel.name}</h6>
+                    {
+                        !isItemLoaded(this.state.nextLevel) ?
+                            <div className="btn-wrap">
+                                <a href={dashboardUrl()} className="btn btn-default btn-md">Go to Dashboard</a>
+                                <br/><br/>
+                            </div>
+                            :
+                            <div>
+                                <div className="btn-wrap">
+                                    <Link
+                                        to={this.state.nextLevelUrl} className="btn btn-default btn-md">Continue to
+                                        level {this.state.nextLevel.id}</Link>
+                                </div>
+                                <Link
+                                    to={this.state.nextLevelUrl} className="next-session-link">
+                                    <i className="fa fa-chevron-down" aria-hidden="true"></i>
+                                </Link>
+                                <h6>{this.state.nextLevel.name}</h6>
+                            </div>
+                    }
                 </div>
             </div>
         );
     }
+
 }
 
 SectionCompletePage.propTypes = {
-    level: PropTypes.object.isRequired,
-    nextLevel: PropTypes.object.isRequired,
-    setCurrentLevel: PropTypes.func.isRequired,
-    setCurrentSection: PropTypes.func.isRequired,
-    setCurrentBusinessOption: PropTypes.func.isRequired
+    appStatus: PropTypes.object.isRequired,
+    setEvents: PropTypes.func.isRequired
 };
 
-export default withRouter(SectionCompletePage);
+function mapStateToProps(state) {
+    return {
+        appStatus: state.appStatusReducer
+    }
+}
+
+export default withRouter(connect(mapStateToProps, {
+    setEvents
+})(SectionCompletePage));
