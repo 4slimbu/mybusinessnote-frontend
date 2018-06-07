@@ -58,7 +58,7 @@ class BusinessOptionPage extends Component {
                         <DefaultTemplate appStatus={appStatus}/> : ""
                 }
                 {
-                    (currentBusinessOption.template == 'modal_box') ?
+                    (currentBusinessOption.template === 'modal_box') ?
                         <ModalBoxTemplate appStatus={appStatus}/> : ""
                 }
             </div>
