@@ -184,17 +184,14 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
                 businessCategories: action.businessCategories
             };
         case SET_BUSINESS_OPTION :
-            const businessOption = (action.businessOption && state.currentBusinessOption && state.currentBusinessOption.id === action.businessOption.id) ?
-                merge(state.currentBusinessOption, action.businessOption)
-                : action.businessOption;
             const index = findIndex(state.businessOptions, {id: action.businessOption.id});
             if (index >= 0) {
                 return {
                     ...state,
-                    currentBusinessOption: businessOption,
+                    currentBusinessOption: action.businessOption,
                     businessOptions: [
                         ...state.businessOptions.slice(0, index),
-                        merge(state.businessOptions[index], action.businessOption),
+                        action.businessOption,
                         ...state.businessOptions.slice(index + 1)
                     ]
 

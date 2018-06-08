@@ -25,10 +25,10 @@ class LevelCompletePage extends Component {
         const nextLevel = getNext(appStatus.levels, currentLevel.id);
         const nextLevelUrl = isItemLoaded(nextLevel) ? '/level/' + nextLevel.slug : dashboardUrl();
 
-        if (!isItemLoaded(appStatus.events) || !isItemLoaded(getByEventType(appStatus.events, 'levelCompleted'))) {
-            history.push(ROUTES.HOME);
-            return;
-        }
+        // if (!isItemLoaded(appStatus.events) || !isItemLoaded(getByEventType(appStatus.events, 'levelCompleted'))) {
+        //     history.push(ROUTES.HOME);
+        //     return;
+        // }
 
         this.setState({
             ...this.state,

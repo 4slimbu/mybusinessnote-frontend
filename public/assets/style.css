@@ -942,6 +942,10 @@ form.apps-form a{
  .mid-sec .content-wrapper .level-complete, .operation-7 .mid-sec .content-wrapper {
      text-align: center;
 }
+ .level-complete {
+     height: 80vh;
+ }
+
  .mid-sec .level-complete p {
      margin-top: 8px;
 }
@@ -1632,32 +1636,21 @@ a.social-media-icon {
      }
 
 .colors-sample li{
-    margin-left: 0;
-    position: relative;
+     position: relative;
+     z-index: 1;
+ }
+
+.colors-sample li:last-child{
+    margin-left: -7px;
 }
 
-/*.colors-sample li.active a{
+.colors-sample li.active{
+    z-index: 10;
+}
+
+.colors-sample li.active a{
      height: 35px;
      width: 35px;
-     border-color: #bf696e;
-     border-width: 3px;
-}*/
-
-.colors-sample li:first-child.active{
-     position: relative;
-     left: 12px;
-}
-
-/*.colors-sample li:first-child.active a,
-.colors-sample li:last-child.active a{
-     border-color: #bf696e;
-     border-width: 3px;
-}*/
-
-.colors-sample li:last-child.active{
-     position: relative;
-     right: 12px;
-     z-index: 10;
 }
 
 .add-colrs {
@@ -2246,16 +2239,21 @@ span.accordion-titles strong {
 
 .disc-style li {
     float: left;
-    padding: 10px;
     border-radius: 5%;
     margin: 8px;
-    background: #eeeeee;
     line-height: inherit;
 }
 
+.disc-style li > a {
+    float: left;
+    border-radius: 5%;
+    line-height: inherit;
+    padding: 10px;
+}
+
 .disc-style li img {
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
     border-radius: 100%
 }
 
@@ -2278,11 +2276,81 @@ a.abs-back {
 /*stacked paper effect */
 
 .paper {
+    position: relative;
     background: #fff;
-    box-shadow:
-        /* The top layer shadow */
-            0 1px 1px rgba(0,0,0,0.15),
-                /* The second layer */
-            0 10px 0 -5px #eee;
-    /* Padding for demo purposes */
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+}
+
+.multiple-paper {
+    position: relative;
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15), 2px -2px 0 1px #e8b8bb;
+}
+
+.tick-done {
+    display: inline-block;
+    position: absolute;
+    right: 4px;
+    color: #32de32;
+    font-size: 0.7em;
+}
+
+.tick-incomplete {
+    display: none;
+}
+
+.hide-tick {
+    display: none;
+}
+
+.li-progress-bar {
+    width: 85%;
+    position: absolute;
+    bottom: 7px;
+}
+
+.li-progress-bar .progress{
+    margin-bottom: 0;
+}
+
+.li-progress-bar .progress-bar {
+    background-color: #C5797D;
+}
+
+.li-progress-bar .progress {
+    background-color: #ffffff;
+}
+
+.locked .li-progress-bar .progress {
+    /*background-color: #d8a1a1;*/
+}
+
+.locked .li-progress-bar {
+    display: none;
+}
+
+.alert-f-body {
+    padding: 40px 15px;
+}
+
+.alert-f-body p {
+    margin: 0;
+}
+
+.alert-f-body .btn {
+    margin-bottom: 0 !important;
+}
+
+.alert-f-body ul.alert-btns {
+    margin: 26px 0 26px;
+    padding: 0;
+}
+
+form.alert-form {
+    margin: 18px auto 25px;
+}
+
+.apps-social-media {
+    margin: 25px 0 0;
+    padding: 0;
 }

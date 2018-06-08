@@ -4,8 +4,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {setBusinessCategoryId, setCurrentTipCategory, setSellGoods} from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
-import {getByKey, isItemLoaded, saveBusinessOption} from "../../../utils/helper/helperFunctions";
-import OptionStatusButtonGroup from "../../common/OptionStatusButtonGroup";
+import {generateAppRelativeUrl, getByKey, isItemLoaded} from "../../../utils/helper/helperFunctions";
 import * as classnames from "classnames";
 import {makeRequest} from "../../../actions/requestAction";
 import request from "../../../services/request";
@@ -44,14 +43,22 @@ class BrandColor extends Component {
 
         this.props.makeRequest(request.BusinessOption.save, {
             id: this.props.appStatus.currentBusinessOption.id,
-            input:{
+            input: {
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
                     brand_color: this.state.brand_color,
                     sec_brand_color: this.state.sec_brand_color
                 }
             }
-        }, {message: MESSAGES.SAVING});
+        }, {message: MESSAGES.SAVING}).then((response) => {
+            let {appStatus, history} = this.props;
+            let {currentLevel, currentSection, currentBusinessOption} = appStatus;
+            let backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug);
+            if (currentBusinessOption.parent_id) {
+                backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, currentBusinessOption.parent_id);
+            }
+            history.push(backUrl);
+        });
     }
 
     onClickNext(e) {
@@ -74,16 +81,6 @@ class BrandColor extends Component {
         }, 1000);
     }
 
-    onClickUpdateStatus(e, status) {
-        e.preventDefault();
-
-        this.props.makeRequest(request.BusinessOption.save, {
-            id: this.props.appStatus.currentBusinessOption.id,
-            input:{
-                business_option_status: status
-            }
-        }, {message: MESSAGES.SAVING});
-    };
 
     onClickOption(e, option) {
         e.preventDefault();
@@ -151,12 +148,10 @@ class BrandColor extends Component {
         const currentBusinessOption = appStatus.currentBusinessOption;
         const {brand_color, sec_brand_color} = this.state;
 
-        const optionStatusButtonGroupProps = {
-            status: currentBusinessOption.status,
-            onClickUpdateStatus: this.onClickUpdateStatus,
-        };
         return (
             <div>
+                <div className="content-wrap"
+                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
                 <ul className="alert-brands-colors">
                     <li><a href="" onClick={(e) => this.onClickOption(e, '#f7e461')}></a></li>
                     <li><a href="" onClick={(e) => this.onClickOption(e, '#cde1e0')}></a></li>
@@ -201,7 +196,6 @@ class BrandColor extends Component {
                 </ul>
                 <a href="#" onClick={(e) => this.handleSubmit(e)} className="btn btn-default btn-lg btn-alert">Done</a>
 
-                <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>
             </div>
 
         )

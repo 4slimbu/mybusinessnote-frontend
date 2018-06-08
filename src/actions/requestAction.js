@@ -72,7 +72,7 @@ export function handleSuccessResponseData(dispatch, responseData) {
 
     if (responseData.events) dispatch(setEvents(responseData.events));
 
-    if (responseData.successCode && responseData.successCode !== 'FETCHED') {
+    if (responseData.successCode && responseData.successCode !== 'FETCHED' && responseData.successCode !== 'TRACKED') {
         dispatch(addFlashMessage({type: "success", text: getCodeMessage(responseData.successCode)}))
     }
 }

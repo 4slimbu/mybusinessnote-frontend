@@ -341,6 +341,11 @@ export function getBySlug(collection, slug) {
     return statusObject ? statusObject : {};
 }
 
+export function filterFirstInCollection(collection = [], filterObject = {}) {
+    filterObject = find(collection, filterObject);
+    return filterObject ? filterObject : {};
+}
+
 export function getByEventType(collection, type) {
     let eventObject = find(collection, {type: type});
     return eventObject ? eventObject : {};

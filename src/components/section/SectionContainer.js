@@ -8,9 +8,11 @@ import {map} from "lodash";
 import {Panel, PanelGroup} from "react-bootstrap";
 import {
     extractLevelFromLocation,
-    extractSectionFromLocation, filterBusinessOptionsBySection,
+    extractSectionFromLocation,
+    filterBusinessOptionsBySection,
+    filterFirstInCollection,
     generateAppRelativeUrl,
-    getBySlug, getCurrentLevelSections,
+    getBySlug,
     getFirst,
     isItemLoaded,
     isSectionLocked
@@ -51,7 +53,7 @@ class SectionContainer extends Component {
         let levelSlug = extractLevelFromLocation(pathname);
         let sectionSlug = extractSectionFromLocation(pathname);
         let currentLevel = getBySlug(levels, levelSlug);
-        let currentSection = getBySlug(sections, sectionSlug);
+        let currentSection = filterFirstInCollection(sections, {slug: sectionSlug, level_id: currentLevel.id});
 
         // Redirect to home if not verified and section is locked
         if (!auth.isVerified && isSectionLocked(businessOptionStatuses, currentSection)) {
@@ -91,7 +93,7 @@ class SectionContainer extends Component {
         let levelSlug = extractLevelFromLocation(pathname);
         let sectionSlug = extractSectionFromLocation(pathname);
         let currentLevel = getBySlug(levels, levelSlug);
-        let currentSection = getBySlug(sections, sectionSlug);
+        let currentSection = filterFirstInCollection(sections, {slug: sectionSlug, level_id: currentLevel.id});
         const toolTip = {};
 
         // Set tooltip content for level

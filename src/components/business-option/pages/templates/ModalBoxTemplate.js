@@ -4,13 +4,15 @@ import LevelHead from "../../../level/includes/LevelHead";
 import Element from "../../elements/Element";
 import {Link} from "react-router-dom";
 import {
-    generateAppRelativeUrl, getChildBusinessOptions, hasChildBusinessOptions, isItemLoaded,
+    filterFirstInCollection,
+    generateAppRelativeUrl, getChildBusinessOptions, getStatus, hasChildBusinessOptions, isItemLoaded,
     isSectionLocked
 } from "../../../../utils/helper/helperFunctions";
 import {map} from "lodash";
 import * as classnames from "classnames";
+import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
 
-const ModalBoxTemplate = ({appStatus}) => {
+const ModalBoxTemplate = ({appStatus, onHandleToolTip, onClickUpdateStatus}) => {
     const {currentLevel, currentSection, currentBusinessOption, businessOptionStatuses} = appStatus;
 
     let backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug);
@@ -24,20 +26,36 @@ const ModalBoxTemplate = ({appStatus}) => {
         businessOptionList = map(childBusinessOptions, (businessOption, key) => {
             const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
             const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
-            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'paper' : '';
+            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'multiple-paper' : 'paper';
             const lockedClass = isLocked ? 'locked' : '';
+            const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
+            const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
+            const completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
             return (
-                <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}>
+                <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}
+                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id)}
+                    onMouseOver={(e) => onHandleToolTip(e, businessOption.id)}
+                    onClick={(e) => onHandleToolTip(e, businessOption.id)}
+                >
                     <Link className="link-box" to={businessOptionUrl}>
                         <div className="red-icon circular-white-bg" href="#">
                             <img src={businessOption.icon}
                                  alt=""/>
                         </div>
                     </Link>
+                    <span className={classnames(completedClass, 'glyphicon glyphicon-ok')}>
+                    </span>
                 </li>
             )
         });
     }
+
+    const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, currentBusinessOption.id);
+    const optionStatusButtonGroupProps = {
+        status: businessOptionStatusObject.status,
+        onClickUpdateStatus: onClickUpdateStatus,
+    };
+
     return (
         <div>
             <LevelHead appStatus={appStatus}/>
@@ -71,22 +89,24 @@ const ModalBoxTemplate = ({appStatus}) => {
                         :
                         (
                             isItemLoaded(businessOptionList) ?
-                                <ul className="disc-style clearfix">
-                                    { businessOptionList }
-                                </ul>
-                                    :
-                            <div>
-                                <p>{currentBusinessOption.name}</p>
-                                <div className="content-wrap"
-                                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
-                                <div>
-                                    {
-                                        currentBusinessOption.element &&
-                                        <Element element={currentBusinessOption.element}
-                                                 onClick={(e) => this.onClickNext(e)}/>
-                                    }
+                                <div className="alert-f-body">
+                                    <div className="content-wrap"
+                                         dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
+                                    <ul className="disc-style clearfix">
+                                        { businessOptionList }
+                                    </ul>
                                 </div>
-                            </div>
+                                    :
+                                <div>
+                                    <div className="alert-f-body">
+                                        {
+                                            currentBusinessOption.element &&
+                                            <Element element={currentBusinessOption.element}
+                                                     onClick={(e) => this.onClickNext(e)}/>
+                                        }
+                                    </div>
+                                    <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>
+                                </div>
                         )
                 }
             </div>
@@ -95,8 +115,9 @@ const ModalBoxTemplate = ({appStatus}) => {
 };
 
 ModalBoxTemplate.propTypes = {
-    levelHeadProps: PropTypes.object.isRequired,
-    currentBusinessOption: PropTypes.object.isRequired
+    appStatus: PropTypes.object.isRequired,
+    onHandleToolTip: PropTypes.func.isRequired,
+    onClickUpdateStatus: PropTypes.func.isRequired
 };
 
 export default ModalBoxTemplate;

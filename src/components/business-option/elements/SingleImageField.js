@@ -7,19 +7,19 @@ import {
     setSellGoods
 } from "../../../actions/appStatusAction";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
-import OptionStatusButtonGroup from "../../common/OptionStatusButtonGroup";
 import {makeRequest} from "../../../actions/requestAction";
 import request from "../../../services/request";
-import {getByKey, isItemLoaded} from "../../../utils/helper/helperFunctions";
+import {generateAppRelativeUrl, getByKey, isItemLoaded} from "../../../utils/helper/helperFunctions";
 import {MESSAGES} from "../../../constants/messages";
 
-class Logo extends Component {
+class SingleImageField extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            metaKey: 'image',
             file: '',
-            logo: '',
+            image: '',
             affiliateLink: {},
             isPreview: false
         };
@@ -28,7 +28,6 @@ class Logo extends Component {
         this.onClickRemove = this.onClickRemove.bind(this);
         this.onClickNext = this.onClickNext.bind(this);
         this.onClickAffiliateLink = this.onClickAffiliateLink.bind(this);
-        this.onClickUpdateStatus = this.onClickUpdateStatus.bind(this);
     }
 
     componentDidMount() {
@@ -36,10 +35,10 @@ class Logo extends Component {
         const {currentBusinessOption} = appStatus;
         const {businessMetas, affiliateLinks} = currentBusinessOption;
 
-        const logoObject = getByKey(businessMetas, 'key', 'logo');
+        const imageObject = getByKey(businessMetas, 'key', 'image');
         this.setState({
             ...this.state,
-            logo: isItemLoaded(logoObject) ? logoObject.value : '',
+            image: isItemLoaded(imageObject) ? imageObject.value : '',
             affiliateLink: isItemLoaded(affiliateLinks) ? affiliateLinks[0] : {}
         });
     }
@@ -52,10 +51,18 @@ class Logo extends Component {
             input:{
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
-                    logo: this.state.logo
+                    [this.state.metaKey]: this.state.image
                 }
             }
-        }, {message: MESSAGES.SAVING});
+        }, {message: MESSAGES.SAVING}).then((response) => {
+            let {appStatus, history} = this.props;
+            let {currentLevel, currentSection, currentBusinessOption} = appStatus;
+            let backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug);
+            if (currentBusinessOption.parent_id) {
+                backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, currentBusinessOption.parent_id);
+            }
+            history.push(backUrl);
+        });
     }
 
     handleImageChange(e) {
@@ -67,7 +74,7 @@ class Logo extends Component {
         reader.onloadend = () => {
             this.setState({
                 file: file,
-                logo: reader.result,
+                image: reader.result,
                 isPreview: true
             });
         };
@@ -79,7 +86,7 @@ class Logo extends Component {
         e.preventDefault();
         this.setState({
             ...this.state,
-            logo: '',
+            image: '',
             isPreview: false
         });
     }
@@ -104,38 +111,24 @@ class Logo extends Component {
         }, 1000);
     }
 
-    onClickUpdateStatus(e, status) {
-        e.preventDefault();
-
-        this.props.makeRequest(request.BusinessOption.save, {
-            id: this.props.appStatus.currentBusinessOption.id,
-            input:{
-                business_option_status: status
-            }
-        }, {message: MESSAGES.SAVING});
-    };
-
     render() {
         const {appStatus} = this.props;
+        const {image, affiliateLink} = this.state;
         const currentBusinessOption = appStatus.currentBusinessOption;
-        const {logo, affiliateLink} = this.state;
-
-        const optionStatusButtonGroupProps = {
-            status: currentBusinessOption.status,
-            onClickUpdateStatus: this.onClickUpdateStatus,
-        };
 
         return (
             <div>
+                <div className="content-wrap"
+                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
                 <form onSubmit={(e) => this.handleSubmit(e)}>
                     {
-                        (isItemLoaded(logo)) ?
+                        (isItemLoaded(image)) ?
                             <div>
                                 <span className="remove-wrapper">
                                     <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}>
                                         <i className="fa fa-remove" aria-hidden="true"></i>
                                     </a>
-                                    <img className="alert-frm-img" src={logo}/>
+                                    <img className="alert-frm-img" src={image}/>
                                 </span>
                                 {
                                     this.state.isPreview ?
@@ -150,7 +143,7 @@ class Logo extends Component {
                                 <li>
                                     <div className="upload-btn-wrapper">
                                         <button className="upload-button">Upload</button>
-                                        <input type="file" name="logo" onChange={(e) => this.handleImageChange(e)}/>
+                                        <input type="file" name="image" onChange={(e) => this.handleImageChange(e)}/>
                                     </div>
                                 </li>
                                 <li>
@@ -161,7 +154,6 @@ class Logo extends Component {
                             </ul>
                     }
 
-                    <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>
                 </form>
             </div>
 
@@ -170,7 +162,7 @@ class Logo extends Component {
     }
 }
 
-Logo.propTypes = {
+SingleImageField.propTypes = {
     setCompletedStatus: PropTypes.func.isRequired,
     onClickNext: PropTypes.func.isRequired,
     getBusinessOptionFromUrl: PropTypes.func.isRequired,
@@ -197,4 +189,4 @@ export default withRouter(
             addFlashMessage,
             setBusinessMeta,
         }
-    )(Logo))
+    )(SingleImageField))

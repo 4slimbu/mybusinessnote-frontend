@@ -8,7 +8,7 @@ import {map} from "lodash";
 import * as classnames from "classnames";
 import {
     filterBusinessOptionsBySection,
-    generateAppRelativeUrl,
+    generateAppRelativeUrl, getStatus,
     hasChildBusinessOptions,
     isItemLoaded,
     isSectionLocked
@@ -40,12 +40,17 @@ class SectionPage extends Component {
         const {appStatus, onHandleToolTip} = this.props;
         const {currentLevel, currentSection, businessOptionStatuses = [{}]} = this.props.appStatus;
         const relevantBusinessOptions = filterBusinessOptionsBySection(appStatus, currentSection.id);
+        const sectionStatus = getStatus(appStatus.businessStatus.sectionStatuses, currentSection.id);
+        const completedPercent = sectionStatus.completed_percent ? sectionStatus.completed_percent : 0;
 
         const businessOptionList = map(relevantBusinessOptions, (businessOption, key) => {
             const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
             const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
-            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'paper' : '';
+            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'multiple-paper' : 'paper';
             const lockedClass = isLocked ? 'locked' : '';
+            const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
+            const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
+            const completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
             return (
                 <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}
                     onTouchEnd={(e) => onHandleToolTip(e, businessOption.id)}
@@ -59,6 +64,8 @@ class SectionPage extends Component {
                                  alt=""/>
                         </div>
                     </Link>
+                    <span className={classnames(completedClass, 'glyphicon glyphicon-ok')}>
+                    </span>
                 </li>
             )
         });
@@ -82,14 +89,18 @@ class SectionPage extends Component {
                         </div>
                     </div>
                     <div className="progress c-progress">
-                        {/*<div className="progress-bar" role="progressbar" aria-valuenow="60"*/}
-                             {/*aria-valuemin="0" aria-valuemax="100"*/}
-                             {/*style={{width: currentSection.completed_percent + '%'}}>*/}
-                        {/*</div>*/}
+                        <div className="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style={{width: completedPercent + '%'}}>
+                        </div>
                     </div>
-                    <ul className="disc-style clearfix">
-                        {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
-                    </ul>
+                    <div className="alert-f-body">
+                        <div className="content-wrap"
+                             dangerouslySetInnerHTML={{__html: currentSection.content}}/>
+                        <ul className="disc-style clearfix">
+                            {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
+                        </ul>
+                    </div>
                 </div>
             </div>
         );

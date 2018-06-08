@@ -1,19 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {map} from "lodash";
-import {getCurrentLevelSections, isSectionLocked} from "../../../utils/helper/helperFunctions";
+import {getCurrentLevelSections, getStatus, isSectionLocked} from "../../../utils/helper/helperFunctions";
 import * as classnames from "classnames";
 import {Link} from "react-router-dom";
+import MiniProgressBar from "../../common/MiniProgressBar";
 
 const sections = (appStatus, currentLevel, onClickSectionLink, onHandleToolTip) => map(getCurrentLevelSections(appStatus.sections, currentLevel.id), (section, key) => {
     const active = 'active';
     const sectionUrl = '/level/' + currentLevel.slug + '/section/' + section.slug;
-
+    const sectionStatus = getStatus(appStatus.businessStatus.sectionStatuses, section.id);
+    const completedPercent = sectionStatus.completed_percent ? sectionStatus.completed_percent : 0;
     const isLocked = isSectionLocked(appStatus.businessStatus.businessOptionStatuses, section);
     const lockedClass = isLocked ? 'locked' : '';
 
     return (
-        <li key={section.id} className={classnames(active, lockedClass)}>
+        <li key={section.id} className={classnames(active, lockedClass)}
+            onTouchEnd={(e) => onHandleToolTip(e, section.id)}
+            onClick={(e) => onHandleToolTip(e, section.id)}
+            onMouseEnter={(e) => onHandleToolTip(e, section.id)}
+        >
             <Link className="link-box" to={sectionUrl}
                   onClick={(e) => onClickSectionLink(e, currentLevel, section, isLocked)}>
                 <div className="red-icon" href="#">
@@ -28,6 +34,9 @@ const sections = (appStatus, currentLevel, onClickSectionLink, onHandleToolTip) 
                onClick={(e) => onHandleToolTip(e, section.id)}>
                 <i className="fa fa-lightbulb-o" aria-hidden="true"></i>
             </a>
+            <div className="li-progress-bar">
+                <MiniProgressBar completed_percent={completedPercent}/>
+            </div>
         </li>
     )
 });

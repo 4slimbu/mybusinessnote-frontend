@@ -5,13 +5,17 @@ import {callApi, makeRequest} from "../../actions/requestAction";
 import {
     extractBoIdFromLocation,
     extractLevelFromLocation,
-    extractSectionFromLocation,
+    extractSectionFromLocation, filterBusinessOptionsBySection, filterFirstInCollection, generateAppRelativeUrl,
     getById,
-    getBySlug,
+    getBySlug, getChildBusinessOptions,
     isItemLoaded
 } from "../../utils/helper/helperFunctions";
 import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
 import BusinessOptionPage from "./pages/BusinessOptionPage";
+import {map} from "lodash";
+import {Panel, PanelGroup} from "react-bootstrap";
+import request from "../../services/request";
+import {MESSAGES} from "../../constants/messages";
 
 class BusinessOptionContainer extends Component {
 
@@ -24,6 +28,8 @@ class BusinessOptionContainer extends Component {
         };
 
         this.redirectTo = this.redirectTo.bind(this);
+        this.onHandleToolTip = this.onHandleToolTip.bind(this);
+        this.onClickUpdateStatus = this.onClickUpdateStatus.bind(this);
     }
 
     componentDidMount() {
@@ -50,6 +56,82 @@ class BusinessOptionContainer extends Component {
 
         // Set current level and section and continue
         this.props.setCurrent(currentLevel, currentSection, currentBusinessOption);
+        this.displayToolTip(props);
+    }
+
+    onClickUpdateStatus(e, status) {
+        e.preventDefault();
+
+        this.props.makeRequest(request.BusinessOption.save, {
+            id: this.props.appStatus.currentBusinessOption.id,
+            input:{
+                business_option_status: status
+            }
+        }, {message: MESSAGES.SAVING}).then((response) => {
+            let {appStatus, history} = this.props;
+            let {currentLevel, currentSection, currentBusinessOption} = appStatus;
+            let backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug);
+            if (currentBusinessOption.parent_id) {
+                backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, currentBusinessOption.parent_id);
+            }
+            history.push(backUrl);
+        });
+    };
+
+    onHandleToolTip(e, id) {
+        e.preventDefault();
+        this.displayToolTip(this.props, id);
+    }
+
+    onHandleToolTipSelect(newKey) {
+        this.displayToolTip(this.props, newKey);
+    }
+
+    displayToolTip(props, id = 0) {
+        const {setToolTipContent, appStatus} = props;
+        const {levels, businessOptions} = appStatus;
+        const pathname = props.location.pathname;
+        let levelSlug = extractLevelFromLocation(pathname);
+        let currentLevel = getBySlug(levels, levelSlug);
+        let boId = extractBoIdFromLocation(pathname);
+        let currentBusinessOption = getById(businessOptions, boId);
+        const toolTip = {};
+
+        // Set tooltip content for level
+        toolTip.title = currentBusinessOption.tooltip_title;
+        toolTip.rawHtmlContent = currentBusinessOption.tooltip;
+
+        // Set tooltip accordion for levels other than level 1
+        if (currentLevel.id !== 1) {
+            const toolTipList = map(getChildBusinessOptions(appStatus, currentBusinessOption), (item, key) => {
+                const title = (item.id === id) ? <strong>{item.short_name}</strong> : item.short_name;
+                return (
+                    <Panel key={key} eventKey={item.id}>
+                        <Panel.Heading>
+                            <Panel.Title toggle>
+                                <h4>
+                                    <span className="accordion-titles">{title}</span>
+                                    <span className="acc-img"></span>
+                                </h4>
+                            </Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Body collapsible>
+                            <div className="content-wrap" dangerouslySetInnerHTML={{__html: item.tooltip}}/>
+                        </Panel.Body>
+                    </Panel>
+                )
+            });
+
+            toolTip.accordion = (
+                <PanelGroup accordion id={`accordion-uncontrolled-level-three-sections`} activeKey={id}
+                            onSelect={(newKey) => this.onHandleToolTipSelect(newKey)}>
+                    {toolTipList}
+                </PanelGroup>
+            );
+        }
+
+        // Dispatch action to set tooltip content
+        setToolTipContent(toolTip);
     }
 
 
@@ -58,18 +140,10 @@ class BusinessOptionContainer extends Component {
     }
 
     render() {
-        const {currentLevel, currentSection, currentBusinessOption} = this.props.appStatus;
-        const {
-            appStatus,
-            setToolTipContent,
-        } = this.props;
-
         const businessOptionPageProps = {
-            appStatus: appStatus,
-            currentLevel: currentLevel,
-            currentSection: currentSection,
-            currentBusinessOption: currentBusinessOption,
-            setToolTipContent: setToolTipContent,
+            appStatus: this.props.appStatus,
+            onHandleToolTip: this.onHandleToolTip,
+            onClickUpdateStatus: this.onClickUpdateStatus
         };
 
         return (
