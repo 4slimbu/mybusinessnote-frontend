@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {
+    filterFirstInCollection,
     generateAppRelativeUrl, getAllUrlParams, getById, getFirstDoableBusinessOption,
     getLast, isItemLoaded
 } from "../../utils/helper/helperFunctions";
@@ -48,10 +49,10 @@ class HomeContainer extends Component {
 
     onClickContinueJourney(e) {
         e.preventDefault();
-        const {levels, sections, businessOptions} = this.props.appStatus;
-        const firstDoableBusinessOption = getFirstDoableBusinessOption(businessOptions);
+        const {levels, sections, businessStatus} = this.props.appStatus;
+        const firstDoableBusinessOption = filterFirstInCollection(businessStatus.businessOptionStatuses, {status: "unlocked"});
 
-        if (isItemLoaded(firstDoableBusinessOption)) {
+        if (isItemLoaded(firstDoableBusinessOption) && firstDoableBusinessOption.level_id !== 3) {
             const currentLevel = getById(levels, firstDoableBusinessOption.level_id);
             const currentSection = getById(sections, firstDoableBusinessOption.section_id);
 

@@ -1819,12 +1819,17 @@ ul.alert-btns li .upload-button{
 }
 
 .completed-section img {
-    margin: 52px auto 0;
+    margin: 0 auto;
     display: block;
 }
 
 .completed-section p {
-    max-width: 280px !important;
+    max-width: 100%;
+    text-align: center;
+}
+
+.completed-section .para-with-padding {
+    padding: 35px;
 }
 
 .right-sec .content-wrapper .hidden-xs div a{
@@ -2015,13 +2020,11 @@ ul.alert-btns li .upload-button.focus {
 
 
 .completed-section p {
-    max-width: 210px;
-    margin: 28px auto 0;
-    padding-bottom: 97px;
+    margin: 30px auto;
 }
 
 .completed-section img {
-    margin-top: 50px;
+    /*margin-top: 50px;*/
 }
 
 span.circle-span.complete {

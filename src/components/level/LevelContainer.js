@@ -3,8 +3,8 @@ import LevelIntroPage from "./pages/LevelIntroPage";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {
-    extractLevelFromLocation,
-    generateAppRelativeUrl,
+    extractLevelFromLocation, filterFirstInCollection,
+    generateAppRelativeUrl, getById,
     getBySlug,
     getCurrentLevelSections,
     getFirst,
@@ -18,13 +18,14 @@ import {Panel, PanelGroup} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 import {MESSAGES} from "../../constants/messages";
 import LevelDownPage from "./pages/LevelDownPage";
+import {ROUTES} from "../../constants/routes";
 
 class LevelContainer extends Component {
     constructor(props) {
         super(props);
 
         this.onClickLevelLink = this.onClickLevelLink.bind(this);
-        this.onClickContinue = this.onClickContinue.bind(this);
+        this.onClickContinueJourney = this.onClickContinueJourney.bind(this);
         this.goTo = this.goTo.bind(this);
         this.onHandleToolTip = this.onHandleToolTip.bind(this);
         this.onHandleToolTipSelect = this.onHandleToolTipSelect.bind(this);
@@ -65,10 +66,10 @@ class LevelContainer extends Component {
         history.push(levelUrl);
     };
 
-    onClickContinue(e) {
+    onClickContinueJourney(e) {
         e.preventDefault();
         const {appStatus, history} = this.props;
-        const {sections, currentLevel} = appStatus;
+        const {businessStatus, levels, sections, currentLevel} = appStatus;
 
         if (isLevelLocked(appStatus, currentLevel)) {
             this.props.addFlashMessage({
@@ -78,10 +79,18 @@ class LevelContainer extends Component {
             return;
         }
 
-        const levelSections = getCurrentLevelSections(sections, currentLevel.id);
-        const firstSection = getFirst(levelSections);
-        setCurrent(currentLevel, firstSection);
-        history.push(generateAppRelativeUrl(currentLevel.slug, firstSection.slug));
+        const firstDoableBusinessOption = filterFirstInCollection(businessStatus.businessOptionStatuses, {status: "unlocked", level_id: currentLevel.id});
+
+        if (isItemLoaded(firstDoableBusinessOption)) {
+            const currentLevel = getById(levels, firstDoableBusinessOption.level_id);
+            const currentSection = getById(sections, firstDoableBusinessOption.section_id);
+            this.props.history.push(generateAppRelativeUrl(currentLevel.slug, currentSection.slug, firstDoableBusinessOption.id));
+        } else {
+            const levelSections = getCurrentLevelSections(sections, currentLevel.id);
+            const firstSection = getFirst(levelSections);
+            history.push(generateAppRelativeUrl(currentLevel.slug, firstSection.slug));
+        }
+
     };
 
     goTo(e, url) {
@@ -157,7 +166,7 @@ class LevelContainer extends Component {
             currentLevel: currentLevel,
             onClickLevelLink: this.onClickLevelLink,
             goTo: this.goTo,
-            onClickContinue: this.onClickContinue,
+            onClickContinueJourney: this.onClickContinueJourney,
             onHandleToolTip: this.onHandleToolTip
         };
 

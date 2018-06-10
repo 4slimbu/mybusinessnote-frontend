@@ -100,7 +100,7 @@ class SocialMediaField extends Component {
                            onClick={(e) => this.onClickSocialIcon(e, 'twitter')}><img
                             src={ currentBusinessOption.icon } alt=""/></a>
                         <form onSubmit={(e) => this.handleSubmit(e)}>
-                            <input placeholder="https://twitter.com/page" type="text"
+                            <input placeholder="https://example.com/page" type="text"
                                    onChange={(e) => this.onChange(e)} value={this.state.value}/>
                             {this.state.errors.twitter &&
                             <div><span className="form-error-message-2">{this.state.errors.twitter}</span></div>}

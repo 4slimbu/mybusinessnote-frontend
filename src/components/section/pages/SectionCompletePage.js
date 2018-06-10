@@ -1,19 +1,13 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {setToolTipContent} from "../../../actions/appStatusAction";
+import {setEvents, setToolTipContent} from "../../../actions/appStatusAction";
 import {Link, withRouter} from "react-router-dom";
 import {addFlashMessage} from "../../../actions/flashMessageAction";
 import {map} from "lodash";
-import * as classnames from "classnames";
-import {
-    filterBusinessOptionsBySection,
-    generateAppRelativeUrl, getStatus,
-    hasChildBusinessOptions, hasInCompleteChildBusinessOptions,
-    isItemLoaded,
-    isSectionLocked
-} from "../../../utils/helper/helperFunctions";
 import LevelHead from "../../level/includes/LevelHead";
+import {generateAppRelativeUrl, getByEventType, getStatus, isItemLoaded} from "../../../utils/helper/helperFunctions";
+import {ROUTES} from "../../../constants/routes";
 
 class SectionCompletePage extends Component {
     constructor(props) {
@@ -21,59 +15,27 @@ class SectionCompletePage extends Component {
         this.state = {
             isEdit: false
         }
+
+        this.onClickContinue = this.onClickContinue.bind(this);
     }
 
-    componentDidMount() {
-        // this.$el = $(this.el);
-        // this.$el.mCustomScrollbar({
-        //     mouseWheel: {scrollAmount: 300}
-        // });
+    componentWillUnmount() {
+        this.props.setEvents([]);
     }
 
-
-    onClickNext(e) {
+    onClickContinue(e, url) {
         e.preventDefault();
-        this.props.getBusinessOption(this.props.appStatus);
+
+        this.props.setEvents([]);
+        this.props.history.push(url);
     }
 
     render() {
-        const {appStatus, onHandleToolTip, goTo} = this.props;
-        const {currentLevel, currentSection, businessOptionStatuses = [{}]} = this.props.appStatus;
-        const relevantBusinessOptions = filterBusinessOptionsBySection(appStatus, currentSection.id);
+        const {appStatus} = this.props;
+        const {currentLevel, currentSection} = this.props.appStatus;
         const sectionStatus = getStatus(appStatus.businessStatus.sectionStatuses, currentSection.id);
         const completedPercent = sectionStatus.completed_percent ? sectionStatus.completed_percent : 0;
 
-        const businessOptionList = map(relevantBusinessOptions, (businessOption, key) => {
-            const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
-            const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
-            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'multiple-paper' : 'paper';
-            const lockedClass = isLocked ? 'locked' : '';
-            let completedClass;
-            if (stackedClass === 'multiple-paper') {
-                completedClass = ! hasInCompleteChildBusinessOptions(appStatus, businessOption)  ? 'tick-done' : 'tick-incomplete';
-            } else {
-                const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
-                const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
-                completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
-            }
-            return (
-                <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}
-                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
-                    onMouseOver={(e) => onHandleToolTip(e, businessOption.id, '')}
-                    onClick={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
-                >
-                    <Link className="link-box" to={businessOptionUrl} >
-                        <div className="red-icon circular-white-bg" href="#">
-                            {/*{businessOption.short_name}*/}
-                            <img src={businessOption.icon}
-                                 alt=""/>
-                        </div>
-                    </Link>
-                    <span className={classnames(completedClass, 'glyphicon glyphicon-ok')}>
-                    </span>
-                </li>
-            )
-        });
 
         const levelHeadProps = {
             appStatus: this.props.appStatus
@@ -100,11 +62,14 @@ class SectionCompletePage extends Component {
                         </div>
                     </div>
                     <div className="alert-f-body">
-                        <div className="content-wrap"
-                             dangerouslySetInnerHTML={{__html: currentSection.content}}/>
-                        <ul className="disc-style clearfix">
-                            {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
-                        </ul>
+                        <div className="completed-section">
+                            <img className="complete-tick"
+                                 src={`${process.env.PUBLIC_URL}/assets/images/completed-tick.png`}
+                                 alt=""/>
+                            <p className="para-with-padding">Well done for completing this section!</p>
+                            <Link to={generateAppRelativeUrl(currentLevel.slug)} onClick={(e) => this.onClickContinue(e, generateAppRelativeUrl(currentLevel.slug))}
+                                  className="btn btn-default btn-lg btn-alert">Continue</Link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,4 +96,5 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps, {
     setToolTipContent,
     addFlashMessage,
+    setEvents,
 })(SectionCompletePage));

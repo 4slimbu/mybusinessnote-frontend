@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {
-    dashboardUrl, getByEventType, getCurrentLevelByUrl, getNext, isItemLoaded,
+    dashboardUrl, generateAppRelativeUrl, getByEventType, getCurrentLevelByUrl, getNext, isItemLoaded,
     publicUrl
 } from "../../../utils/helper/helperFunctions";
 import {setEvents} from "../../../actions/appStatusAction";
@@ -42,6 +42,13 @@ class LevelCompletePage extends Component {
         this.props.setEvents([]);
     }
 
+    onClickContinue(e, url) {
+        e.preventDefault();
+
+        this.props.setEvents([]);
+        this.props.history.push(url);
+    }
+
     render() {
 
         return (
@@ -62,11 +69,15 @@ class LevelCompletePage extends Component {
                             <div>
                                 <div className="btn-wrap">
                                     <Link
-                                          to={this.state.nextLevelUrl} className="btn btn-default btn-md">Continue to
+                                          to={this.state.nextLevelUrl}
+                                          onClick={(e) => this.onClickContinue(e, this.state.nextLevelUrl)}
+                                          className="btn btn-default btn-md">Continue to
                                         level {this.state.nextLevel.id}</Link>
                                 </div>
                                 <Link
-                                      to={this.state.nextLevelUrl} className="next-session-link">
+                                      to={this.state.nextLevelUrl}
+                                      onClick={(e) => this.onClickContinue(e, this.state.nextLevelUrl)}
+                                      className="next-session-link">
                                     <i className="fa fa-chevron-down" aria-hidden="true"></i>
                                 </Link>
                                 <h6>{this.state.nextLevel.name}</h6>

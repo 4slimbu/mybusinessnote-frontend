@@ -23,7 +23,7 @@ const LevelHead = (props) => {
 };
 
 LevelHead.propTypes = {
-    currentLevel: PropTypes.object.isRequired
+    appStatus: PropTypes.object.isRequired
 };
 
 export default LevelHead;
