@@ -4,14 +4,14 @@ import * as classnames from "classnames";
 import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {
-    generateAppRelativeUrl, getCurrentLevelSections, getStatus, isItemLoaded,
+    generateAppRelativeUrl, getCurrentLevelSections, getStatus, isItemLoaded, isLevelLocked,
     isSectionLocked
 } from "../../../../utils/helper/helperFunctions";
 import UserInfoLinks from "../../right-sidebar/current-user-box/UserInfoLinks";
 
 class MobileLevelLinks extends Component {
     render() {
-        const {appStatus, onClickLevelLink, onClickSectionLink} = this.props;
+        const {auth, appStatus, onClickLevelLink, onClickSectionLink} = this.props;
 
         const {levels, sections, currentLevel, currentSection, businessStatus} = appStatus;
 
@@ -52,8 +52,9 @@ class MobileLevelLinks extends Component {
 
             return map(currentLevelSections, (section, key) => {
                 const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
-                const isLocked = isSectionLocked(businessOptionStatuses, section);
-                const lockedClass = isLocked ? 'locked' : '';
+                const isLocked = isLevelLocked(appStatus, level);
+                const isSectionLocked = !auth.isVerified && section.id !== 1 && section.id !== 2;
+                const lockedClass = isLocked || isSectionLocked ? 'locked' : '';
                 return (
                     <li key={section.id} className={classnames(lockedClass)}>
                         <a href={sectionUrl} onClick={(e) => onClickSectionLink(e, level, section, isLocked)}>
@@ -131,6 +132,7 @@ class MobileLevelLinks extends Component {
 }
 
 MobileLevelLinks.propTypes = {
+    auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
     setCurrent: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,

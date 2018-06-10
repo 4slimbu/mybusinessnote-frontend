@@ -27,14 +27,14 @@ export function makeRequest(apiCallFunction, data = {}, options={isSilent: false
                 (response) => {
                     if (! options.isSilent) dispatch(deleteLoadingMessage());
                     if (response && response.data) {
-                        handleSuccessResponseData(dispatch, response.data);
+                        handleSuccessResponseData(dispatch, response.data, options.isSilent);
                         resolve(response.data);
                     }
                 },
                 (error) => {
                     if (! options.isSilent) dispatch(deleteLoadingMessage());
                     if (error && error.response && error.response.data) {
-                        handleErrorResponseData(dispatch, error.response.data);
+                        handleErrorResponseData(dispatch, error.response.data, options.isSilent);
                         reject(error.response.data)
                     }
                 }
@@ -44,7 +44,7 @@ export function makeRequest(apiCallFunction, data = {}, options={isSilent: false
     }
 }
 
-export function handleSuccessResponseData(dispatch, responseData) {
+export function handleSuccessResponseData(dispatch, responseData, isSilent) {
     const token = responseData.token;
     if (token) {
         localStorage.setItem("jwtToken", token);
@@ -72,12 +72,12 @@ export function handleSuccessResponseData(dispatch, responseData) {
 
     if (responseData.events) dispatch(setEvents(responseData.events));
 
-    if (responseData.successCode && responseData.successCode !== 'FETCHED' && responseData.successCode !== 'TRACKED') {
+    if (responseData.successCode && responseData.successCode !== 'FETCHED' && responseData.successCode !== 'TRACKED' && !isSilent) {
         dispatch(addFlashMessage({type: "success", text: getCodeMessage(responseData.successCode)}))
     }
 }
 
-export function handleErrorResponseData(dispatch, errorData) {
+export function handleErrorResponseData(dispatch, errorData, isSilent) {
     if (errorData.errorCode) {
         if (
             getCodeMessage(errorData.errorCode) === MESSAGES.ERR_TOKEN_EXPIRED ||
@@ -87,6 +87,8 @@ export function handleErrorResponseData(dispatch, errorData) {
             dispatch(logout());
         }
 
-        dispatch(addFlashMessage({type: "error", text: getCodeMessage(errorData.errorCode)}));
+        if (!isSilent) {
+            dispatch(addFlashMessage({type: "error", text: getCodeMessage(errorData.errorCode)}));
+        }
     }
 }

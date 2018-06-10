@@ -10,7 +10,7 @@ import SectionLinks from "./SectionLinks";
 class LevelLinks extends Component {
 
     render() {
-        const {appStatus, onClickLevelLink, onClickSectionLink} = this.props;
+        const {appStatus, onClickLevelLink, onClickSectionLink, auth} = this.props;
 
         const {levels, currentLevel, businessStatus} = appStatus;
 
@@ -26,6 +26,7 @@ class LevelLinks extends Component {
             const sectionLinksProps = {
                 level: level,
                 appStatus: appStatus,
+                auth: auth,
                 onClickSectionLink: onClickSectionLink
             };
 
@@ -74,6 +75,7 @@ class LevelLinks extends Component {
 
 LevelLinks.propTypes = {
     appStatus: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
     setCurrent: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     onClickLevelLink: PropTypes.func.isRequired,

@@ -33,6 +33,7 @@ class SectionContainer extends Component {
 
         this.redirectTo = this.redirectTo.bind(this);
         this.onHandleToolTip = this.onHandleToolTip.bind(this);
+        this.goTo = this.goTo.bind(this);
     }
 
     componentDidMount() {
@@ -77,9 +78,20 @@ class SectionContainer extends Component {
         this.props.history.push(url);
     }
 
-    onHandleToolTip(e, id) {
+    goTo(e, url) {
+        e.preventDefault();
+        const {history} = this.props;
+        history.push(url);
+    }
+
+    onHandleToolTip(e, id, url) {
         e.preventDefault();
         this.displayToolTip(this.props, id);
+
+        if (url.length > 0) {
+            const {history} = this.props;
+            history.push(url);
+        }
     }
 
     onHandleToolTipSelect(newKey) {
@@ -139,7 +151,8 @@ class SectionContainer extends Component {
         const sectionPageProps = {
             makeRequest: makeRequest,
             redirectTo: this.redirectTo,
-            onHandleToolTip: this.onHandleToolTip
+            onHandleToolTip: this.onHandleToolTip,
+            goTo: this.goTo,
         };
 
         return (

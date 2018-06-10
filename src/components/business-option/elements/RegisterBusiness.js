@@ -8,7 +8,11 @@ import request from "../../../services/request";
 import {makeRequest} from "../../../actions/requestAction";
 import {validateFields} from "../../../utils/validation/FieldValidator";
 import {ROUTES} from "../../../constants/routes";
-import {getAllFields, getChangedFields, getRulesForChangedFields} from "../../../utils/helper/helperFunctions";
+import {
+    filterFirstInCollection,
+    getAllFields, getChangedFields, getRulesForChangedFields,
+    isItemLoaded
+} from "../../../utils/helper/helperFunctions";
 import {MESSAGES} from "../../../constants/messages";
 import {isEmpty} from "lodash";
 
@@ -158,7 +162,11 @@ class RegisterBusiness extends Component {
                 ...changedFields
             }, {message: MESSAGES.SAVING}).then(
                 (responseData) => {
-                    history.push(ROUTES.LEVEL_TWO);
+                    if (isItemLoaded(responseData.events) && filterFirstInCollection(responseData.events, {type: "levelCompleted"})) {
+                        history.push(ROUTES.LEVEL_ONE + '/completed');
+                    } else {
+                        history.push(ROUTES.LEVEL_TWO);
+                    }
                 },
                 (errorData) => {
                     this.resetFields();

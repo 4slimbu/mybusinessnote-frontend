@@ -42,12 +42,13 @@ class LeftSideBarContainer extends Component {
 
     render() {
         const {
-            appStatus, addFlashMessage, setCurrent,
+            auth, appStatus, addFlashMessage, setCurrent,
             setCompletedStatus, getBusinessOptionFromUrl
         } = this.props;
 
         const levelLinksProps = {
             appStatus: appStatus,
+            auth: auth,
             setCurrent: setCurrent,
             setCompletedStatus: setCompletedStatus,
             getBusinessOptionFromUrl: getBusinessOptionFromUrl,
@@ -58,6 +59,7 @@ class LeftSideBarContainer extends Component {
 
         const mobileNavLinksProps = {
             appStatus: appStatus,
+            auth: auth,
             setCurrent: setCurrent,
             setCompletedStatus: setCompletedStatus,
             getBusinessOptionFromUrl: getBusinessOptionFromUrl,

@@ -55,11 +55,11 @@ class App extends Component {
                 props.history.push(generateAppRelativeUrl(currentLevel.slug) + '/completed');
                 return;
             }
-            // if (isItemLoaded(getByEventType(events, 'sectionCompleted'))) {
-            //     if (currentSection.show_landing_page) {
-            //         props.history.push(generateAppRelativeUrl(currentLevel.slug, currentSection.slug) + '/completed');
-            //     }
-            // }
+            if (isItemLoaded(getByEventType(events, 'sectionCompleted'))) {
+                if (currentSection.show_landing_page) {
+                    props.history.push(generateAppRelativeUrl(currentLevel.slug, currentSection.slug) + '/completed');
+                }
+            }
         }
     }
 

@@ -2,7 +2,7 @@ import * as axios from "axios";
 import {apiBaseUrl, getEnv, newsFeedApiBaseUrl} from "../utils/helper/helperFunctions";
 import axiosRetry from 'axios-retry';
 
-axiosRetry(axios, { retries: 5 });
+// axiosRetry(axios, { retries: 5 });
 /**
  * This handles all the api request. If REACT_APP_ENV = mock-api, then the data
  * is faked and returned as async promise object using mock data.

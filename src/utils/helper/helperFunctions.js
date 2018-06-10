@@ -255,12 +255,12 @@ export function saveBusinessOption(currentObject, data) {
     );
 }
 
-export function isLevelLocked(businessOptionStatuses, level) {
+export function isLevelLocked(appStatus, level) {
     if (level.id === 1) {
         return false;
     }
 
-    let statusObject = find(businessOptionStatuses, (item) => {
+    let statusObject = find(appStatus.businessStatus.businessOptionStatuses, (item) => {
         return item.level_id === level.id && item.status !== 'locked'
     });
 
@@ -296,6 +296,26 @@ export function hasChildBusinessOptions(appStatus, currentBusinessOption) {
     });
 
     return isItemLoaded(relevantBusinessOptions);
+}
+
+export function hasInCompleteChildBusinessOptions(appStatus, currentBusinessOption) {
+    let relevantBusinessOptions = filter(appStatus. businessOptions, function (item) {
+        let statusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, item.id);
+        return item.parent_id === currentBusinessOption.id  && statusObject.status != 'irrelevant';
+    });
+
+    if (isItemLoaded(relevantBusinessOptions)) {
+        let completedBusinessOptions = filter(relevantBusinessOptions, function (item) {
+            let statusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, item.id);
+            return item.parent_id === currentBusinessOption.id  && statusObject.status != 'irrelevant' && statusObject.status === 'done';
+        });
+
+        if (relevantBusinessOptions.length === completedBusinessOptions.length) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 export function getChildBusinessOptions(appStatus, currentBusinessOption) {

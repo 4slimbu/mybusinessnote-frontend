@@ -5,14 +5,15 @@ import Element from "../../elements/Element";
 import {Link} from "react-router-dom";
 import {
     filterFirstInCollection,
-    generateAppRelativeUrl, getChildBusinessOptions, getStatus, hasChildBusinessOptions, isItemLoaded,
+    generateAppRelativeUrl, getChildBusinessOptions, getStatus, hasChildBusinessOptions,
+    hasInCompleteChildBusinessOptions, isItemLoaded,
     isSectionLocked
 } from "../../../../utils/helper/helperFunctions";
 import {map} from "lodash";
 import * as classnames from "classnames";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
 
-const ModalBoxTemplate = ({appStatus, onHandleToolTip, onClickUpdateStatus}) => {
+const ModalBoxTemplate = ({appStatus, onHandleToolTip, goTo, onClickUpdateStatus}) => {
     const {currentLevel, currentSection, currentBusinessOption, businessOptionStatuses} = appStatus;
 
     let backUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug);
@@ -28,14 +29,20 @@ const ModalBoxTemplate = ({appStatus, onHandleToolTip, onClickUpdateStatus}) => 
             const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
             const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'multiple-paper' : 'paper';
             const lockedClass = isLocked ? 'locked' : '';
-            const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
-            const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
-            const completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
+            let completedClass;
+            if (stackedClass === 'multiple-paper') {
+                completedClass = ! hasInCompleteChildBusinessOptions(appStatus, businessOption)  ? 'tick-done' : 'tick-incomplete';
+            } else {
+                const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
+                const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
+                completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
+            }
+
             return (
                 <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}
-                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id)}
-                    onMouseOver={(e) => onHandleToolTip(e, businessOption.id)}
-                    onClick={(e) => onHandleToolTip(e, businessOption.id)}
+                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
+                    onMouseOver={(e) => onHandleToolTip(e, businessOption.id, '')}
+                    onClick={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
                 >
                     <Link className="link-box" to={businessOptionUrl}>
                         <div className="red-icon circular-white-bg" href="#">
@@ -117,7 +124,8 @@ const ModalBoxTemplate = ({appStatus, onHandleToolTip, onClickUpdateStatus}) => 
 ModalBoxTemplate.propTypes = {
     appStatus: PropTypes.object.isRequired,
     onHandleToolTip: PropTypes.func.isRequired,
-    onClickUpdateStatus: PropTypes.func.isRequired
+    onClickUpdateStatus: PropTypes.func.isRequired,
+    goTo: PropTypes.func.isRequired,
 };
 
 export default ModalBoxTemplate;

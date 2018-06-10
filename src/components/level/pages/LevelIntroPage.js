@@ -5,7 +5,7 @@ import SectionGridList from "../includes/SectionGridList";
 import {isItemLoaded} from "../../../utils/helper/helperFunctions";
 
 const LevelIntroPage = (props) => {
-    const {appStatus, currentLevel, onClickContinue, onClickSectionLink, onHandleToolTip} = props;
+    const {appStatus, currentLevel, onClickContinue, goTo, onHandleToolTip} = props;
     const {content} = props.currentLevel;
     const levelHeadProps = {
         currentLevel: currentLevel,
@@ -14,7 +14,7 @@ const LevelIntroPage = (props) => {
     const sectionGridListProps = {
         appStatus: appStatus,
         currentLevel: currentLevel,
-        onClickSectionLink: onClickSectionLink,
+        goTo: goTo,
         onHandleToolTip: onHandleToolTip
 
     };
@@ -35,7 +35,7 @@ LevelIntroPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
     currentLevel: PropTypes.object.isRequired,
     onClickContinue: PropTypes.func.isRequired,
-    onClickSectionLink: PropTypes.func.isRequired,
+    goTo: PropTypes.func.isRequired,
     onHandleToolTip: PropTypes.func.isRequired,
 };
 

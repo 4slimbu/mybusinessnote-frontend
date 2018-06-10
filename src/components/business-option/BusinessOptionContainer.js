@@ -7,8 +7,8 @@ import {
     extractLevelFromLocation,
     extractSectionFromLocation, filterBusinessOptionsBySection, filterFirstInCollection, generateAppRelativeUrl,
     getById,
-    getBySlug, getChildBusinessOptions,
-    isItemLoaded
+    getBySlug, getChildBusinessOptions, getCodeMessage,
+    isItemLoaded, isLevelLocked
 } from "../../utils/helper/helperFunctions";
 import {setCurrent, setToolTipContent} from "../../actions/appStatusAction";
 import BusinessOptionPage from "./pages/BusinessOptionPage";
@@ -16,6 +16,8 @@ import {map} from "lodash";
 import {Panel, PanelGroup} from "react-bootstrap";
 import request from "../../services/request";
 import {MESSAGES} from "../../constants/messages";
+import {ROUTES} from "../../constants/routes";
+import {addFlashMessage} from "../../actions/flashMessageAction";
 
 class BusinessOptionContainer extends Component {
 
@@ -29,6 +31,7 @@ class BusinessOptionContainer extends Component {
 
         this.redirectTo = this.redirectTo.bind(this);
         this.onHandleToolTip = this.onHandleToolTip.bind(this);
+        this.goTo = this.goTo.bind(this);
         this.onClickUpdateStatus = this.onClickUpdateStatus.bind(this);
     }
 
@@ -44,7 +47,7 @@ class BusinessOptionContainer extends Component {
 
     bootstrap(props) {
         // Initialize
-        let {appStatus} = props;
+        let {appStatus, auth, history} = props;
         let {levels, sections, businessOptions} = appStatus;
         let pathname = props.location.pathname;
         let levelSlug = extractLevelFromLocation(pathname);
@@ -53,6 +56,14 @@ class BusinessOptionContainer extends Component {
         let currentLevel = getBySlug(levels, levelSlug);
         let currentSection = getBySlug(sections, sectionSlug);
         let currentBusinessOption = getById(businessOptions, boId);
+
+        //check if authenticated and verified
+        if (currentBusinessOption.id !== 1 && currentBusinessOption.id !== 2 && currentBusinessOption.id !== 3) {
+            if (! auth.isAuthenticated || !auth.isVerified) {
+                history.push(ROUTES.HOME);
+                return;
+            }
+        }
 
         // Set current level and section and continue
         this.props.setCurrent(currentLevel, currentSection, currentBusinessOption);
@@ -78,9 +89,21 @@ class BusinessOptionContainer extends Component {
         });
     };
 
-    onHandleToolTip(e, id) {
+    goTo(e, url) {
+        e.preventDefault();
+
+        const {history} = this.props;
+        history.push(url);
+    }
+
+    onHandleToolTip(e, id, url) {
         e.preventDefault();
         this.displayToolTip(this.props, id);
+
+        if (url.length > 0) {
+            const {history} = this.props;
+            history.push(url);
+        }
     }
 
     onHandleToolTipSelect(newKey) {
@@ -143,6 +166,7 @@ class BusinessOptionContainer extends Component {
         const businessOptionPageProps = {
             appStatus: this.props.appStatus,
             onHandleToolTip: this.onHandleToolTip,
+            goTo: this.goTo,
             onClickUpdateStatus: this.onClickUpdateStatus
         };
 

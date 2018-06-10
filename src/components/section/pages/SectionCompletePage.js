@@ -1,95 +1,134 @@
 import React, {Component} from "react";
-import {Link, withRouter} from "react-router-dom";
-import PropTypes from "prop-types";
-import {
-    dashboardUrl, getByEventType, getCurrentLevelByUrl, getNext, isItemLoaded,
-    publicUrl
-} from "../../../utils/helper/helperFunctions";
-import {setEvents} from "../../../actions/appStatusAction";
 import {connect} from "react-redux";
-import {ROUTES} from "../../../constants/routes";
+import PropTypes from "prop-types";
+import {setToolTipContent} from "../../../actions/appStatusAction";
+import {Link, withRouter} from "react-router-dom";
+import {addFlashMessage} from "../../../actions/flashMessageAction";
+import {map} from "lodash";
+import * as classnames from "classnames";
+import {
+    filterBusinessOptionsBySection,
+    generateAppRelativeUrl, getStatus,
+    hasChildBusinessOptions, hasInCompleteChildBusinessOptions,
+    isItemLoaded,
+    isSectionLocked
+} from "../../../utils/helper/helperFunctions";
+import LevelHead from "../../level/includes/LevelHead";
 
 class SectionCompletePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentLevel: {},
-            nextLevel: {},
-            nextLevelUrl: '/'
-        };
+            isEdit: false
+        }
     }
 
     componentDidMount() {
-        const {appStatus, history, location} = this.props;
-        const currentLevel = getCurrentLevelByUrl(appStatus.levels, location.pathname);
-        const nextLevel = getNext(appStatus.levels, currentLevel.id);
-        const nextLevelUrl = isItemLoaded(nextLevel) ? '/level/' + nextLevel.slug : dashboardUrl();
-
-        if (!isItemLoaded(appStatus.events) || !getByEventType('levelCompleted')) {
-            history.push(ROUTES.HOME);
-            return;
-        }
-
-        this.setState({
-            ...this.state,
-            currentLevel: currentLevel,
-            nextLevel: nextLevel,
-            nextLevelUrl: nextLevelUrl
-        })
+        // this.$el = $(this.el);
+        // this.$el.mCustomScrollbar({
+        //     mouseWheel: {scrollAmount: 300}
+        // });
     }
 
-    componentWillUnmount() {
-        this.props.setEvents([]);
+
+    onClickNext(e) {
+        e.preventDefault();
+        this.props.getBusinessOption(this.props.appStatus);
     }
 
     render() {
+        const {appStatus, onHandleToolTip, goTo} = this.props;
+        const {currentLevel, currentSection, businessOptionStatuses = [{}]} = this.props.appStatus;
+        const relevantBusinessOptions = filterBusinessOptionsBySection(appStatus, currentSection.id);
+        const sectionStatus = getStatus(appStatus.businessStatus.sectionStatuses, currentSection.id);
+        const completedPercent = sectionStatus.completed_percent ? sectionStatus.completed_percent : 0;
+
+        const businessOptionList = map(relevantBusinessOptions, (businessOption, key) => {
+            const businessOptionUrl = generateAppRelativeUrl(currentLevel.slug, currentSection.slug, businessOption.id);
+            const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
+            const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'multiple-paper' : 'paper';
+            const lockedClass = isLocked ? 'locked' : '';
+            let completedClass;
+            if (stackedClass === 'multiple-paper') {
+                completedClass = ! hasInCompleteChildBusinessOptions(appStatus, businessOption)  ? 'tick-done' : 'tick-incomplete';
+            } else {
+                const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
+                const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
+                completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
+            }
+            return (
+                <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}
+                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
+                    onMouseOver={(e) => onHandleToolTip(e, businessOption.id, '')}
+                    onClick={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
+                >
+                    <Link className="link-box" to={businessOptionUrl} >
+                        <div className="red-icon circular-white-bg" href="#">
+                            {/*{businessOption.short_name}*/}
+                            <img src={businessOption.icon}
+                                 alt=""/>
+                        </div>
+                    </Link>
+                    <span className={classnames(completedClass, 'glyphicon glyphicon-ok')}>
+                    </span>
+                </li>
+            )
+        });
+
+        const levelHeadProps = {
+            appStatus: this.props.appStatus
+        };
 
         return (
-            <div className="level-complete">
-                <h5 className="obvious-h5 hidden-xs">{this.state.currentLevel.name}</h5>
-                {this.state.currentLevel.badge_message &&
-                <div className="content-wrap" dangerouslySetInnerHTML={{__html: this.state.currentLevel.badge_message}}/>}
-                <img className="complete-block-img"
-                     src={publicUrl('/assets/images/level-complete.png')} alt=""/>
-                <div className="bottom-block-complete">
-                    {
-                        !isItemLoaded(this.state.nextLevel) ?
-                            <div className="btn-wrap">
-                                <a href={dashboardUrl()} className="btn btn-default btn-md">Go to Dashboard</a>
-                                <br/><br/>
-                            </div>
-                            :
-                            <div>
-                                <div className="btn-wrap">
-                                    <Link
-                                        to={this.state.nextLevelUrl} className="btn btn-default btn-md">Continue to
-                                        level {this.state.nextLevel.id}</Link>
-                                </div>
-                                <Link
-                                    to={this.state.nextLevelUrl} className="next-session-link">
-                                    <i className="fa fa-chevron-down" aria-hidden="true"></i>
-                                </Link>
-                                <h6>{this.state.nextLevel.name}</h6>
-                            </div>
-                    }
+            <div>
+                <LevelHead {...levelHeadProps}/>
+
+                <div className="alert-form">
+                    <div className="alert-head pos-relative">
+                        <div>
+                            <Link className="pull-left abs-back" to={generateAppRelativeUrl(currentLevel.slug)}>
+                                <i className="fa fa-chevron-left" aria-hidden="true"></i>
+                            </Link>
+                            <img className="red-icon mCS_img_loaded" src={currentSection.icon} alt=""/>
+                            <h6>{currentSection.name}</h6>
+                        </div>
+                    </div>
+                    <div className="progress c-progress">
+                        <div className="progress-bar" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style={{width: completedPercent + '%'}}>
+                        </div>
+                    </div>
+                    <div className="alert-f-body">
+                        <div className="content-wrap"
+                             dangerouslySetInnerHTML={{__html: currentSection.content}}/>
+                        <ul className="disc-style clearfix">
+                            {isItemLoaded(this.props.appStatus.businessOptions) && businessOptionList}
+                        </ul>
+                    </div>
                 </div>
             </div>
         );
     }
-
 }
 
 SectionCompletePage.propTypes = {
+    auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
-    setEvents: PropTypes.func.isRequired
+    setToolTipContent: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
+    onHandleToolTip: PropTypes.func.isRequired,
+    goTo: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
-        appStatus: state.appStatusReducer
+        appStatus: state.appStatusReducer,
+        auth: state.authReducer
     }
 }
 
 export default withRouter(connect(mapStateToProps, {
-    setEvents
+    setToolTipContent,
+    addFlashMessage,
 })(SectionCompletePage));

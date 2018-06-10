@@ -25,7 +25,7 @@ class LevelContainer extends Component {
 
         this.onClickLevelLink = this.onClickLevelLink.bind(this);
         this.onClickContinue = this.onClickContinue.bind(this);
-        this.onClickSectionLink = this.onClickSectionLink.bind(this);
+        this.goTo = this.goTo.bind(this);
         this.onHandleToolTip = this.onHandleToolTip.bind(this);
         this.onHandleToolTipSelect = this.onHandleToolTipSelect.bind(this);
     }
@@ -68,9 +68,9 @@ class LevelContainer extends Component {
     onClickContinue(e) {
         e.preventDefault();
         const {appStatus, history} = this.props;
-        const {sections, businessStatus, currentLevel} = appStatus;
+        const {sections, currentLevel} = appStatus;
 
-        if (isLevelLocked(businessStatus.businessOptionStatuses, currentLevel)) {
+        if (isLevelLocked(appStatus, currentLevel)) {
             this.props.addFlashMessage({
                 type: 'error',
                 text: MESSAGES.ERR_LOCKED
@@ -84,19 +84,20 @@ class LevelContainer extends Component {
         history.push(generateAppRelativeUrl(currentLevel.slug, firstSection.slug));
     };
 
-    onClickSectionLink(e, level, section, isLocked) {
+    goTo(e, url) {
         e.preventDefault();
-        if (isLocked) {
-            return;
-        }
         const {history} = this.props;
-        setCurrent(level, section);
-        history.push(generateAppRelativeUrl(level.slug, section.slug));
+        history.push(url);
     };
 
-    onHandleToolTip(e, id) {
+    onHandleToolTip(e, id, url) {
         e.preventDefault();
         this.displayToolTip(this.props, id);
+
+        if (url.length > 0) {
+            const {history} = this.props;
+            history.push(url);
+        }
     }
 
     onHandleToolTipSelect(newKey) {
@@ -155,7 +156,7 @@ class LevelContainer extends Component {
             appStatus: this.props.appStatus,
             currentLevel: currentLevel,
             onClickLevelLink: this.onClickLevelLink,
-            onClickSectionLink: this.onClickSectionLink,
+            goTo: this.goTo,
             onClickContinue: this.onClickContinue,
             onHandleToolTip: this.onHandleToolTip
         };

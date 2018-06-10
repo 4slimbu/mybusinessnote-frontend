@@ -4,7 +4,7 @@ import * as classnames from "classnames";
 import {
     generateAppRelativeUrl,
     getCurrentLevelSections,
-    getStatus,
+    getStatus, isLevelLocked,
     isSectionLocked
 } from "../../../../utils/helper/helperFunctions";
 import PropTypes from "prop-types";
@@ -12,16 +12,17 @@ import PropTypes from "prop-types";
 class SectionLinks extends Component {
 
     render() {
-        const {appStatus, level, onClickSectionLink} = this.props;
+        const {auth, appStatus, level, onClickSectionLink} = this.props;
         const {sections, currentSection, businessStatus} = appStatus;
-        const {sectionStatuses, businessOptionStatuses} = businessStatus;
+        const {sectionStatuses} = businessStatus;
         const currentLevelSections = getCurrentLevelSections(sections, level.id);
 
         const sectionsList = map(currentLevelSections, (section, key) => {
             const sectionUrl = generateAppRelativeUrl(level.slug, section.slug);
             const sectionStatus = getStatus(sectionStatuses, section.id);
-            const isLocked = isSectionLocked(businessOptionStatuses, section);
-            const lockedClass = isLocked ? 'locked' : '';
+            const isLocked = isLevelLocked(appStatus, level);
+            const isSectionLocked = !auth.isVerified && section.id !== 1 && section.id !== 2;
+            const lockedClass = isLocked || isSectionLocked ? 'locked' : '';
             return (
                 <li key={section.id} className={classnames(lockedClass)}>
                     <a href={sectionUrl} onClick={(e) => onClickSectionLink(e, level, section, isLocked)}>
@@ -42,6 +43,7 @@ class SectionLinks extends Component {
 }
 
 SectionLinks.propTypes = {
+    auth: PropTypes.object.isRequired,
     appStatus: PropTypes.object.isRequired,
     level: PropTypes.object.isRequired,
     onClickSectionLink: PropTypes.func.isRequired

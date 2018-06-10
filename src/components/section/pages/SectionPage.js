@@ -9,7 +9,7 @@ import * as classnames from "classnames";
 import {
     filterBusinessOptionsBySection,
     generateAppRelativeUrl, getStatus,
-    hasChildBusinessOptions,
+    hasChildBusinessOptions, hasInCompleteChildBusinessOptions,
     isItemLoaded,
     isSectionLocked
 } from "../../../utils/helper/helperFunctions";
@@ -37,7 +37,7 @@ class SectionPage extends Component {
     }
 
     render() {
-        const {appStatus, onHandleToolTip} = this.props;
+        const {appStatus, onHandleToolTip, goTo} = this.props;
         const {currentLevel, currentSection, businessOptionStatuses = [{}]} = this.props.appStatus;
         const relevantBusinessOptions = filterBusinessOptionsBySection(appStatus, currentSection.id);
         const sectionStatus = getStatus(appStatus.businessStatus.sectionStatuses, currentSection.id);
@@ -48,16 +48,21 @@ class SectionPage extends Component {
             const isLocked = isSectionLocked(businessOptionStatuses, businessOption);
             const stackedClass = hasChildBusinessOptions(appStatus, businessOption) ? 'multiple-paper' : 'paper';
             const lockedClass = isLocked ? 'locked' : '';
-            const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
-            const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
-            const completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
+            let completedClass;
+            if (stackedClass === 'multiple-paper') {
+                completedClass = ! hasInCompleteChildBusinessOptions(appStatus, businessOption)  ? 'tick-done' : 'tick-incomplete';
+            } else {
+                const businessOptionStatusObject = getStatus(appStatus.businessStatus.businessOptionStatuses, businessOption.id);
+                const businessOptionStatus = businessOptionStatusObject.status ? businessOptionStatusObject.status : '';
+                completedClass = businessOptionStatus === 'done'  ? 'tick-done' : 'tick-incomplete';
+            }
             return (
                 <li key={businessOption.id} className={classnames(lockedClass, stackedClass, 'active')}
-                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id)}
-                    onMouseEnter={(e) => onHandleToolTip(e, businessOption.id)}
-                    onClick={(e) => onHandleToolTip(e, businessOption.id)}
+                    onTouchEnd={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
+                    onMouseOver={(e) => onHandleToolTip(e, businessOption.id, '')}
+                    onClick={(e) => onHandleToolTip(e, businessOption.id, businessOptionUrl)}
                 >
-                    <Link className="link-box" to={businessOptionUrl}>
+                    <Link className="link-box" to={businessOptionUrl} >
                         <div className="red-icon circular-white-bg" href="#">
                             {/*{businessOption.short_name}*/}
                             <img src={businessOption.icon}
@@ -112,7 +117,8 @@ SectionPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
     setToolTipContent: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
-    onHandleToolTip: PropTypes.func.isRequired
+    onHandleToolTip: PropTypes.func.isRequired,
+    goTo: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

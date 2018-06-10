@@ -2234,7 +2234,8 @@ span.accordion-titles strong {
 
 .disc-style {
     margin: 0;
-    padding: 5%;
+    padding: 0;
+    display: inline-block;
 }
 
 .disc-style li {
@@ -2248,7 +2249,7 @@ span.accordion-titles strong {
     float: left;
     border-radius: 5%;
     line-height: inherit;
-    padding: 10px;
+    padding: 25px;
 }
 
 .disc-style li img {
@@ -2278,13 +2279,15 @@ a.abs-back {
 .paper {
     position: relative;
     background: #fff;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    border: 1px solid #e8b8bb;
+    /*box-shadow: 0 1px 1px rgba(0,0,0,0.15);*/
 }
 
 .multiple-paper {
     position: relative;
     background: #fff;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.15), 2px -2px 0 1px #e8b8bb;
+    border: 1px solid #e8b8bb;
+    box-shadow: 0 0 1px rgba(0,0,0,0.15), 3px -3px 0 0 #e8b8bb;
 }
 
 .tick-done {
@@ -2329,19 +2332,19 @@ a.abs-back {
     display: none;
 }
 
-.alert-f-body {
-    padding: 40px 15px;
+.alert-form .alert-f-body {
+    padding: 15% 5%;
 }
 
-.alert-f-body p {
+.alert-form .alert-f-body p {
     margin: 0;
 }
 
-.alert-f-body .btn {
-    margin-bottom: 0 !important;
+.alert-form .alert-f-body .btn {
+    margin-bottom: 0;
 }
 
-.alert-f-body ul.alert-btns {
+.alert-form .alert-f-body ul.alert-btns {
     margin: 26px 0 26px;
     padding: 0;
 }
@@ -2350,7 +2353,12 @@ form.alert-form {
     margin: 18px auto 25px;
 }
 
-.apps-social-media {
+.alert-form .apps-social-media {
     margin: 25px 0 0;
     padding: 0;
+}
+
+.mCSB_container.mCS_no_scrollbar_y.mCS_y_hidden
+{
+    padding: 0px;
 }
