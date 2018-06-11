@@ -21,7 +21,7 @@ class SignUpForm extends Component {
             phone_number: 'required',
             password: 'required|min:8',
             confirm_password: 'match:password',
-            // captcha_response: 'captcha'
+            captcha_response: 'captcha'
         };
 
         // Initial State

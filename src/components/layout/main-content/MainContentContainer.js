@@ -6,7 +6,6 @@ class MainContentContainer extends Component {
         this.$el = $(this.el);
         this.$el.mCustomScrollbar({
             mouseWheel: {scrollAmount: 300},
-            alwaysShowScrollbar: 1,
         });
     }
 

@@ -19,17 +19,17 @@ const sections = (appStatus, currentLevel, onHandleToolTip, goTo) => map(getCurr
 
     return (
         <li key={section.id} className={classnames(active, lockedClass)}
-            onTouchEnd={(e) => onHandleToolTip(e, section.id, sectionUrl)}
-            onClick={(e) => onHandleToolTip(e, section.id, sectionUrl)}
+            onTouchEnd={(e) => onHandleToolTip(e, section.id, isLocked ? '' : sectionUrl)}
+            onClick={(e) => onHandleToolTip(e, section.id, isLocked ? '' : sectionUrl)}
             onMouseOver={(e) => onHandleToolTip(e, section.id, '')}
         >
-            <Link className="link-box" to={sectionUrl}>
+            <div className="link-box">
                 <div className="red-icon" href="#">
                     <img src={section.icon}
                          alt=""/>
                 </div>
                 <span> {section.name}</span>
-            </Link>
+            </div>
             <a className="apps-question" href="#"
                onTouchEnd={(e) => onHandleToolTip(e, section.id, '')}
                onMouseOver={(e) => onHandleToolTip(e, section.id, '')}
