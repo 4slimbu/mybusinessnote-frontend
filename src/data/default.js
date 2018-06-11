@@ -11,7 +11,8 @@ export const DEFAULT_APP_STATUS = {
     businessCategories: [],
     currentTipCategoryId: null,
     toolTip: null,
-    events: []
+    events: [],
+    appSettings: []
 };
 
 export const DEFAULT_NEWS_LIST = {};

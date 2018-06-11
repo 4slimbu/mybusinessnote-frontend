@@ -2092,6 +2092,12 @@ span.accordion-titles strong {
 }
 
 @media (hover: hover) {
+    .step-one.on-bg-white a.btn:hover {
+        background: none;
+        border-color: #000;
+        color: #000;
+    }
+
     button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
         border-color: #ccc #bbb #aaa;
     }
@@ -2365,3 +2371,70 @@ form.alert-form {
 {
     padding: 0px;
 }
+
+/* -- Start: Main Pop Up -- */
+.popup.active {
+    display: inline-block;
+}
+
+.popup {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,.7);
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.popup-wrapper {
+    position: absolute;
+    text-align: center;
+    color: #fff;
+    display: table;
+    height: 100vh;
+    width: 100%;
+}
+
+.popup-container {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.popup-mode-content .popup-content {
+    position: relative;
+    background: #fff;
+    padding: 50px 30px;
+    width: auto;
+    max-width: 890px;
+    margin: 0 auto;
+    text-align: center;
+    color: #000;
+}
+
+.popup-content.active {
+    display: inline-block;
+}
+
+.close-popup {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10001;
+    background: black;
+    color: white !important;
+    border-radius: 100%;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.close-popup:hover {
+    text-decoration: none;
+}
+/* -- End: Main Pop Up -- */

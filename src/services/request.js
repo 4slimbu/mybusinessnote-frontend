@@ -114,6 +114,15 @@ const Track = {
         requests('GET', apiBaseUrl('/click?bo_id=' + data.boId + '&aff_id=' + data.affId)),
 };
 
+/**
+ * Handle all News related requests
+ */
+const AppSettings = {
+    all: (data) =>
+        requests('GET', apiBaseUrl('/app-settings')),
+};
+
+
 export default {
     Auth,
     Business,
@@ -121,5 +130,6 @@ export default {
     Level,
     BusinessOption,
     News,
-    Track
+    Track,
+    AppSettings
 };

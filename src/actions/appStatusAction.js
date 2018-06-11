@@ -1,4 +1,5 @@
 import {
+    SET_APP_SETTINGS,
     SET_BUSINESS,
     SET_BUSINESS_CATEGORIES,
     SET_BUSINESS_CATEGORY_ID,
@@ -136,5 +137,12 @@ export function setEvents(events) {
     return {
         type: SET_EVENTS,
         events
+    }
+}
+
+export function setAppSettings(settings) {
+    return {
+        type: SET_APP_SETTINGS,
+        settings
     }
 }

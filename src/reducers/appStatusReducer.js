@@ -1,4 +1,5 @@
 import {
+    SET_APP_SETTINGS,
     SET_BUSINESS,
     SET_BUSINESS_CATEGORIES,
     SET_BUSINESS_CATEGORY_ID,
@@ -237,6 +238,11 @@ export default (state = DEFAULT_APP_STATUS, action = {}) => {
             return {
                 ...state,
                 events: action.events
+            };
+        case SET_APP_SETTINGS :
+            return {
+                ...state,
+                appSettings: action.settings
             };
         default:
             return state;

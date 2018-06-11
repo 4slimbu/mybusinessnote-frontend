@@ -15,6 +15,8 @@ import {setNews} from "../actions/newsAction";
 import LoadingMessage from "./layout/loading/LoadingMessage";
 import {generateAppRelativeUrl, getByEventType, isItemLoaded, publicUrl} from "../utils/helper/helperFunctions";
 import {setEvents, setToolTipContent} from "../actions/appStatusAction";
+import PopUp from "./common/PopUp";
+import * as _ from "lodash";
 
 class App extends Component {
 
@@ -33,6 +35,7 @@ class App extends Component {
         props.makeRequest(request.Level.all);
         props.makeRequest(request.BusinessOption.all);
         props.makeRequest(request.BusinessCategory.all);
+        props.makeRequest(request.AppSettings.all);
         if (props.auth.isAuthenticated) {
             props.makeRequest(request.Business.getStatus);
             props.makeRequest(request.Business.get);
@@ -73,10 +76,14 @@ class App extends Component {
     }
 
     render() {
+        const appSettings = this.props.appStatus.appSettings;
+        let popUpSetting = _.find(appSettings, function(o) { return o.key == 'popup'; });
+
         return (
             this.isAppReady() ?
                 <ErrorBoundary>
                     <LayoutContainer>
+                        { popUpSetting && <PopUp popUpSetting={popUpSetting}/> }
                         <LoadingMessage/>
                         <FlashMessageList/>
                         <LeftSideBar/>
