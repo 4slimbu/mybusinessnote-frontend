@@ -76,6 +76,7 @@ class App extends Component {
     }
 
     render() {
+        const {auth} = this.props;
         const appSettings = this.props.appStatus.appSettings;
         let popUpSetting = _.find(appSettings, function(o) { return o.key == 'popup'; });
 
@@ -83,7 +84,7 @@ class App extends Component {
             this.isAppReady() ?
                 <ErrorBoundary>
                     <LayoutContainer>
-                        { popUpSetting && <PopUp popUpSetting={popUpSetting}/> }
+                        { !auth.isAuthenticated && popUpSetting && <PopUp popUpSetting={popUpSetting}/> }
                         <LoadingMessage/>
                         <FlashMessageList/>
                         <LeftSideBar/>
