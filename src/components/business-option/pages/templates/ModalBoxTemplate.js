@@ -12,6 +12,7 @@ import {
 import {map} from "lodash";
 import * as classnames from "classnames";
 import OptionStatusButtonGroup from "../../../common/OptionStatusButtonGroup";
+import BusinessOptionContent from "../../content-handler/BusinessOptionContent";
 
 const ModalBoxTemplate = ({appStatus, onHandleToolTip, goTo, onClickUpdateStatus}) => {
     const {currentLevel, currentSection, currentBusinessOption, businessOptionStatuses} = appStatus;
@@ -106,10 +107,11 @@ const ModalBoxTemplate = ({appStatus, onHandleToolTip, goTo, onClickUpdateStatus
                                     :
                                 <div>
                                     <div className="alert-f-body">
+                                        <BusinessOptionContent content={currentBusinessOption.content} />
                                         {
-                                            currentBusinessOption.element &&
-                                            <Element element={currentBusinessOption.element}
-                                                     onClick={(e) => this.onClickNext(e)}/>
+                                            // currentBusinessOption.element &&
+                                            // <Element element={currentBusinessOption.element}
+                                            //          onClick={(e) => this.onClickNext(e)}/>
                                         }
                                     </div>
                                     <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>

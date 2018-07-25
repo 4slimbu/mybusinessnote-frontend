@@ -2343,6 +2343,8 @@ a.abs-back {
 
 .alert-form .alert-f-body {
     padding: 15% 5%;
+    /*temp*/
+    background: grey;
 }
 
 .alert-form .alert-f-body p {
