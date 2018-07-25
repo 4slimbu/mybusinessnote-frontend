@@ -9,6 +9,7 @@ class ParentShortCode extends Component {
             <div className="content-wrap">
                 <p>name: {name}</p>
                 { this.props.children }
+                <p>name: {name}</p>
                 {/*<DynamicElement onClickNext={(e) => onClickNext(e)} onComplete={(bool) => this.props.onComplete(bool)}/>*/}
             </div>
         )
