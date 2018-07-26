@@ -150,8 +150,6 @@ class BrandColor extends Component {
 
         return (
             <div>
-                <div className="content-wrap"
-                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
                 <ul className="alert-brands-colors">
                     <li><a href="" onClick={(e) => this.onClickOption(e, '#f7e461')}></a></li>
                     <li><a href="" onClick={(e) => this.onClickOption(e, '#cde1e0')}></a></li>

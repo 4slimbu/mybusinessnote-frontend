@@ -118,8 +118,6 @@ class SingleImageField extends Component {
 
         return (
             <div>
-                <div className="content-wrap"
-                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
                 <form onSubmit={(e) => this.handleSubmit(e)}>
                     {
                         (isItemLoaded(image)) ?

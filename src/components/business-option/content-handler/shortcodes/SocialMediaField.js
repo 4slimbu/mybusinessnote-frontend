@@ -92,8 +92,6 @@ class SocialMediaField extends Component {
 
         return (
             <div>
-                <div className="content-wrap"
-                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
                 <ul className="apps-social-media">
                     <li>
                         <a className="social-media-icon" href=""

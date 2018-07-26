@@ -83,8 +83,6 @@ class SingleTextField extends Component {
 
         return (
             <div>
-                <div className="content-wrap"
-                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
                 <form className="alert-form">
                     <div className="form-group">
                         <input type="text"

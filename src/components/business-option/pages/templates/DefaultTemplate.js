@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import LevelHead from "../../../level/includes/LevelHead";
 import Element from "../../elements/Element";
+import BusinessOptionContent from "../../content-handler/BusinessOptionContent";
 
 const DefaultTemplate = ({appStatus}) => {
     const {currentBusinessOption} = appStatus;
@@ -10,13 +11,9 @@ const DefaultTemplate = ({appStatus}) => {
             <LevelHead appStatus={appStatus}/>
 
             <h1>{currentBusinessOption.name}</h1>
-            <div className="content-wrap"
-                 dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
-            {
-                currentBusinessOption.element &&
-                <Element element={currentBusinessOption.element}
-                         onClick={(e) => this.onClickNext(e).bind(this)}/>
-            }
+            <div className="content-wrap">
+                <BusinessOptionContent content={currentBusinessOption.content} />
+            </div>
         </div>
     )
 };

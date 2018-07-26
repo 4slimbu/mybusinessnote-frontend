@@ -83,8 +83,6 @@ class YesAndLinkField extends Component {
         const affiliateLink = (currentBusinessOption.affiliateLinks[0]) ? currentBusinessOption.affiliateLinks[0].link : '#';
         return (
             <div>
-                <div className="content-wrap"
-                     dangerouslySetInnerHTML={{__html: currentBusinessOption.content}}/>
                 <ul className="alert-btns">
                     <li><a
                         className={this.state.value === 'yes' ? 'active' : ''}

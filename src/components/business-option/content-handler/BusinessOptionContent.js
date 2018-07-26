@@ -63,7 +63,9 @@ class BusinessOptionContent extends Component {
                     break;
                 case 'GETNAME':
                     if (!(/\s/.test(token))) {
-                        parsedValue.name += token;
+                        if (token != ']') {
+                            parsedValue.name += token;
+                        }
                     } else if (parsedValue.name) {
                         mode = 'PARSING';
                     }
@@ -289,7 +291,7 @@ class BusinessOptionContent extends Component {
 
         return (
             <div className="content-wrap">
-                {content && this.parseShortCode(content)}
+                {isItemLoaded(content) && this.parseShortCode(content)}
                 {/*<DynamicElement onClickNext={(e) => onClickNext(e)} onComplete={(bool) => this.props.onComplete(bool)}/>*/}
             </div>
         )

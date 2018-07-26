@@ -6,7 +6,7 @@ class ParentShortCode extends Component {
     render() {
         const {name, attributes} = this.props;
         return (
-            <div className="content-wrap">
+            <div>
                 <p>name: {name}</p>
                 { this.props.children }
                 <p>name: {name}</p>

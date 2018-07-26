@@ -108,11 +108,6 @@ const ModalBoxTemplate = ({appStatus, onHandleToolTip, goTo, onClickUpdateStatus
                                 <div>
                                     <div className="alert-f-body">
                                         <BusinessOptionContent content={currentBusinessOption.content} />
-                                        {
-                                            // currentBusinessOption.element &&
-                                            // <Element element={currentBusinessOption.element}
-                                            //          onClick={(e) => this.onClickNext(e)}/>
-                                        }
                                     </div>
                                     <OptionStatusButtonGroup {...optionStatusButtonGroupProps}/>
                                 </div>
