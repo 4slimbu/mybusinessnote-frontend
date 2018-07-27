@@ -3,19 +3,20 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {generateAppRelativeUrl, getByKey, isItemLoaded} from "../../../../utils/helper/helperFunctions";
+import {makeRequest} from "../../../../actions/requestAction";
 import request from "../../../../services/request";
 import {MESSAGES} from "../../../../constants/messages";
-import {makeRequest} from "../../../../actions/requestAction";
 
-class SocialMediaField extends Component {
+class YesAndLinkField extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            metaKey: 'social_media',
+            metaKey: 'text_input',
             value: '',
-            isChanged: false,
-            errors: {},
-        }
+            affiliateLink: {},
+            isChanged: false
+        };
     }
 
     componentDidMount() {
@@ -31,15 +32,15 @@ class SocialMediaField extends Component {
         });
     }
 
-    handleSubmit(e) {
+    handleSubmit(e, value) {
         e.preventDefault();
 
         this.props.makeRequest(request.BusinessOption.save, {
             id: this.props.appStatus.currentBusinessOption.id,
-            input: {
+            input:{
                 business_option_id: this.props.appStatus.currentBusinessOption.id,
                 business_meta: {
-                    [this.state.metaKey]: this.state.value
+                    [this.state.metaKey]: value
                 }
             }
         }, {message: MESSAGES.SAVING}).then((response) => {
@@ -59,7 +60,7 @@ class SocialMediaField extends Component {
         this.props.makeRequest(request.Track.click, {
             boId: boId,
             affId: affId
-        });
+        }, {isSilent: true});
 
         setTimeout(function () {
             window.open(link, '_blank');
@@ -76,36 +77,33 @@ class SocialMediaField extends Component {
     }
 
     render() {
-        const {appStatus} = this.props;
-        const currentBusinessOption = appStatus.currentBusinessOption;
-
+        const {currentBusinessOption} = this.props.appStatus;
+        const affiliateLinkId = (currentBusinessOption.affiliateLinks[0]) ? currentBusinessOption.affiliateLinks[0].id : '';
+        const affiliateLinkLabel = (currentBusinessOption.affiliateLinks[0]) ? currentBusinessOption.affiliateLinks[0].label : 'Set Up Now';
+        const affiliateLink = (currentBusinessOption.affiliateLinks[0]) ? currentBusinessOption.affiliateLinks[0].link : '#';
         return (
             <div>
-                <ul className="apps-social-media">
+                <ul className="alert-btns">
+                    <li><a
+                        className={this.state.value === 'yes' ? 'active' : ''}
+                        href="" onClick={(e) => this.handleSubmit(e, 'yes')}>Yes</a></li>
                     <li>
-                        <a className="social-media-icon" href="#">
-                            <img src={currentBusinessOption.icon} alt=""/>
-                        </a>
-                        <form onSubmit={(e) => this.handleSubmit(e)}>
-                            <input placeholder="https://example.com/page" type="text"
-                                   onChange={(e) => this.onChange(e)} value={this.state.value}/>
-                            {this.state.errors.social_media &&
-                            <div><span className="form-error-message-2">{this.state.errors.social_media}</span></div>}
-
-                            {
-                                this.state.isChanged && <button className="btn btn-default btn-lg btn-alert">Done</button>
-                            }
-                        </form>
+                        <a onClick={(e) => this.onClickAffiliateLink(e, currentBusinessOption.id, affiliateLinkId, affiliateLink)}
+                           href={affiliateLink} target="new" className="upload-button">{affiliateLinkLabel}</a>
                     </li>
                 </ul>
+
             </div>
+
         )
 
     }
 }
 
-SocialMediaField.propTypes = {
-    makeRequest: PropTypes.func.isRequired,
+YesAndLinkField.propTypes = {
+    setCurrentBusinessOption: PropTypes.func.isRequired,
+    onClickNext: PropTypes.func.isRequired,
+    getAppStatus: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -121,4 +119,4 @@ export default withRouter(
         {
             makeRequest,
         }
-    )(SocialMediaField))
+    )(YesAndLinkField))

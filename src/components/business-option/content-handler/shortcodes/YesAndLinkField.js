@@ -77,16 +77,17 @@ class YesAndLinkField extends Component {
     }
 
     render() {
+        const {attributes} = this.props;
         const {currentBusinessOption} = this.props.appStatus;
         const affiliateLinkId = (currentBusinessOption.affiliateLinks[0]) ? currentBusinessOption.affiliateLinks[0].id : '';
-        const affiliateLinkLabel = (currentBusinessOption.affiliateLinks[0]) ? currentBusinessOption.affiliateLinks[0].label : 'Set Up Now';
+        const affiliateLinkLabel = attributes.link_label ? attributes.link_label : 'Set Up Now';
         const affiliateLink = (currentBusinessOption.affiliateLinks[0]) ? currentBusinessOption.affiliateLinks[0].link : '#';
         return (
             <div>
                 <ul className="alert-btns">
                     <li><a
                         className={this.state.value === 'yes' ? 'active' : ''}
-                        href="" onClick={(e) => this.handleSubmit(e, 'yes')}>Yes</a></li>
+                        href="" onClick={(e) => this.handleSubmit(e, 'yes')}>{ attributes.confirm_label ? attributes.confirm_label : "Yes"}</a></li>
                     <li>
                         <a onClick={(e) => this.onClickAffiliateLink(e, currentBusinessOption.id, affiliateLinkId, affiliateLink)}
                            href={affiliateLink} target="new" className="upload-button">{affiliateLinkLabel}</a>

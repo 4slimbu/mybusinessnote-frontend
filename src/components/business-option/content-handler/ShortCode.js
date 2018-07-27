@@ -9,8 +9,8 @@ import SingleImageField from "./shortcodes/SingleImageField";
 import SingleTextField from "./shortcodes/SingleTextField";
 import BrandColor from "./shortcodes/BrandColor";
 import SocialMediaField from "./shortcodes/SocialMediaField";
-import YesAndLinkField from "./shortcodes/YesAndLinkField";
 import {isItemLoaded} from "../../../utils/helper/helperFunctions";
+import ConfirmAndLink from "./shortcodes/ConfirmAndLink";
 
 class ShortCode extends Component {
     constructor(props) {
@@ -27,7 +27,7 @@ class ShortCode extends Component {
             SingleTextField: SingleTextField,
             BrandColor: BrandColor,
             SocialMediaField: SocialMediaField,
-            YesAndLinkField: YesAndLinkField,
+            ConfirmAndLink: ConfirmAndLink,
         };
     }
 

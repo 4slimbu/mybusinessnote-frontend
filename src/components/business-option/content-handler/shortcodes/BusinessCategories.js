@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -138,7 +138,7 @@ class BusinessCategories extends Component {
         });
 
         return (
-            <div>
+            <Fragment>
                 <ul className="apps-icons clearfix apps-h-effect">
                     {businessCategories}
                 </ul>
@@ -146,7 +146,7 @@ class BusinessCategories extends Component {
                     {next &&
                     <button onClick={(e) => this.onClickNext(e)} className="btn btn-default btn-md">Continue</button>}
                 </div>
-            </div>
+            </Fragment>
 
         )
 

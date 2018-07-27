@@ -50,13 +50,39 @@ class HomeContainer extends Component {
     onClickContinueJourney(e) {
         e.preventDefault();
         const {levels, sections, businessStatus} = this.props.appStatus;
-        const firstDoableBusinessOption = filterFirstInCollection(businessStatus.businessOptionStatuses, {status: "unlocked"});
+        const firstUnlockedBusinessOption = filterFirstInCollection(businessStatus.businessOptionStatuses, {status: "unlocked"});
+        const firstSkippedBusinessOption = filterFirstInCollection(businessStatus.businessOptionStatuses, {status: "skipped"});
 
-        if (isItemLoaded(firstDoableBusinessOption) && firstDoableBusinessOption.level_id !== 3) {
+        let firstDoableBusinessOption;
+        if (firstUnlockedBusinessOption ) {
+            let firstUnlockedBusinessOptionLevel = getById(levels, firstUnlockedBusinessOption.level_id);
+
+            if (firstUnlockedBusinessOptionLevel && firstUnlockedBusinessOptionLevel.is_active && ! firstUnlockedBusinessOptionLevel.is_down) {
+                firstDoableBusinessOption = firstUnlockedBusinessOption;
+            } else if (firstSkippedBusinessOption) {
+                let firstSkippedBusinessOptionLevel = getById(levels, firstSkippedBusinessOption.level_id);
+
+                if (firstSkippedBusinessOptionLevel && firstSkippedBusinessOptionLevel.is_active && ! firstSkippedBusinessOptionLevel.is_down) {
+                    firstDoableBusinessOption = firstSkippedBusinessOption;
+                }
+            }
+        } else if (firstSkippedBusinessOption) {
+            let firstSkippedBusinessOptionLevel = getById(levels, firstSkippedBusinessOption.level_id);
+
+            if (firstSkippedBusinessOptionLevel.is_active && ! firstSkippedBusinessOptionLevel.is_down) {
+                firstDoableBusinessOption = firstSkippedBusinessOption;
+            }
+        }
+
+        if (isItemLoaded(firstDoableBusinessOption)) {
             const currentLevel = getById(levels, firstDoableBusinessOption.level_id);
             const currentSection = getById(sections, firstDoableBusinessOption.section_id);
 
-            this.props.history.push(generateAppRelativeUrl(currentLevel.slug, currentSection.slug, firstDoableBusinessOption.id));
+            if ( currentLevel && currentSection && currentLevel.is_active && !currentLevel.is_down) {
+                this.props.history.push(generateAppRelativeUrl(currentLevel.slug, currentSection.slug, firstDoableBusinessOption.id));
+            } else {
+                this.props.history.push(ROUTES.LEVEL_ONE);
+            }
         } else {
             this.props.history.push(ROUTES.LEVEL_ONE);
         }

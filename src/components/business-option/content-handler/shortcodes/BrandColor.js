@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -149,7 +149,7 @@ class BrandColor extends Component {
         const {brand_color, sec_brand_color} = this.state;
 
         return (
-            <div>
+            <Fragment>
                 <ul className="alert-brands-colors">
                     <li><a href="" onClick={(e) => this.onClickOption(e, '#f7e461')}></a></li>
                     <li><a href="" onClick={(e) => this.onClickOption(e, '#cde1e0')}></a></li>
@@ -194,7 +194,7 @@ class BrandColor extends Component {
                 </ul>
                 <a href="#" onClick={(e) => this.handleSubmit(e)} className="btn btn-default btn-lg btn-alert">Done</a>
 
-            </div>
+            </Fragment>
 
         )
 
