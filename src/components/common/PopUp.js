@@ -26,6 +26,7 @@ class PopUp extends Component {
     componentDidMount() {
         if (this.props.popUpSetting && this.props.popUpSetting.value) {
             const target = this.props.popUpSetting.value.target ? this.props.popUpSetting.value.target : this.state.target;
+            const referrerUrl = this.props.popUpSetting.value.referrer_url ? this.props.popUpSetting.value.referrer_url : this.state.referrer_url;
             const triggerType = this.props.popUpSetting.value.trigger_type ? this.props.popUpSetting.value.trigger_type : this.state.triggerType;
             const delayTime = this.props.popUpSetting.value.delay_time ? this.props.popUpSetting.value.delay_time : this.state.delayTime;
             const minClickCount = this.props.popUpSetting.value.min_click_count ? this.props.popUpSetting.value.min_click_count : this.state.minClickCount;
@@ -36,6 +37,7 @@ class PopUp extends Component {
             this.setState({
                 ...this.state,
                 target: target,
+                referrerUrl: referrerUrl,
                 triggerType: triggerType,
                 delayTime: delayTime,
                 minClickCount: minClickCount,
@@ -49,14 +51,16 @@ class PopUp extends Component {
     }
 
     preparePopUp() {
-        if (this.state.target === 'referrer') {
-            if (this.checkIfReferrerIsValid()) {
+        switch (this.state.target) {
+            case 'referrer':
+                if (this.checkIfReferrerIsValid()) {
+                    this.triggerPopUp();
+                }
+                break;
+            case 'all':
                 this.triggerPopUp();
-            }
-        }
-
-        if (this.state.target === 'all') {
-            this.triggerPopUp();
+                break;
+            default:
         }
     }
 
