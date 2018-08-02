@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {random} from "lodash";
+import {getCookie, setCookie} from "../../utils/helper/helperFunctions";
 
 class PopUp extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ class PopUp extends Component {
             delayTime: '5',
             minClickCount: '5',
             maxClickCount: '10',
+            daysToDisableWhenCancelled: '30',
             content: null,
             referrerUrl: '',
             showPopUp: false,
@@ -18,6 +20,7 @@ class PopUp extends Component {
         };
         this.onClose = this.onClose.bind(this);
         this.showPopUpAfterFewRandClicks = this.showPopUpAfterFewRandClicks.bind(this);
+        this.isDisabled = this.isDisabled.bind(this);
     }
 
     componentDidMount() {
@@ -27,6 +30,7 @@ class PopUp extends Component {
             const delayTime = this.props.popUpSetting.value.delay_time ? this.props.popUpSetting.value.delay_time : this.state.delayTime;
             const minClickCount = this.props.popUpSetting.value.min_click_count ? this.props.popUpSetting.value.min_click_count : this.state.minClickCount;
             const maxClickCount = this.props.popUpSetting.value.max_click_count ? this.props.popUpSetting.value.max_click_count : this.state.maxClickCount;
+            const daysToDisableWhenCancelled = this.props.popUpSetting.value.days_to_disable_when_cancelled ? this.props.popUpSetting.value.days_to_disable_when_cancelled : this.state.daysToDisableWhenCancelled;
             const content = this.props.popUpSetting.value.content ? this.props.popUpSetting.value.content : this.state.content;
 
             this.setState({
@@ -36,6 +40,7 @@ class PopUp extends Component {
                 delayTime: delayTime,
                 minClickCount: minClickCount,
                 maxClickCount: maxClickCount,
+                daysToDisableWhenCancelled: daysToDisableWhenCancelled,
                 content: content
             }, function () {
                 this.preparePopUp();
@@ -53,6 +58,11 @@ class PopUp extends Component {
         if (this.state.target === 'all') {
             this.triggerPopUp();
         }
+    }
+
+
+    isDisabled() {
+        return getCookie('isPopUpDisabled');
     }
 
     triggerPopUp() {
@@ -76,6 +86,10 @@ class PopUp extends Component {
     }
 
     showPopUpInstantly() {
+        if (this.isDisabled()) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             showPopUp: true,
@@ -103,6 +117,8 @@ class PopUp extends Component {
     }
 
     onClose() {
+        setCookie('isPopUpDisabled', true, {maxAge: this.state.daysToDisableWhenCancelled * 24 * 60 * 60, path: '/'});
+
         this.setState({
             showPopUp: false,
             content: null,
@@ -123,7 +139,9 @@ class PopUp extends Component {
                     </div>
                 </div>
                 :
-                <div ref={node => { this.node = node; }}></div>
+                <div ref={node => {
+                    this.node = node;
+                }}></div>
         )
     }
 }

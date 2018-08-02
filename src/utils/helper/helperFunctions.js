@@ -1,5 +1,6 @@
-import {filter, find, findIndex, has, indexOf, intersectionBy, intersectionWith, map} from "lodash";
+import {filter, find, findIndex, has, indexOf, map} from "lodash";
 import {MESSAGES} from "../../constants/messages";
+import Cookies from 'universal-cookie';
 
 /*
 ==========================================================================
@@ -565,4 +566,20 @@ export function getAppUrlFromApiUrl(location) {
     const sectionSlug = extractSectionFromLocation(location);
     const boId = extractBoIdFromLocation(location);
     return '/level/' + levelSlug + '/section/' + sectionSlug + '/bo/' + boId;
+}
+
+/*
+==========================================================================
+Extra Helper Functions
+==========================================================================
+ */
+
+export function getCookie(name, options = {}) {
+    const cookies = new Cookies();
+    return cookies.get(name, options);
+}
+
+export function setCookie(name, value, options = {}) {
+    const cookies = new Cookies();
+    cookies.set(name, value, options);
 }
