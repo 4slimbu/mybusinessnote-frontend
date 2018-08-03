@@ -1386,9 +1386,8 @@ ul.alert-btns {
 ul.alert-btns li {
     display: inline-block;
     vertical-align: top;
-}
-ul.alert-btns li:first-child {
-    padding-right: 28px;
+    padding: 0px 15px;
+    margin-bottom: 15px;
 }
 ul.alert-btns li a, .alert-btns select {
     outline: none;
@@ -1403,6 +1402,9 @@ ul.alert-btns li a, .alert-btns select {
     text-transform: uppercase;
     transition-duration: 0.8s;
     transition-property: background, color, border;
+}
+ul.alert-btns li a{
+    display: inline-block;
 }
 .alert-btns select{
     padding: 10px 40px 10px 20px;
@@ -2354,7 +2356,7 @@ a.abs-back {
 }
 
 .alert-form .alert-f-body ul.alert-btns {
-    margin: 26px 0 26px;
+    margin: 26px -15px 11px;
     padding: 0;
 }
 
