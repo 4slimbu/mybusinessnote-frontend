@@ -2440,3 +2440,10 @@ form.alert-form {
     text-decoration: none;
 }
 /* -- End: Main Pop Up -- */
+
+.cancel-btn:before {
+    background: #4b384b;
+    padding: 5px 6px;
+    border-radius: 100%;
+    color: #ffffff;
+}

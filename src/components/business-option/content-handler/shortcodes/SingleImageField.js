@@ -124,7 +124,7 @@ class SingleImageField extends Component {
                             <div>
                                 <span className="remove-wrapper">
                                     <a className="remove" href="#" onClick={(e) => this.onClickRemove(e)}>
-                                        <i className="fa fa-remove" aria-hidden="true"></i>
+                                        <i className="fa fa-remove cancel-btn" aria-hidden="true"></i>
                                     </a>
                                     <img className="alert-frm-img" src={image}/>
                                 </span>
