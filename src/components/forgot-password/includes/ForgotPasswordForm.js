@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {ROUTES} from "../../../constants/routes";
 import {validateFields} from "../../../utils/validation/FieldValidator";
 import request from "../../../services/request";
+import {MESSAGES} from "../../../constants/messages";
 
 class ForgotPasswordForm extends Component {
     constructor(props) {
@@ -65,7 +66,7 @@ class ForgotPasswordForm extends Component {
 
     submitForm() {
         const data = {email: this.state.email.value};
-        this.props.makeRequest(request.Auth.forgotPassword, data).then(
+        this.props.makeRequest(request.Auth.forgotPassword, data, {message: MESSAGES.SENDING_EMAIL}).then(
             (responseData) => {
                 this.props.showEmailSentResponsePage();
             },

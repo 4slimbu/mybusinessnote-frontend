@@ -112,7 +112,7 @@ class LoginForm extends Component {
             password: this.state.password.value
         };
 
-        this.props.makeRequest(request.Auth.login, data, {message: MESSAGES.VERIFYING}).then(
+        this.props.makeRequest(request.Auth.login, data, {message: MESSAGES.LOGGING}).then(
             (responseData) => {
                 this.props.makeRequest(request.Business.getStatus);
                 this.props.makeRequest(request.BusinessOption.all);

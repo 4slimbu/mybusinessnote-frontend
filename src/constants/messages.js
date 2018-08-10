@@ -2,10 +2,13 @@
 export const MESSAGES = {
     // Loading Message
     LOADING_USER_CHECK: "Checking if user already exist...",
+    UPDATING: "Updating...",
     SAVING: "Saving...",
     REFRESHING: "Refreshing...",
     REGISTERING: "Creating your account...",
+    LOGGING: "Logging...",
     VERIFYING: "Verifying...",
+    SENDING_EMAIL: "Sending email...",
 
     // Success Message
     LOGIN_SUCCESS: "Logged in successfully",

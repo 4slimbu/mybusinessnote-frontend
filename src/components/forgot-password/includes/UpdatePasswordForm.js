@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {ROUTES} from "../../../constants/routes";
 import {validateFields} from "../../../utils/validation/FieldValidator";
 import request from "../../../services/request";
+import {MESSAGES} from "../../../constants/messages";
 
 class UpdatePasswordForm extends Component {
     constructor(props) {
@@ -84,7 +85,7 @@ class UpdatePasswordForm extends Component {
 
     isFormValid(dataObject) {
         const rules = {
-            password: 'required|min:8|lowercase|uppercase|num|specialChar|max:20',
+            password: 'required|min:8',
             confirm_password: 'match:password'
         };
         const {errors, isValid} = validateFields(dataObject, rules);
@@ -114,7 +115,7 @@ class UpdatePasswordForm extends Component {
             confirm_password: this.state.confirm_password.value,
             forgot_password_token: this.state.forgot_password_token
         };
-        this.props.makeRequest(request.Auth.updatePassword, data).then(
+        this.props.makeRequest(request.Auth.updatePassword, data, {message: MESSAGES.UPDATING}).then(
             (responseData) => {
                 this.props.showPasswordUpdatedResponsePage();
             },

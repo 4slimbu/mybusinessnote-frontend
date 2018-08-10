@@ -77,7 +77,7 @@ class LeftSideBarContainer extends Component {
                     <Link to="/" className="site-branding">
                         <img src={`${publicUrl()}/assets/images/app_logo_256.png`} alt=""/>
                     </Link>
-                    <h3 className="tagline-head">Let your <br/>journey begins</h3>
+                    <h3 className="tagline-head">Let your <br/>journey begin</h3>
 
                     <div className="menu-accordion">
                         <div className="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">

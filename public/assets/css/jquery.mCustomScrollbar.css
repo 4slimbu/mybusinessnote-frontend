@@ -1458,3 +1458,18 @@ yx-axis
     background-color: rgba(255, 255, 255, 0.9);
 }
 /* ---------------------------------------- */
+
+/* ---------------Added By Sudip ---------------*/
+.mCSB_container.mCS_no_scrollbar_y.mCS_y_hidden {
+    margin-right: 5px;
+}
+
+@media only screen and (max-width: 767px) {
+    #mCSB_1_scrollbar_vertical {
+        display: none !important;
+    }
+
+    .mCSB_container.mCS_no_scrollbar_y.mCS_y_hidden {
+        margin-right: 5px;
+    }
+}

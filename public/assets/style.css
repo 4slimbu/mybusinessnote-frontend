@@ -710,6 +710,7 @@ ul.getting-start-list a {
      transition-property: background, border;
      transition-duration: 0.5s;
      font-weight: 300;
+     margin: 2%;
 }
 
 /*Step 2*/
