@@ -17,6 +17,7 @@ import {generateAppRelativeUrl, getByEventType, isItemLoaded, publicUrl} from ".
 import {setEvents, setToolTipContent} from "../actions/appStatusAction";
 import PopUp from "./common/PopUp";
 import * as _ from "lodash";
+import MetaInformation from "./common/MetaInformation";
 
 class App extends Component {
 
@@ -76,14 +77,15 @@ class App extends Component {
     }
 
     render() {
-        const {auth} = this.props;
-        const appSettings = this.props.appStatus.appSettings;
+        const {auth, appStatus} = this.props;
+        const appSettings = appStatus.appSettings;
         let popUpSetting = _.find(appSettings, function(o) { return o.key == 'popup'; });
 
         return (
             this.isAppReady() ?
                 <ErrorBoundary>
                     <LayoutContainer>
+                        <MetaInformation appStatus={appStatus}/>
                         { !auth.isAuthenticated && popUpSetting && <PopUp popUpSetting={popUpSetting}/> }
                         <LoadingMessage/>
                         <FlashMessageList/>
