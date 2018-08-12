@@ -10,14 +10,14 @@ const MetaInformation = ({appStatus}) => {
     let description = '';
 
     if (isItemLoaded(currentBusinessOption)) {
-        title = currentBusinessOption.name;
-        description = currentBusinessOption.icon;
+        title = currentBusinessOption.meta_title;
+        description = currentBusinessOption.meta_description;
     } else if (isItemLoaded(currentSection)) {
-        title = currentSection.name;
-        description = currentSection.icon;
+        title = currentSection.meta_title;
+        description = currentSection.meta_description;
     } else if (isItemLoaded(currentLevel)) {
-        title = currentLevel.name;
-        description = currentLevel.icon;
+        title = currentLevel.meta_title;
+        description = currentLevel.meta_description;
     }
 
     return (
