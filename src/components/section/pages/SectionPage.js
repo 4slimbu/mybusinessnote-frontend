@@ -64,7 +64,7 @@ class SectionPage extends Component {
                 >
                     <Link className="link-box" to={businessOptionUrl} >
                         <div className="red-icon circular-white-bg" href="#">
-                            {/*{businessOption.short_name}*/}
+                            {/*{businessOption.name}*/}
                             <img src={businessOption.icon}
                                  alt=""/>
                         </div>

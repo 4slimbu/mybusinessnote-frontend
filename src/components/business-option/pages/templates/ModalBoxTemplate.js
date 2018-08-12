@@ -75,7 +75,7 @@ const ModalBoxTemplate = ({appStatus, onHandleToolTip, goTo, onClickUpdateStatus
                             <i className="fa fa-chevron-left" aria-hidden="true"></i>
                         </Link>
                         <img className="red-icon mCS_img_loaded" src={currentBusinessOption.icon} alt=""/>
-                        <h6>{currentBusinessOption.short_name}</h6>
+                        <h6>{currentBusinessOption.name}</h6>
                     </div>
                 </div>
                 <div className="progress c-progress">

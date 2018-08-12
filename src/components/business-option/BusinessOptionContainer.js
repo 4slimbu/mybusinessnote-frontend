@@ -127,7 +127,7 @@ class BusinessOptionContainer extends Component {
         // Set tooltip accordion for levels other than level 1
         if (currentLevel.id !== 1) {
             const toolTipList = map(getChildBusinessOptions(appStatus, currentBusinessOption), (item, key) => {
-                const title = (item.id === id) ? <strong>{item.short_name}</strong> : item.short_name;
+                const title = (item.id === id) ? <strong>{item.name}</strong> : item.name;
                 return (
                     <Panel key={key} eventKey={item.id}>
                         <Panel.Heading>
