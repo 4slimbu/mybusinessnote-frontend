@@ -168,7 +168,7 @@ class BusinessOptionContent extends Component {
         //      "[someothershortcode]",
         //      "more text"
         // ]
-        const shortCodeRegex = new RegExp('(\\[.+?\\](?:.+?\\[\\/.+?\\])?)', 'gs');
+        const shortCodeRegex = new RegExp('(\\[.+?\\](?:.+?\\[\\/.+?\\])?)', 'gm');
         const splittedContent = rawContent.split(shortCodeRegex);
 
         const parsedContent = [];
@@ -181,7 +181,7 @@ class BusinessOptionContent extends Component {
                 })
             // Else, it is still a shortcode and need further processing.
             } else {
-                const parentShortCodeRegex = new RegExp('(\\[.+?\\])(.+?)\\[\\/.+?\\]', 'gs');
+                const parentShortCodeRegex = new RegExp('(\\[.+?\\])(.+?)\\[\\/.+?\\]', 'gm');
                 let arr;
                 // Let's check if the shortcode is a parent-shortcode, if yes then it again need further processing
                 if (item.match(parentShortCodeRegex)) {

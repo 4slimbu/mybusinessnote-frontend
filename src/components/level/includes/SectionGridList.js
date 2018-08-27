@@ -3,10 +3,8 @@ import PropTypes from "prop-types";
 import {map} from "lodash";
 import {
     getCurrentLevelSections, getStatus, isLevelLocked,
-    isSectionLocked
 } from "../../../utils/helper/helperFunctions";
 import * as classnames from "classnames";
-import {Link} from "react-router-dom";
 import MiniProgressBar from "../../common/MiniProgressBar";
 
 const sections = (appStatus, currentLevel, onHandleToolTip, goTo) => map(getCurrentLevelSections(appStatus.sections, currentLevel.id), (section, key) => {

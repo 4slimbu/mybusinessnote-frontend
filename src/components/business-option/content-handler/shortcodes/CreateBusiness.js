@@ -8,7 +8,11 @@ import {makeRequest} from "../../../../actions/requestAction";
 import {validateFields} from "../../../../utils/validation/FieldValidator";
 import {ROUTES} from "../../../../constants/routes";
 import {MESSAGES} from "../../../../constants/messages";
-import {getAllFields, getChangedFields, getRulesForChangedFields} from "../../../../utils/helper/helperFunctions";
+import {
+    filterFirstInCollection,
+    getAllFields, getChangedFields, getRulesForChangedFields,
+    isItemLoaded
+} from "../../../../utils/helper/helperFunctions";
 import {isEmpty} from "lodash";
 
 class CreateBusiness extends Component {
@@ -19,6 +23,7 @@ class CreateBusiness extends Component {
         this.rules = {
             business_name: 'required',
             website: 'required|website',
+            abn: 'required|numeric',
         };
 
         // Initial State
@@ -37,6 +42,15 @@ class CreateBusiness extends Component {
                 label: "Website",
                 name: "website",
                 placeholder: "https://yourwebsite.com",
+                value: "",
+                oldValue: "",
+                type: "text"
+            },
+            abn: {
+                isChanged: false,
+                label: "Enter your Australian Business Number (ABN) *",
+                name: "abn",
+                placeholder: "eg. 3522 2525 2524",
                 value: "",
                 oldValue: "",
                 type: "text"
@@ -66,6 +80,10 @@ class CreateBusiness extends Component {
                 ...this.state.website,
                 oldValue: business.website,
             },
+            abn: {
+                ...this.state.abn,
+                oldValue: business.abn,
+            },
         });
     }
 
@@ -78,6 +96,11 @@ class CreateBusiness extends Component {
             },
             website: {
                 ...this.state.website,
+                isChanged: false,
+                value: ''
+            },
+            abn: {
+                ...this.state.abn,
                 isChanged: false,
                 value: ''
             },
@@ -151,7 +174,7 @@ class CreateBusiness extends Component {
             !isEmpty(this.state.business_name.oldValue) &&
             !this.state.isChanged
         ) {
-            history.push(ROUTES.REGISTER_ABN);
+            history.push(ROUTES.LEVEL_TWO);
             return;
         }
 
@@ -176,7 +199,11 @@ class CreateBusiness extends Component {
                 ...changedFields
             }, {message: MESSAGES.SAVING}).then(
                 (responseData) => {
-                    history.push(ROUTES.REGISTER_ABN);
+                    if (isItemLoaded(responseData.events) && filterFirstInCollection(responseData.events, {type: "levelCompleted"})) {
+                        history.push(ROUTES.LEVEL_ONE + '/completed');
+                    } else {
+                        history.push(ROUTES.LEVEL_TWO);
+                    }
                 },
                 (errorData) => {
                     this.resetFields();
@@ -222,6 +249,14 @@ class CreateBusiness extends Component {
 
                 <TextFieldGroup fieldObject={this.state.business_name} onChange={this.onChange}
                                 error={errors.business_name}/>
+
+                <TextFieldGroup fieldObject={this.state.abn} onChange={this.onChange}
+                                error={errors.abn}/>
+
+                <span className="find-web-span">Don’t have a ABN?</span>
+                <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
+                   href={affiliateLink} target="new"
+                   className="btn btn-lg btn-default clearfix btn-level-5">{affiliateLinkLabel}</a>
 
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Continue</button>

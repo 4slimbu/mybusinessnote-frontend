@@ -189,7 +189,6 @@ export function getCurrentLevelByUrl(levels, url) {
 
     let splittedArray = url.split(/\/|\?|&|=|\./g);
 
-
     if (splittedArray && splittedArray[2]) {
         let currentLevel = filter(levels, (level) => {
             return level.slug == splittedArray[2];

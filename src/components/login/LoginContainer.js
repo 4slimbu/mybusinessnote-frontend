@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import LoginPage from "./pages/LoginPage";
 import {callApi, makeRequest} from "../../actions/requestAction";
 import LoadingMessage from "../layout/loading/LoadingMessage";
+import request from "../../services/request";
 
 class LoginContainer extends Component {
 
@@ -14,6 +15,22 @@ class LoginContainer extends Component {
         };
 
         this.redirectTo = this.redirectTo.bind(this);
+    }
+
+    componentDidMount() {
+        if (this.props.match.params.driver) {
+            this.setState({
+                isShowSocialLoginProcessingPage: true
+            });
+            this.props.makeRequest(request.Auth.loginSocialUser, this.props.location.pathname + this.props.location.search).then(
+                (response) => {
+                    this.props.history.push('/');
+                },
+                ( error ) => {
+                    // this.setState({errors: error.response.data.error, isLoading: false});
+                }
+            );
+        }
     }
 
     redirectTo(url) {
