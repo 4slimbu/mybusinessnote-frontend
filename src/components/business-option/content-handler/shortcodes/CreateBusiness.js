@@ -254,8 +254,7 @@ class CreateBusiness extends Component {
                                 error={errors.abn}/>
 
                 <span className="find-web-span">Don’t have a ABN?</span>
-                <a onClick={(e) => this.onClickAffiliateLink(e, appStatus.currentBusinessOption.id, affiliateLinkId, affiliateLink)}
-                   href={affiliateLink} target="new"
+                <a href="https://register.business.gov.au" target="new"
                    className="btn btn-lg btn-default clearfix btn-level-5">{affiliateLinkLabel}</a>
 
                 <div className="btn-wrap">

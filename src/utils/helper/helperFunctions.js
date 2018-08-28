@@ -256,7 +256,22 @@ export function saveBusinessOption(currentObject, data) {
 }
 
 export function isLevelLocked(appStatus, level) {
+    // First level is always unlocked
     if (level.id === 1) {
+        return false;
+    }
+
+    // If at least some thing is completed in this level, then it must have been unlocked
+    let levelStatus = getStatus(appStatus.businessStatus.levelStatuses, level.id);
+    let completedPercent = levelStatus.completed_percent ? levelStatus.completed_percent : 0;
+    if (completedPercent > 0) {
+        return false;
+    }
+
+    // If previous level is completed then this level must be unlocked
+    let previousLevelStatus = getStatus(appStatus.businessStatus.levelStatuses, level.id - 1);
+    let previousLevelCompletedPercent = previousLevelStatus.completed_percent ? previousLevelStatus.completed_percent : 0;
+    if (previousLevelCompletedPercent >= 100) {
         return false;
     }
 
