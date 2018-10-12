@@ -255,7 +255,7 @@ class CreateBusiness extends Component {
 
                 <span className="find-web-span">Don’t have a ABN?</span>
                 <a href="https://register.business.gov.au" target="new"
-                   className="btn btn-lg btn-default clearfix btn-level-5">{affiliateLinkLabel}</a>
+                   className="btn btn-lg btn-default clearfix btn-level-5">Register Your Business</a>
 
                 <div className="btn-wrap">
                     <button className="btn btn-default btn-md">Continue</button>
