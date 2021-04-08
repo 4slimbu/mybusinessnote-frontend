@@ -5,7 +5,7 @@
   "homepage": "/",
   "dependencies": {
     "axios": "^0.17.1",
-    "axios-retry": "^3.0.2",
+    "axios-retry": "^3.1.2",
     "classnames": "^2.2.5",
     "jquery": "^3.3.1",
     "jquery-mousewheel": "^3.1.13",

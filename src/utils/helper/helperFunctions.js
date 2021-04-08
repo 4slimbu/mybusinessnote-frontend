@@ -465,6 +465,8 @@ export function publicUrl(url = null) {
  */
 export function apiBaseUrl(url = null) {
     if (url) {
+        console.log(process.env);
+        debugger;
         return process.env.REACT_APP_API_BASE_URL + url;
     }
     return process.env.REACT_APP_API_BASE_URL;
