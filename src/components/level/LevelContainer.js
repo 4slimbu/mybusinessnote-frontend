@@ -25,7 +25,7 @@ class LevelContainer extends Component {
         super(props);
 
         this.onClickLevelLink = this.onClickLevelLink.bind(this);
-        this.onClickContinueJourney = this.onClickContinueJourney.bind(this);
+        this.onClickContinueNote = this.onClickContinueNote.bind(this);
         this.goTo = this.goTo.bind(this);
         this.onHandleToolTip = this.onHandleToolTip.bind(this);
         this.onHandleToolTipSelect = this.onHandleToolTipSelect.bind(this);
@@ -66,7 +66,7 @@ class LevelContainer extends Component {
         history.push(levelUrl);
     };
 
-    onClickContinueJourney(e) {
+    onClickContinueNote(e) {
         e.preventDefault();
         const {appStatus, history} = this.props;
         const {businessStatus, levels, sections, currentLevel} = appStatus;
@@ -166,7 +166,7 @@ class LevelContainer extends Component {
             currentLevel: currentLevel,
             onClickLevelLink: this.onClickLevelLink,
             goTo: this.goTo,
-            onClickContinueJourney: this.onClickContinueJourney,
+            onClickContinueNote: this.onClickContinueNote,
             onHandleToolTip: this.onHandleToolTip
         };
 

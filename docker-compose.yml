@@ -1,0 +1,21 @@
+version: "3"
+services:
+  #Nginx Service
+  mbn-app-server:
+    image: nginx:alpine
+    container_name: mbn-app-server
+    restart: unless-stopped
+    tty: true
+    # ports:
+    #   - "8099:80"
+    #   - "443:443"
+    environment:
+      - VIRTUAL_HOST=mybusinessnote.local
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+
+networks:
+  default:
+    external:
+      name: projects_virtual-network

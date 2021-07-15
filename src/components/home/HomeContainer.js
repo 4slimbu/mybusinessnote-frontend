@@ -24,7 +24,7 @@ class HomeContainer extends Component {
         };
 
         this.onClickStart = this.onClickStart.bind(this);
-        this.onClickContinueJourney = this.onClickContinueJourney.bind(this);
+        this.onClickContinueNote = this.onClickContinueNote.bind(this);
         this.onVerifyAccount = this.onVerifyAccount.bind(this);
         this.onSendVerificationEmail = this.onSendVerificationEmail.bind(this);
     }
@@ -47,7 +47,7 @@ class HomeContainer extends Component {
         history.push(ROUTES.LEVEL_ONE);
     };
 
-    onClickContinueJourney(e) {
+    onClickContinueNote(e) {
         e.preventDefault();
         const {levels, sections, businessStatus} = this.props.appStatus;
         const firstUnlockedBusinessOption = filterFirstInCollection(businessStatus.businessOptionStatuses, {status: "unlocked"});
@@ -111,7 +111,7 @@ class HomeContainer extends Component {
 
         const welcomePageProps = {
             onClickStart: this.onClickStart,
-            onClickContinueJourney: this.onClickContinueJourney
+            onClickContinueNote: this.onClickContinueNote
         };
 
         const guestPageProps = {

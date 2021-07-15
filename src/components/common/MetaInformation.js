@@ -22,7 +22,7 @@ const MetaInformation = ({appStatus}) => {
 
     return (
         <Helmet>
-            <title>{ isItemLoaded(title) ? title + ' - ' : '' }My Business Journey</title>
+            <title>{ isItemLoaded(title) ? title + ' - ' : '' }My Business Note</title>
             <meta name="description" content={ description } />
         </Helmet>
     )

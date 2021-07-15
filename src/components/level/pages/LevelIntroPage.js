@@ -5,7 +5,7 @@ import SectionGridList from "../includes/SectionGridList";
 import {isItemLoaded} from "../../../utils/helper/helperFunctions";
 
 const LevelIntroPage = (props) => {
-    const {appStatus, currentLevel, onClickContinueJourney, goTo, onHandleToolTip} = props;
+    const {appStatus, currentLevel, onClickContinueNote, goTo, onHandleToolTip} = props;
     const {content} = props.currentLevel;
     const levelHeadProps = {
         currentLevel: currentLevel,
@@ -25,7 +25,7 @@ const LevelIntroPage = (props) => {
             <div className="content-wrap" dangerouslySetInnerHTML={{__html: content}}/>
             {currentLevel.id === 1 ? '' : <SectionGridList {...sectionGridListProps}/>}
             <div className="btn-wrap">
-                <a href="#" onClick={(e) => onClickContinueJourney(e)} className="btn btn-default btn-md">Continue</a>
+                <a href="#" onClick={(e) => onClickContinueNote(e)} className="btn btn-default btn-md">Continue</a>
             </div>
         </div>
     );
@@ -34,7 +34,7 @@ const LevelIntroPage = (props) => {
 LevelIntroPage.propTypes = {
     appStatus: PropTypes.object.isRequired,
     currentLevel: PropTypes.object.isRequired,
-    onClickContinueJourney: PropTypes.func.isRequired,
+    onClickContinueNote: PropTypes.func.isRequired,
     goTo: PropTypes.func.isRequired,
     onHandleToolTip: PropTypes.func.isRequired,
 };
