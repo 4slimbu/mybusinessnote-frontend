@@ -362,7 +362,7 @@ class SignUpForm extends Component {
             />
             <div className="form-group re-captcha">
               <ReCAPTCHA
-                sitekey="6LdwFZYbAAAAAPaNomx5wZxeMaZS1QTp3zN5CV8O"
+                sitekey={process.env.REACT_APP_RECAPTCHA_KEY}
                 onChange={this.onChange}
               />
               {errors.captcha_response && (
