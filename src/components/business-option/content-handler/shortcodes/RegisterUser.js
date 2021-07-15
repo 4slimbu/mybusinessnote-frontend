@@ -1,27 +1,23 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import SignUpForm from "../../form/SignUpForm";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import {makeRequest} from "../../../../actions/requestAction";
+import { makeRequest } from "../../../../actions/requestAction";
 
 class RegisterUser extends Component {
-    render() {
-        const {
-            appStatus, auth,
-            doesUserExists,
-            makeRequest
-        } = this.props;
+  render() {
+    const { appStatus, auth, doesUserExists, makeRequest } = this.props;
 
-        const signUpFormProps = {
-            appStatus: appStatus,
-            auth: auth,
-            doesUserExists: doesUserExists,
-            makeRequest: makeRequest,
-        };
+    const signUpFormProps = {
+      appStatus: appStatus,
+      auth: auth,
+      doesUserExists: doesUserExists,
+      makeRequest: makeRequest,
+    };
 
-        return (
-            <div>
-
+    return (
+      <div>
+        {/*
                 {
                     !auth.isAuthenticated &&
                     <div>
@@ -40,26 +36,27 @@ class RegisterUser extends Component {
                     </div>
 
                 }
-                <SignUpForm {...signUpFormProps}/>
-
-            </div>
-        );
-    }
+            */}
+        <SignUpForm {...signUpFormProps} />
+      </div>
+    );
+  }
 }
 
 RegisterUser.propTypes = {
-    appStatus: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired,
-    makeRequest: PropTypes.func.isRequired,
+  appStatus: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
+  makeRequest: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
-    return {
-        appStatus: state.appStatusReducer,
-        auth: state.authReducer
-    }
+  return {
+    appStatus: state.appStatusReducer,
+    auth: state.authReducer,
+  };
 }
 
 export default connect(mapStateToProps, {
-    makeRequest,
+  makeRequest,
 })(RegisterUser);
+
