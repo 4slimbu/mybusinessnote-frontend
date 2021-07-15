@@ -1,80 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!--for local test: responsive@gmail.com-->
     <!--<meta name="google-site-verification" content="Ly_GBnyG4MATAkzgebiTjhjii4K2Zg8OsinraxgyD5k"/>-->
     <!--for MBJ app-->
-    <meta name="google-site-verification" content="5VccfvaKcJpWVXaqa0e_3DdED0L9H97kgCvmU45dNa0" />
+    <meta
+      name="google-site-verification"
+      content="5VccfvaKcJpWVXaqa0e_3DdED0L9H97kgCvmU45dNa0"
+    />
     <title>My Business Journey</title>
     <!-- favicon -->
-    <link rel="icon" type="icon/png" href="%PUBLIC_URL%/assets/images/fav-icons.png">
+    <link
+      rel="icon"
+      type="icon/png"
+      href="%PUBLIC_URL%/assets/images/favicon.png"
+    />
     <!-- Bootstrap -->
-    <link href="%PUBLIC_URL%/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="%PUBLIC_URL%/assets/css/bootstrap.min.css" rel="stylesheet" />
     <!-- fonts -->
-    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,700,800,900,900i"
-          rel="stylesheet">
-    <link rel="stylesheet" href="%PUBLIC_URL%/assets/css/jquery.mCustomScrollbar.css"/>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="%PUBLIC_URL%/assets/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,700,800,900,900i"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="%PUBLIC_URL%/assets/css/jquery.mCustomScrollbar.css"
+    />
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/c-progressbar.css">
-    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/style.css">
-    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/responsive.css">
-    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/mobile.css">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="%PUBLIC_URL%/assets/css/c-progressbar.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="%PUBLIC_URL%/assets/style.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="%PUBLIC_URL%/assets/css/responsive.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="%PUBLIC_URL%/assets/css/mobile.css"
+    />
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47410922-3"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-47410922-3"
+    ></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-        gtag('config', 'UA-47410922-3');
+      gtag("config", "UA-47410922-3");
     </script>
     <style>
-        .app-loading {
-            width: 100%;
-            height: 100vh;
-            background: #bf696e !important;
-            /*background: #4b384b !important;*/
-        }
+      .app-loading {
+        width: 100%;
+        height: 100vh;
+        background: #bf696e !important;
+        /*background: #4b384b !important;*/
+      }
 
-        .app-loading .logo {
-            display: block;
-            width: 120px;
-            margin: 0 auto;
-            padding: 46vh 0;
-            animation-name: app-loading-logo-animation;
-            animation-duration: 3s;
-            animation-iteration-count: infinite;
-        }
+      .app-loading .logo {
+        display: block;
+        width: 120px;
+        margin: 0 auto;
+        padding: 46vh 0;
+        animation-name: app-loading-logo-animation;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+      }
 
-        @keyframes app-loading-logo-animation {
-            0% {
-                opacity: 0;
-            }
-            40% {
-                opacity: 1;
-            }
-            60% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
+      @keyframes app-loading-logo-animation {
+        0% {
+          opacity: 0;
         }
+        40% {
+          opacity: 1;
+        }
+        60% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
     </style>
-</head>
-<body>
-<noscript>
-    You need to enable JavaScript to run this app.
-</noscript>
-<div id="root">
-    <div class="app-loading">
+  </head>
+  <body>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <div id="root">
+      <div class="app-loading"></div>
     </div>
-</div>
-<!--
+    <!--
   This HTML file is a template.
   If you open it directly in the browser, you will see an empty page.
 
@@ -85,15 +122,14 @@
   To create a production bundle, use `npm run build` or `yarn build`.
 -->
 
-<!--js Library  -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
-<!-- Bootstrap menu js -->
-<script src="%PUBLIC_URL%/assets/js/bootstrap.min.js"></script>
-<!--<script src="%PUBLIC_URL%/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>-->
-<!-- Custom js -->
-<script src="%PUBLIC_URL%/assets/js/c-progressbar.js"></script>
-<script src="%PUBLIC_URL%/assets/js/custom.js"></script>
-
-</body>
+    <!--js Library  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+    <!-- Bootstrap menu js -->
+    <script src="%PUBLIC_URL%/assets/js/bootstrap.min.js"></script>
+    <!--<script src="%PUBLIC_URL%/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>-->
+    <!-- Custom js -->
+    <script src="%PUBLIC_URL%/assets/js/c-progressbar.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/custom.js"></script>
+  </body>
 </html>
