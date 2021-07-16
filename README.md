@@ -1,7 +1,6 @@
-# My Business Journey Main App #
+# My Business Note Main App
 
-My Business Journey is One page app built on React/Redux. This application integrates with MBJ api https://bitbucket.org/octomedia/mbj  which is built on Laravel. 
-
+My Business Note is One page app built on React/Redux. This application integrates with MBN api which is built on Laravel.
 
 ## Installation
 
@@ -9,22 +8,33 @@ My Business Journey is One page app built on React/Redux. This application integ
 
 Begin by cloning this repository to your machine, and installing all npm dependencies.
 
-```bash
-git clone git@bitbucket.org:octomedia/mbj_app.git
-cd mbj_app && npm install
-npm start
 ```
-
+git clone git@github.com:limvus/mybusinessnote-frontend.git
+cd mybusinessnote-frontend
+npm install
+```
 
 ### Step 2
 
-Open src/config.js and update API Base URL to work with your local API endpoint
+Copy .env.example to .env and update the constants.
 
+```
+cp .env.example .env
+```
 
-## Other Details
+### Step 3: docker method
 
-Hosting: AWS
+Use docker to run production build
 
-### Staging Main App
+```
+npm run build
+docker-compose up -d
+```
 
-http://appstaging.mybusinessjourney.com.au
+### Step 3: dev method
+
+Use npm server to run development build
+
+```
+npm start
+```
