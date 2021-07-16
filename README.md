@@ -31,6 +31,9 @@ npm run build
 docker-compose up -d
 ```
 
+- make sure jwilder/nginx-proxy is running in the system in the same network
+- make sure the VIRTUAL_HOST is set to the one you have in /etc/hosts
+
 ### Step 3: dev method
 
 Use npm server to run development build
