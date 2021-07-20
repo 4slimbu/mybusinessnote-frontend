@@ -10,7 +10,8 @@ services:
     #   - "8099:80"
     #   - "443:443"
     environment:
-      - VIRTUAL_HOST=mybusinessnote.local
+      - VIRTUAL_HOST=mybusinessnote.com
+      - LETSENCRYPT_HOST=mybusinessnote.com
     volumes:
       - ./:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
@@ -18,4 +19,4 @@ services:
 networks:
   default:
     external:
-      name: projects_virtual-network
+      name: ubuntu_default
