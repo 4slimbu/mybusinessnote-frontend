@@ -102,9 +102,11 @@ class App extends Component {
       <ErrorBoundary>
         <LayoutContainer>
           <MetaInformation appStatus={appStatus} />
+          {/*
           {!auth.isAuthenticated && popUpSetting && (
             <PopUp popUpSetting={popUpSetting} />
           )}
+          */}
           <LoadingMessage />
           <FlashMessageList />
           <LeftSideBar />
@@ -152,4 +154,3 @@ export default withRouter(
     setEvents,
   })(App)
 );
-
